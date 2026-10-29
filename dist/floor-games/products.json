@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "garden-giggles",
+    "title": "Garden Giggles",
+    "width_ft": 4,
+    "height_ft": 5,
+    "width_mm": 1219.2,
+    "height_mm": 1524.0,
+    "area_sqft": 20,
+    "price_inr": 4000,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "instructions": "https://mimipip.com/play/garden-giggles/",
+    "description": "Three ways to play: copy a pose, remember a trail, or stay and stretch. Stickers and simple instructions are all you need.",
+    "stock_target": 5,
+    "stock_verified": false,
+    "dispatch_working_days": [
+      1,
+      2
+    ],
+    "checkout_enabled": false
+  },
+  {
+    "slug": "sunshine-hop",
+    "title": "Sunshine Hop",
+    "width_ft": 3,
+    "height_ft": 10,
+    "width_mm": 914.4000000000001,
+    "height_mm": 3048.0,
+    "area_sqft": 30,
+    "price_inr": 6000,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "instructions": "https://mimipip.com/play/sunshine-hop/",
+    "description": "Walk the number trail, hop the pattern, or remember a number sequence. A bright everyday movement game.",
+    "stock_target": 5,
+    "stock_verified": false,
+    "dispatch_working_days": [
+      1,
+      2
+    ],
+    "checkout_enabled": false
+  },
+  {
+    "slug": "little-town",
+    "title": "Little Town",
+    "width_ft": 4,
+    "height_ft": 6,
+    "width_mm": 1219.2,
+    "height_mm": 1828.8000000000002,
+    "area_sqft": 24,
+    "price_inr": 4800,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "instructions": "https://mimipip.com/play/little-town/",
+    "description": "Drive to the shop, visit the park and find a parking place. Play with a finger or a favourite age-appropriate toy car.",
+    "stock_target": 5,
+    "stock_verified": false,
+    "dispatch_working_days": [
+      1,
+      2
+    ],
+    "checkout_enabled": false
+  }
+]
