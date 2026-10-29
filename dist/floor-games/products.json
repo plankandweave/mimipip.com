@@ -12,8 +12,6 @@
     "rate_inr_sqft": 200,
     "instructions": "https://mimipip.com/play/garden-giggles/",
     "description": "Three ways to play: copy a pose, remember a trail, or stay and stretch. Stickers and simple instructions are all you need.",
-    "stock_target": 5,
-    "stock_verified": false,
     "dispatch_working_days": [
       1,
       2
@@ -33,8 +31,6 @@
     "rate_inr_sqft": 200,
     "instructions": "https://mimipip.com/play/sunshine-hop/",
     "description": "Walk the number trail, hop the pattern, or remember a number sequence. A bright everyday movement game.",
-    "stock_target": 5,
-    "stock_verified": false,
     "dispatch_working_days": [
       1,
       2
@@ -54,8 +50,6 @@
     "rate_inr_sqft": 200,
     "instructions": "https://mimipip.com/play/little-town/",
     "description": "Drive to the shop, visit the park and find a parking place. Play with a finger or a favourite age-appropriate toy car.",
-    "stock_target": 5,
-    "stock_verified": false,
     "dispatch_working_days": [
       1,
       2
