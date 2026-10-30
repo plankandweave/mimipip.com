@@ -41,16 +41,6 @@
           "scene_key": "nursery",
           "width": 1536,
           "height": 1024
-        },
-        {
-          "url": "https://zyvorah.com/media/product-images/unfinished-ranges-20261029/border-woodland-ramble/flat.png",
-          "alt": "Woodland Ramble — clean flat artwork",
-          "position": 1,
-          "is_featured": false,
-          "is_flat": true,
-          "scene_key": null,
-          "width": 12000,
-          "height": 1200
         }
       ],
       "materials": []
@@ -99,16 +89,6 @@
           "scene_key": "nursery",
           "width": 1536,
           "height": 1024
-        },
-        {
-          "url": "https://zyvorah.com/media/product-images/unfinished-ranges-20261029/border-little-sky-parade/flat.png",
-          "alt": "Little Sky Parade — clean flat artwork",
-          "position": 1,
-          "is_featured": false,
-          "is_flat": true,
-          "scene_key": null,
-          "width": 12000,
-          "height": 1200
         }
       ],
       "materials": []
