@@ -7183,6 +7183,222 @@
       "personalization": null,
       "collectionURL": "/collections/happy-lines/",
       "detailURL": "/collections/happy-lines/ribbon-play/"
+    },
+    {
+      "id": "MP-SS-01",
+      "slug": "dino-days-stair-sticker-set",
+      "name": "Dino Days Stair Sticker Set",
+      "description": "Friendly dinosaurs, leafy greens and warm sandy tones. Four coordinated sticker designs for vertical, closed stair risers. Furniture is not included. Presentation mockups show the design idea; final dimensions, material, fit and pricing are not yet confirmed. These are decorative riser stickers, not tread or grip stickers. Follow your bunk-bed manufacturer’s age and use guidance.",
+      "collection": [
+        "little-steps-big-adventures"
+      ],
+      "concept": [
+        "dinosaurs"
+      ],
+      "color": [
+        "green",
+        "neutral",
+        "orange"
+      ],
+      "gender": [
+        "all"
+      ],
+      "age": [
+        "school-age"
+      ],
+      "space": [
+        "bedroom",
+        "shared"
+      ],
+      "type": [
+        "stair-sticker"
+      ],
+      "surface": [
+        "stair-riser"
+      ],
+      "widthCm": null,
+      "heightCm": null,
+      "measurementType": "fit-pending",
+      "image": "/collections/step-smiles/images/dino-days.webp",
+      "imageRole": "Four-riser design presentation · furniture not included",
+      "source": "Approved Step Smiles room-informed iteration",
+      "status": "Design preview · sizing and pricing to be confirmed",
+      "price": null,
+      "personalization": null,
+      "detailURL": "/collections/step-smiles/dino-days/"
+    },
+    {
+      "id": "MP-SS-02",
+      "slug": "space-club-stair-sticker-set",
+      "name": "Space Club Stair Sticker Set",
+      "description": "A rocket, smiling moon, ringed planet and astronaut bear in blue and gold. Four coordinated sticker designs for vertical, closed stair risers. Furniture is not included. Presentation mockups show the design idea; final dimensions, material, fit and pricing are not yet confirmed. These are decorative riser stickers, not tread or grip stickers. Follow your bunk-bed manufacturer’s age and use guidance.",
+      "collection": [
+        "little-steps-big-adventures"
+      ],
+      "concept": [
+        "space"
+      ],
+      "color": [
+        "blue",
+        "yellow",
+        "neutral"
+      ],
+      "gender": [
+        "all"
+      ],
+      "age": [
+        "school-age"
+      ],
+      "space": [
+        "bedroom",
+        "shared"
+      ],
+      "type": [
+        "stair-sticker"
+      ],
+      "surface": [
+        "stair-riser"
+      ],
+      "widthCm": null,
+      "heightCm": null,
+      "measurementType": "fit-pending",
+      "image": "/collections/step-smiles/images/space-club.webp",
+      "imageRole": "Four-riser design presentation · furniture not included",
+      "source": "Approved Step Smiles room-informed iteration",
+      "status": "Design preview · sizing and pricing to be confirmed",
+      "price": null,
+      "personalization": null,
+      "detailURL": "/collections/step-smiles/space-club/"
+    },
+    {
+      "id": "MP-SS-03",
+      "slug": "ocean-pals-stair-sticker-set",
+      "name": "Ocean Pals Stair Sticker Set",
+      "description": "A whale, turtle, clownfish and jellyfish in sea blues with coral accents. Four coordinated sticker designs for vertical, closed stair risers. Furniture is not included. Presentation mockups show the design idea; final dimensions, material, fit and pricing are not yet confirmed. These are decorative riser stickers, not tread or grip stickers. Follow your bunk-bed manufacturer’s age and use guidance.",
+      "collection": [
+        "little-steps-big-adventures"
+      ],
+      "concept": [
+        "ocean"
+      ],
+      "color": [
+        "blue",
+        "orange"
+      ],
+      "gender": [
+        "all"
+      ],
+      "age": [
+        "school-age"
+      ],
+      "space": [
+        "bedroom",
+        "shared"
+      ],
+      "type": [
+        "stair-sticker"
+      ],
+      "surface": [
+        "stair-riser"
+      ],
+      "widthCm": null,
+      "heightCm": null,
+      "measurementType": "fit-pending",
+      "image": "/collections/step-smiles/images/ocean-pals.webp",
+      "imageRole": "Four-riser design presentation · furniture not included",
+      "source": "Approved Step Smiles room-informed iteration",
+      "status": "Design preview · sizing and pricing to be confirmed",
+      "price": null,
+      "personalization": null,
+      "detailURL": "/collections/step-smiles/ocean-pals/"
+    },
+    {
+      "id": "MP-SS-04",
+      "slug": "beep-beep-stair-sticker-set",
+      "name": "Beep Beep Stair Sticker Set",
+      "description": "A cheerful car, bus, train and airplane across four sky-blue scenes. Four coordinated sticker designs for vertical, closed stair risers. Furniture is not included. Presentation mockups show the design idea; final dimensions, material, fit and pricing are not yet confirmed. These are decorative riser stickers, not tread or grip stickers. Follow your bunk-bed manufacturer’s age and use guidance.",
+      "collection": [
+        "little-steps-big-adventures"
+      ],
+      "concept": [
+        "transport"
+      ],
+      "color": [
+        "blue",
+        "red",
+        "yellow"
+      ],
+      "gender": [
+        "all"
+      ],
+      "age": [
+        "school-age"
+      ],
+      "space": [
+        "bedroom",
+        "shared"
+      ],
+      "type": [
+        "stair-sticker"
+      ],
+      "surface": [
+        "stair-riser"
+      ],
+      "widthCm": null,
+      "heightCm": null,
+      "measurementType": "fit-pending",
+      "image": "/collections/step-smiles/images/beep-beep.webp",
+      "imageRole": "Four-riser design presentation · furniture not included",
+      "source": "Approved Step Smiles room-informed iteration",
+      "status": "Design preview · sizing and pricing to be confirmed",
+      "price": null,
+      "personalization": null,
+      "detailURL": "/collections/step-smiles/beep-beep/"
+    },
+    {
+      "id": "MP-SS-05",
+      "slug": "forest-friends-stair-sticker-set",
+      "name": "Forest Friends Stair Sticker Set",
+      "description": "A fox, rabbit, bear and squirrel among warm woodland greens. Four coordinated sticker designs for vertical, closed stair risers. Furniture is not included. Presentation mockups show the design idea; final dimensions, material, fit and pricing are not yet confirmed. These are decorative riser stickers, not tread or grip stickers. Follow your bunk-bed manufacturer’s age and use guidance.",
+      "collection": [
+        "little-steps-big-adventures"
+      ],
+      "concept": [
+        "woodland",
+        "animals"
+      ],
+      "color": [
+        "green",
+        "orange",
+        "brown",
+        "neutral"
+      ],
+      "gender": [
+        "all"
+      ],
+      "age": [
+        "school-age"
+      ],
+      "space": [
+        "bedroom",
+        "shared"
+      ],
+      "type": [
+        "stair-sticker"
+      ],
+      "surface": [
+        "stair-riser"
+      ],
+      "widthCm": null,
+      "heightCm": null,
+      "measurementType": "fit-pending",
+      "image": "/collections/step-smiles/images/forest-friends.webp",
+      "imageRole": "Four-riser design presentation · furniture not included",
+      "source": "Approved Step Smiles room-informed iteration",
+      "status": "Design preview · sizing and pricing to be confirmed",
+      "price": null,
+      "personalization": null,
+      "detailURL": "/collections/step-smiles/forest-friends/"
     }
   ]
 }
