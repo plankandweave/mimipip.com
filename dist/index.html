@@ -160,8 +160,9 @@
   <script src="catalogue.js"></script>
   <script src="nafas/supplement.js"></script>
 <script defer src="/analytics.js"></script>
+<link rel="stylesheet" href="/assets/soft-ui.css?v=20261030-1">
 </head>
-<body>
+<body class="storefront">
   <header class="header"><div class="header-inner">
     <button class="menu-button" id="menuButton" aria-label="Open navigation" aria-expanded="false">☰</button>
     <a class="brand" href="index.html" aria-label="MimiPip home"><img src="assets/mimi-pip/wordmark.png" alt="MimiPip"></a>
@@ -173,7 +174,7 @@
       <div class="nav-dropdown"><button class="nav-trigger" type="button" aria-expanded="false">By age</button><div class="nav-menu" aria-label="Choose an age group"><button type="button" data-nav-stage="Nursery">Nursery</button><button type="button" data-nav-stage="Toddler">Toddler</button><button type="button" data-nav-stage="Kids">Kids</button></div></div>
       <div class="nav-dropdown"><button class="nav-trigger" type="button" aria-expanded="false">By gender</button><div class="nav-menu" aria-label="Browse by gender"><button type="button" data-nav-room="boys">Boys’ rooms</button><button type="button" data-nav-room="girls">Girls’ rooms</button><button type="button" data-nav-room="shared">Shared rooms</button></div></div>
     </nav>
-    <div class="header-actions"><button class="cart-button" id="openCart" type="button">Bag <span class="count" id="cartCount">0</span></button></div>
+    <div class="header-actions"><button class="cart-button" id="openCart" type="button" aria-label="Open shopping bag"><svg class="bag-icon" viewBox="0 0 40 44" fill="none" aria-hidden="true"><path d="M13 14V10a7 7 0 0 1 14 0v4" stroke="#a45c40" stroke-width="2.2" stroke-linecap="round"/><path d="M9 13h22l3 23c.4 3-2 5-5 5H11c-3 0-5.4-2-5-5l3-23Z" fill="#f3ddbb" stroke="#a45c40" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15" cy="25" r="1.3" fill="#80583f"/><circle cx="25" cy="25" r="1.3" fill="#80583f"/><path d="M16 30q4 4 8 0" stroke="#80583f" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="29" r="2" fill="#e8b2a0"/><circle cx="28" cy="29" r="2" fill="#e8b2a0"/></svg><span class="count" id="cartCount" aria-live="polite">0</span></button></div>
   </div></header>
   <main id="home">
     <section class="hero" aria-label="Featured MimiPip collection"><div class="home-carousel" id="homeCarousel">
