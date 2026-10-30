@@ -1,0 +1,501 @@
+{
+  "collection": "Bathroom Buddies",
+  "products": [
+    {
+      "sku": "MP-BB-01",
+      "slug": "bunny-bathroom-buddy",
+      "name": "Bunny Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with peach ears, rosy cheeks and a little heart-shaped nose. Choose Bunny to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 23.3,
+      "height_cm": 25.0,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/bunny-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/bunny-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-02",
+      "slug": "bear-bathroom-buddy",
+      "name": "Bear Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with a caramel face, round ears and a cream muzzle. Choose Bear to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 21.7,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/bear-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/bear-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-03",
+      "slug": "frog-bathroom-buddy",
+      "name": "Frog Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with a sage-green face, wide eyes and a cheerful smile. Choose Frog to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 21.9,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/frog-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/frog-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-04",
+      "slug": "cat-bathroom-buddy",
+      "name": "Cat Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with a peach face, little stripes and whiskers. Choose Cat to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 22.1,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/cat-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/cat-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-05",
+      "slug": "puppy-bathroom-buddy",
+      "name": "Puppy Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with soft floppy ears and a friendly little face. Choose Puppy to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 16.6,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/puppy-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/puppy-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-06",
+      "slug": "panda-bathroom-buddy",
+      "name": "Panda Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with round dark ears and gentle eye patches. Choose Panda to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 21.6,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/panda-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/panda-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-07",
+      "slug": "fox-bathroom-buddy",
+      "name": "Fox Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with terracotta ears and soft cream cheeks. Choose Fox to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 22.1,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/fox-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/fox-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-08",
+      "slug": "koala-bathroom-buddy",
+      "name": "Koala Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with rounded grey ears and an oval nose. Choose Koala to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 16.5,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/koala-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/koala-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-09",
+      "slug": "piglet-bathroom-buddy",
+      "name": "Piglet Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with a blush-pink face and a rounded snout. Choose Piglet to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 21.3,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/piglet-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/piglet-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-10",
+      "slug": "lion-bathroom-buddy",
+      "name": "Lion Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with a golden face framed by a scalloped mane. Choose Lion to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 22.3,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/lion-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/lion-bathroom-buddy-flat.svg"
+    },
+    {
+      "sku": "MP-BB-11",
+      "slug": "owl-bathroom-buddy",
+      "name": "Owl Bathroom Buddy",
+      "collection": "Bathroom Buddies",
+      "brand": "Mimi Pip",
+      "description": "A little bathroom companion with cream face patches and a tiny golden beak. Choose Owl to bring a friendly face to the outside of a closed toilet lid. Sold individually as one character design.",
+      "status": "coming_soon",
+      "sales_enabled": false,
+      "width_cm": 25.0,
+      "height_cm": 20.1,
+      "dimension_basis": "Nominal design area; maximum 25 cm on longest side; sample fit pending",
+      "price_usd": null,
+      "price_inr": null,
+      "material": null,
+      "piece_count": null,
+      "gallery": [
+        {
+          "position": 1,
+          "role": "Individual flat artwork with width and height dimension arrows",
+          "asset": "/bathroom-buddies/assets/owl-bathroom-buddy-dimensions.svg",
+          "required": true
+        },
+        {
+          "position": 2,
+          "role": "Same character applied to exterior of closed toilet lid",
+          "asset": null
+        },
+        {
+          "position": 3,
+          "role": "Actual supplied pieces and backing sheet",
+          "asset": null
+        }
+      ],
+      "application_video": "/bathroom-buddies/assets/bear-application.mp4",
+      "release_requires": [
+        "Production proof and fit sample",
+        "Confirmed material, removal and cleaning performance",
+        "Final pack contents",
+        "Approved price and fulfilment",
+        "Reviewed application video"
+      ],
+      "construction_note": "One character per product. Artwork, die-cut paths and final piece count to be confirmed in production proof.",
+      "flat_asset": "/bathroom-buddies/assets/owl-bathroom-buddy-flat.svg"
+    }
+  ],
+  "domain": "mimipip.com"
+}
