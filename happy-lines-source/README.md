@@ -2,11 +2,11 @@
 
 User-authorized addition to the existing MimiPip foundation preview on 30 October 2026. Includes original Ribbon Play and ten coordinating designs. All eleven renders were regenerated using the approved artwork/boards as references and visually inspected in the generation output.
 
-Build: `node happy-lines-source/build.mjs`
+Build: `node happy-lines-source/build.mjs`, then `node happy-lines-source/integrate.mjs`.
 
 Verify: `node happy-lines-source/verify.mjs`
 
-Deployment directory remains `out/`. Run this build after the original foundation renderer if regenerating the foundation. Do not use the legacy `dist/` packaging scripts for this release. The remaining empty foundation pages, noindex policy, closed checkout, and service restrictions are preserved.
+Deployment directory remains `out/`. A concurrent storefront/catalogue update was fetched and merged before publication. The new storefront homepage and existing products were preserved; Happy Lines is added to its hero, catalogue, collection and colour facets, and native design routes. The collection builder deliberately does not replace the storefront homepage. Do not run the old empty-foundation renderer or legacy `dist/` packaging scripts for this release. The noindex policy, closed checkout, and service restrictions are preserved.
 
 ## Review
 

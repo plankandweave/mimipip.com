@@ -22,7 +22,7 @@ assert.deepEqual(products.filter(p=>matches(p,{age:'nursery',color:'Pink',gender
 assert.equal(products.filter(p=>matches(p,{age:'7-10',color:'Pink',gender:'Boys'})).length,2);
 assert.equal(products.filter(p=>matches(p,{age:'toddler',color:'Orange'})).length,1);
 assert.equal(products.filter(p=>matches(p,{color:'Red'})).length,0);
-const routes=['','collections','nursery','toddler','kids-wallpaper','kids-room-wallpaper','collections/happy-lines',...products.map(p=>'collections/happy-lines/'+p.slug)];
+const routes=['collections','nursery','toddler','kids-wallpaper','kids-room-wallpaper','collections/happy-lines',...products.map(p=>'collections/happy-lines/'+p.slug)];
 for(const route of routes){
   const html=fs.readFileSync(path.join(out,route,'index.html'),'utf8');
   assert.ok(html.includes('ORDERS ARE NOT OPEN'));
@@ -37,4 +37,11 @@ for(const route of routes){
   }
 }
 assert.ok(fs.readFileSync(path.join(out,'checkout/index.html'),'utf8').includes('Orders are not open yet'));
-console.log('PASS: 11 design records; 0–10 age range; all age, colour and gender combinations; 18 pages and their local links/assets; closed checkout preserved.');
+const catalog=JSON.parse(fs.readFileSync(path.join(out,'catalogue.json')));
+assert.equal(catalog.products.filter(p=>p.collection.includes('happy-lines')).length,11);
+assert.ok(catalog.products.filter(p=>!p.collection.includes('happy-lines')).length>100,'Existing catalogue preserved');
+const discovery=await import('../out/discovery.mjs');
+assert.equal(discovery.results(catalog.products,{collection:['happy-lines'],age:['baby'],color:['pink'],gender:['girls']}).length,2);
+assert.equal(discovery.results(catalog.products,{collection:['happy-lines']}).length,11);
+assert.ok(fs.readFileSync(path.join(out,'app.mjs'),'utf8').includes('Meet Happy Lines.'));
+console.log('PASS: 11 designs; 0–10 ages; combined filters; 17 static pages and assets; storefront integration; existing catalogue and closed checkout preserved.');

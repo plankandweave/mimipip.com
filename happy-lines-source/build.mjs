@@ -37,7 +37,6 @@ function landing(route,title,intro,items) {
   const body = `<section class="hero"><p class="eyebrow">MimiPip · Collection preview</p><h1>${title}</h1><p class="intro">${intro}</p></section><section class="feature"><a href="${base}"><img src="${items[0].image}" width="1448" height="1086" alt="${esc(alt(items[0]))}"></a><div class="feature-copy"><p class="eyebrow">New collection</p><h2>Happy Lines</h2><p>Painted stripes, cheerful checks and warm ivory space. Eleven designs, shown in rooms from nursery through age ten.</p><a class="button" href="${base}">Explore Happy Lines ↗</a></div></section>${items.length>1?`<div class="grid">${items.map(card).join('')}</div>`:''}<div class="stage-links"><a href="/nursery/">Nursery</a><a href="/toddler/">Toddler</a><a href="/kids-room-wallpaper/">Children up to 10</a></div>${scaleNote}`;
   write(route,shell(title,'Explore MimiPip Happy Lines wallpaper room previews.',route?`/${route}/`:'/',body));
 }
-landing('','Happy little spaces.','Meet Happy Lines: a colourful first chapter for growing imaginations.',[ribbon]);
 landing('collections','Our collections.','Wallpaper stories for little rooms, from the first days to age ten.',[ribbon]);
 landing('nursery','For little beginnings.','Happy Lines in nursery rooms for ages 0–2.',products.filter(p=>p.age==='nursery'));
 landing('toddler','For growing imaginations.','Playful wallpaper in toddler rooms for ages 2–3.',products.filter(p=>p.age==='toddler'));
@@ -46,4 +45,4 @@ landing('kids-wallpaper','Wallpaper for little worlds.','Explore Happy Lines fro
 const target = path.join(out,'collections/happy-lines');
 for(const name of ['style.css','collection.js','products.json']) fs.copyFileSync(path.join(source,name),path.join(target,name));
 fs.cpSync(path.join(source,'images'),path.join(target,'images'),{recursive:true});
-console.log(`Built Happy Lines: ${products.length} designs, 11 detail pages, collection and six discovery pages. Ordering stays closed.`);
+console.log(`Built Happy Lines: ${products.length} designs, 11 detail pages, collection and five discovery pages. Ordering stays closed.`);
