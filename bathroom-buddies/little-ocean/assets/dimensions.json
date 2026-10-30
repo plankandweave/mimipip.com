@@ -1,0 +1,480 @@
+{
+  "name": "Little Ocean",
+  "collection": "Bathroom Buddies",
+  "sku": "MP-BB-LO-20",
+  "count": 20,
+  "units": "mm",
+  "dimension_status": "Fixed design dimensions; manufacturing validation pending",
+  "items": [
+    {
+      "id": 0,
+      "name": "Whale",
+      "width_mm": 120,
+      "height_mm": 110.3,
+      "viewbox": [
+        17,
+        115,
+        261,
+        240
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Turtle",
+      "width_mm": 120,
+      "height_mm": 112.1,
+      "viewbox": [
+        289,
+        128,
+        242,
+        226
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Octopus",
+      "width_mm": 120,
+      "height_mm": 123.0,
+      "viewbox": [
+        534,
+        114,
+        239,
+        245
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Pufferfish",
+      "width_mm": 120,
+      "height_mm": 103.4,
+      "viewbox": [
+        783,
+        138,
+        238,
+        205
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Dolphin",
+      "width_mm": 120,
+      "height_mm": 141.5,
+      "viewbox": [
+        1013,
+        117,
+        218,
+        257
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Crab",
+      "width_mm": 120,
+      "height_mm": 99.2,
+      "viewbox": [
+        24,
+        427,
+        260,
+        215
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Seahorse",
+      "width_mm": 120,
+      "height_mm": 194.2,
+      "viewbox": [
+        316,
+        387,
+        160,
+        259
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Ray",
+      "width_mm": 120,
+      "height_mm": 101.6,
+      "viewbox": [
+        508,
+        425,
+        267,
+        226
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Striped fish",
+      "width_mm": 120,
+      "height_mm": 106.9,
+      "viewbox": [
+        787,
+        424,
+        220,
+        196
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Starfish",
+      "width_mm": 120,
+      "height_mm": 121.1,
+      "viewbox": [
+        1022,
+        400,
+        220,
+        222
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Shell",
+      "width_mm": 120,
+      "height_mm": 107.1,
+      "viewbox": [
+        20,
+        698,
+        242,
+        216
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Jellyfish",
+      "width_mm": 120,
+      "height_mm": 164.1,
+      "viewbox": [
+        276,
+        668,
+        207,
+        283
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Submarine",
+      "width_mm": 120,
+      "height_mm": 105.9,
+      "viewbox": [
+        502,
+        666,
+        273,
+        241
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Seaweed",
+      "width_mm": 120,
+      "height_mm": 158.6,
+      "viewbox": [
+        799,
+        668,
+        199,
+        263
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Coral",
+      "width_mm": 120,
+      "height_mm": 137.1,
+      "viewbox": [
+        1025,
+        684,
+        211,
+        241
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Sun",
+      "width_mm": 120,
+      "height_mm": 116.1,
+      "viewbox": [
+        16,
+        950,
+        245,
+        237
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Little whale",
+      "width_mm": 120,
+      "height_mm": 95.9,
+      "viewbox": [
+        269,
+        977,
+        249,
+        199
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Little turtle",
+      "width_mm": 120,
+      "height_mm": 108.6,
+      "viewbox": [
+        522,
+        971,
+        242,
+        219
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Scallop shell",
+      "width_mm": 120,
+      "height_mm": 102.9,
+      "viewbox": [
+        789,
+        980,
+        239,
+        205
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Bubble cluster",
+      "width_mm": 60,
+      "height_mm": 79.6,
+      "viewbox": [
+        1068,
+        966,
+        165,
+        219
+      ]
+    }
+  ],
+  "placements": {
+    "mirror": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 425,
+          "y_mm": 585
+        },
+        {
+          "id": 1,
+          "x_mm": 1040,
+          "y_mm": 585
+        },
+        {
+          "id": 9,
+          "x_mm": 1060,
+          "y_mm": 130
+        },
+        {
+          "id": 19,
+          "x_mm": 1080,
+          "y_mm": 310
+        }
+      ]
+    },
+    "bathtub-side": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 180,
+          "y_mm": 535
+        },
+        {
+          "id": 1,
+          "x_mm": 440,
+          "y_mm": 535
+        },
+        {
+          "id": 2,
+          "x_mm": 710,
+          "y_mm": 535
+        },
+        {
+          "id": 9,
+          "x_mm": 980,
+          "y_mm": 535
+        },
+        {
+          "id": 10,
+          "x_mm": 1240,
+          "y_mm": 535
+        }
+      ]
+    },
+    "wc-lid": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 740,
+          "y_mm": 460
+        },
+        {
+          "id": 19,
+          "x_mm": 820,
+          "y_mm": 370
+        }
+      ]
+    },
+    "bathtub-floor": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 280,
+          "y_mm": 360
+        },
+        {
+          "id": 1,
+          "x_mm": 550,
+          "y_mm": 360
+        },
+        {
+          "id": 2,
+          "x_mm": 820,
+          "y_mm": 360
+        },
+        {
+          "id": 9,
+          "x_mm": 350,
+          "y_mm": 600
+        },
+        {
+          "id": 10,
+          "x_mm": 650,
+          "y_mm": 600
+        },
+        {
+          "id": 19,
+          "x_mm": 1050,
+          "y_mm": 600
+        }
+      ]
+    },
+    "bathroom-floor": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 450,
+          "y_mm": 200
+        },
+        {
+          "id": 1,
+          "x_mm": 850,
+          "y_mm": 200
+        },
+        {
+          "id": 2,
+          "x_mm": 650,
+          "y_mm": 430
+        },
+        {
+          "id": 9,
+          "x_mm": 450,
+          "y_mm": 700
+        },
+        {
+          "id": 10,
+          "x_mm": 1000,
+          "y_mm": 700
+        },
+        {
+          "id": 19,
+          "x_mm": 1000,
+          "y_mm": 440
+        }
+      ]
+    },
+    "shower-floor": {
+      "scene_viewbox_mm": [
+        0,
+        0,
+        1600,
+        1100
+      ],
+      "motifs": [
+        {
+          "id": 0,
+          "x_mm": 450,
+          "y_mm": 220
+        },
+        {
+          "id": 1,
+          "x_mm": 850,
+          "y_mm": 220
+        },
+        {
+          "id": 2,
+          "x_mm": 650,
+          "y_mm": 450
+        },
+        {
+          "id": 9,
+          "x_mm": 450,
+          "y_mm": 720
+        },
+        {
+          "id": 10,
+          "x_mm": 1000,
+          "y_mm": 720
+        },
+        {
+          "id": 19,
+          "x_mm": 1000,
+          "y_mm": 460
+        }
+      ]
+    }
+  },
+  "variants": [
+    {
+      "id": "decorative",
+      "usd": 19.99,
+      "inr": 1199,
+      "surfaces": [
+        "mirror",
+        "bathtub exterior",
+        "closed WC lid"
+      ]
+    },
+    {
+      "id": "floor",
+      "usd": 12.99,
+      "inr": 799,
+      "surfaces": [
+        "bathtub floor",
+        "bathroom floor",
+        "shower floor"
+      ]
+    }
+  ],
+  "checkout_enabled": false
+}
