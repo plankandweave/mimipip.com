@@ -11,5 +11,5 @@
   </g>
   <g fill="#fff8e8" opacity=".88"><circle cx="252" cy="207" r="7"/><circle cx="313" cy="188" r="6"/><circle cx="372" cy="153" r="7"/><circle cx="460" cy="203" r="6"/><circle cx="534" cy="239" r="7"/><circle cx="318" cy="295" r="6"/><circle cx="410" cy="290" r="7"/></g>
   <path d="M138 530c132-28 309-20 451 0" fill="none" stroke="#d1b48d" stroke-width="8" stroke-linecap="round"/>
-  <text x="360" y="572" text-anchor="middle" fill="#7a6554" font-family="Georgia,serif" font-size="22">from a little sketchbook</text>
+  <text x="360" y="572" text-anchor="middle" fill="#7a6554" font-family="Nunito, sans-serif" font-size="22">from a little sketchbook</text>
 </svg>
