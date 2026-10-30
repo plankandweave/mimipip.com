@@ -18,6 +18,9 @@ The storefront imports the 177 products in Zyvorah’s rendered Kids Wallpapers 
 - Child-name and six-shape badge preview, wall-size estimator, local cart, checkout details and final order review.
 - Product navigation for wallpapers, borders, height charts and floor games; the latter two are coming-soon categories until products are added.
 - Transparent MimiPip logo and warm ivory / orange identity.
+- Zyvorah merchandising rules adapted for MimiPip: mapped flat or room imagery only, a white-led MimiPip palette, and catalogue results grouped into collection-specific rows.
+
+See [ZYVORAH_RULES_ADAPTED.md](ZYVORAH_RULES_ADAPTED.md) for the site-wide image, palette and collection standards.
 
 ## Review and commerce limits
 
@@ -32,3 +35,9 @@ The Nafas page follows Zyvorah’s chapter structure and has all 11 design cards
 - `assets/lorange-kids-logo-transparent.png` — transparent brand mark used on the storefront.
 - `assets/shapes/` — six placeholder personalization badge shapes.
 - `zyvorah-reference/` — unmodified copied source references and integration notes.
+
+## Colour and shade browsing — 30 October 2026
+
+The local prototype now offers a second shade row for all twelve colour families, including light blue, pastel blue, navy, sage, mint, blush, cream and terracotta. Shade chips use illustrative swatches and counts that respect the other active filters; selecting a new family resets the shade. All shades keeps broad catalogue discovery available. Zero-result shades are disabled.
+
+Initial shade membership uses explicit shade words in source titles, descriptions and tags. A broad Pastel tag alone does not establish a specific pastel colour. This is incomplete catalogue coverage and requires visual review of flat artwork, especially dominant background versus accent colours, before public release. These changes are local; no live deployment was performed.

@@ -5,7 +5,7 @@ Updated 29 October 2026 from the user’s supplied brand artwork and domain inst
 - Website domain: mimipip.com (exact user spelling).
 - Displayed brand: MimiPip, matching the supplied artwork. The logo and domain intentionally use different spellings unless the user directs otherwise.
 - Original brand reference: assets/mimipip-brand-reference.png, preserved without pixel edits. The header and footer use the standalone wordmark artwork in assets/mimipip-logo.png.
-- Palette direction: warm cream, bright orange, sunny yellow and soft blue.
+- Palette direction: white-led surfaces, warm ivory, bright orange and warm brown, with pale blue and sunny yellow used only as small accents.
 - Product QR destinations must use mimipip.com. Current Garden Giggles target is planned as https://mimipip.com/play/garden-giggles/ and is not yet verified live.
 - The current edits are local source and deployment-bundle changes. The live domain has not been updated.
 
