@@ -1,0 +1,38 @@
+{
+  "brand": "Mimi Pip",
+  "collection": "Little Ocean",
+  "default_market": "US",
+  "secondary_market": "IN",
+  "fulfilment_system": "ROS",
+  "checkout_enabled": false,
+  "products": [
+    {
+      "slug": "little-ocean-floor-grips",
+      "sku": "MP-BA-LO-F20",
+      "name": "Little Ocean Floor Grips",
+      "short": "A little ocean under little feet.",
+      "kind": "Floor grip design",
+      "image": "little-ocean-floor-render.png",
+      "usd": 12.99,
+      "inr": 799,
+      "description": "Twenty little sea friends, in soft ocean blues, seafoam and sun-warmed coral. A coordinated floor-grip design for a cheerful bath-time space.",
+      "detail": "20 illustrated pieces \u00b7 installation scraper planned",
+      "status": "Coming soon",
+      "note": "Wet-area grip and material testing are required before release. Not available to order until performance and surface compatibility are verified."
+    },
+    {
+      "slug": "little-ocean-wall-stickers",
+      "sku": "MP-BA-LO-W20",
+      "name": "Little Ocean Wall Stickers",
+      "short": "Make a splash. Tell a story.",
+      "kind": "Bathroom wall design",
+      "image": "little-ocean-wall-render.png",
+      "usd": 19.99,
+      "inr": 1199,
+      "description": "A whale, a tiny submarine and a whole sea of friendly faces. Twenty coordinating illustrations bring a gentle underwater story to a child\u2019s bathroom wall.",
+      "detail": "20 illustrated pieces \u00b7 coordinated ocean palette",
+      "status": "Coming soon",
+      "note": "Bathroom adhesion, cleaning and material checks are required before release. Direct-spray shower use and final surface compatibility are not yet confirmed."
+    }
+  ]
+}
