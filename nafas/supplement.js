@@ -1,4 +1,4 @@
-window.LORANGE_SUPPLEMENTAL_PRODUCTS = [{
+window.MIMIPIP_SUPPLEMENTAL_PRODUCTS = [{
   handle: "nafas-pizza-pal",
   title: "Pizza Pal",
   description: "<p>A smiling slice, waving hello at the children’s table. Nafas imagined this cheerful pizza for a children’s eating area, with her little waving arm, cheeky tongue and coloured-pencil marks.</p><p>Source listing: Cream · Modern · Playful · Kids and restaurants.</p>",

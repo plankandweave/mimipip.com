@@ -32,7 +32,7 @@ The Nafas page follows Zyvorah’s chapter structure and has all 11 design cards
 
 - `index.html` — storefront, filters, product detail, personalization preview and cart.
 - `catalogue-zyvorah-copy.json` / `catalogue.js` — copied Kids collection.
-- `assets/lorange-kids-logo-transparent.png` — transparent brand mark used on the storefront.
+- `assets/mimi-pip/full-logo.png` — transparent brand mark used on the storefront.
 - `assets/shapes/` — six placeholder personalization badge shapes.
 - `zyvorah-reference/` — unmodified copied source references and integration notes.
 

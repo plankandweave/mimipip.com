@@ -1,5 +1,44 @@
 [
   {
+    "slug": "hopscotch-peach-pop",
+    "colourway": "Peach Pop",
+    "title": "Connected Hopscotch \u2014 Peach Pop",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
+    "slug": "hopscotch-pastel-play",
+    "colourway": "Pastel Play",
+    "title": "Connected Hopscotch \u2014 Pastel Play",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
+    "slug": "hopscotch-bold-adventure",
+    "colourway": "Bold Adventure",
+    "title": "Connected Hopscotch \u2014 Bold Adventure",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
     "slug": "garden-giggles",
     "title": "Garden Giggles",
     "width_ft": 4,
@@ -12,25 +51,6 @@
     "rate_inr_sqft": 200,
     "instructions": "https://mimipip.com/play/garden-giggles/",
     "description": "Three ways to play: copy a pose, remember a trail, or stay and stretch. Stickers and simple instructions are all you need.",
-    "dispatch_working_days": [
-      1,
-      2
-    ],
-    "checkout_enabled": false
-  },
-  {
-    "slug": "sunshine-hop",
-    "title": "Sunshine Hop",
-    "width_ft": 3,
-    "height_ft": 8.5,
-    "width_mm": 914.4000000000001,
-    "height_mm": 2590.8,
-    "area_sqft": 25.5,
-    "price_inr": 5100.0,
-    "gst_included": true,
-    "rate_inr_sqft": 200,
-    "instructions": "https://mimipip.com/play/sunshine-hop/",
-    "description": "Walk the number trail, hop the pattern, or remember a number sequence. A bright everyday movement game.",
     "dispatch_working_days": [
       1,
       2
