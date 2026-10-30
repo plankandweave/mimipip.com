@@ -1,0 +1,43 @@
+/* MimiPip: restrained typography; playfulness lives in the artwork. */
+:root{--sans:"Inter","Avenir Next",Avenir,"Segoe UI",sans-serif;--serif:var(--sans)}
+body{font-family:var(--sans);font-size:15px;line-height:1.6}
+h1,h2,h3{font-family:var(--sans);font-weight:500;letter-spacing:-.025em}
+.hero h1,.carousel-copy h1{font-size:clamp(30px,3.2vw,44px);font-weight:500;line-height:1.16;letter-spacing:-.035em}
+.section-heading h2,.shop-heading h2,.parent-copy h2,.promise h2,.split-copy h2{font-size:clamp(25px,2.5vw,34px);font-weight:500;line-height:1.22;color:#514437}
+.hero p,.carousel-copy p,.hero-copy>p{font-size:15px;line-height:1.75}
+.eyebrow,.section-heading .eyebrow,.carousel-copy .eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em}
+.collection-card strong,.product-title,.stage-card h3,.category-card h3{font-size:17px;font-weight:500;line-height:1.35;color:#514437}
+.collection-result-heading{font-size:22px;font-weight:500;color:#514437}
+.care-card h3,.parent-row h3{font-weight:600}
+.age-card span{font-size:17px;font-weight:500}
+.button,.carousel-copy .button,.pill{font-size:12px;font-weight:500;letter-spacing:.015em}
+.storefront .header-inner{grid-template-columns:142px minmax(0,1fr) 60px;gap:24px;min-height:76px}
+.storefront .brand{grid-column:1;grid-row:1;justify-content:flex-start}
+.storefront .brand img{width:132px;object-position:left center}
+.storefront .nav{grid-column:2;grid-row:1;gap:clamp(8px,1vw,16px)}
+.storefront .header-actions{grid-column:3;grid-row:1}
+.storefront .nav>a,.storefront .nav-trigger,.storefront .cart-button{font-weight:500;text-transform:none;letter-spacing:0}
+.storefront .section{padding-top:58px;padding-bottom:58px}
+.storefront .section-heading{max-width:620px;margin-bottom:28px}
+.storefront .carousel-copy{left:auto;right:auto;width:auto;max-width:440px;padding-right:40px}
+.storefront .carousel-copy h1{max-width:390px;margin:14px 0 18px}
+.storefront .collection-card{box-shadow:none}
+@media(max-width:1100px){
+ .storefront .header-inner{grid-template-columns:42px minmax(0,1fr) 60px;gap:14px}
+ .storefront .brand{grid-column:2;justify-content:center}
+ .storefront .brand img{object-position:center}
+ .storefront .nav{grid-column:auto;grid-row:auto;gap:0}
+ .storefront .menu-button{grid-column:1;grid-row:1}
+}
+@media(max-width:680px){
+ .hero h1,.carousel-copy h1{font-size:30px;line-height:1.18}
+ .section-heading h2,.shop-heading h2,.parent-copy h2,.promise h2,.split-copy h2{font-size:26px}
+ .storefront .header-inner{min-height:66px}
+ .storefront .section{padding-top:40px;padding-bottom:40px}
+ .storefront .carousel-copy{max-width:none;padding:24px 3px 8px}
+ .collection-card strong,.product-title{font-size:15px}
+ .age-card span{font-size:15px}
+ .care-card p{font-size:12px}
+}
+
+.storefront .collection-grid > .collection-grid{grid-column:1 / -1;min-width:0}
