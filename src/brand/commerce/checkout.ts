@@ -4,15 +4,15 @@ export function tubeDimensions(widthCm:number,heightCm:number){
  if(!Number.isFinite(widthCm)||!Number.isFinite(heightCm)||Math.min(widthCm,heightCm)<=0)throw new Error('Invalid product dimensions');
  return {lengthCm:Math.min(widthCm,heightCm)+2,widthCm:8.3,heightCm:8.3};
 }
-export type Fulfilment={stock:number;qcReleased:boolean;weightKg:number;pickupPin:string;warehouse:string;batch:string;quote:{destinationPin:string;shippingPaise:number;reference:string;expiresAt:number;carrier:'Delhivery'}};
+export type Fulfilment={availability?:'stock_or_jit';stock?:number;qcReleased?:boolean;weightKg:number;pickupPin:string;warehouse:string;batch:string;quote:{destinationPin:string;shippingPaise:number;reference:string;expiresAt:number;carrier:'Delhivery'}};
 export function fulfilment(raw:string|undefined):Fulfilment|null{
  try{const f=JSON.parse(raw||'null');
- if(!f||!Number.isSafeInteger(f.stock)||f.stock<=0||f.qcReleased!==true||!Number.isFinite(f.weightKg)||f.weightKg<=0||!/^\d{6}$/.test(f.pickupPin)||!f.warehouse||!f.batch||f.quote?.carrier!=='Delhivery'||!/^\d{6}$/.test(f.quote.destinationPin)||!Number.isSafeInteger(f.quote.shippingPaise)||f.quote.shippingPaise<0||!f.quote.reference||!Number.isFinite(f.quote.expiresAt)||f.quote.expiresAt<=Date.now())return null;
+ if(!f||(f.availability!=='stock_or_jit'&&(!Number.isSafeInteger(f.stock)||f.stock<=0||f.qcReleased!==true))||!Number.isFinite(f.weightKg)||f.weightKg<=0||!/^\d{6}$/.test(f.pickupPin)||!f.warehouse||!f.batch||f.quote?.carrier!=='Delhivery'||!/^\d{6}$/.test(f.quote.destinationPin)||!Number.isSafeInteger(f.quote.shippingPaise)||f.quote.shippingPaise<0||!f.quote.reference||!Number.isFinite(f.quote.expiresAt)||f.quote.expiresAt<=Date.now())return null;
  return f;
  }catch{return null;}
 }
 type Statement={bind(...values:unknown[]):Statement;first<T=any>():Promise<T|null>;run():Promise<{meta:{changes:number}}>};
-type Env={DB?:{prepare(sql:string):Statement};RAZORPAY_KEY_ID?:string;RAZORPAY_KEY_SECRET?:string;RAZORPAY_WEBHOOK_SECRET?:string;PEACH_POP_FULFILMENT_JSON?:string};
+type Env={MIMIPIP_INDIA_CHECKOUT_ENABLED?:string;DB?:{prepare(sql:string):Statement};RAZORPAY_KEY_ID?:string;RAZORPAY_KEY_SECRET?:string;RAZORPAY_WEBHOOK_SECRET?:string;PEACH_POP_FULFILMENT_JSON?:string};
 type Order={id:string;token_hash:string;status:string;amount:number;shipping:number;customer:string;fulfilment:string;razorpay_order_id:string|null;payment_id:string|null;created_at:number;updated_at:number};
 const encoder=new TextEncoder();
 const hex=(v:ArrayBuffer)=>Array.from(new Uint8Array(v),n=>n.toString(16).padStart(2,'0')).join('');
@@ -28,8 +28,8 @@ export function paymentMatches(p:any,o:Order){return p?.status==='captured'&&p.c
 export async function handleCommerce(request:Request,env:Env,transport:typeof fetch):Promise<Response>{
  const path=new URL(request.url).pathname.replace(/\/$/,'');
  const f=fulfilment(env.PEACH_POP_FULFILMENT_JSON);
- const configured=!!(env.DB&&env.RAZORPAY_KEY_ID&&env.RAZORPAY_KEY_SECRET&&env.RAZORPAY_WEBHOOK_SECRET);
- if(path==='/api/india-checkout/readiness'&&request.method==='GET')return json({product:peachPop,packing:tubeDimensions(75,260),available:configured&&!!f,quote:f?{pin:f.quote.destinationPin,shippingPaise:f.quote.shippingPaise,expiresAt:f.quote.expiresAt}:null,message:f?'':'Delivery and availability are being confirmed. Payment is not open yet.'});
+ const configured=!!(env.MIMIPIP_INDIA_CHECKOUT_ENABLED==='1'&&env.DB&&env.RAZORPAY_KEY_ID&&env.RAZORPAY_KEY_SECRET&&env.RAZORPAY_WEBHOOK_SECRET);
+ if(path==='/api/india-checkout/readiness'&&request.method==='GET')return json({product:peachPop,packing:tubeDimensions(75,260),available:configured&&!!f,availability:f?.availability||'stock',quote:f?{pin:f.quote.destinationPin,shippingPaise:f.quote.shippingPaise,expiresAt:f.quote.expiresAt}:null,message:configured&&f?'':f?'Checkout is being connected. Payment is not open yet.':'Delivery and availability are being confirmed. Payment is not open yet.'});
  if(!env.DB||!env.RAZORPAY_KEY_ID||!env.RAZORPAY_KEY_SECRET)return json({error:'Checkout is temporarily unavailable.'},503);
  const db=env.DB;
  async function provider(path:string,body?:unknown){
@@ -60,14 +60,14 @@ export async function handleCommerce(request:Request,env:Env,transport:typeof fe
   let o=await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
   if(path==='/api/india-checkout/create'){
    if(!o){
-    if(!f||!env.RAZORPAY_WEBHOOK_SECRET)return json({error:'Delivery and stock must be confirmed before payment.'},409);
+    if(!f||!env.RAZORPAY_WEBHOOK_SECRET||env.MIMIPIP_INDIA_CHECKOUT_ENABLED!=='1')return json({error:'Delivery and stock must be confirmed before payment.'},409);
     if(b.slug!==peachPop.slug||b.quantity!==1||!validCustomer(b.customer)||b.customer.pin!==f.quote.destinationPin)return json({error:'Check the delivery address and product selection.'},400);
     const customer={name:b.customer.name.trim(),email:b.customer.email.trim(),phone:b.customer.phone,address:b.customer.address.trim(),city:b.customer.city.trim(),state:b.customer.state.trim(),pin:b.customer.pin};
     const id='MP-'+crypto.randomUUID();const now=Date.now();
     // A single conditional insert prevents simultaneous shoppers overselling the confirmed batch.
     // Reservations are conservative: ambiguous provider failures are never automatically released.
-    const r=await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,customer,fulfilment,created_at,updated_at) SELECT ?,?,'creating',?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM mimipip_orders WHERE json_extract(fulfilment,'$.batch')=? AND status!='cancelled') < ?")
-     .bind(id,tokenHash,peachPop.pricePaise+f.quote.shippingPaise,f.quote.shippingPaise,JSON.stringify(customer),JSON.stringify({...f,packing:tubeDimensions(75,260)}),now,now,f.batch,f.stock).run();
+    const r=await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,customer,fulfilment,created_at,updated_at) SELECT ?,?,'creating',?,?,?,?,?,? WHERE ? = 'stock_or_jit' OR (SELECT COUNT(*) FROM mimipip_orders WHERE json_extract(fulfilment,'$.batch')=? AND status!='cancelled') < ?")
+     .bind(id,tokenHash,peachPop.pricePaise+f.quote.shippingPaise,f.quote.shippingPaise,JSON.stringify(customer),JSON.stringify({...f,packing:tubeDimensions(75,260)}),now,now,f.availability||'stock',f.batch,f.stock||0).run();
     if(!r.meta.changes)return json({error:'This batch is currently reserved. Please try later.'},409);
     o=(await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
     const ro=await provider('orders',{amount:o.amount,currency:'INR',receipt:id.replaceAll('-','').slice(0,40),notes:{brand:'MimiPip',mimipip_order_id:id,sku:peachPop.slug}});

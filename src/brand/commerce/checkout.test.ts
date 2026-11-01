@@ -23,7 +23,7 @@ function harness(){
   else data={status:captured?'paid':'attempted',amount:total,amount_paid:captured?total:0,currency:'INR'};
   return Response.json(data);
  };
- const env:any={DB,RAZORPAY_KEY_ID:'test',RAZORPAY_KEY_SECRET:'test-secret',RAZORPAY_WEBHOOK_SECRET:'webhook-test',PEACH_POP_FULFILMENT_JSON:JSON.stringify(stock)};
+ const env:any={DB,MIMIPIP_INDIA_CHECKOUT_ENABLED:'1',RAZORPAY_KEY_ID:'test',RAZORPAY_KEY_SECRET:'test-secret',RAZORPAY_WEBHOOK_SECRET:'webhook-test',PEACH_POP_FULFILMENT_JSON:JSON.stringify(stock)};
  const call=(action:string,data:any={},origin='https://mimipip.com')=>handleCommerce(new Request('https://mimipip.com/api/india-checkout/'+action,{method:'POST',headers:{origin,'Content-Type':'application/json'},body:JSON.stringify({token:'a'.repeat(64),...data})}),env,transport as any);
  return {db,env,call,setCaptured:()=>{captured=true;},calls:()=>calls};
 }
@@ -39,3 +39,4 @@ test('server price, idempotency, stock reservation and captured-only confirmatio
 });
 test('reload recovery reconciles captured payment without browser callback',async()=>{const h=harness();await h.call('create',{slug:'hopscotch-peach-pop',quantity:1,customer});h.setCaptured();assert.equal((await (await h.call('status')).json()).paid,true);});
 test('webhook validates raw signature and confirms only an owned captured payment',async()=>{const h=harness();h.env.RAZORPAY_WEBHOOK_SECRET='webhook-test';await h.call('create',{slug:'hopscotch-peach-pop',quantity:1,customer});h.setCaptured();const body=JSON.stringify({event:'payment.captured',payload:{payment:{entity:{id:'pay_test',order_id:'order_test',captured:true,status:'captured',amount:409900,amount_refunded:0,currency:'INR'}}}});const req=(sig:string)=>new Request('https://mimipip.com/api/india-checkout/webhook',{method:'POST',body,headers:{'x-razorpay-signature':sig}});const provider=async()=>Response.json({status:'paid',amount:409900,amount_paid:409900,currency:'INR'});assert.equal((await handleCommerce(req('bad'),h.env,provider as any)).status,401);const sig=createHmac('sha256','webhook-test').update(body).digest('hex');assert.equal((await handleCommerce(req(sig),h.env,provider as any)).status,200);assert.equal(h.db.prepare('select status from mimipip_orders').get()!.status,'paid');assert.equal((await handleCommerce(req(sig),h.env,provider as any)).status,200);});
+test('owner-authorized stock-or-JIT mode does not invent a finite stock count or QC release',()=>{const {stock:count,qcReleased,...other}=stock;const f=fulfilment(JSON.stringify({...other,availability:'stock_or_jit'}));assert.equal(f?.availability,'stock_or_jit');assert.equal(f?.stock,undefined);assert.equal(f?.qcReleased,undefined);});

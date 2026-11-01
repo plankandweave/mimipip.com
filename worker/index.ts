@@ -1,3 +1,4 @@
+import {secretSetup,getWebhookSecret,type SetupEnv} from '../src/brand/commerce/secret-setup';
 import {handleCommerce} from '../src/brand/commerce/checkout';
 import {razorpayTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
@@ -12,7 +13,11 @@ const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin)
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
- if(p.startsWith('/api/india-checkout/'))return withCheckoutBrowserPolicy(await handleCommerce(request,env as Parameters<typeof handleCommerce>[1],razorpayTransport));
+ if(p==='/payment-setup')return secretSetup(request,env as SetupEnv);
+ if(p.startsWith('/api/india-checkout/')){
+  try {const secret=await getWebhookSecret(env as SetupEnv);return withCheckoutBrowserPolicy(await handleCommerce(request,{...(env as Parameters<typeof handleCommerce>[1]),RAZORPAY_WEBHOOK_SECRET:secret},razorpayTransport));}
+  catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
+ }
  if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
