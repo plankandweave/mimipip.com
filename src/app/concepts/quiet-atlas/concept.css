@@ -1,0 +1,3 @@
+.quiet-atlas-concept .book > header > div:first-child { aspect-ratio: 3 / 2; }
+.quiet-atlas-concept .book > header img { object-position: bottom; }
+.quiet-atlas-concept .book { --book-ground: #eeebe4; --book-ink: #403c37; --book-muted: #7b7369; --book-accent: #7d7464; --book-accent-soft: #e3dfd5; --book-rule: #d8d1c6; }

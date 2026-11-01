@@ -1,0 +1,3 @@
+.the-pattern-house-concept .book > header > div:first-child { aspect-ratio: 3 / 2; }
+.the-pattern-house-concept .book > header img { object-position: bottom; }
+.the-pattern-house-concept .book { --book-ground: #eee5d5; --book-ink: #51443c; --book-muted: #817369; --book-accent: #897a65; --book-soft: #e4d6c5; --book-rule: #d5c3b0; }

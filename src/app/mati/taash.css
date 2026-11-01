@@ -1,0 +1,1221 @@
+/*
+ * TAASH — the Zyvorah × Mati shopfront.
+ *
+ * Every colour here is SAMPLED from the printed book, not chosen to match it.
+ * `--paper` is the ground the whole section sits on. It is Kaagaz — the same
+ * card stock as the title plate on the cover, so the page continues the panel
+ * rather than sitting on a lighter sheet behind it (Roheena, 5 September). The
+ * book's interior stock (#F8F5EF) is kept below as --leaf for anything that
+ * needs to read as a printed page rather than as the wall.
+ *
+ * six inks are the six the book names on its own palette page: Kaajal the block
+ * ink, Sindoor the oxblood, Lakh the shadow red, Dhool the foxing, Gond the
+ * gummed tape and Kaagaz the card stock. Someone holding the book and someone
+ * reading this page are looking at the same six colours.
+ *
+ * Everything is scoped under `.taash`. The rest of the store stays on --cloud;
+ * this section is a different room in the same house, not a re-theme.
+ */
+
+.taash {
+  --paper: #ebdcc2;
+  /* The book's actual interior stock, measured off the printed pages. Retained
+     because the book spreads and any page-like surface should still read as
+     paper against the Kaagaz ground. */
+  --leaf: #f8f5ef;
+  --kaajal: #1c1913;
+  --sindoor: #79231a;
+  --lakh: #5e1a14;
+  --dhool: #5a4c3a;
+  --gond: #c7a57b;
+  --kaagaz: #ebdcc2;
+
+  --rule: color-mix(in srgb, var(--dhool) 22%, transparent);
+  /* The card surface: warmer and a shade darker than the page. */
+  /* The tile the design sits on: darker and BROWNER than the ground, so it
+     reads as set into the page rather than laid on top of it. Mixed toward
+     Dhool (the foxing brown) rather than Gond (the tape tan) — Gond alone goes
+     yellow against Kaagaz and lifts instead of settling. */
+  --card: color-mix(in srgb, #5a4c3a 11%, #ebdcc2);
+  --measure: 34rem;
+  /* One display ramp for the whole page: the opening line is the largest voice,
+     every section heading below it is one step down and they are all the same
+     size as each other. Three independent clamps is how the page ended up with
+     a small lede under big headings. */
+  --lede-size: clamp(1.75rem, 4.4vw, 2.75rem);
+  --head-size: clamp(1.5rem, 3.6vw, 2.15rem);
+
+  /* One ground for the whole section. The site body is --cloud (#FAFAF7) and
+     this wrapper was --paper: close enough to look like a mistake
+     rather than a choice wherever the two met. min-height makes the wrapper
+     cover the viewport so no cloud shows beneath a short page. */
+  background: var(--paper);
+  min-height: 100vh;
+  color: var(--kaajal);
+  font-family: var(--font-taash-body), Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.taash ::selection {
+  background: color-mix(in srgb, var(--gond) 55%, transparent);
+}
+
+/* --- type ---------------------------------------------------------------- */
+
+.taash h1,
+.taash h2,
+.taash h3 {
+  font-family: var(--font-taash-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+/* The book sets every name in Devanagari above the Latin. Reproducing that is
+   most of what makes the page feel like the object. */
+.taash .dev {
+  font-family: var(--font-taash-dev), var(--font-taash-display), serif;
+  font-weight: 400;
+  color: var(--dhool);
+  line-height: 1.4;
+}
+
+/* Small caps with wide tracking — the book's running heads and specimen labels.
+   Tracking this wide needs the letters to be small, or it reads as a gap. */
+.taash .label {
+  font-family: var(--font-taash-body), Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.62rem;
+  color: var(--dhool);
+}
+
+/* `.narrow` centres the column, but a max-width'd child inside it then hugs the
+   left edge of that column — so the text sat left of centre with a wide empty
+   right margin. Centring the child too puts the reading column on the page's
+   own axis. */
+.taash .lede,
+.taash .prose {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+/* The one sentence the collection leads with. It has to sit clearly above the
+   paragraphs under it, or the opening reads as four equal paragraphs. */
+.taash .lede {
+  font-size: var(--lede-size);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.taash .lede + .prose {
+  margin-top: 2rem;
+}
+
+.taash .prose {
+  color: color-mix(in srgb, var(--kaajal) 88%, var(--dhool));
+}
+
+/* Paragraphs in a section are a set, not a stack of separate blocks. */
+.taash .prose + .prose {
+  margin-top: 1.25rem;
+}
+
+/* One heading treatment for the whole page. Bigger than the old chapter rules
+   were, because there is far less body copy under each of them now. */
+.taash .section-head {
+  font-size: var(--head-size);
+  margin: 0.6rem 0 1.75rem;
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+/* A section's eyebrow sits on the same axis as the copy it introduces. In a
+   `.narrow` column that copy is LEFT, so the eyebrow is left; the old rule
+   hard-centred it and left a small-caps line floating in the middle of a
+   left-aligned block. Centred only where the section itself is centred. */
+.taash .section-label,
+.taash .narrow .label,
+.taash .closing .label {
+  display: block;
+  max-width: var(--measure);
+  margin-inline: auto;
+  text-align: left;
+}
+
+.taash .wrap > .section-label,
+.taash .passage .label {
+  max-width: none;
+  text-align: center;
+}
+
+/* An eyebrow introduces the line under it: tight to its own heading, open above
+   the block it starts. */
+.taash .section-label + .lede,
+.taash .section-label + .section-head {
+  margin-top: 0.75rem;
+}
+
+/* A group of designs is announced, not numbered: no chapter, no plate count. */
+.taash .group-head {
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  margin: 0 0 clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+.taash .scroll-cue {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+/* Body copy in a full-width section still reads at the same measure. */
+.taash .narrow-in-wrap {
+  width: min(100%, var(--measure));
+  margin-inline: auto;
+}
+
+.taash .prose-left {
+  margin-inline: 0;
+}
+
+.taash .fine {
+  max-width: var(--measure);
+  margin: 2.5rem auto 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--dhool);
+}
+
+.taash .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.taash .closing {
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+}
+
+/* --- layout -------------------------------------------------------------- */
+
+/* Match the site gutter (globals.css .container-x) instead of a flat 1.25rem,
+   which left the page hugging the viewport edge on wide screens. */
+.taash {
+  --taash-gutter: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.taash .wrap {
+  width: min(100% - 2 * var(--taash-gutter), 78rem);
+  margin-inline: auto;
+}
+
+.taash .narrow {
+  width: min(100% - 2 * var(--taash-gutter), var(--measure));
+  margin-inline: auto;
+}
+
+.taash section + section {
+  margin-top: clamp(4rem, 9vw, 8rem);
+}
+
+/* The cover is a full-bleed image; the first text after it needs real air or it
+   reads as a caption stuck to the bottom of the picture. */
+.taash .masthead + section {
+  margin-top: clamp(5rem, 11vw, 10rem);
+}
+
+/* --- masthead ------------------------------------------------------------ */
+
+/* The jacket, restated: the Bisaat — Gehra field with a card-stock panel
+   floating on it. The book's front board looks exactly like this, which is the
+   point — the page and the object introduce themselves the same way. */
+.taash .masthead {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: min(84vh, 46rem);
+  padding: clamp(3rem, 8vw, 6rem) 1.25rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* z-index 0 rather than -1: a negative index would drop the art behind
+   .taash's own paper background and disappear entirely. The plate sits above it
+   on z-index 1. */
+.taash .masthead-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-repeat: repeat;
+  /* One card face lands at roughly 105px, so the chequer reads as a chequer on
+     a phone as well as on a desktop. */
+  background-size: 420px 420px;
+}
+
+/* The jacket prints the plate straight onto the pattern; on screen the pattern
+   is brighter and the panel needs a little separation from it. */
+.taash .masthead-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(28, 25, 19, 0.18);
+}
+
+.taash .plate {
+  position: relative;
+  z-index: 1;
+  background: var(--kaagaz);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 6vw, 5rem);
+  text-align: center;
+  max-width: 32rem;
+  box-shadow: 0 2rem 4rem -1.5rem rgba(28, 25, 19, 0.45);
+}
+
+.taash .plate .dev {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  color: var(--kaajal);
+}
+
+.taash .plate h1 {
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em; /* balance the trailing letter-space */
+  margin: 0.5rem 0 0;
+}
+
+/* Two houses, one size. Neither name is allowed to grow: this is a
+   collaboration, and a lockup where one mark is larger says otherwise. */
+.taash .houses {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.7em;
+  font-family: var(--font-taash-display), Georgia, serif;
+  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--kaajal);
+  margin: 0;
+}
+
+/* Equal size means equal HEIGHT of the mark itself, and the two files will not
+   agree on how much padding sits inside their own artboards. --mati-mark-scale
+   is the one number to turn if Mati's wordmark lands optically light or heavy
+   beside Zyvorah's; it is not a licence to make either one bigger than the
+   other, only to make them MATCH. */
+.taash .house-mark {
+  height: clamp(1.1rem, 2.6vw, 1.5rem);
+  width: auto;
+  color: var(--kaajal);
+}
+
+.taash .house-mark.mati {
+  height: calc(clamp(1.1rem, 2.6vw, 1.5rem) * var(--mati-mark-scale, 1));
+}
+
+.taash .houses .cross {
+  letter-spacing: 0;
+  text-indent: 0;
+  color: var(--dhool);
+}
+
+.taash .plate hr {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--dhool) 40%, transparent);
+  width: 5rem;
+  margin: 1.75rem auto;
+}
+
+/* --- designs -------------------------------------------------------------- */
+
+/* Two per row, always. Four-across turned twenty-four designs into a catalogue
+   listing; at two the images are large enough to show the texture, which is the
+   entire argument for the collection. One column on a phone. */
+.taash .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 2vw, 2rem);
+}
+
+@media (max-width: 40rem) {
+  .taash .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* No card. The caption sits on the page, the way a plate caption sits on the
+   paper — a beige box around every design read as a product tile and made the
+   page feel like a grid of things for sale rather than a collection. */
+.taash .card {
+  display: block;
+  color: inherit;
+  /* The tile is painted again, one step down from the ground. Left unpainted
+     the caption sat on the page itself and the design had no edge — which is
+     what put the picture and the words in two different places. */
+  background: var(--card);
+  overflow: hidden;
+}
+
+.taash .card figure {
+  margin: 0;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.taash .card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .taash .card:hover img {
+    transform: scale(1.03);
+  }
+}
+
+/* The caption had no horizontal padding at all, so the name and its line sat
+   hard against the left edge of the card and read as overflow rather than
+   layout. */
+.taash .card-body {
+  padding: 1.1rem 1.25rem 1.4rem;
+}
+
+.taash .card .dev {
+  font-size: 1.05rem;
+}
+
+.taash .card h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  margin: 0.1rem 0 0;
+}
+
+/* One sentence, upright. The italic paragraph under every plate was the thing
+   that made twenty-four designs feel like twenty-four poems. */
+.taash .card-line {
+  margin: 0.55rem 0 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--kaajal) 74%, var(--dhool));
+  text-wrap: pretty;
+}
+
+/* One proportion for every image on the page — designs, murals, grounds, book
+   pages and the studio photographs alike. A page of mixed aspect ratios reads
+   as a feed; a page of one reads as an edition. */
+.taash .ratio-plate,
+.taash .book-slot,
+.taash .book-figure img {
+  aspect-ratio: 4 / 3;
+}
+
+/* --- the six inks -------------------------------------------------------- */
+
+.taash .inks {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(0.4rem, 1.4vw, 1rem);
+}
+
+@media (max-width: 40rem) {
+  .taash .inks {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.taash .ink swatch,
+.taash .ink-chip {
+  display: block;
+  aspect-ratio: 1 / 2.6;
+  border: 1px solid color-mix(in srgb, var(--dhool) 15%, transparent);
+}
+
+.taash .ink-name {
+  margin-top: 0.7rem;
+}
+
+/* --- the book ------------------------------------------------------------ */
+
+/* One ground after the cover: the book band used to be Kaagaz, which read as a
+   different page rather than a section of this one. It is separated by space
+   and a rule now, not by colour. */
+.taash .book {
+  background: transparent;
+  border-top: 1px solid var(--rule);
+  padding: clamp(4rem, 8vw, 7rem) 0 0;
+}
+
+/* The book is photographed, not plated: the cover is a portrait product shot
+   and a spread is two 220 x 295 pages side by side. Both keep their real
+   proportion — the page's 4:3 belongs to the designs, and cropping a book to it
+   would be cropping the object rather than framing it. */
+.taash .book-layout .book-figure img,
+.taash .book-layout .book-slot {
+  aspect-ratio: 6 / 7;
+}
+
+.taash .book-spreads {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 2vw, 2rem);
+}
+
+.taash .book-spreads .book-figure img,
+.taash .book-spreads .book-slot {
+  aspect-ratio: 440 / 295;
+}
+
+@media (max-width: 52rem) {
+  .taash .book-spreads {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The book's own column is a text column, not the page's centred measure. */
+.taash .book-layout .section-head,
+.taash .book-layout .label {
+  margin-inline: 0;
+  text-align: left;
+}
+
+.taash .book-layout {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.taash .spec {
+  border-top: 1px solid var(--rule);
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+
+.taash .spec div {
+  display: flex;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.taash .spec dt,
+.taash .spec .k {
+  color: var(--dhool);
+  flex: 0 0 9rem;
+}
+
+/* --- buttons ------------------------------------------------------------- */
+
+/* Sindoor is the only saturated colour on the page, and it is spent on the one
+   thing we want pressed. */
+.taash .btn-taash {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--sindoor);
+  color: var(--paper);
+  padding: 0.95rem 2rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  transition: background 200ms ease;
+}
+
+.taash .btn-taash:hover {
+  background: var(--lakh);
+}
+
+.taash .btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--gond);
+  padding-bottom: 0.2rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--kaajal);
+}
+
+/* --- unpublished designs -------------------------------------------------- */
+
+/* A design that is not in the catalogue yet is shown but not linked — there is
+   no product page behind it, and a dead link reads as a broken site. It carries
+   NO badge: "Not yet published" is a fact about our production schedule, and
+   printing it under the artwork tells a visitor the collection is unfinished
+   rather than that this design is worth looking at. It still opens the plate
+   view — looking is allowed before buying is. */
+.taash .card,
+.taash .card.is-draft {
+  cursor: zoom-in;
+}
+
+/* --- the plate view ------------------------------------------------------ */
+
+/* A design, dealt to the table: the clicked card at full size on a Kaajal
+   ground, with every rendition it owns and — once published — the way into its
+   product page. The scrim is the block ink, not a generic black, so the view
+   still reads as a page of the same book. */
+/* No `position` of our own: the UA sheet gives a modal dialog `position:
+   fixed; inset: 0`, which — with `margin: auto` — is the centring; overriding
+   the position once sent the whole view 467px above the viewport, and the
+   site's base reset zeroes dialog margins, which pinned it to the top-left.
+   The dialog still acts as the containing block for the arrows and the close
+   button. */
+.taash .plate-view {
+  margin: auto;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--kaagaz);
+  width: min(1080px, 94vw);
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
+/* The page holds still while a plate is on the table. CSS, not a JS flag, so
+   the lock can never outlive the dialog — however it closes. */
+html:has(.taash .plate-view[open]) {
+  overflow: hidden;
+}
+
+.taash .plate-view::backdrop {
+  background: color-mix(in srgb, var(--kaajal) 95%, transparent);
+}
+
+/* position: relative — the stage, not the dialog, is the arrows' containing
+   block, so top: 50% is the middle of the SWATCH. Centred on the dialog the
+   arrows hung half the caption's height below the picture's middle. */
+.taash .plate-stage {
+  position: relative;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* The published plate is a link into its product page; the wrapper has to be
+   invisible as layout — full width, no inline gap under the image. */
+.taash .plate-link {
+  display: block;
+  width: 100%;
+  line-height: 0;
+}
+
+/* !important throughout: next/image writes `object-fit: cover; max-width;
+   max-height; aspect-ratio` as INLINE styles on production builds (turbopack
+   dev does not), and inline beats any stylesheet rule. Without these the
+   plate ignored the viewport cap — a 943px dialog in a 900px window, close
+   button clipped — and `cover` would crop the artwork the view exists to
+   show whole. */
+.taash .plate-stage img {
+  width: 100% !important;
+  height: auto !important;
+  /* Leave room for the caption and dots below at any window height, so the
+     dialog never grows taller than the viewport it is centred in. */
+  max-height: calc(100vh - 16rem) !important;
+  object-fit: contain !important;
+}
+
+.taash .plate-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kaajal) 55%, transparent);
+  color: var(--kaagaz);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.taash .plate-arrow:hover {
+  background: var(--sindoor);
+}
+
+.taash .plate-arrow.prev {
+  left: 0.75rem;
+}
+
+.taash .plate-arrow.next {
+  right: 0.75rem;
+}
+
+.taash .plate-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.taash .plate-dots button {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kaagaz) 35%, transparent);
+  cursor: pointer;
+}
+
+.taash .plate-dots button.on {
+  background: var(--gond);
+}
+
+.taash .plate-caption {
+  text-align: center;
+  margin-top: 1.1rem;
+  padding: 0 1rem 0.5rem;
+}
+
+/* The Devanagari name is Dhool on paper; on the Kaajal scrim it needs Gond's
+   light or it sinks into the ground. */
+.taash .plate-caption .dev {
+  color: var(--gond);
+  font-size: 1.35rem;
+}
+
+.taash .plate-line {
+  max-width: 44rem;
+  margin: 0.45rem auto 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--kaagaz) 82%, transparent);
+  text-wrap: pretty;
+}
+
+.taash .plate-cta {
+  margin-top: 1.1rem;
+}
+
+.taash .plate-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kaajal) 55%, transparent);
+  color: var(--kaagaz);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.taash .plate-close:hover {
+  background: var(--sindoor);
+}
+
+@media (max-width: 40rem) {
+  .taash .plate-view {
+    width: 100vw;
+  }
+
+  .taash .plate-stage img {
+    max-height: calc(100vh - 13rem) !important;
+  }
+
+  .taash .plate-arrow {
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+}
+
+/* A book page whose rendition has not been rebuilt yet. The edition is still in
+   revision, so an empty, honest frame beats a stale picture of a page that has
+   since changed. */
+.taash .book-slot {
+  margin: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 2rem;
+  width: 100%;
+  background: color-mix(in srgb, var(--gond) 18%, var(--paper));
+  border: 1px dashed color-mix(in srgb, var(--dhool) 35%, transparent);
+}
+
+.taash .book-figure {
+  margin: 0;
+}
+
+.taash .book-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--kaagaz);
+}
+
+.taash .book-figure figcaption {
+  display: block;
+  margin-top: 0.75rem;
+  letter-spacing: 0.16em;
+}
+
+/* --- the site chrome, on this page only ---------------------------------- */
+
+/*
+ * The header and announcement bar are shared components rendered outside this
+ * section, so they arrive in the site's pastel palette: a lavender-to-peach
+ * gradient across the top, sage/sky/lavender pills, and a --cloud header. Cool
+ * pinks and blues sitting directly above a warm limestone page read as two
+ * sites stacked on one another.
+ *
+ * These rules re-tint that chrome into the collection's own palette and NOTHING
+ * else — every one is gated on `body:has(.taash)`, so it applies on /mati and
+ * nowhere else on the store. Not a global re-theme: the pastels are right
+ * everywhere they are today, and wrong only here.
+ *
+ * If a browser lacks :has(), the block is dropped and the chrome stays as it is.
+ * The page is still correct, just less of a piece.
+ */
+
+/* The announcement strip: the same left-to-right gradient, warm instead of cool. */
+body:has(.taash) [class*="from-lavender"] {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, #c7a57b 26%, #ebdcc2),
+    #ebdcc2,
+    color-mix(in srgb, #c7a57b 18%, #ebdcc2)
+  ) !important;
+  color: #1c1913;
+}
+
+/* The header sits on --cloud, a cooler white than this page's paper. */
+body:has(.taash) header {
+  background-color: color-mix(in srgb, #ebdcc2 94%, transparent) !important;
+}
+
+/* The category pills, in three warm neutrals rather than sage/sky/lavender —
+   kept distinct from each other so they still read as three separate things. */
+body:has(.taash) header .bg-sage {
+  background-color: color-mix(in srgb, #c7a57b 42%, #ebdcc2) !important;
+}
+body:has(.taash) header .bg-sky {
+  background-color: color-mix(in srgb, #5a4c3a 16%, #ebdcc2) !important;
+}
+body:has(.taash) header .bg-lavender {
+  background-color: color-mix(in srgb, #f8f5ef 55%, #ebdcc2) !important;
+}
+body:has(.taash) header .bg-sage,
+body:has(.taash) header .bg-sky,
+body:has(.taash) header .bg-lavender {
+  color: #1c1913 !important;
+}
+
+/* --- the book, told ------------------------------------------------------- */
+
+.taash .book-story {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.taash .book-story h3 {
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+}
+
+.taash .book-story p {
+  margin: 0;
+  max-width: 34rem;
+  color: color-mix(in srgb, var(--kaajal) 88%, var(--dhool));
+}
+
+/* The colophon reads as the book's own last-page note: smaller, quieter, and
+   set off by a rule rather than boxed like a table. */
+.taash .colophon {
+  margin-top: 2.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+  max-width: 34rem;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--dhool);
+}
+
+/* --- the editorial sequence (Roheena, 5 September) ------------------------ */
+
+/* One room beside one touch: the proposition in a single row. The room pane is
+   wider — the crop is a detail, not an equal. */
+.taash .hero-pair {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  align-items: stretch;
+}
+.taash .hero-pair figure {
+  margin: 0;
+  overflow: hidden;
+  background: var(--card);
+}
+.taash .hero-pair img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 700px) {
+  .taash .hero-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The centred passage: the one place the page speaks in the middle of the
+   sheet, like a title page. Wider leading, no left axis. */
+/* Sized the same way `.narrow` is, so the centred passage sits in exactly the
+   same column as the left-aligned copy above and below it — one text block that
+   changes alignment, not a second, narrower page. */
+.taash .passage {
+  width: min(100% - 2 * var(--taash-gutter), var(--measure));
+  margin-inline: auto;
+  text-align: center;
+}
+.taash .passage h2 {
+  font-size: var(--head-size);
+  margin-bottom: 1.4rem;
+}
+.taash .passage p {
+  font-size: 1.08rem;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--kaajal) 88%, var(--dhool));
+}
+.taash .passage p + p {
+  margin-top: 1.1rem;
+}
+
+/* Section names in Devanagari, at display size — the words are the story, so
+   they get the type an English heading would have had. */
+.taash .group-dev {
+  font-family: var(--font-taash-dev), var(--font-taash-display), serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 400;
+  /* Noto Serif Devanagari has a negative left side bearing: a uniform 0.04em
+     of ink sits left of the text origin (measured 2.18px at 54.4px, 0.96px at
+     24px), so left-aligned Devanagari hangs outside the text column. Nudge it
+     back onto the column so it lines up with the Latin below it. Centred .dev
+     is deliberately left alone — a nudge there would push it off-centre. */
+  margin: 0 0 0 0.04em;
+}
+.taash .group-gloss {
+  max-width: 38rem;
+  margin: 0.6rem 0 2.4rem;
+  color: color-mix(in srgb, var(--kaajal) 82%, var(--dhool));
+  font-size: 1.02rem;
+}
+
+/* The card's Devanagari IS the title now. Selector carries .card so it beats
+   the generic `.taash .card .dev` sizing that styled the old small label. */
+.taash .card .card-dev {
+  font-size: 1.5rem;
+  color: var(--kaajal);
+  /* 0.04em: the same Devanagari left side bearing, see .group-dev above. */
+  margin: 0 0 0.35rem 0.04em;
+  line-height: 1.3;
+}
+
+.taash .card-latin,
+.taash .plate-name {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-taash-display), Georgia, serif;
+  font-size: 1.18rem;
+  line-height: 1.25;
+  color: var(--kaajal);
+}
+
+.taash .plate-name {
+  color: var(--kaagaz);
+  font-size: 1.35rem;
+}
+
+/* A ground at the size it deserves: a full-width band of the texture, tall
+   enough to read as material, with its word set on a small card-stock plate.
+   At product-card size a plain limestone reads as a blank tile. */
+.taash .ground-band {
+  position: relative;
+  display: block;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  min-height: clamp(300px, 45vh, 440px);
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+  box-sizing: border-box;
+  color: inherit;
+  isolation: isolate;
+  overflow: hidden;
+}
+.taash .ground-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+}
+.taash .ground-caption {
+  position: relative;
+  z-index: 1;
+  max-width: 26rem;
+  margin-left: clamp(1.25rem, 8vw, 7rem);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  padding: 1.4rem 1.6rem 1.6rem;
+}
+.taash .ground-caption .dev {
+  font-size: 1.5rem;
+  color: var(--kaajal);
+  margin: 0.3rem 0 0.35rem;
+}
+.taash .gloss-inline {
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.85rem;
+}
+
+/* --- the book follows the hand -------------------------------------------- */
+
+.taash .book-tilt {
+  /* Closer viewer, stronger foreshortening: at 1100px the wider rotation read
+     as the book sliding rather than turning. */
+  perspective: 900px;
+}
+.taash .book-tilt-inner {
+  transform: rotateX(var(--book-rx, 0deg)) rotateY(var(--book-ry, 0deg));
+  transition: transform 200ms ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* --- the complete book preview and pre-order ----------------------------- */
+
+.taash .book-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  margin-top: 2rem;
+}
+
+.taash .book-look {
+  border: 1px solid var(--dhool);
+  padding: 0.9rem 1.45rem;
+}
+
+.taash .book-actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.taash .book-error {
+  margin-top: 0.8rem;
+  color: var(--sindoor);
+  font-size: 0.9rem;
+}
+
+.taash .taash-reader {
+  margin: auto;
+  width: min(1500px, 96vw);
+  height: min(1000px, 96vh);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kaagaz);
+  overflow: visible;
+}
+
+.taash .taash-reader::backdrop {
+  background: color-mix(in srgb, var(--kaajal) 94%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.taash .taash-reader-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: 100%;
+  height: 100%;
+  border: 1px solid color-mix(in srgb, var(--kaagaz) 18%, transparent);
+  background: #17130f;
+  box-shadow: 0 30px 100px rgb(0 0 0 / 0.55);
+}
+
+.taash .taash-reader-bar,
+.taash .taash-reader-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-taash-body), Georgia, serif;
+}
+
+.taash .taash-reader-bar {
+  border-bottom: 1px solid color-mix(in srgb, var(--kaagaz) 16%, transparent);
+}
+
+.taash .taash-reader-bar > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.taash .taash-reader-bar strong {
+  font-family: var(--font-taash-display), Georgia, serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.18em;
+}
+
+.taash .taash-reader-bar span,
+.taash .taash-reader-controls span {
+  color: color-mix(in srgb, var(--kaagaz) 68%, transparent);
+  font-size: 0.78rem;
+}
+
+.taash .taash-reader-bar button,
+.taash .taash-reader-controls button {
+  border: 1px solid color-mix(in srgb, var(--kaagaz) 34%, transparent);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--kaagaz);
+}
+
+.taash .taash-reader-controls button:disabled {
+  opacity: 0.3;
+}
+
+.taash .taash-reader-stage {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: 1rem;
+  background: radial-gradient(circle at 50% 45%, #3a3027 0, #211b16 48%, #120f0c 100%);
+}
+
+.taash .taash-page-flip {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.taash .taash-reader-leaf {
+  overflow: hidden;
+  background: #f8f5ef;
+  box-shadow: inset 0 0 0 1px rgb(30 23 18 / 0.08);
+}
+
+.taash .taash-reader-leaf.outer-cover {
+  background: #612b25;
+}
+
+.taash .taash-reader-leaf img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.taash .taash-reader-controls {
+  border-top: 1px solid color-mix(in srgb, var(--kaagaz) 16%, transparent);
+}
+
+body:has(.taash .taash-reader[open]) {
+  overflow: hidden;
+}
+
+@media (max-width: 700px) {
+  .taash .taash-reader {
+    width: 100vw;
+    height: 100dvh;
+  }
+
+  .taash .taash-reader-shell {
+    border: 0;
+  }
+
+  .taash .taash-reader-stage {
+    padding: 0.5rem;
+  }
+
+  .taash .taash-reader-controls span {
+    display: none;
+  }
+}
+/* No pointer, no tilt: a phone gets the same book, standing still. */
+@media (hover: none) {
+  .taash .book-tilt-inner {
+    transform: none;
+  }
+}
+
+
+/* Campaign entry points stay clear of the sticky shop header. */
+.taash #patte,
+.taash #bisaat,
+.taash #book {
+  scroll-margin-top: 9rem;
+}
+
+.taash .campaign-line {
+  margin-top: 1.25rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  text-wrap: balance;
+}
+
+.taash .masthead-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.taash .masthead-actions .btn-taash,
+.taash .masthead-actions .btn-quiet {
+  white-space: normal;
+  text-align: center;
+}
+
+.taash .collection-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 2rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.9rem;
+}
+
+.taash .collection-nav a:hover,
+.taash .collection-nav a:focus-visible,
+.taash .book-preorder-note a {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.taash .book-preorder-note {
+  margin-top: 1rem;
+  max-width: var(--measure);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--dhool);
+}

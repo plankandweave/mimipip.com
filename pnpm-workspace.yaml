@@ -1,0 +1,93 @@
+# Which dependencies may run their install scripts.
+#
+# pnpm 10+ refuses to run a dependency's build script unless it is named here.
+# This file was committed with pnpm's own scaffold still in it — every value was
+# the literal string "set this to true or false" — so nothing was approved and
+# pnpm failed the install with ERR_PNPM_IGNORED_BUILDS. Locally that is a
+# warning you can work through; on Vercel it meant sharp never produced a
+# binary, and every build from 25 Aug 15:50 UTC died with
+#   Cannot find module '../build/Release/sharp-linux-x64.node'
+#   Failed to collect page data for /api/segment-room
+# while production quietly went on serving the last good deploy.
+#
+# All four install native binaries and all four are needed:
+#   sharp          — image pipeline. TWO copies: ours (0.35.x) and the 0.32.6
+#                    that @xenova/transformers pins, which is the one
+#                    /api/segment-room actually loads. 0.32.6 fetches libvips in
+#                    its install script, so blocking the script leaves no binary
+#                    at all — see .npmrc for the related libc pin.
+#   esbuild        — platform binary; the bundler cannot run without it.
+#   unrs-resolver  — native resolver behind the lint config.
+#   protobufjs     — postinstall only generates types, but it warns forever if
+#                    left unapproved and there is nothing to gain by blocking it.
+allowBuilds:
+  esbuild: true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true
+  # workerd — Cloudflare's local Workers runtime (vinext dev/start); its
+  # postinstall downloads the platform binary, so blocking it leaves no runtime.
+  workerd: true
+
+# Transitive dependencies pinned above their published advisories.
+#
+# Every entry here is a package we do not depend on directly — each arrived
+# under something else that has not shipped a bumped range of its own. Dependabot
+# raised 19 alerts against this lockfile (1 critical, 6 high) and all of them
+# resolve to these five names. Remove an entry only once its parent's own
+# dependency range has moved past the fix.
+#
+#   protobufjs  — 6.11.6 under onnx-proto → onnxruntime-web → @xenova/transformers.
+#                 Critical: arbitrary code execution. onnx-proto still asks for
+#                 ^6.8.8 and is unmaintained; 7.x is the only patched line.
+#   postcss     — 8.4.31 bundled under next. Path traversal / arbitrary .map read.
+#   sharp       — 0.32.6 under @xenova/transformers and 0.34.5 under next, both
+#                 carrying the libvips CVEs. Our own dependency is already 0.35.3;
+#                 this collapses all three copies onto it, which also retires the
+#                 0.32.6 install script that fetched libvips at install time.
+#   qs          — 6.15.3 under express → @modelcontextprotocol/sdk (dev only).
+#   uuid        — 8.3.2 under exceljs, which uses nothing but v4.
+#   brace-expansion — arrives under minimatch in three incompatible major lines
+#                 at once (1.x, 2.x, 5.x). GHSA-mh99-v99m-4gvg / CVE-2026-14257.
+#                 vendor/brace-expansion-compat ports the patched 5.0.8
+#                 algorithm behind BOTH calling conventions — callable module
+#                 (minimatch 3/5) and named `expand` export (minimatch 10) —
+#                 because one override has to satisfy every consumer.
+#   fast-uri    — under ajv (fastify, @modelcontextprotocol/sdk). Authority
+#                 injection and host confusion; 3.1.8 is the patched line.
+#   proxy-addr  — 2.0.7 under express → @modelcontextprotocol/sdk (dev only).
+#                 Critical: IP spoofing through IPv4-mapped IPv6 trust subnets.
+#   ip-address  — 10.5.0 under express-rate-limit → @modelcontextprotocol/sdk.
+#   undici      — 7.29.0 under miniflare → @cloudflare/vite-plugin (local dev
+#                 runtime). TLS validation bypass and several DoS advisories.
+#   source-map-js — 1.2.1 under @tailwindcss/node. Event-loop DoS.
+#   (Added 8 Oct 2026. braces 3.0.3 under eslint's fast-glob is still flagged:
+#   no patched release exists, and it only ever parses our own lint globs.)
+# Declared in BOTH this file and package.json's "pnpm.overrides". pnpm 11 reads
+# only this one and warns that the package.json field is ignored; pnpm 9 and 10
+# read only package.json. The lockfile is still lockfileVersion 9.0, so the
+# builder may well be on 9 — keep the two lists identical.
+#
+# There used to be a THIRD list: an npm-style top-level "overrides" in
+# package.json. No version of pnpm reads that field, and this repo has no
+# package-lock.json, so it was dead config that read as authoritative — and it
+# was the only home of the brace-expansion shim and the fast-uri pin, neither of
+# which was therefore in effect. Its entries are folded in here. If you add an
+# override, it goes in these two lists and nowhere else.
+overrides:
+  protobufjs: '^7.6.5'
+  postcss: '^8.5.26'
+  sharp: '^0.35.5'
+  qs: '^6.16.0'
+  uuid: '^11.1.1'
+  brace-expansion: 'file:./vendor/brace-expansion-compat'
+  fast-uri: '^3.1.8'
+  proxy-addr: '^2.0.8'
+  ip-address: '^10.7.1'
+  undici: '^7.29.1'
+  source-map-js: '^1.2.2'
+
+patchedDependencies:
+  vinext: patches/vinext.patch
+
+verifyDepsBeforeRun: false

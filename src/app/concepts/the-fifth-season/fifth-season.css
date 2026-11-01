@@ -1,0 +1,17 @@
+/* Let the complete architectural scene carry the cover, with its floor visible. */
+.fifth-season-concept .book > header > div:first-child {
+  aspect-ratio: 3 / 2;
+}
+
+.fifth-season-concept .book > header img {
+  object-position: bottom;
+}
+
+.fifth-season-concept .book {
+  --book-ground: #f1e9de;
+  --book-ink: #302538;
+  --book-muted: #69576c;
+  --book-accent: #235554;
+  --book-accent-soft: #e0e5df;
+  --book-rule: #d8cdbd;
+}

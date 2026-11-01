@@ -1,0 +1,74 @@
+@font-face {
+  font-family: BlueNotes;
+  src: url('/fonts/Syne-Variable.ttf') format('truetype');
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+.blue-notes {
+  --bn-ink: #193e83;
+  --bn-paper: #f5f4ef;
+  color: var(--bn-ink);
+  background: var(--bn-paper);
+}
+.blue-notes a:focus-visible,
+.blue-notes button:focus-visible { outline: 2px solid var(--bn-ink); outline-offset: 5px; }
+.bn-opening { padding: 28px 3vw 0; }
+.bn-edition { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .025em; }
+.bn-edition a { display: inline-flex; align-items: center; min-height: 40px; }
+.bn-edition > span { align-self: center; }
+.bn-opening h1 {
+  font-family: BlueNotes, sans-serif;
+  font-weight: 700;
+  font-size: clamp(76px, 14.6vw, 240px);
+  letter-spacing: -.07em;
+  line-height: .95;
+  margin: 14px 0 34px;
+  white-space: nowrap;
+}
+.bn-cover { margin: 0; }
+.bn-cover img { display: block; width: 100%; height: auto; }
+.bn-cover figcaption { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 11px; padding-top: 8px; }
+.bn-cover figcaption a { min-height: 44px; display: inline-flex; align-items: center; gap: 28px; }
+.bn-introduction { display: flex; align-items: flex-end; justify-content: space-between; gap: 50px; padding: 68px 7vw 82px; }
+.bn-introduction > p { font-family: BlueNotes, sans-serif; font-size: clamp(21px, 2.6vw, 36px); line-height: 1.3; letter-spacing: -.035em; max-width: 730px; }
+.bn-introduction > div { flex: 0 0 auto; padding-bottom: 4px; font-size: 14px; }
+.bn-introduction > div > span { display: block; margin-top: 5px; font-size: 11px; color: #52617a; }
+.bn-designs { padding: 0 3vw 70px; scroll-margin-top: 130px; }
+.bn-gallery { display: grid; grid-template-columns: 1fr 1fr; column-gap: 5vw; align-items: start; }
+.bn-design { min-width: 0; margin: 0 0 100px; scroll-margin-top: 130px; }
+.bn-design:nth-child(even) { margin-top: 130px; }
+.bn-design-picture a { display: block; }
+.bn-design-picture img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; background: #e9e7e1; }
+.bn-room-views { display: flex; flex-wrap: wrap; column-gap: 19px; row-gap: 0; margin-top: 9px; }
+.bn-room-views button { min-height: 44px; padding: 8px 0; border: 0; border-radius: 0; background: transparent; font-size: 10px; line-height: 1.4; color: #52617a; position: relative; }
+.bn-room-views button[aria-pressed=true] { color: var(--bn-ink); }
+.bn-room-views button[aria-pressed=true]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 6px; height: 1px; background: currentColor; }
+.bn-design-heading { display: flex; gap: 12px; align-items: baseline; margin-top: 13px; }
+.bn-number { font-size: 10px; font-variant-numeric: tabular-nums; }
+.bn-design-heading h2 { font-family: BlueNotes, sans-serif; font-weight: 600; font-size: clamp(24px, 2.7vw, 42px); line-height: 1.1; letter-spacing: -.045em; }
+.bn-design-link { display: flex; align-items: center; justify-content: flex-end; min-width: 44px; min-height: 44px; margin-left: auto; font-size: 28px; }
+.bn-design-rate { padding-left: 26px; margin-top: 6px; font-size: 11px; color: #52617a; }
+.bn-end { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 18px; border-top: 1px solid #193e8325; padding: 22px 3vw; font-size: 10px; }
+.bn-end a { display: inline-flex; min-height: 44px; align-items: center; }
+@media (max-width: 800px) {
+  .bn-opening { padding: 10px 5vw 0; }
+  .bn-opening h1 { font-size: 14.8vw; margin: 12px 0 25px; }
+  .bn-cover { margin: 0 -5vw; }
+  .bn-cover figcaption { padding: 4px 5vw 0; font-size: 10px; }
+  .bn-cover figcaption a { gap: 12px; }
+  .bn-introduction { display: block; padding: 35px 5vw 48px; }
+  .bn-introduction > p { font-size: 23px; max-width: 560px; }
+  .bn-introduction > div { display: flex; align-items: baseline; gap: 18px; margin-top: 22px; font-size: 12px; }
+  .bn-introduction > div > span { margin: 0; font-size: 10px; }
+  .bn-designs { padding: 0 5vw 25px; scroll-margin-top: 120px; }
+  .bn-gallery { display: block; }
+  .bn-design, .bn-design:nth-child(even) { margin: 0 0 54px; }
+  .bn-design-picture { margin: 0 -5vw; }
+  .bn-room-views { column-gap: 15px; margin-top: 5px; }
+  .bn-room-views button { font-size: 10px; }
+  .bn-design-heading { margin-top: 7px; }
+  .bn-design-heading h2 { font-size: 29px; }
+  .bn-design-rate { margin-top: 2px; }
+  .bn-end { padding: 20px 5vw; }
+}

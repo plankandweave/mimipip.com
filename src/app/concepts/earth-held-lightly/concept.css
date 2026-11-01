@@ -1,0 +1,3 @@
+.earth-held-lightly-concept .book > header > div:first-child { aspect-ratio: 3 / 2; }
+.earth-held-lightly-concept .book > header img { object-position: bottom; }
+.earth-held-lightly-concept .book { --book-ground: #eee6d8; --book-ink: #464b3d; --book-muted: #777762; --book-accent: #777e62; --book-soft: #e0d7c5; --book-rule: #cec7b5; }

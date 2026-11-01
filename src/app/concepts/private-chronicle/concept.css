@@ -1,0 +1,3 @@
+.private-chronicle-concept .book > header > div:first-child { aspect-ratio: 3 / 2; }
+.private-chronicle-concept .book > header img { object-position: bottom; }
+.private-chronicle-concept .book { --book-ground: #f1eadf; --book-ink: #4b4138; --book-muted: #897866; --book-accent: #91704d; --book-soft: #e8ddce; --book-rule: #d8c9b7; }
