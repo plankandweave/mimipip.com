@@ -7,3 +7,5 @@
 @media(prefers-reduced-motion:reduce){.hero-slide,.hero-copy,.hero-media{transition:none!important;transform:none!important}}
 
 .discovery-age img{object-fit:contain;object-position:center center;background:#f7f2e9}
+
+.polka-crop{display:block;position:relative;width:100%;aspect-ratio:1.15;overflow:hidden;background:#fff9ed}.polka-crop img{position:absolute!important;top:0;left:0;width:200%!important;max-width:none!important;height:200%!important;object-fit:fill!important}.polka-crop.diptych img{height:100%!important}
