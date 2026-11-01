@@ -150,15 +150,8 @@ function toCard(p: Product, roomKey?: string, mode?: CardImageMode): ProductCard
     : `${p.title} ${noun}`;
   const room = card && !card.is_flat ? roomAltPhrase(card.scene_key) : undefined;
   const imageAlt = room ? `${named} in ${room}` : named;
-  // A second ROOM render for the card's hover — never the flat (homepage rule
-  // 9) and never on a room page, where another room's picture is a lie about
-  // the page. Null when the design has only one render.
-  const hover =
-    !roomKey && card && !card.is_flat
-      ? imgs.find((i) => !i.is_flat && i.url !== card.url)
-      : undefined;
   return {
-    hoverImage: hover?.url ?? null,
+    flatHoverImage: flat?.url ?? null,
     sampleable: p.category === WALLPAPER_CATEGORY && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "smooth-matt"),
     handle: p.handle,
     title: p.title,

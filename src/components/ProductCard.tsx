@@ -26,14 +26,14 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
     format,
   });
   const price = copy.price;
-  // The second render is fetched only once a mouse actually arrives — a grid
-  // of 24 cards must not download 48 pictures for a hover most never make.
+  // The flat artwork is fetched only when a mouse arrives, so visitors who
+  // never hover do not download an extra image for every card.
   const [hoverWanted, setHoverWanted] = useState(false);
   const [hoverReady, setHoverReady] = useState(false);
-  const hoverImage = product.hoverImage && product.hoverImage !== product.image ? product.hoverImage : null;
-  const second = hoverImage && hoverWanted ? (
+  const flatHoverImage = product.flatHoverImage && product.flatHoverImage !== product.image ? product.flatHoverImage : null;
+  const flatHover = flatHoverImage && hoverWanted ? (
     <Image
-      src={hoverImage}
+      src={flatHoverImage}
       alt=""
       fill
       sizes="(max-width:768px) 50vw, 25vw"
@@ -53,7 +53,8 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
     <Link
       href={href ?? `/products/${product.handle}`}
       className="group block"
-      onPointerEnter={(e) => { if (e.pointerType === "mouse" && hoverImage) setHoverWanted(true); }}
+      onPointerEnter={(e) => { if (e.pointerType === "mouse" && flatHoverImage) setHoverWanted(true); }}
+      onFocus={() => { if (flatHoverImage) setHoverWanted(true); }}
     >
       {/* The card's FOOTPRINT stays square so every grid row lines up, but a
           piece with a fixed finished shape is framed at that shape inside it —
@@ -62,7 +63,27 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       <div className="zoomer relative flex aspect-square items-center justify-center bg-wash">
         <WishlistButton handle={product.handle} />
         {product.image ? (
-          product.aspectRatio ? (
+          product.cardImageCrop ? (
+            <div className="absolute inset-0 overflow-hidden bg-wash">
+              <div
+                className="absolute"
+                style={{
+                  width: `${product.cardImageCrop.columns * 100}%`,
+                  height: `${product.cardImageCrop.rows * 100}%`,
+                  left: `${-product.cardImageCrop.x * 100}%`,
+                  top: `${-product.cardImageCrop.y * 100}%`,
+                }}
+              >
+                <Image
+                  src={product.image}
+                  alt={product.imageAlt}
+                  fill
+                  sizes="(max-width:768px) 50vw, 25vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ) : product.aspectRatio ? (
             <div className="relative h-full max-w-full" style={{ aspectRatio: product.aspectRatio }}>
               <Image
                 src={product.image}
@@ -71,7 +92,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
                 sizes="(max-width:768px) 50vw, 25vw"
                 className="object-cover"
               />
-              {second}
+              {flatHover}
             </div>
           ) : (
             <>
@@ -82,12 +103,13 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
                 sizes="(max-width:768px) 50vw, 25vw"
                 className="object-cover"
               />
-              {second}
+              {flatHover}
             </>
           )
         ) : (
           <div className="grid h-full place-items-center text-mist">No image</div>
         )}
+        {flatHover && product.cardImageCrop ? flatHover : null}
         {badge ? (
           <span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full max-w-[calc(100%-4.25rem)] px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] backdrop-blur-sm ${badge.className}`}>
             <BadgeIcon badgeKey={badge.key} className="h-3 w-3 shrink-0" />

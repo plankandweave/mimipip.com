@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { FocusEventHandler, PointerEventHandler, ReactNode } from "react";
 import { gaEvent } from "@/lib/ga";
 
 /**
@@ -17,6 +17,8 @@ export function TrendingConfigureLink({
   className,
   children,
   ariaLabel,
+  onPointerEnter,
+  onFocus,
 }: {
   href: string;
   handle: string;
@@ -25,12 +27,16 @@ export function TrendingConfigureLink({
   className?: string;
   children: ReactNode;
   ariaLabel?: string;
+  onPointerEnter?: PointerEventHandler<HTMLAnchorElement>;
+  onFocus?: FocusEventHandler<HTMLAnchorElement>;
 }) {
   return (
     <Link
       href={href}
       className={className}
       aria-label={ariaLabel}
+      onPointerEnter={onPointerEnter}
+      onFocus={onFocus}
       onClick={() => gaEvent("trending_pin_click", { item_id: handle, placement })}
     >
       {children}

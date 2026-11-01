@@ -117,6 +117,8 @@ export type ShowcaseEntry = {
 // A trimmed shape used by product cards / grids.
 export type ProductCardData = {
   sampleable?: boolean;
+  /** Optional crop into a single room panel of a composite editorial image. */
+  cardImageCrop?: { x: number; y: number; columns: number; rows: number };
   handle: string;
   title: string;
   image: string | null;
@@ -129,8 +131,8 @@ export type ProductCardData = {
    *  flat or an unscened mockup. What `showsRoom` (src/lib/rooms.ts) checks
    *  before a room tile may use the picture. */
   imageScene?: string | null;
-  /** A second room render, crossfaded in on desktop hover. Never the flat. */
-  hoverImage?: string | null;
+  /** The clean flat artwork shown over the room preview on desktop hover. */
+  flatHoverImage?: string | null;
   fromPricePerSqft: number | null;
   /** True for Canvas Wall Art — sold only at fixed sizes; NEVER render a ₹/sq ft rate. */
   isCanvas?: boolean;

@@ -7393,7 +7393,7 @@
   "personalization": null,
   "collectionURL": "/collections/polka-dots/",
   "detailURL": "/collections/polka-dots/happy-dots/",
-  "imagePanelRatio": 1.0
+  "imagePanelRatio": 1
  },
  {
   "id": "MP-PD02",
@@ -8526,5 +8526,664 @@
   "collectionURL": "/collections/polka-dots/",
   "detailURL": "/collections/polka-dots/tiny-confetti/",
   "imagePanelRatio": 1.5
+ },
+ {
+  "id": "MP-CC01",
+  "slug": "colour-create-bunny-garden",
+  "name": "Bunny Garden",
+  "description": "A colour-in wallpaper world of flowers and bunnies. An outlined scene for children to bring to life with their own colours. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "bunny-garden"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/bunny-garden-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/bunny-garden-room.webp",
+    "alt": "Bunny Garden — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/bunny-garden-flat.webp",
+    "alt": "Bunny Garden — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC02",
+  "slug": "colour-create-little-town",
+  "name": "Little Town",
+  "description": "A colour-in wallpaper world of a playful little town. An outlined scene for children to bring to life with their own colours. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "little-town"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/little-town-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/little-town-room.webp",
+    "alt": "Little Town — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/little-town-flat.webp",
+    "alt": "Little Town — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC03",
+  "slug": "colour-create-woodland",
+  "name": "Woodland Picnic",
+  "description": "A colour-in wallpaper world of woodland animals at a picnic. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "woodland"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/woodland-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/woodland-room.webp",
+    "alt": "Woodland Picnic — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/woodland-flat.webp",
+    "alt": "Woodland Picnic — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC04",
+  "slug": "colour-create-ocean",
+  "name": "Ocean Friends",
+  "description": "A colour-in wallpaper world of whales, turtles and sea life. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "ocean"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/ocean-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/ocean-room.webp",
+    "alt": "Ocean Friends — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/ocean-flat.webp",
+    "alt": "Ocean Friends — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC05",
+  "slug": "colour-create-space",
+  "name": "Space Explorers",
+  "description": "A colour-in wallpaper world of astronauts and distant planets. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "space"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/space-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/space-room.webp",
+    "alt": "Space Explorers — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/space-flat.webp",
+    "alt": "Space Explorers — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC06",
+  "slug": "colour-create-dinosaurs",
+  "name": "Dinosaur Valley",
+  "description": "A colour-in wallpaper world of friendly dinosaurs. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "dinosaurs"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/dinosaurs-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/dinosaurs-room.webp",
+    "alt": "Dinosaur Valley — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/dinosaurs-flat.webp",
+    "alt": "Dinosaur Valley — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC07",
+  "slug": "colour-create-farm",
+  "name": "Happy Farm",
+  "description": "A colour-in wallpaper world of farm animals and a tractor. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "farm"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/farm-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/farm-room.webp",
+    "alt": "Happy Farm — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/farm-flat.webp",
+    "alt": "Happy Farm — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC08",
+  "slug": "colour-create-balloons",
+  "name": "Balloon Meadow",
+  "description": "A colour-in wallpaper world of hot-air balloons over a picnic meadow. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "balloons"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/balloons-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/balloons-room.webp",
+    "alt": "Balloon Meadow — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/balloons-flat.webp",
+    "alt": "Balloon Meadow — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC09",
+  "slug": "colour-create-castle",
+  "name": "Castle Garden",
+  "description": "A colour-in wallpaper world of a storybook castle and friendly dragon. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "castle"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/castle-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/castle-room.webp",
+    "alt": "Castle Garden — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/castle-flat.webp",
+    "alt": "Castle Garden — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC10",
+  "slug": "colour-create-safari",
+  "name": "Safari Watering Hole",
+  "description": "A colour-in wallpaper world of animals at a watering hole. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "safari"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/safari-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/safari-room.webp",
+    "alt": "Safari Watering Hole — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/safari-flat.webp",
+    "alt": "Safari Watering Hole — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC11",
+  "slug": "colour-create-vehicles",
+  "name": "Little Journeys",
+  "description": "A colour-in wallpaper world of buses, bicycles and trains. Softly coloured upper scenery pairs with outlined foreground details for children to make their own. The room image shows example colouring; the flat preview shows the original design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "vehicles"
+  ],
+  "color": [
+   "pastel",
+   "white"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/vehicles-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/vehicles-room.webp",
+    "alt": "Little Journeys — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/vehicles-flat.webp",
+    "alt": "Little Journeys — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
+ },
+ {
+  "id": "MP-CC12",
+  "slug": "colour-create-pastel-blue",
+  "name": "Pastel Blue Drawing Wall",
+  "description": "A quiet pastel-blue whole-wall canvas for little drawings and big ideas. The room image shows example doodles; the flat preview shows the plain blue design.",
+  "collection": [
+   "colour-create"
+  ],
+  "concept": [
+   "creative-play",
+   "pastel-blue"
+  ],
+  "color": [
+   "blue"
+  ],
+  "age": [
+   "toddler",
+   "preschool",
+   "school-age"
+  ],
+  "space": [
+   "bedroom",
+   "playroom"
+  ],
+  "type": [
+   "wallpaper"
+  ],
+  "surface": [
+   "wall"
+  ],
+  "widthCm": null,
+  "heightCm": null,
+  "measurementType": "made-to-measure",
+  "image": "/review/colour-create/pastel-blue-room.webp",
+  "imageRole": "Illustrative room scene showing a child colouring. Flat artwork shown in the second image.",
+  "source": "Mimi Pip · Colour & Create",
+  "status": "Design preview",
+  "price": null,
+  "personalization": null,
+  "gallery": [
+   {
+    "url": "/review/colour-create/pastel-blue-room.webp",
+    "alt": "Pastel Blue Drawing Wall — child colouring in a styled room",
+    "width": 1440,
+    "height": 960
+   },
+   {
+    "url": "/review/colour-create/pastel-blue-flat.webp",
+    "alt": "Pastel Blue Drawing Wall — flat design preview",
+    "width": 750,
+    "height": 500
+   }
+  ]
  }
 ]

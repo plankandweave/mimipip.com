@@ -436,10 +436,11 @@
   .unroll[data-unrolled] .measure-dot { transform: translate(-50%, -50%) scale(1); }
   .unroll[data-unrolled] .measure-label { opacity: 1; }
 
-  /* 4. Card hover: a second ROOM render crossfades in — desktop mice only. */
+  /* 4. Card hover: the matching flat artwork crossfades in — desktop mice only. */
   @media (hover: hover) {
     .card-hover-img { opacity: 0; transition: opacity 0.45s var(--ease-settle); }
-    .group:hover .card-hover-img.is-ready { opacity: 1; }
+    .group:hover .card-hover-img.is-ready,
+    .group:focus-within .card-hover-img.is-ready { opacity: 1; }
     .zoomer { transition: transform 0.45s var(--ease-settle); }
     .group:hover .zoomer { transform: translateY(-3px); }
   }
@@ -461,9 +462,13 @@
   white-space: nowrap;
   backdrop-filter: blur(6px);
 }
-/* Without motion there is no hover crossfade to fade — keep the extra render hidden. */
-@media (prefers-reduced-motion: reduce), (hover: none) {
+/* Touch screens do not have hover; reduced-motion users still get the image
+   swap, immediately, without the crossfade. */
+@media (hover: none) {
   .card-hover-img { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-hover-img { transition: none !important; }
 }
 
 /* A first-time visitor's market is not known yet: hide prices rather than paint

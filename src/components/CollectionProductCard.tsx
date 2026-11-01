@@ -13,12 +13,12 @@ import { SampleOrderModal } from "@/components/SampleOrderModal";
 import { useMarket } from "@/components/MarketProvider";
 import { formatMarketMoney } from "@/lib/markets";
 
-// Collection-grid card: the shared ProductCard plus a derived descriptor line
-// and hover quick-actions (See in room / Order sample / Customise + Save). Kept
-// separate from ProductCard so other surfaces (home, search, related) are
-// untouched.
+// Collection-grid card: the shared product-card image behavior plus a derived
+// descriptor line and hover quick-actions (See in room / Order sample / Customise + Save).
 export function CollectionProductCard({ product, buyingActions = false }: { product: ProductCardData; buyingActions?: boolean }) {
   const [sampleOpen, setSampleOpen] = useState(false);
+  const [hoverWanted, setHoverWanted] = useState(false);
+  const [hoverReady, setHoverReady] = useState(false);
   const { market, quote } = useMarket();
   const href = `/products/${product.handle}`;
   const badge = productBadges({
@@ -55,8 +55,16 @@ export function CollectionProductCard({ product, buyingActions = false }: { prod
 
   return (
     <div className="group block">
-      <div className="zoomer relative aspect-square bg-wash">
-        <Link href={href} aria-label={product.title} className="grid h-full w-full place-items-center">
+      <div
+        className="zoomer relative aspect-square bg-wash"
+        onPointerEnter={(e) => { if (e.pointerType === "mouse" && product.flatHoverImage) setHoverWanted(true); }}
+      >
+        <Link
+          href={href}
+          aria-label={product.title}
+          className="grid h-full w-full place-items-center"
+          onFocus={() => { if (product.flatHoverImage) setHoverWanted(true); }}
+        >
           {product.image ? (
             // A design sold AS a shape is shown whole inside the square tile
             // rather than cropped to it — same rule, and the same reasons, as
@@ -81,6 +89,16 @@ export function CollectionProductCard({ product, buyingActions = false }: { prod
             <div className="grid h-full place-items-center text-mist">No image</div>
           )}
         </Link>
+        {product.flatHoverImage && product.flatHoverImage !== product.image && hoverWanted && (
+          <Image
+            src={product.flatHoverImage}
+            alt=""
+            fill
+            sizes="(max-width:768px) 50vw, 25vw"
+            onLoad={() => setHoverReady(true)}
+            className={`card-hover-img pointer-events-none object-cover ${hoverReady ? "is-ready" : ""}`}
+          />
+        )}
 
         <WishlistButton handle={product.handle} />
 

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "@/components/SiteImage";
 import { MarketMoney } from "@/components/MarketMoney";
@@ -29,6 +32,8 @@ export function TrendingPins({
   heading?: string;
   kicker?: string;
 }) {
+  const [hovered, setHovered] = useState<Record<string, boolean>>({});
+  const [ready, setReady] = useState<Record<string, boolean>>({});
   if (!cards.length) return null;
   return (
     <div>
@@ -54,7 +59,13 @@ export function TrendingPins({
                 handle={p.handle}
                 placement={placement}
                 ariaLabel={`Configure ${p.title}`}
-                className="zoomer relative block aspect-[4/3] w-full shrink-0 overflow-hidden rounded-[18px] bg-surface sm:w-[46%]"
+                className="group zoomer relative block aspect-[4/3] w-full shrink-0 overflow-hidden rounded-[18px] bg-surface sm:w-[46%]"
+                onPointerEnter={(e) => {
+                  if (e.pointerType === "mouse" && p.flatHoverImage) setHovered((state) => ({ ...state, [p.handle]: true }));
+                }}
+                onFocus={() => {
+                  if (p.flatHoverImage) setHovered((state) => ({ ...state, [p.handle]: true }));
+                }}
               >
                 {p.image && (
                   <Image
@@ -63,6 +74,16 @@ export function TrendingPins({
                     fill
                     sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 30vw"
                     className="object-cover object-bottom"
+                  />
+                )}
+                {p.flatHoverImage && p.flatHoverImage !== p.image && hovered[p.handle] && (
+                  <Image
+                    src={p.flatHoverImage}
+                    alt=""
+                    fill
+                    sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 30vw"
+                    onLoad={() => setReady((state) => ({ ...state, [p.handle]: true }))}
+                    className={`card-hover-img pointer-events-none object-cover ${ready[p.handle] ? "is-ready" : ""}`}
                   />
                 )}
               </TrendingConfigureLink>
