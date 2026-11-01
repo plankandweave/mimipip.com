@@ -17,3 +17,20 @@ export function withOfflineBrowserPolicy(response: Response): Response {
  headers.set('Content-Security-Policy', offlineContentSecurityPolicy);
  return new Response(response.body, {status: response.status, statusText: response.statusText, headers});
 }
+
+// The only retained live transport is restricted to Razorpay order/payment operations.
+const paymentFetch = globalThis.fetch.bind(globalThis);
+export const razorpayTransport: typeof fetch = async (input, init) => {
+ const url = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
+ if (url.origin !== 'https://api.razorpay.com' || !/^\/v1\/(orders(?:\/order_[A-Za-z0-9]+(?:\/payments)?)?|payments\/pay_[A-Za-z0-9]+)$/.test(url.pathname)) throw new Error('Payment endpoint not allowed');
+ return paymentFetch(input, {...init, redirect:'error'});
+};
+export function withCheckoutBrowserPolicy(response:Response):Response {
+ const headers=new Headers(response.headers);
+ headers.set('Content-Security-Policy', offlineContentSecurityPolicy
+  .replace("connect-src 'self'", "connect-src 'self' https://*.razorpay.com")
+  .replace("script-src 'self' 'unsafe-inline' 'unsafe-eval'", "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com")
+  .replace("frame-src 'none'", "frame-src https://api.razorpay.com https://checkout.razorpay.com"));
+ headers.set('Cache-Control','no-store');headers.set('Referrer-Policy','no-referrer');
+ return new Response(response.body,{status:response.status,headers});
+}

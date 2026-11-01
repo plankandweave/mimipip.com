@@ -1,3 +1,5 @@
+import {handleCommerce} from '../src/brand/commerce/checkout';
+import {razorpayTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
 import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand/network-policy';
@@ -10,6 +12,8 @@ const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin)
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
+ if(p.startsWith('/api/india-checkout/'))return withCheckoutBrowserPolicy(await handleCommerce(request,env as Parameters<typeof handleCommerce>[1],razorpayTransport));
+ if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
  const browseRoutes: Record<string,string> = {
