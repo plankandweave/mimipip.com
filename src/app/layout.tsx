@@ -151,7 +151,7 @@ export default function RootLayout({
                   design is saved, and the list it keeps in step with the
                   customer's account must not depend on which route they
                   happened to sign in from. */}
-              <SaveKeeper />
+              {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <SaveKeeper />}
             </ShoppingJourneyProvider>
             </CartProvider>
             </PartnerProvider>

@@ -1,3 +1,4 @@
+import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
 import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand/network-policy';
 import records from '../src/brand/review/catalogue.json';
@@ -11,6 +12,28 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
+ const browseRoutes: Record<string,string> = {
+   '/collections/wall-art':'/browse/collection?value=wallpaper-worlds', '/collections':'/browse/collection',
+   '/concepts':'/browse/concept', '/rooms':'/browse/space', '/colours':'/browse/color',
+   '/lookbook':'/browse/collection', '/new':'/browse/collection', '/design-with':'/search'
+ };
+ if (browseRoutes[p]) return redirect(u,browseRoutes[p]);
+ const guideAliases: Record<string,string> = {
+   '/print-your-own':'tools', '/match-a-photo':'tools', '/see-it-in-my-room':'tools', '/samples':'tools',
+   '/custom-sizing':'how-to-measure', '/shipping-policy':'shipping-returns', '/refund-policy':'shipping-returns',
+   '/where-to-buy':'faq', '/founders-note':'about', '/our-story':'about', '/sustainability':'materials',
+   '/bespoke':'tools', '/collaborate':'contact', '/commercial':'contact', '/press':'contact', '/trade':'contact',
+   '/office':'contact', '/hospitality':'contact', '/hospitals':'contact', '/retail':'contact', '/real-estate':'contact',
+   '/projects':'contact', '/become-an-installer':'contact'
+ };
+ const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
+ if (topic) return redirect(u,'/guides/'+topic);
+ if (p === '/sitemap.xml') {
+   const paths = ['/', ...['collection','color','concept','gender','age','space'].map(axis=>'/browse/'+axis),
+     ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
+   const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
+   return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});
+ }
  if(p.startsWith('/design/'))return redirect(u,'/products/'+encodeURIComponent(p.slice(8)));
  if(p==='/shop')return redirect(u,'/browse/collection');
  const facet=/^\/shop\/(collection|color|concept|gender|age|space)$/.exec(p);

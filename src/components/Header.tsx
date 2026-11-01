@@ -264,7 +264,7 @@ export async function Header() {
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
               {process.env.MIMIPIP_LOCAL_REVIEW!=="1" && <ShipToCountry className="hidden min-w-0 md:block" />}
             </div>
-            <div className="hidden shrink-0 md:block"><Concierge disconnected={process.env.MIMIPIP_LOCAL_REVIEW==="1"} /></div>
+            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />}</div>
           </div>
         </div>
       </StorefrontOnly>
@@ -287,7 +287,7 @@ export async function Header() {
             >
               New
             </Link>
-            <AudienceMenu
+            {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <AudienceMenu
               label="Homes"
               shoppingLinks={[
                 { label: "Wall Art", href: wallArtHref },
@@ -299,12 +299,12 @@ export async function Header() {
               items={homesItems}
               seeAllLabel="See all rooms"
               secondarySection={{heading:"By Concepts",href:conceptsFor("homes"),items:homeConceptItems,seeAllLabel:"See all home concepts"}}
-            />
+            />}
             <div className="hidden min-[900px]:block">
               <MegaMenu families={shopFamilies} />
             </div>
             <nav className="header-left-journeys hidden items-center gap-4 min-[1200px]:flex xl:gap-5">
-              {DESKTOP_JOURNEYS.map((journey) => (
+              {(process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [{label:"Find a design",href:"/search"}] : DESKTOP_JOURNEYS).map((journey) => (
                 <JourneyLink
                   key={journey.href}
                   href={journey.href}
@@ -326,7 +326,7 @@ export async function Header() {
 
           <StorefrontOnly>
           <div className="header-right-rail col-start-3 row-start-1 flex min-w-0 items-center justify-end gap-3 xl:gap-5">
-            <nav className="header-business-nav items-center gap-3 xl:gap-4">
+            {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <nav className="header-business-nav items-center gap-3 xl:gap-4">
               <AudienceMenu
                 label="For Offices"
                 pillClassName="bg-sky"
@@ -360,14 +360,14 @@ export async function Header() {
                 className="header-business-door header-business-real-estate"
                 align="right"
               />
-            </nav>
+            </nav>}
             <div className="flex items-center gap-0.5">
               {/* Below sm, five icons ran under the centred wordmark (seen on
                   a 390px iPhone, 6 Oct 2026). Photo search and Account give
                   way there — both are in the phone drawer — leaving search,
                   saved and cart clear of it down to a 360px screen. */}
               <NavSearch />
-              <VisualSearch triggerClassName="hidden sm:grid" />
+              {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <VisualSearch triggerClassName="hidden sm:grid" />}
               <span className="header-saved-icon"><WishlistNavIcon /></span>
               <Link
                 href="/account"
@@ -383,7 +383,7 @@ export async function Header() {
         </div>
       </div>
       <StorefrontOnly>
-        <MobileBrowseRail links={browseLinks} lead={<Concierge disconnected={process.env.MIMIPIP_LOCAL_REVIEW==="1"} />} />
+        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />} />
       </StorefrontOnly>
     </ScrollHeader>
   );

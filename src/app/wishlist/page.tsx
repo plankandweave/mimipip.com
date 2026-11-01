@@ -16,7 +16,7 @@ export default function WishlistPage() {
   // The page where the ask makes its own case: the customer is looking at the
   // thing they would lose. Logged as the same funnel step as SaveKeeper's card
   // so "asks shown → addresses given" is one number across both surfaces.
-  const asking = !session && !loading && handles.length > 0;
+  const asking = process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW !== "1" && !session && !loading && handles.length > 0;
   useEffect(() => {
     if (asking) sendTasteSignal("", "save_prompt");
   }, [asking]);
@@ -54,8 +54,8 @@ export default function WishlistPage() {
             <p className="mx-auto mt-1 max-w-sm text-xs text-mist">
               Tap the heart on any design and it lands here — no account, no interruption.
             </p>
-            <Link href="/collections/wall-art" className="btn mt-5 inline-flex h-11 px-6 text-[0.8rem]">
-              Browse wallpaper
+            <Link href="/browse/collection" className="btn mt-5 inline-flex h-11 px-6 text-[0.8rem]">
+              Explore designs
             </Link>
           </div>
         ) : (

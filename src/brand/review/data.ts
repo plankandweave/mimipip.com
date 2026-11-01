@@ -4,7 +4,7 @@ export const axes=['collection','color','concept','gender','age','space'] as con
 export type Axis=typeof axes[number];
 export type RecordData=typeof records[number];
 export const catalogue=records;
-export const options=(axis:Axis)=>axis==='gender'?['all','neutral','boys','girls']:[...new Set(records.flatMap(p=>p[axis]??[]))].sort();
+export const options=(axis:Axis)=>axis==='gender'?[]:axis==='age'?['baby','toddler','preschool','school-age']:[...new Set(records.flatMap(p=>p[axis]??[]))].sort();
 export const filter=(axis:Axis,value:string)=>records.filter(p=>!value||axis==='gender'||(p[axis] as string[]|undefined)?.includes(value));
 export const card=(p:RecordData):ProductCardData=>({handle:p.slug,title:p.name,image:p.image,imageAlt:p.name+' · '+p.imageRole,fromPricePerSqft:null,cardLabel:'Design preview · ordering unavailable',sampleable:false});
 export const find=(slug:string)=>records.find(p=>p.slug===slug);

@@ -115,7 +115,17 @@ const DOORS: {
 
 export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
   const canvas = useCanvasJourney();
-  const columns = canvas ? COLS.map(column => column.title === "Shop" ? {
+  const columns = disconnected ? [
+    { title: "Shop", links: ["Collection", "Color", "Concept", "Gender", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })) },
+    { title: "Plan your room", links: [
+      { label: "Wallpaper buying guide", href: "/wallpaper-buying-guide" }, { label: "How to measure", href: "/how-to-measure" },
+      { label: "Surfaces and materials", href: "/materials" }, { label: "Installation and removal", href: "/installation" }, { label: "Saved designs", href: "/wishlist" }
+    ] },
+    { title: "Help", links: [
+      { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
+      { label: "United States", href: "/us" }, { label: "India", href: "/in" }
+    ] }
+  ] : canvas ? COLS.map(column => column.title === "Shop" ? {
     title: "Shop",
     links: [{ label: "Canvas Art", href: "/collections/canvas-art" }, { label: "All Collections", href: "/collections" }, { label: "See It in My Room", href: "/see-it-in-my-room" }, { label: "Gift Cards", href: "/gift-card" }],
   } : column.title === "Help" ? {
@@ -183,7 +193,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
           ))}
         </div>
         <div className="container-x pb-10 text-xs leading-relaxed text-mist">
-          {brand.contactEmail ? <>Creators and press can write to <a href={`mailto:${brand.contactEmail}`} className="underline underline-offset-2 hover:text-charcoal">{brand.contactEmail}</a>.</> : <Link href="/contact">Contact the team about collaborations or press.</Link>}
+          {brand.contactEmail ? <>Creators and press can write to <a href={`mailto:${brand.contactEmail}`} className="underline underline-offset-2 hover:text-charcoal">{brand.contactEmail}</a>.</> : <Link href="/faq">Help with choosing a design</Link>}
         </div>
       </div>
 

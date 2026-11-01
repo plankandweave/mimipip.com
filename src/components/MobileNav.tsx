@@ -120,7 +120,8 @@ export function MobileNav({
                   </Link>
                 ))}
               </div>
-                            <Link
+              {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW !== "1" && <>
+              <Link
                 href="/mati"
                 onClick={close}
                 className="mb-2 flex items-center justify-between rounded-2xl bg-[#79231a] px-5 py-4 font-display text-[1.05rem] font-semibold text-[#f8f5ef]"
@@ -213,6 +214,7 @@ export function MobileNav({
                 </button>
               </div>
 
+              </>}
               <p className="caps mt-8 mb-2 px-1 text-mist">Shop</p>
               <div className="flex flex-col">
                 {shop.map((f) => {
@@ -299,7 +301,7 @@ export function MobileNav({
                   { label: "Saved", href: "/wishlist" },
                   { label: "My boards", href: "/account/boards" },
                   { label: "Cart", href: "/cart" },
-                ].map((n) => (
+                ].filter(item => process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW !== "1" || ["/search","/wishlist","/cart"].includes(item.href)).map((n) => (
                   <Link
                     key={n.href}
                     href={n.href}
@@ -314,7 +316,7 @@ export function MobileNav({
                   above the logo that held it is desktop-only now. The shop
                   detects it from the connection, so few ever need this. */}
               <div className="mt-6 border-t border-edge pt-4 text-sm">
-                <ShipToCountry />
+                {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW !== "1" && <ShipToCountry />}
               </div>
             </nav>
           </div>
