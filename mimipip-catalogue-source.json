@@ -475,12 +475,13 @@
       ],
       "widthCm": 23.3,
       "heightCm": 25,
-      "image": "/assets/bunny-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/bunny-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-01",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/bunny-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-02",
@@ -511,12 +512,13 @@
       ],
       "widthCm": 25,
       "heightCm": 21.7,
-      "image": "/assets/bear-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/bathroom-buddies-room-cover.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-02",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/bear-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-03",
@@ -547,12 +549,13 @@
       ],
       "widthCm": 25,
       "heightCm": 21.9,
-      "image": "/assets/frog-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/frog-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-03",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/frog-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-04",
@@ -583,12 +586,13 @@
       ],
       "widthCm": 25,
       "heightCm": 22.1,
-      "image": "/assets/cat-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/cat-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-04",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/cat-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-05",
@@ -619,12 +623,13 @@
       ],
       "widthCm": 25,
       "heightCm": 16.6,
-      "image": "/assets/puppy-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/puppy-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-05",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/puppy-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-06",
@@ -655,12 +660,13 @@
       ],
       "widthCm": 25,
       "heightCm": 21.6,
-      "image": "/assets/panda-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/panda-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-06",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/panda-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-07",
@@ -691,12 +697,13 @@
       ],
       "widthCm": 25,
       "heightCm": 22.1,
-      "image": "/assets/fox-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/fox-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-07",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/fox-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-08",
@@ -727,12 +734,13 @@
       ],
       "widthCm": 25,
       "heightCm": 16.5,
-      "image": "/assets/koala-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/koala-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-08",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/koala-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-09",
@@ -763,12 +771,13 @@
       ],
       "widthCm": 25,
       "heightCm": 21.3,
-      "image": "/assets/piglet-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/piglet-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-09",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/piglet-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-10",
@@ -799,12 +808,13 @@
       ],
       "widthCm": 25,
       "heightCm": 22.3,
-      "image": "/assets/lion-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/lion-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-10",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/lion-bathroom-buddy-flat.svg"
     },
     {
       "id": "MP-BB-11",
@@ -835,12 +845,13 @@
       ],
       "widthCm": 25,
       "heightCm": 20.1,
-      "image": "/assets/owl-bathroom-buddy-flat.svg",
-      "imageRole": "Design artwork \u00b7 production proof pending",
+      "image": "/assets/owl-bathroom-buddy-room.png",
+      "imageRole": "Illustrative bathroom setting; decal shown on closed lid",
       "source": "WC Stickers \u00b7 MP-BB-11",
       "status": "Coming soon \u00b7 sample fit pending",
       "price": null,
-      "personalization": null
+      "personalization": null,
+      "flatImage": "/assets/owl-bathroom-buddy-flat.svg"
     },
     {
       "id": "hopscotch-peach-pop",
@@ -871,7 +882,7 @@
       ],
       "widthCm": 75,
       "heightCm": 260,
-      "image": "/assets/hopscotch-peach-pop-room.webp",
+      "image": "/assets/hopscotch-peach-pop-square-room.png",
       "imageRole": "Illustrative room render \u00b7 not proof of floor compatibility",
       "source": "floor stickers \u00b7 hopscotch-peach-pop",
       "status": "Preview record \u00b7 material validation pending",
@@ -907,7 +918,7 @@
       ],
       "widthCm": 75,
       "heightCm": 260,
-      "image": "/assets/hopscotch-pastel-play-room.webp",
+      "image": "/assets/hopscotch-pastel-play-square-room.png",
       "imageRole": "Illustrative room render \u00b7 not proof of floor compatibility",
       "source": "floor stickers \u00b7 hopscotch-pastel-play",
       "status": "Preview record \u00b7 material validation pending",
@@ -943,82 +954,9 @@
       ],
       "widthCm": 75,
       "heightCm": 260,
-      "image": "/assets/hopscotch-bold-adventure-room.webp",
+      "image": "/assets/hopscotch-bold-adventure-square-room.png",
       "imageRole": "Illustrative room render \u00b7 not proof of floor compatibility",
       "source": "floor stickers \u00b7 hopscotch-bold-adventure",
-      "status": "Preview record \u00b7 material validation pending",
-      "price": null,
-      "personalization": null
-    },
-    {
-      "id": "garden-giggles",
-      "slug": "garden-giggles",
-      "name": "Garden Giggles",
-      "description": "Three ways to play: copy a pose, remember a trail, or stay and stretch. Stickers and simple instructions are all you need.",
-      "collection": [
-        "floor-games"
-      ],
-      "concept": [
-        "learning-play"
-      ],
-      "color": [
-        "multicolor"
-      ],
-      "age": [
-        "preschool",
-        "school-age"
-      ],
-      "space": [
-        "playroom"
-      ],
-      "type": [
-        "floor-sticker"
-      ],
-      "surface": [
-        "floor"
-      ],
-      "widthCm": 121.92,
-      "heightCm": 152.4,
-      "image": "/assets/garden-giggles-rooms.webp",
-      "imageRole": "Illustrative room render \u00b7 not proof of floor compatibility",
-      "source": "floor stickers \u00b7 garden-giggles",
-      "status": "Preview record \u00b7 material validation pending",
-      "price": null,
-      "personalization": null
-    },
-    {
-      "id": "little-town",
-      "slug": "little-town",
-      "name": "Little Town",
-      "description": "Drive to the shop, visit the park and find a parking place. Play with a finger or a favourite age-appropriate toy car.",
-      "collection": [
-        "floor-games"
-      ],
-      "concept": [
-        "transport",
-        "learning-play"
-      ],
-      "color": [
-        "multicolor"
-      ],
-      "age": [
-        "preschool",
-        "school-age"
-      ],
-      "space": [
-        "playroom"
-      ],
-      "type": [
-        "floor-sticker"
-      ],
-      "surface": [
-        "floor"
-      ],
-      "widthCm": 121.92,
-      "heightCm": 182.88000000000002,
-      "image": "/assets/little-town-rooms.webp",
-      "imageRole": "Illustrative room render \u00b7 not proof of floor compatibility",
-      "source": "floor stickers \u00b7 little-town",
       "status": "Preview record \u00b7 material validation pending",
       "price": null,
       "personalization": null
@@ -7225,7 +7163,8 @@
       "status": "Design preview \u00b7 sizing and pricing to be confirmed",
       "price": null,
       "personalization": null,
-      "detailURL": "/collections/step-smiles/dino-days/"
+      "detailURL": "/collections/step-smiles/dino-days/",
+      "roomPresentation": "stairs"
     },
     {
       "id": "MP-SS-02",
@@ -7268,7 +7207,8 @@
       "status": "Design preview \u00b7 sizing and pricing to be confirmed",
       "price": null,
       "personalization": null,
-      "detailURL": "/collections/step-smiles/space-club/"
+      "detailURL": "/collections/step-smiles/space-club/",
+      "roomPresentation": "stairs"
     },
     {
       "id": "MP-SS-03",
@@ -7310,7 +7250,8 @@
       "status": "Design preview \u00b7 sizing and pricing to be confirmed",
       "price": null,
       "personalization": null,
-      "detailURL": "/collections/step-smiles/ocean-pals/"
+      "detailURL": "/collections/step-smiles/ocean-pals/",
+      "roomPresentation": "stairs"
     },
     {
       "id": "MP-SS-04",
@@ -7353,7 +7294,8 @@
       "status": "Design preview \u00b7 sizing and pricing to be confirmed",
       "price": null,
       "personalization": null,
-      "detailURL": "/collections/step-smiles/beep-beep/"
+      "detailURL": "/collections/step-smiles/beep-beep/",
+      "roomPresentation": "stairs"
     },
     {
       "id": "MP-SS-05",
@@ -7398,7 +7340,8 @@
       "status": "Design preview \u00b7 sizing and pricing to be confirmed",
       "price": null,
       "personalization": null,
-      "detailURL": "/collections/step-smiles/forest-friends/"
+      "detailURL": "/collections/step-smiles/forest-friends/",
+      "roomPresentation": "stairs"
     },
     {
       "id": "MP-PD01",
