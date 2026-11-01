@@ -118,6 +118,7 @@ export type ShowcaseEntry = {
 export type ProductCardData = {
   sampleable?: boolean;
   /** Optional crop into a single room panel of a composite editorial image. */
+  roomPanel?: {sourceWidth:number;sourceHeight:number;x:number;y:number;width:number;height:number};
   cardImageCrop?: { x: number; y: number; columns: number; rows: number };
   handle: string;
   title: string;

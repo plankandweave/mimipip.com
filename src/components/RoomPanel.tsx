@@ -1,0 +1,3 @@
+export type RoomPanelBounds = {sourceWidth:number;sourceHeight:number;x:number;y:number;width:number;height:number};
+/** Render only the reviewed room bounds; neighbouring artwork and sheet gutters stay outside the viewport. */
+export function RoomPanel({src,alt,panel,card=false}:{src:string;alt:string;panel:RoomPanelBounds;card?:boolean}){return <svg role="img" aria-label={alt} viewBox={`${panel.x} ${panel.y} ${panel.width} ${panel.height}`} preserveAspectRatio={card?'xMidYMid slice':'xMidYMid meet'} overflow="hidden" className={card?'absolute inset-0 h-full w-full overflow-hidden':'block w-full overflow-hidden'} style={card?undefined:{aspectRatio:`${panel.width}/${panel.height}`}}><image href={src} width={panel.sourceWidth} height={panel.sourceHeight}/></svg>}

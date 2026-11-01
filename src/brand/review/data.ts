@@ -7,6 +7,7 @@ export const catalogue=records;
 export const options=(axis:Axis)=>axis==='gender'?[]:axis==='age'?['baby','toddler','preschool','school-age']:[...new Set(records.flatMap(p=>p[axis]??[]))].sort();
 export const filter=(axis:Axis,value:string)=>records.filter(p=>!value||axis==='gender'||(p[axis] as string[]|undefined)?.includes(value));
 export const card=(p:RecordData):ProductCardData=>({
+  roomPanel: (p as RecordData & {roomPanel?:import("@/components/RoomPanel").RoomPanelBounds}).roomPanel,
   handle:p.slug,
   title:p.name,
   image:p.image,

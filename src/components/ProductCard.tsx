@@ -1,5 +1,6 @@
 "use client";
 
+import { RoomPanel } from "./RoomPanel";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "@/components/SiteImage";
@@ -63,7 +64,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       <div className="zoomer relative flex aspect-square items-center justify-center bg-wash">
         <WishlistButton handle={product.handle} />
         {product.image ? (
-          product.cardImageCrop ? (
+          product.roomPanel ? <RoomPanel src={product.image} alt={product.imageAlt} panel={product.roomPanel} card/> : product.cardImageCrop ? (
             <div className="absolute inset-0 overflow-hidden bg-wash">
               <div
                 className="absolute"
