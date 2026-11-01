@@ -7,7 +7,14 @@ import { brand } from './current';
  * No inherited page is approved by default; commerce/account tools are not gated here.
  */
 export type EditorialApproval = { brandId: typeof brand.id; title: string; description: string; reviewReference: string };
-export const editorialApprovals: Readonly<Record<string, EditorialApproval>> = {};
+export const editorialApprovals: Readonly<Record<string, EditorialApproval>> = {
+ '/nafas': {
+  brandId: brand.id,
+  title: "Nafas’s Face Parade",
+  description: "Meet Nafas Elizabeth Pattrick and explore her colourful wallpapers, pencil animals, flowers, cars and playful scenes for children's spaces.",
+  reviewReference: "Owner approved restoring and deploying the Nafas collection page for Mimi Pip on 1 November 2026.",
+ },
+};
 export function editorialMetadata(route: string): Metadata {
  const content = editorialApprovals[route];
  return content ? {title: content.title, description: content.description} : {

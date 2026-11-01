@@ -5,18 +5,15 @@ import { NafasAudioGuide, NafasListenButton, GuideArtwork } from "./NafasAudioGu
 import { NafasLivingRoomFilm } from "./NafasLivingRoomFilm";
 import Link from "next/link";
 import Image from "@/components/SiteImage";
-import { MarketMoney } from "@/components/MarketMoney";
 import { SITE_URL } from "@/lib/seo";
 import {
   NAFAS_ARTIST,
-  NAFAS_COLLECTION_HANDLE,
   NAFAS_DESCRIPTION,
   NAFAS_DESIGNS,
   NAFAS_INKS,
   NAFAS_PATH,
   NAFAS_PENCILS,
   NAFAS_PORTRAIT,
-  NAFAS_RATE,
   NAFAS_STORY,
   NAFAS_TITLE,
   nafasWebSrc,
@@ -179,7 +176,7 @@ function Swatches({ inks }: { inks: readonly { name: string; hex: string }[] }) 
               <a href="#flowers-and-play" className="nf-btn nf-btn-line">Flowers &amp; play</a>
             </div>
             <p className="mt-6 text-sm text-[color:var(--ink-soft)]">
-              <MarketMoney inr={NAFAS_RATE} /> per sq ft · sized to your wall&rsquo;s measurements on Smooth Matt
+              Explore the designs · availability and ordering are shown on each product page
             </p>
           </div>
           <div className="relative mx-auto w-full max-w-[560px] pb-10 pr-6 md:pb-14">
@@ -272,7 +269,7 @@ function Swatches({ inks }: { inks: readonly { name: string; hex: string }[] }) 
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link href="/contact?question=Nafas%27s%20colourful%20tree%20as%20wallpaper%20or%20wall%20art" className="nf-btn nf-btn-pink">Ask us about this design <span aria-hidden>→</span></Link>
-            <Link href={`/collections/${NAFAS_COLLECTION_HANDLE}`} className="nf-btn nf-btn-line">Shop Nafas&rsquo;s wallpapers</Link>
+            <Link href="#faces" className="nf-btn nf-btn-line">Explore Nafas&rsquo;s wallpapers</Link>
           </div>
         </div>
       </section>
@@ -498,10 +495,10 @@ function Swatches({ inks }: { inks: readonly { name: string; hex: string }[] }) 
             <Swatches inks={NAFAS_PENCILS} />
           </div>
           <div className="mt-14 flex flex-wrap gap-3">
-            <Link href={`/collections/${NAFAS_COLLECTION_HANDLE}`} className="nf-btn nf-btn-ink">
-              Shop all {NAFAS_DESIGNS.length} designs <span aria-hidden>→</span>
+            <Link href="#faces" className="nf-btn nf-btn-ink">
+              Explore all {NAFAS_DESIGNS.length} designs <span aria-hidden>→</span>
             </Link>
-            <Link href="/collections/kids-wallpapers" className="nf-btn nf-btn-line">
+            <Link href="/collections/wallpaper-worlds" className="nf-btn nf-btn-line">
               More kids&rsquo; wallpapers
             </Link>
           </div>
