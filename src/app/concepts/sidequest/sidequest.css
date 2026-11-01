@@ -1,0 +1,8 @@
+/* Preserve the complete architectural scene, including the floor, on the cover. */
+.sidequest-concept .book > header > div:first-child {
+  aspect-ratio: 3 / 2;
+}
+
+.sidequest-concept .book > header img {
+  object-position: bottom;
+}

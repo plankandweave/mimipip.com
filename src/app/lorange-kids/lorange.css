@@ -1,0 +1,80 @@
+/*
+ * L'Orange Kids — its shop inside zyvorah.com.
+ *
+ * Colours from the brand's own direction: warm ivory ground, burnt-orange
+ * wordmark, a fine rust line, quiet chrome so the children's artwork does the
+ * talking. Scoped under `.lorange`, like `.nafas` and `.taash`.
+ */
+
+.lorange {
+  --ivory: #fcfaf5;
+  --paper: #f7f2e8;
+  --line: #e9e2d7;
+  --rust: #b45d36;
+  --rust-dark: #934728;
+  --ink: #302b26;
+  --muted: #77716a;
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.lorange .serif {
+  font-family: var(--font-lorange), Georgia, "Times New Roman", serif;
+}
+
+.lorange .caption {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.lorange .rule {
+  height: 1px;
+  background: var(--rust);
+  opacity: 0.55;
+}
+
+.lorange .family-ribbon {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  color: var(--rust-dark);
+}
+
+.lorange .family-ribbon a {
+  color: var(--rust-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.lorange .lorange-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: var(--rust);
+  color: #fffdf8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.lorange .lorange-btn:hover {
+  background: var(--rust-dark);
+}
+
+.lorange .room-link {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fffdf8;
+  padding: 1.25rem 1.4rem;
+  transition: border-color 150ms ease;
+}
+
+.lorange .room-link:hover {
+  border-color: var(--rust);
+}

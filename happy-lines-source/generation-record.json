@@ -1,0 +1,297 @@
+[
+  {
+    "slug": "sunbeam-check",
+    "name": "Sunbeam Check",
+    "description": "Butter yellow and ivory open gingham with slender tangerine lines and tiny pale-pink intersections. Restrained, sunny, airy.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Yellow",
+      "Orange",
+      "Pink",
+      "Ivory"
+    ],
+    "age": "nursery",
+    "ageLabel": "Nursery \u00b7 0\u20132 years",
+    "ageMin": 0,
+    "ageMax": 2,
+    "image": "/collections/happy-lines/images/sunbeam-check.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-dc475d7b-8472-40f4-992c-4830a8ee42d8.png",
+    "prompt": "Use the supplied board only as wallpaper design reference, not as layout. Create a single full-bleed landscape photorealistic interior photograph, NO text, swatches, labels or collage. Preserve the Sunbeam Check pattern in its left swatch faithfully: Butter yellow and ivory open gingham with slender tangerine lines and tiny pale-pink intersections. Restrained, sunny, airy. Room: A serene nursery with a 130 cm wide pale oak crib facing camera, properly spaced vertical rails, firm flat mattress and fitted white sheet ONLY inside crib, no pillows blankets toys bumpers or canopy, small oak dresser away from crib, soft rug. Beautiful high-end yet child-appropriate interior. Strictly straight FRONT VIEW, level camera perpendicular to wallpaper wall; no angled camera. Show full 360 cm wide by 270 cm high back wall and floor, correct furniture proportions. Wallpaper is a SMALL repeating pattern not an enlarged mural: primary check pitch 15 cm, about 24 check intervals across 360 cm wall. Maintain regular horizontal and vertical spacing everywhere, no pattern warping. Real oak, cotton, soft natural daylight, contact shadows, restrained thoughtful decor. No people."
+  },
+  {
+    "slug": "meadow-ribbon",
+    "name": "Meadow Ribbon",
+    "description": "Alternating slender leaf green and wider pale green vertical ribbons on ivory, crossed every 15 cm by a delicate periwinkle double line. Quiet linear rhythm.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Green",
+      "Periwinkle",
+      "Ivory"
+    ],
+    "age": "toddler",
+    "ageLabel": "Toddler \u00b7 2\u20133 years",
+    "ageMin": 2,
+    "ageMax": 3,
+    "image": "/collections/happy-lines/images/meadow-ribbon.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-b841fdb9-f623-45c8-a709-88cf84e126f7.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Alternating slender leaf green and wider pale green vertical ribbons on ivory, crossed every 15 cm by a delicate periwinkle double line. Quiet linear rhythm. Room: A toddler bedroom with a low 140 cm long oak toddler bed side-on along the back wall, short protective guard, neat ivory bedding, low rounded bookcase with picture books, two wooden toys on a shelf, child-sized reading chair. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Use small repeated wallpaper motifs, approximately 10 cm spacing between vertical stripes and 30 cm between fine horizontal double lines; no giant mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "pink-hopscotch",
+    "name": "Pink Hopscotch",
+    "description": "Blush pink broad open square lattice on ivory with tiny orange square accents at alternate intersections. Pale yellow fine secondary lines. Spacious and sophisticated.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Pink",
+      "Yellow",
+      "Orange",
+      "Ivory"
+    ],
+    "age": "4-6",
+    "ageLabel": "Children \u00b7 4\u20136 years",
+    "ageMin": 4,
+    "ageMax": 6,
+    "image": "/collections/happy-lines/images/pink-hopscotch.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-dbc7dcf9-b110-4988-bf8e-7043c6c07512.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Blush pink broad open square lattice on ivory with tiny orange square accents at alternate intersections. Pale yellow fine secondary lines. Spacious and sophisticated. Room: A beautiful bedroom for a five-year-old with a 90 cm wide blush upholstered single bed facing camera, ivory bedding, one playful cushion, low oak bedside cabinet and small picture-book rack. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Use small repeated wallpaper motifs, approximately 30 cm pink grid squares and 15 cm secondary yellow grid squares; no giant mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "blue-pencil",
+    "name": "Blue Pencil",
+    "description": "Airy periwinkle pencil-thin vertical pinstripes grouped in pairs on warm ivory with occasional very fine green and yellow stripes. No horizontal bands. Refined hand-painted lines.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Periwinkle",
+      "Yellow",
+      "Green",
+      "Ivory"
+    ],
+    "age": "7-10",
+    "ageLabel": "Children \u00b7 7\u201310 years",
+    "ageMin": 7,
+    "ageMax": 10,
+    "image": "/collections/happy-lines/images/blue-pencil.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-119839e4-2c1f-42b7-a2d5-7c7595e89d3a.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Airy periwinkle pencil-thin vertical pinstripes grouped in pairs on warm ivory with occasional very fine green and yellow stripes. No horizontal bands. Refined hand-painted lines. Room: A beautiful bedroom and homework nook for an eight-year-old, 90 cm wide oak single bed facing camera and small 100 cm wide desk beside it, one child-sized chair, pencils and picture books, ivory bedding. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Small repeated wallpaper motifs, fine 3\u20135 cm spaced pinstripes, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "candy-weave",
+    "name": "Candy Weave",
+    "description": "Basketweave of alternating horizontal and vertical striped square blocks, each block 15 cm, in blush pink, periwinkle and ivory with restrained yellow accents. Clear consistent woven geometry.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Pink",
+      "Periwinkle",
+      "Yellow",
+      "Green",
+      "Orange",
+      "Ivory"
+    ],
+    "age": "toddler",
+    "ageLabel": "Toddler \u00b7 2\u20133 years",
+    "ageMin": 2,
+    "ageMax": 3,
+    "image": "/collections/happy-lines/images/candy-weave.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-8fdb0491-dd3a-43d1-932c-b873169f7932.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Basketweave of alternating horizontal and vertical striped square blocks, each block 15 cm, in blush pink, periwinkle and ivory with restrained yellow accents. Clear consistent woven geometry. Room: A beautiful toddler playroom with 180 cm low ivory toy storage, 50 cm high rounded oak play table and two small chairs, wooden stacking blocks and picture books; clearly a young child's space. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Small repeated wallpaper motifs, basketweave squares approximately 15 cm wide, roughly 24 squares across the wall, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "citrus-window",
+    "name": "Citrus Window",
+    "description": "Very open windowpane plaid of yellow broad lines and fine orange double lines on ivory, with a few pale green intersections. Large ivory squares, gentle painted edges.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Yellow",
+      "Orange",
+      "Green",
+      "Ivory"
+    ],
+    "age": "nursery",
+    "ageLabel": "Nursery \u00b7 0\u20132 years",
+    "ageMin": 0,
+    "ageMax": 2,
+    "image": "/collections/happy-lines/images/citrus-window.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-fc8a5027-655b-4fe7-90a8-3a949331b5d4.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Very open windowpane plaid of yellow broad lines and fine orange double lines on ivory, with a few pale green intersections. Large ivory squares, gentle painted edges. Room: A beautiful nursery with a 130 cm wide white crib facing camera, straight correctly spaced rails and firm flat mattress with fitted ivory sheet ONLY, no loose objects in crib, pale green upholstered parent chair set away from crib, low oak dresser. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Repeated wallpaper motifs, 30 cm wide windowpane squares, twelve across 360 cm wall, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "garden-steps",
+    "name": "Garden Steps",
+    "description": "Small rhythmic stepped blocks in two greens with ivory negative space, tiny periwinkle square accents, orderly geometric repeat, airy not dense. A playful architectural pattern.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Green",
+      "Periwinkle",
+      "Pink",
+      "Orange",
+      "Yellow",
+      "Ivory"
+    ],
+    "age": "7-10",
+    "ageLabel": "Children \u00b7 7\u201310 years",
+    "ageMin": 7,
+    "ageMax": 10,
+    "image": "/collections/happy-lines/images/garden-steps.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-50bfed05-bc04-40d3-8741-c786c1fded25.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Small rhythmic stepped blocks in two greens with ivory negative space, tiny periwinkle square accents, orderly geometric repeat, airy not dense. A playful architectural pattern. Room: A shared bedroom for two children aged seven and nine with two 90 cm wide oak single beds facing camera, white bedding and green throws, small central nightstand, picture books and one wooden model. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Repeated wallpaper motifs, each green stepped wave approximately 30 cm wide and 20 cm tall; repeat consistently across entire wall, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "confetti-rail",
+    "name": "Confetti Rail",
+    "description": "Fine multicolour vertical railway stripes on warm ivory, periwinkle pink green yellow and tiny orange dashed intervals; consistent narrow spacing, playful yet restrained. Mostly ivory.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Periwinkle",
+      "Pink",
+      "Green",
+      "Yellow",
+      "Orange",
+      "Ivory"
+    ],
+    "age": "7-10",
+    "ageLabel": "Children \u00b7 7\u201310 years",
+    "ageMin": 7,
+    "ageMax": 10,
+    "image": "/collections/happy-lines/images/confetti-rail.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-8f7d6268-bca7-4d7e-9c0f-f87082cb6801.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Fine multicolour vertical railway stripes on warm ivory, periwinkle pink green yellow and tiny orange dashed intervals; consistent narrow spacing, playful yet restrained. Mostly ivory. Room: A joyful homework and craft room for children aged seven to ten with a 160 cm long desk and two appropriately sized chairs, pencil pots and exercise books, low periwinkle storage unit and small toy globe. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Small repeated wallpaper motifs, thin stripes every 3\u20135 cm, small dashed orange accent stripes, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "ribbon-picnic",
+    "name": "Ribbon Picnic",
+    "description": "Bold but airy hand-painted plaid of pink and pale green broad ribbons on ivory crossed by narrow yellow checker bands, small periwinkle accents. Related to original Ribbon Play but a distinct quieter colour balance.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Pink",
+      "Green",
+      "Yellow",
+      "Periwinkle",
+      "Ivory"
+    ],
+    "age": "nursery",
+    "ageLabel": "Nursery \u00b7 0\u20132 years",
+    "ageMin": 0,
+    "ageMax": 2,
+    "image": "/collections/happy-lines/images/ribbon-picnic.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-63ceb9a7-d50b-4681-b596-296d93e275aa.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Bold but airy hand-painted plaid of pink and pale green broad ribbons on ivory crossed by narrow yellow checker bands, small periwinkle accents. Related to original Ribbon Play but a distinct quieter colour balance. Room: A beautiful softly coloured nursery with a 130 cm pale oak crib facing camera, proper straight vertical rails, firm mattress and fitted white sheet ONLY, no blankets cushions toys bumpers or canopy inside crib, ivory nursing chair and pink ottoman well away from crib. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Small repeated wallpaper motifs, ribbon intersections every 30 cm and narrow yellow checks of 2 cm, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "little-parade",
+    "name": "Little Parade",
+    "description": "Horizontal bands alternating pale green and ivory fields with evenly spaced narrow yellow vertical ticks, separated by thin periwinkle and blush striped ribbon bands. Controlled rhythmic stripe sampler, no characters.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Green",
+      "Yellow",
+      "Pink",
+      "Periwinkle",
+      "Ivory"
+    ],
+    "age": "4-6",
+    "ageLabel": "Children \u00b7 4\u20136 years",
+    "ageMin": 4,
+    "ageMax": 6,
+    "image": "/collections/happy-lines/images/little-parade.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-6fe6c4de-1f59-4dea-8d93-2dbbff7b824c.png",
+    "prompt": "Use supplied board as wallpaper reference ONLY. Create one full-bleed landscape photorealistic room photograph, no board layout, text, labels, swatches or collage. Preserve wallpaper design from left swatch: Horizontal bands alternating pale green and ivory fields with evenly spaced narrow yellow vertical ticks, separated by thin periwinkle and blush striped ribbon bands. Controlled rhythmic stripe sampler, no characters. Room: A beautiful bedroom for a four-year-old with a low 160 cm long oak child's bed along back wall, ivory bedding, child-size rounded reading seat, low picture-book display, three wooden toys. Strictly FRONT VIEW camera perpendicular to back wall, level straight horizontal and vertical lines. Show 360 cm wide 270 cm high wall, furniture at believable dimensions. Small repeated wallpaper motifs, horizontal band rhythm every 30 cm, short yellow vertical ticks every 5 cm, no enlarged mural, consistent spacing and no warping. Beautiful premium children's interior, oak cotton wool, soft natural daylight, realistic shadows, considered sparse decor, no people. Preserve approved palette and pattern identity."
+  },
+  {
+    "slug": "ribbon-play",
+    "name": "Ribbon Play",
+    "description": "Softly painted pink, yellow, green and periwinkle ribbons crossed by little orange and green checkerboard bands on warm ivory.",
+    "collection": "Happy Lines",
+    "gender": [
+      "Boys",
+      "Girls",
+      "Gender-neutral"
+    ],
+    "colors": [
+      "Pink",
+      "Yellow",
+      "Orange",
+      "Periwinkle",
+      "Green",
+      "Ivory"
+    ],
+    "age": "4-6",
+    "ageLabel": "Children \u00b7 4\u20136 years",
+    "ageMin": 4,
+    "ageMax": 6,
+    "image": "/collections/happy-lines/images/ribbon-play.png",
+    "status": "Design preview",
+    "scaleStatus": "Illustrative room scale; repeat size and colour require print proofing.",
+    "sourceFile": "exec-b683aff4-2079-432c-947f-ed9f2d28d7df.png",
+    "prompt": "Use the supplied original flat Ribbon Play wallpaper as the exact design reference. Create one full-bleed photorealistic landscape interior photograph. No text, collage, labels or swatches. A beautiful bedroom for a six-year-old with a 90 cm wide oak single bed facing camera, simple ivory duvet, one yellow cushion, low toy cubby and child-sized reading chair. Strictly straight FRONT VIEW camera perpendicular to back wall. Wall 360 cm wide and 270 cm high, correct furniture proportions. Preserve the exact colours and painted ribbon/checker pattern of reference, apply as repeated wallpaper not mural: use reference square at 120 cm x120 cm, exactly 3 copies across wall and 2.25 vertically. Fine checker squares approximately 3 cm; broad pink yellow green periwinkle ribbons approximately 10 cm wide. Do not stretch or warp motifs. Beautiful sophisticated child-friendly oak cotton wool room with soft daylight and realistic material textures. No adults or baby crib."
+  }
+]

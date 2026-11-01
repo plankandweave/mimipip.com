@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "hopscotch-peach-pop",
+    "colourway": "Peach Pop",
+    "title": "Connected Hopscotch \u2014 Peach Pop",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
+    "slug": "hopscotch-pastel-play",
+    "colourway": "Pastel Play",
+    "title": "Connected Hopscotch \u2014 Pastel Play",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
+    "slug": "hopscotch-bold-adventure",
+    "colourway": "Bold Adventure",
+    "title": "Connected Hopscotch \u2014 Bold Adventure",
+    "width_mm": 750,
+    "height_mm": 2600,
+    "area_sqft": 20.989625312583957,
+    "price_inr": 3999,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "format": "One connected contour-cut floor sticker",
+    "qr": false
+  },
+  {
+    "slug": "garden-giggles",
+    "title": "Garden Giggles",
+    "width_ft": 4,
+    "height_ft": 5,
+    "width_mm": 1219.2,
+    "height_mm": 1524.0,
+    "area_sqft": 20,
+    "price_inr": 4000,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "instructions": "https://mimipip.com/play/garden-giggles/",
+    "description": "Three ways to play: copy a pose, remember a trail, or stay and stretch. Stickers and simple instructions are all you need.",
+    "dispatch_working_days": [
+      1,
+      2
+    ],
+    "checkout_enabled": false
+  },
+  {
+    "slug": "little-town",
+    "title": "Little Town",
+    "width_ft": 4,
+    "height_ft": 6,
+    "width_mm": 1219.2,
+    "height_mm": 1828.8000000000002,
+    "area_sqft": 24,
+    "price_inr": 4800,
+    "gst_included": true,
+    "rate_inr_sqft": 200,
+    "instructions": "https://mimipip.com/play/little-town/",
+    "description": "Drive to the shop, visit the park and find a parking place. Play with a finger or a favourite age-appropriate toy car.",
+    "dispatch_working_days": [
+      1,
+      2
+    ],
+    "checkout_enabled": false
+  }
+]

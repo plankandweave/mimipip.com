@@ -1,0 +1,325 @@
+/* The flip book — a case study read LEFT TO RIGHT, one spread per gesture.
+ *
+ * Scoped under `.flip-book` and layered on the same `--book-*` tokens as the
+ * classic book, so `data-book-theme` swaps its mood the same way. Everything
+ * here is structure: the scroller, the snap geometry, the square plate with
+ * its sideways caption band, the full-span panorama, and the night pages.
+ *
+ * Geometry rule: every spread's width is set in CSS, never derived from an
+ * image's intrinsic size — snap positions must be correct before a single
+ * byte of imagery arrives.
+ */
+
+.flip-book {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--book-ground);
+  color: var(--book-ink);
+  overflow: hidden;
+}
+
+.flip-scroller {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  outline: none;
+}
+.flip-scroller::-webkit-scrollbar { display: none; }
+
+.flip-spread {
+  flex: 0 0 auto;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--book-ground);
+  color: var(--book-ink);
+  transition: background var(--book-motion) ease, color var(--book-motion) ease;
+}
+
+/* The night pages. The paper itself darkens when the book reaches the night
+ * rooms and returns to ivory after — the ground participates in the story.
+ * Fixed inks rather than tokens: night is one specific indigo whatever the
+ * theme, the same way a printed book's black pages are not themeable. */
+.flip-spread[data-dark] {
+  background: #141c26;
+  color: #e8e4db;
+  --flip-muted: #93a0a6;
+  --flip-rule: #2c3841;
+}
+.flip-spread { --flip-muted: var(--book-muted); --flip-rule: var(--book-rule); }
+
+/* This residential book pairs landscape artwork with landscape room views.
+ * Reserve a whole viewport per plate and preserve its declared aspect ratio;
+ * on phones the caption belongs below the image, within the same page. */
+@media screen {
+  [data-book-project="a-life-collected"] .flip-cover-img img { object-position: bottom; }
+  [data-book-project="a-life-collected"] .flip-plate { width: 100vw; }
+  [data-book-project="a-life-collected"] .flip-plate-img {
+    width: min(68vw, 100vh);
+    height: auto;
+    max-width: none;
+    flex: none;
+  }
+  [data-book-project="a-life-collected"] .flip-band {
+    height: min(66vh, 45vw);
+    max-width: 20vw;
+  }
+}
+@media screen and (max-width: 760px) {
+  [data-book-project="a-life-collected"] .flip-plate {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1.25rem;
+    overflow-y: auto;
+  }
+  [data-book-project="a-life-collected"] .flip-plate-img { width: 100%; }
+  [data-book-project="a-life-collected"] .flip-band {
+    writing-mode: horizontal-tb;
+    display: grid;
+    gap: 0.5rem;
+    height: auto;
+    width: 100%;
+    max-width: none;
+    flex: none;
+  }
+  [data-book-project="a-life-collected"] .flip-band-number { font-size: 0.8rem; }
+  [data-book-project="a-life-collected"] .flip-band-title { font-size: 1.4rem; }
+  [data-book-project="a-life-collected"] .flip-band-space { letter-spacing: 0.1em; }
+}
+
+/* ---- cover ------------------------------------------------------------- */
+.flip-cover { width: 100vw; }
+.flip-cover-img { position: absolute; inset: 0; }
+.flip-cover-scrim {
+  position: absolute; inset: auto 0 0 0; height: 42%;
+  background: linear-gradient(to top, rgba(10, 14, 20, 0.72), transparent);
+}
+.flip-cover-text {
+  position: absolute; left: clamp(1.5rem, 5vw, 4rem); bottom: clamp(1.5rem, 6vh, 3.5rem);
+  right: clamp(1.5rem, 5vw, 4rem);
+  color: #fff;
+}
+.flip-kind {
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  opacity: 0.92;
+}
+.flip-cover-title {
+  font-family: var(--book-display);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 1.02;
+  margin-top: 0.5rem;
+  text-wrap: balance;
+}
+.flip-cover-standfirst {
+  margin-top: 0.9rem; max-width: 44rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem); line-height: 1.55; opacity: 0.94;
+}
+
+/* ---- passage (chapter turn) -------------------------------------------- */
+.flip-passage { width: 100vw; }
+.flip-passage-inner { max-width: 34rem; padding: 0 2rem; text-align: center; }
+.flip-eyebrow {
+  font-size: 0.68rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--book-accent);
+}
+.flip-spread[data-dark] .flip-eyebrow { color: #c2a567; }
+.flip-passage-title {
+  font-family: var(--book-display);
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  line-height: 1.12;
+  margin-top: 1rem;
+  text-wrap: balance;
+}
+.flip-passage-body {
+  margin-top: 1.4rem; display: grid; gap: 0.9rem;
+  font-size: 1rem; line-height: 1.65; color: var(--flip-muted);
+}
+
+/* ---- plate: image + sideways band -------------------------------------- */
+/* The plate's height budget; width follows the artwork's declared aspect. */
+.flip-plate { padding-inline: clamp(2rem, 6vw, 5rem); gap: clamp(1rem, 2vw, 1.75rem); }
+.flip-plate-img {
+  position: relative;
+  height: min(80vh, 84vw);
+  aspect-ratio: var(--flip-ar, 2 / 3);
+  max-width: 80vw;
+  box-shadow: 0 24px 60px -32px rgba(16, 24, 34, 0.45);
+}
+.flip-spread[data-dark] .flip-plate-img { box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.8); }
+
+/* The sideways band. Real text in vertical writing mode — reading order,
+ * selection and screen readers all unaffected; only the glyphs turn. */
+.flip-band {
+  writing-mode: vertical-rl;
+  height: min(80vh, 84vw);
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+.flip-band-number {
+  font-family: var(--book-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  color: var(--book-accent);
+  letter-spacing: 0.08em;
+}
+.flip-spread[data-dark] .flip-band-number { color: #c2a567; }
+.flip-band-title {
+  font-family: var(--book-display);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  letter-spacing: 0.04em;
+}
+.flip-band-space {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--flip-muted);
+}
+.flip-band-note {
+  font-size: 0.85rem; line-height: 1.5; color: var(--flip-muted);
+  max-height: 100%;
+}
+
+/* ---- pair: two artworks, one footprint --------------------------------- */
+.flip-pair { padding-inline: clamp(2rem, 6vw, 5rem); gap: clamp(1rem, 2vw, 1.75rem); }
+.flip-pair-imgs { display: flex; gap: clamp(0.75rem, 1.5vw, 1.25rem); height: min(78vh, 84vw); }
+.flip-pair-imgs > div {
+  position: relative; height: 100%; aspect-ratio: var(--flip-pair-ar, 2 / 3);
+  box-shadow: 0 24px 60px -32px rgba(16, 24, 34, 0.45);
+}
+/* Landscape pairs stack: two wide sheets in a row would be 200vh of width,
+ * so the column keeps both readable inside one viewport. Each item takes the
+ * pair's declared aspect; the column's width follows from its height. */
+.flip-pair-imgs[data-stack] { flex-direction: column; justify-content: center; }
+.flip-pair-imgs[data-stack] > div { height: auto; width: min(56vh, 84vw); }
+
+/* ---- panorama: the full span ------------------------------------------- */
+.flip-pano { width: 100vw; }
+.flip-pano-img { position: absolute; inset: 0; }
+.flip-pano-caption {
+  position: absolute; left: clamp(1.5rem, 4vw, 3rem); bottom: clamp(1.25rem, 4vh, 2.5rem);
+  color: #fff; text-shadow: 0 1px 14px rgba(10, 14, 20, 0.55);
+}
+.flip-pano-caption .flip-band-space { color: rgba(255, 255, 255, 0.85); }
+
+/* ---- palette / index / ask --------------------------------------------- */
+.flip-quiet { width: 100vw; }
+.flip-quiet-inner {
+  width: min(64rem, 88vw);
+  /* A short viewport must clip nothing — the coverage index especially is
+   * the one page whose whole point is completeness. */
+  max-height: calc(100% - 4rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.flip-quiet-inner .flip-eyebrow { display: block; text-align: center; }
+/* The classic vertical book lets its palette break out of the prose measure.
+ * A flip spread is already nearly full width and its scrollable height turns
+ * that negative margin into horizontal overflow, clipping the first and last
+ * legend labels. Keep the palette inside the flip page's own measure. */
+.flip-quiet-inner .book-palette { margin-inline: 0; }
+.flip-quiet-title {
+  font-family: var(--book-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  text-align: center;
+  margin-top: 0.9rem;
+  text-wrap: balance;
+}
+.flip-quiet-intro {
+  margin: 1rem auto 0; max-width: 36rem; text-align: center;
+  font-size: 0.95rem; line-height: 1.6; color: var(--flip-muted);
+}
+
+.flip-index-groups {
+  margin-top: clamp(1.25rem, 3.5vh, 2.25rem);
+  columns: 4; column-gap: 2.5rem;
+  font-size: 0.78rem; line-height: 1.75;
+}
+@media (max-width: 1100px) { .flip-index-groups { columns: 3; } }
+@media (max-width: 760px) { .flip-index-groups { columns: 2; font-size: 0.72rem; } }
+.flip-index-group { break-inside: avoid; margin-bottom: 1.1rem; }
+.flip-index-group h3 {
+  font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--book-accent); margin-bottom: 0.35rem;
+}
+.flip-index-group li { color: var(--flip-muted); }
+
+.flip-ask-cta {
+  display: inline-flex; margin-top: 1.6rem;
+  padding: 0.7rem 1.4rem; border-radius: 999px;
+  background: var(--book-ink); color: var(--book-ground);
+  font-size: 0.9rem; font-weight: 600;
+}
+
+/* ---- chrome: edge arrows + progress ------------------------------------ */
+.flip-nav {
+  position: absolute; top: 0; bottom: 0; width: clamp(3rem, 6vw, 5rem);
+  z-index: 20; display: flex; align-items: center; justify-content: center;
+  border: 0; background: transparent; cursor: pointer;
+  color: var(--book-ink); opacity: 0; transition: opacity 200ms ease;
+  font-size: 1.6rem;
+}
+.flip-nav:hover, .flip-nav:focus-visible { opacity: 0.85; }
+.flip-nav[disabled] { opacity: 0 !important; pointer-events: none; }
+.flip-nav--prev { left: 0; }
+.flip-nav--next { right: 0; }
+/* Touch devices page by swiping; edge buttons would only steal taps. */
+@media (hover: none) { .flip-nav { display: none; } }
+
+/* The progress strip is the programme's own elevation band — sea at the far
+ * left, sky at the far right — with the reader's position as a bronze mark. */
+.flip-progress {
+  position: relative; height: 4px; flex: none;
+  background: linear-gradient(
+    to right,
+    #12333b 0%, #1e5560 14%, #7a9e8e 30%, #b99e6b 44%,
+    #708c5e 58%, #9fb287 72%, #c9cfc0 86%, #dde6ec 100%
+  );
+}
+.flip-progress-mark {
+  position: absolute; top: -3px; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--book-accent);
+  box-shadow: 0 0 0 2px var(--book-ground);
+  transform: translateX(-50%);
+  transition: left 120ms linear;
+}
+.flip-counter {
+  position: absolute; right: clamp(1rem, 3vw, 2rem); bottom: 0.9rem; z-index: 20;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.7rem; letter-spacing: 0.14em; color: var(--flip-muted);
+  pointer-events: none;
+}
+
+/* ---- degradation ------------------------------------------------------- */
+/* Cmd-P must never print one clipped spread. The real print artifact is the
+ * landscape PDF; this just keeps the browser's own attempt honest. */
+@media print {
+  .flip-book { height: auto; overflow: visible; }
+  .flip-scroller { display: block; overflow: visible; }
+  .flip-spread { width: 100% !important; height: auto; min-height: 90vh; break-inside: avoid; }
+  .flip-nav, .flip-progress, .flip-counter { display: none; }
+}
+
+/* The proof-of-scope grid. Deliberately dense and small: the argument is the
+ * NUMBER of considered walls, not any one of them, and a reader who wants a
+ * particular room has the store. */
+.flip-gallery {
+  margin-top: clamp(1rem, 3vh, 1.75rem);
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+.flip-gallery-cell {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 2px;
+}
+@media (max-width: 1100px) { .flip-gallery { grid-template-columns: repeat(7, 1fr); } }
+@media (max-width: 760px) { .flip-gallery { grid-template-columns: repeat(5, 1fr); } }

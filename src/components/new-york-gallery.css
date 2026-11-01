@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "New York Editorial";
+  src: url("/fonts/Playfair-600.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+.ny-room-name {
+  font-family: "New York Editorial", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0;
+}

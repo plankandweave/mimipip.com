@@ -1,0 +1,187 @@
+/* The case-study book runs its own theme, scoped to `.book`.
+ *
+ * The shop palette is soft pastel retail — right for the storefront, wrong for
+ * a presentation that has to read as a design practice. Rather than fight the
+ * global tokens, the book redefines a small set of its own and every rule
+ * below reads from them. A new project changes ONE attribute
+ * (`data-book-theme`) and the whole book changes mood while the structure,
+ * pacing and page order stay identical. That sameness is deliberate: it is
+ * what makes six books read as one studio rather than six vendors.
+ */
+
+.book {
+  --book-ground: #FBFBF9;
+  --book-ink: #14161C;
+  --book-muted: #5C6270;
+  --book-rule: #E3E2DD;
+  --book-accent: #2B47A8;
+  --book-accent-soft: #EAEEF9;
+
+  /* Page rhythm. `density` scales the vertical air between plates, so a
+   * contemplative book breathes and a bright one moves. */
+  --book-density: 1;
+  --book-motion: 700ms;
+  --book-measure: 34rem;
+
+  --book-display: var(--font-display);
+  --book-body: var(--font-sans);
+
+  background: var(--book-ground);
+  color: var(--book-ink);
+  font-family: var(--book-body);
+}
+
+/* Precise — technology, workplace, infrastructure. Cool, exact, lots of white,
+ * slow dissolves. The PulseGrid theme. */
+.book[data-book-theme="precise"] {
+  --book-ground: #FBFBF9;
+  --book-ink: #14161C;
+  --book-muted: #5C6270;
+  --book-rule: #E3E2DD;
+  --book-accent: #2B47A8;
+  --book-accent-soft: #EAEEF9;
+  --book-density: 1.15;
+  --book-motion: 700ms;
+}
+
+/* Warm — hospitality. Denser pages, softer rules, a slower amber ink. */
+.book[data-book-theme="warm"] {
+  --book-ground: #FCF8F2;
+  --book-ink: #241B14;
+  --book-muted: #6B5B4C;
+  --book-rule: #E8DDCE;
+  --book-accent: #A2542A;
+  --book-accent-soft: #F6EADF;
+  --book-density: 0.9;
+  --book-motion: 900ms;
+}
+
+/* Calm — healthcare, wellness. Maximum air, minimum contrast, nothing sudden. */
+.book[data-book-theme="calm"] {
+  --book-ground: #F8FBFA;
+  --book-ink: #17231F;
+  --book-muted: #55665F;
+  --book-rule: #DCE7E2;
+  --book-accent: #2F6B4F;
+  --book-accent-soft: #E6F0EB;
+  --book-density: 1.3;
+  --book-motion: 1000ms;
+}
+
+/* Bright — schools, youth-facing offices. Tighter, quicker, higher contrast. */
+.book[data-book-theme="bright"] {
+  --book-ground: #FFFDF6;
+  --book-ink: #14161C;
+  --book-muted: #55606E;
+  --book-rule: #EAE4D4;
+  --book-accent: #C05621;
+  --book-accent-soft: #FDEEE2;
+  --book-density: 0.8;
+  --book-motion: 420ms;
+}
+
+/* Dusk — the Shorelight flip book. Ivory plaster paper, deep-sea ink and a
+ * bronze accent, matching the building the study walks through. The night
+ * pages (flip.css) carry their own indigo ground on top of this. */
+.book[data-book-theme="dusk"] {
+  --book-ground: #F3F0E9;
+  --book-ink: #22303A;
+  --book-muted: #5F6B73;
+  --book-rule: #E1DCD0;
+  --book-accent: #8A7038;
+  --book-accent-soft: #EDE7DA;
+  --book-density: 0.9;
+  --book-motion: 800ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book { --book-motion: 1ms; }
+}
+
+/* ---- Type ------------------------------------------------------------- */
+
+.book h1, .book h2, .book h3 {
+  font-family: var(--book-display);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.book-eyebrow {
+  font-family: var(--book-display);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--book-muted);
+}
+
+.book-prose {
+  max-width: var(--book-measure);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--book-muted);
+}
+.book-prose strong { color: var(--book-ink); font-weight: 600; }
+
+/* A chapter's rationale sits directly under its full-bleed wall reveal, so
+ * the reading measure that suits standalone prose elsewhere just leaves the
+ * paragraph stranded in the left third of the plate. */
+.book-prose--full { max-width: none; }
+
+/* ---- Plates ----------------------------------------------------------- */
+
+/* One idea per screen. Padding scales with the theme's density so the change
+ * of mood is felt as pace, not just colour. */
+.book-plate {
+  padding-block: calc(5rem * var(--book-density));
+  padding-inline: clamp(1.25rem, 6vw, 5rem);
+  max-width: 1500px;
+  margin-inline: auto;
+}
+
+/* Front matter — brief, palette, motifs. These plates are read, not looked
+ * at, and at full density they pushed the first wall four screens down the
+ * page. Two thirds of the air, same rhythm. */
+.book-plate--tight { padding-block: calc(3.25rem * var(--book-density)); }
+
+.book-rule { border-top: 1px solid var(--book-rule); }
+
+/* ---- Palette ---------------------------------------------------------- */
+
+/* One strip, full bleed, no gutters. Colours are only ever judged against
+ * their neighbours — a gap between swatches quietly flatters a palette that
+ * would clash on a real wall.
+ *
+ * The strip itself is `PaletteStrip` (tone="editorial"), shared with the
+ * proposal studio: each band is as wide as that colour's share, names and
+ * purposes sit in a track beneath, and no hex, percentage or role is ever set
+ * as text. All this class does now is break the strip out of the plate's
+ * measure — the layout inside it belongs to the component, so the book and
+ * the deck cannot drift apart. */
+.book-palette {
+  /* Break OUT of the plate's text measure, but not all the way to the page
+   * edge: the strip should read as wider than the prose around it, while the
+   * first swatch's label still has air to its left. */
+  margin-inline: calc(-1 * clamp(0.5rem, 3vw, 2.6rem));
+}
+
+/* ---- Print ------------------------------------------------------------ */
+
+/* The GM who likes the book forwards it to an owner who wants a file, so
+ * Cmd-P has to produce something worth attaching. */
+@media print {
+  .book { --book-density: 0.5; background: #fff; }
+  .book-plate { break-inside: avoid; padding-block: 1.5rem; }
+  .book-plate--tight { padding-block: 1.1rem; }
+  /* Two classes deep, so this beats the strip's own height class without
+   * needing !important. The bands are the palette on paper — a browser that
+   * drops backgrounds to save ink would print six empty boxes. */
+  .book .book-palette [data-palette-strip="bands"] { height: 76px; }
+  .book .book-palette [data-palette-strip="bands"] > * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .book-chapter { break-before: page; }
+  .book-no-print { display: none !important; }
+  .book-reveal-frame { break-inside: avoid; }
+}

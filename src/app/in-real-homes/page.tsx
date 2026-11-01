@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import Gallery from './gallery';
+export const metadata: Metadata = {title: 'In real homes', description: 'Playful border ideas for everyday nurseries and children’s rooms.', alternates:{canonical:'/in-real-homes/'}};
+export default function Page(){return <section className="container-x py-10 md:py-16"><header className="mx-auto mb-10 max-w-2xl text-center"><p className="mb-3 text-sm tracking-widest uppercase">Little spaces, big imagination</p><h1 className="mb-4 text-4xl md:text-6xl">In real homes</h1><p className="text-xl">Everyday rooms, little moments of colour.</p><p className="mt-3">Ideas for bringing playful borders into small nurseries and children’s rooms.</p><p className="mt-4 text-xs opacity-60">Illustrative room settings, not customer photographs.</p></header><Gallery /></section>}

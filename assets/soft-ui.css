@@ -1,0 +1,60 @@
+/* Shared soft controls; original artwork and wordmark retain their colours. */
+:root{--rust:#b65e43;--rust-dark:#94482f;--orange:#b65e43;--sun:#f2d9a0;--ink:#514437}
+button,input,select,textarea{max-width:100%}
+.button,.pill,.buy button,.product-actions button,.checkout-block button,.checkout-final button{border-radius:999px!important;box-shadow:none;font-size:13px!important;line-height:1.4!important;font-weight:700!important;min-height:44px}
+.button,.pill,.product-actions button:first-child{background:#b65e43;border-color:#b65e43;color:#fff}
+.product-actions button{border:1px solid #d8b7a5;background:#fff8f0;color:#87462f;padding:10px 14px}
+.product-title,.product-card h3,.section-heading h2,.shop-heading h2,.promise h2,.collection-card strong{color:#725448}
+.product-card,.collection-card,.category-card,.age-grid .age-card,.filter-panel,.dialog,.checkout-dialog{border-radius:22px}
+.collection-card img,.category-art,.carousel-slide img{border-radius:18px}
+.product-card:hover{border-color:#d8b7a5;box-shadow:0 8px 22px #6c49330d}
+.nav-menu{border-radius:18px}.nav-menu a,.nav-menu button{border-radius:10px}
+.storefront .header{width:100%;max-width:none;margin:0;padding:0}
+.storefront .header-inner{grid-template-columns:150px minmax(0,1fr) 58px;gap:20px;min-height:82px}
+.storefront .brand{grid-column:1;grid-row:1;justify-content:flex-start;margin:0}
+.storefront .brand img{width:142px;height:54px;object-position:left center}
+.storefront .nav{grid-column:2;grid-row:1;min-width:0;justify-content:center;gap:clamp(8px,1.2vw,18px)}
+.storefront .header-actions{grid-column:3;grid-row:1}
+.storefront .cart-button{position:relative;display:grid;place-items:center;width:52px;height:52px;padding:5px;border:0;border-radius:50%;background:#fff5e9}
+.bag-icon{width:37px;height:40px;overflow:visible}
+.storefront .cart-button .count{position:absolute;top:0;right:-3px;display:grid;place-items:center;min-width:19px;width:auto;height:19px;margin:0;padding:0 4px;border-radius:999px;background:#e8efdf;color:#496045;font-size:10px!important;line-height:1!important}
+.storefront .collection-grid>.collection-grid{grid-column:1/-1;min-width:0;width:100%}
+.storefront .collection-card{min-width:0;text-align:left;padding:12px 12px 20px;overflow:hidden}
+.storefront .collection-card strong{font-size:clamp(19px,2vw,26px);line-height:1.2}
+.storefront .collection-kicker{font-size:12px;line-height:1.5}
+.storefront .collection-link{font-size:12px}
+.storefront .product-actions{flex-wrap:wrap}
+.storefront .product-actions button{flex:1 1 100px}
+.storefront .product-actions button:last-child{flex:0 1 65px}
+.storefront .product-price{display:block;margin:14px 4px 0}
+.storefront .carousel-copy{min-width:0}
+.storefront .carousel-copy .button{border-radius:999px;background:#b65e43;border-color:#b65e43}
+.storefront .section-heading h2,.storefront .promise h2{font-size:clamp(28px,3.2vw,44px)}
+.storefront .footer-col h3{color:#875540}
+.storefront .filter-tools input{min-width:0}
+.storefront .cookie-settings{border-radius:999px}
+@media(max-width:1100px){
+.storefront .header-inner{grid-template-columns:48px minmax(0,1fr) 52px;gap:14px}
+.storefront .brand{grid-column:2;justify-content:center}.storefront .brand img{object-position:center}
+.storefront .menu-button{grid-column:1;grid-row:1;display:block;width:44px;height:44px;border:1px solid #eadfcf;border-radius:50%;background:#fff8f0}
+.storefront .nav{grid-column:auto;grid-row:auto;display:none;position:absolute;top:100%;left:0;right:0;align-items:stretch;justify-content:flex-start;gap:0}
+.storefront .nav.open{display:flex}.storefront .nav-menu{min-width:0}.storefront .browse-menu{min-width:0}
+}
+@media(max-width:680px){
+.storefront .header-inner{min-height:72px;padding:8px 4vw;gap:10px}.storefront .brand img{width:124px;height:46px}
+.storefront .collection-grid,.storefront .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.storefront .product-actions{gap:7px;margin:10px 0 0}.storefront .product-actions button,.storefront .product-actions button:last-child{flex:1 1 100%;font-size:12px!important;padding:10px 8px}
+.storefront .collection-card{padding:9px 9px 16px}.storefront .collection-card strong{font-size:19px}.storefront .collection-kicker{font-size:11px}
+.storefront .collection-link{font-size:11px}.storefront .product-card{padding:9px}.storefront .product-title{font-size:17px;line-height:1.25}
+.storefront .section{padding:42px 4vw}.storefront .carousel-copy{left:auto;right:auto;bottom:auto;width:100%;padding:24px 3px 8px;max-width:none}
+.storefront .carousel-copy h1{font-size:36px}.storefront .home-carousel{grid-template-columns:minmax(0,1fr)}
+.storefront .dialog{padding:16px}.storefront .footer-bottom{flex-wrap:wrap}
+}
+@media(max-width:360px){.storefront .collection-grid,.storefront .product-grid{grid-template-columns:minmax(0,1fr)}}
+
+.field input,.field select,.filter-tools input,.filter-tools select{border-radius:14px;border-color:#dfd3c5;min-height:44px;padding:10px 12px}
+.shape-button{border-radius:14px}.shape-button[aria-pressed="true"]{border-color:#b65e43;background:#fff5e9}
+.dialog-head h2,.details h3,.collection-result-heading{color:#725448}
+#mp-consent{border-radius:22px!important}#mp-consent button,.mp-cookie-settings{border-radius:999px!important;min-height:40px}
+
+.hero-actions .pill:first-child,.sticky-shop .pill,.chapter-nav a:first-child{background:#b65e43;border-color:#b65e43;color:#fff}

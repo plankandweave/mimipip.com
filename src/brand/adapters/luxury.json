@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "luxury",
+  "name": "Luxury",
+  "title": "Luxury",
+  "description": "Independent brand foundation. Design in preparation.",
+  "origin": "https://luxury.invalid",
+  "locale": "en_US",
+  "defaultMarket": "US",
+  "contactEmail": null,
+  "logo": null,
+  "iconSvg": null,
+  "alternateNames": [],
+  "socialLinks": {
+    "instagram": null,
+    "pinterest": null,
+    "youtube": null
+  },
+  "theme": {
+    "background": "#FFFFFF",
+    "foreground": "#222222",
+    "accent": "#222222",
+    "provenance": "Neutral unapproved scaffolding; brand owner to supply identity"
+  }
+}

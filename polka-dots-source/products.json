@@ -1,0 +1,1189 @@
+[
+  {
+    "id": "MP-PD01",
+    "slug": "polka-dots-happy-dots",
+    "designSlug": "happy-dots",
+    "name": "Happy Dots",
+    "description": "Blue, yellow and orange dots in a loose, playful scatter on warm off-white.",
+    "group": "original",
+    "collection": [
+      "polka-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "orange",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/happy-dots.png",
+    "imageLayout": "diptych",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/happy-dots/",
+    "imagePanelRatio": 1.0
+  },
+  {
+    "id": "MP-PD02",
+    "slug": "polka-dots-blue-pebble",
+    "designSlug": "blue-pebble",
+    "name": "Blue Pebble",
+    "description": "Light blue dots in an evenly spaced staggered repeat on off-white.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/blue-pebble.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/blue-pebble/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD03",
+    "slug": "polka-dots-sunshine-spots",
+    "designSlug": "sunshine-spots",
+    "name": "Sunshine Spots",
+    "description": "Bright yellow dots in a neat staggered repeat on white.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "yellow",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunshine-spots.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunshine-spots/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD04",
+    "slug": "polka-dots-orange-pop",
+    "designSlug": "orange-pop",
+    "name": "Orange Pop",
+    "description": "Small orange dots bring a lively, ordered rhythm to off-white.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "orange",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/orange-pop.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/orange-pop/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD05",
+    "slug": "polka-dots-cloud-dots",
+    "designSlug": "cloud-dots",
+    "name": "Cloud Dots",
+    "description": "White dots arranged in a gentle staggered repeat on light blue.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "white",
+      "blue"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/cloud-dots.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/cloud-dots/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD06",
+    "slug": "polka-dots-sunny-sky",
+    "designSlug": "sunny-sky",
+    "name": "Sunny Sky",
+    "description": "Alternating blue and yellow dots on a fresh white ground.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunny-sky.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunny-sky/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD07",
+    "slug": "polka-dots-little-carnival",
+    "designSlug": "little-carnival",
+    "name": "Little Carnival",
+    "description": "Rows of blue, yellow and orange dots give this off-white design a cheerful beat.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "orange",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/little-carnival.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/little-carnival/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD08",
+    "slug": "polka-dots-blue-button",
+    "designSlug": "blue-button",
+    "name": "Blue Button",
+    "description": "Large and small blue dots alternate across warm off-white.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/blue-button.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/blue-button/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD09",
+    "slug": "polka-dots-sunbeam-on-blue",
+    "designSlug": "sunbeam-on-blue",
+    "name": "Sunbeam on Blue",
+    "description": "Yellow dots sit in a spacious regular pattern on light blue.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "yellow",
+      "blue"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunbeam-on-blue.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunbeam-on-blue/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD10",
+    "slug": "polka-dots-tangerine-sky",
+    "designSlug": "tangerine-sky",
+    "name": "Tangerine Sky",
+    "description": "Orange and white dots alternate against a light blue ground.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "orange",
+      "white",
+      "blue"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/tangerine-sky.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/tangerine-sky/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD11",
+    "slug": "polka-dots-sunny-button",
+    "designSlug": "sunny-button",
+    "name": "Sunny Button",
+    "description": "Large and small yellow dots make a sunny repeat on off-white.",
+    "group": "classic",
+    "collection": [
+      "polka-dots",
+      "classic-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "yellow",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunny-button.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunny-button/",
+    "imagePanelRatio": 1.3333333333333333
+  },
+  {
+    "id": "MP-PD12",
+    "slug": "polka-dots-confetti-dance",
+    "designSlug": "confetti-dance",
+    "name": "Confetti Dance",
+    "description": "Blue, yellow and orange circles of different sizes scatter freely over warm off-white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "orange",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/confetti-dance.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/confetti-dance/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD13",
+    "slug": "polka-dots-blue-bubble",
+    "designSlug": "blue-bubble",
+    "name": "Blue Bubble",
+    "description": "A light, irregular scatter of blue dots, from tiny specks to larger circles, on white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/blue-bubble.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/blue-bubble/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD14",
+    "slug": "polka-dots-sunshine-sprinkle",
+    "designSlug": "sunshine-sprinkle",
+    "name": "Sunshine Sprinkle",
+    "description": "Yellow circles in mixed sizes drift across off-white with plenty of breathing room.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "yellow",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunshine-sprinkle.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunshine-sprinkle/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD15",
+    "slug": "polka-dots-tangerine-tumble",
+    "designSlug": "tangerine-tumble",
+    "name": "Tangerine Tumble",
+    "description": "A bright orange scatter with varied circle sizes and open white space.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "orange",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/tangerine-tumble.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/tangerine-tumble/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD16",
+    "slug": "polka-dots-cloud-sprinkle",
+    "designSlug": "cloud-sprinkle",
+    "name": "Cloud Sprinkle",
+    "description": "White circles in mixed sizes float across a soft light blue ground.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "white",
+      "blue"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/cloud-sprinkle.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/cloud-sprinkle/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD17",
+    "slug": "polka-dots-sunny-bubbles",
+    "designSlug": "sunny-bubbles",
+    "name": "Sunny Bubbles",
+    "description": "Blue and yellow dots mingle in an irregular, airy scatter on white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sunny-bubbles.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sunny-bubbles/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD18",
+    "slug": "polka-dots-blue-pop",
+    "designSlug": "blue-pop",
+    "name": "Blue Pop",
+    "description": "Larger blue circles and little orange dots scatter over warm off-white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "orange",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/blue-pop.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/blue-pop/",
+    "imagePanelRatio": 1.5
+  },
+  {
+    "id": "MP-PD19",
+    "slug": "polka-dots-sky-sprinkles",
+    "designSlug": "sky-sprinkles",
+    "name": "Sky Sprinkles",
+    "description": "White dots and sunny yellow accents float across light blue.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "white",
+      "yellow",
+      "blue"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/sky-sprinkles.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/sky-sprinkles/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD20",
+    "slug": "polka-dots-citrus-bubbles",
+    "designSlug": "citrus-bubbles",
+    "name": "Citrus Bubbles",
+    "description": "Orange and yellow circles in mixed sizes bring a warm, playful scatter to off-white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "orange",
+      "yellow",
+      "neutral"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/citrus-bubbles.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/citrus-bubbles/",
+    "imagePanelRatio": 1.0942452043369475
+  },
+  {
+    "id": "MP-PD21",
+    "slug": "polka-dots-tiny-confetti",
+    "designSlug": "tiny-confetti",
+    "name": "Tiny Confetti",
+    "description": "Tiny blue, yellow and orange dots create a light confetti scatter on white.",
+    "group": "random",
+    "collection": [
+      "polka-dots",
+      "random-dots"
+    ],
+    "concept": [
+      "pattern"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "orange",
+      "white"
+    ],
+    "gender": [
+      "boys",
+      "girls",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "ageMin": 0,
+    "ageMax": 10,
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "measurementType": "made-to-measure",
+    "widthCm": null,
+    "heightCm": null,
+    "image": "/collections/polka-dots/images/tiny-confetti.png",
+    "imageLayout": "quad",
+    "imageRole": "Flat design concept; room views are illustrative and do not reproduce every dot position or scale exactly",
+    "source": "MimiPip Polka Dots design concepts",
+    "status": "Design preview \u00b7 repeat and colour proofing pending",
+    "price": null,
+    "personalization": null,
+    "collectionURL": "/collections/polka-dots/",
+    "detailURL": "/collections/polka-dots/tiny-confetti/",
+    "imagePanelRatio": 1.5
+  }
+]

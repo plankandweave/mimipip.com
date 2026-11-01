@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "mimi-pip",
+  "name": "Mimi Pip",
+  "title": "Mimi Pip",
+  "description": "Little spaces for big little worlds.",
+  "origin": "https://mimi-pip.invalid",
+  "locale": "en_US",
+  "defaultMarket": "US",
+  "contactEmail": null,
+  "logo": null,
+  "iconSvg": null,
+  "alternateNames": [],
+  "socialLinks": {
+    "instagram": null,
+    "pinterest": null,
+    "youtube": null
+  },
+  "theme": {
+    "background": "#FFF9ED",
+    "foreground": "#714414",
+    "accent": "#FF542B",
+    "provenance": "Approximate working brand guide targets; brown text proposed"
+  },
+  "emailLogo": {
+    "path": "/brand/mimi-pip/email-wordmark.png",
+    "width": 2172,
+    "height": 724
+  }
+}

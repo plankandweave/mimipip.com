@@ -1,0 +1,189 @@
+/*
+ * Nafas's Face Parade — the shopfront.
+ *
+ * Every colour is picked off her artwork (lib/nafas NAFAS_INKS): the icing
+ * ground behind Pink Pop's sprinkles, the sprinkles themselves, the latte and
+ * coffee beans behind Ruby & Snow. The page stays light — icing, never a dark
+ * band — so her colours do the talking.
+ *
+ * Scoped under `.nafas`, like `.taash`: a different room in the same house.
+ */
+
+.nafas {
+  --icing: #fff9f0;
+  --icing-deep: #fbf1e3;
+  --pink: #f2147a;
+  --pink-soft: #ffd6e8;
+  --cherry: #ee2a2a;
+  --sun: #f7c934;
+  --sky: #4ea6ee;
+  --leaf: #6cc04a;
+  --bean: #8a5a3b;
+  --latte: #e3bd7c;
+  --ink: #3a2a24;
+  --ink-soft: #6e5a50;
+  background: var(--icing);
+  color: var(--ink);
+}
+
+.nafas .display {
+  font-family: var(--font-nafas), "Nunito", "Trebuchet MS", sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Her sprinkles, as a quiet wash behind the hero. Drawn once as an SVG tile
+   so the page ships no extra picture for it. */
+.nafas .sprinkles {
+  background-color: var(--icing);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg opacity='.3' stroke-linecap='round' stroke-width='9' fill='none'%3E%3Cpath d='M18 22l16 12' stroke='%23f2147a'/%3E%3Cpath d='M72 18l18-6' stroke='%23f7c934'/%3E%3Cpath d='M128 30l10 16' stroke='%234ea6ee'/%3E%3Cpath d='M160 70l-16 10' stroke='%236cc04a'/%3E%3Cpath d='M40 76l4 18' stroke='%23f7c934'/%3E%3Cpath d='M96 70l16 8' stroke='%23ff8fb8'/%3E%3Cpath d='M20 132l18-4' stroke='%234ea6ee'/%3E%3Cpath d='M70 140l10-16' stroke='%23f2147a'/%3E%3Cpath d='M120 120l18 6' stroke='%23f7c934'/%3E%3Cpath d='M156 150l-6 18' stroke='%23ff8fb8'/%3E%3Cpath d='M110 168l14-10' stroke='%236cc04a'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Coffee beans — Ruby & Snow's ground — as a little divider. */
+.nafas .beans {
+  height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22' viewBox='0 0 44 22'%3E%3Cellipse cx='22' cy='11' rx='7' ry='10' fill='%238a5a3b' opacity='.55'/%3E%3Cpath d='M22 2c-3 5 3 13 0 18' stroke='%23fff9f0' stroke-width='1.6' fill='none' opacity='.8'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+.nafas .polaroid {
+  background: #fff;
+  padding: 12px 12px 18px;
+  border-radius: 22px;
+  box-shadow: 0 1px 0 rgba(58, 42, 36, 0.06), 0 18px 40px -24px rgba(58, 42, 36, 0.35);
+}
+
+.nafas .tilt-l { transform: rotate(-2deg); }
+.nafas .tilt-r { transform: rotate(1.6deg); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .nafas .face-card { transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .nafas .face-card:hover { transform: translateY(-6px) rotate(-0.6deg); }
+}
+
+.nafas .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.nafas .nf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.85rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.nafas .nf-btn:hover { transform: translateY(-1px); }
+.nafas .nf-btn-pink { background: var(--pink); color: #fff; }
+.nafas .nf-btn-pink:hover { background: #d90f6b; }
+.nafas .nf-btn-line { border: 2px solid var(--ink); color: var(--ink); }
+
+.nafas .dot {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(58, 42, 36, 0.08);
+}
+
+/*
+ * The pencil half of the page (4 October 2026). The three animals are drawn in
+ * graphite, so the page turns from her colour into black and white: the icing
+ * cools to paper, the sprinkles lose their colour, and the frames become
+ * sketchbook leaves. Nothing here is a dark band — paper, never charcoal.
+ */
+.nafas {
+  --paper: #f6f5f1;
+  --paper-deep: #efede7;
+  --graphite: #2e2e2e;
+  --lead: #6b6b6b;
+}
+
+/* Paper grain, drawn as SVG noise so it ships no picture. */
+.nafas .grain {
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.18 0 0 0 0 0.18 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The turn. Two sprinkle layers over a ground that cools from icing to paper:
+   the coloured one fades out from the top, the grey one fades in below it. */
+.nafas .fade-band {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--icing) 0%, var(--paper) 100%);
+}
+.nafas .fade-band::before,
+.nafas .fade-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: 180px 180px;
+  pointer-events: none;
+}
+.nafas .fade-band::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg opacity='.3' stroke-linecap='round' stroke-width='9' fill='none'%3E%3Cpath d='M18 22l16 12' stroke='%23f2147a'/%3E%3Cpath d='M72 18l18-6' stroke='%23f7c934'/%3E%3Cpath d='M128 30l10 16' stroke='%234ea6ee'/%3E%3Cpath d='M160 70l-16 10' stroke='%236cc04a'/%3E%3Cpath d='M40 76l4 18' stroke='%23f7c934'/%3E%3Cpath d='M96 70l16 8' stroke='%23ff8fb8'/%3E%3Cpath d='M20 132l18-4' stroke='%234ea6ee'/%3E%3Cpath d='M70 140l10-16' stroke='%23f2147a'/%3E%3Cpath d='M120 120l18 6' stroke='%23f7c934'/%3E%3Cpath d='M156 150l-6 18' stroke='%23ff8fb8'/%3E%3Cpath d='M110 168l14-10' stroke='%236cc04a'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 65%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 65%);
+}
+.nafas .fade-band::after,
+.nafas .sprinkles-grey {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg opacity='.16' stroke='%232e2e2e' stroke-linecap='round' stroke-width='9' fill='none'%3E%3Cpath d='M18 22l16 12'/%3E%3Cpath d='M72 18l18-6'/%3E%3Cpath d='M128 30l10 16'/%3E%3Cpath d='M160 70l-16 10'/%3E%3Cpath d='M40 76l4 18'/%3E%3Cpath d='M96 70l16 8'/%3E%3Cpath d='M20 132l18-4'/%3E%3Cpath d='M70 140l10-16'/%3E%3Cpath d='M120 120l18 6'/%3E%3Cpath d='M156 150l-6 18'/%3E%3Cpath d='M110 168l14-10'/%3E%3C/g%3E%3C/svg%3E");
+}
+.nafas .fade-band::after {
+  -webkit-mask-image: linear-gradient(180deg, transparent 35%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 35%, #000 100%);
+}
+.nafas .fade-band > * { position: relative; z-index: 1; }
+.nafas .sprinkles-grey {
+  background-color: var(--paper);
+  background-size: 180px 180px;
+}
+
+/* A sketchbook leaf: paper white, a hairline of graphite, no colour. */
+.nafas .sketch {
+  background: #fdfdfb;
+  padding: 12px 12px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(46, 46, 46, 0.14);
+  box-shadow: 0 16px 36px -26px rgba(46, 46, 46, 0.4);
+}
+
+.nafas .nf-btn-ink { background: var(--graphite); color: #fff; }
+.nafas .nf-btn-ink:hover { background: #111; }
+
+/* Optional artist audio guide: images invite listening; shopping stays explicit. */
+.nafas-audio-art:not(.absolute) { position: relative; }
+.nafas-audio-art { cursor: pointer; }
+.nafas-listen { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .7rem 1rem; border-radius: 999px; background: #fff9f2; color: #49273b; border: 1px solid #eed2de; font-size: .85rem; font-weight: 650; cursor: pointer; box-shadow: 0 3px 16px #34202a12; }
+.nafas-listen:hover { background: #ffe4ef; }
+.nafas-listen:focus-visible, .nafas-player button:focus-visible, .nafas-picture-shop:focus-visible { outline: 3px solid #d50064; outline-offset: 4px; }
+.nafas-art-invite { position: absolute; top: 16px; left: 16px; right: 16px; z-index: 2; opacity: 0; transition: opacity .18s; pointer-events: none; }
+.nafas-art-invite button { pointer-events: auto; }
+.nafas-audio-art:hover > .nafas-art-invite, .nafas-audio-art:focus-within > .nafas-art-invite { opacity: 1; }
+.nafas-picture-shop { position: absolute; bottom: 12px; right: 12px; z-index: 2; background: #fff9f2ed; padding: .55rem .8rem; border-radius: 20px; font-size: .75rem; text-decoration: underline; }
+.nafas-guide-start { margin-top: 1.3rem; }
+.nafas-guide-start .nafas-listen { background: #f2147a; color: white; border-color: #f2147a; }
+.nafas-guide-start p { font-size: .8rem; margin: .5rem 0; color: var(--ink-soft); }
+.nafas-player { position: fixed; z-index: 45; bottom: 20px; left: 50%; transform: translateX(-50%); width: min(590px, calc(100vw - 32px)); border: 1px solid #e9d9df; border-radius: 22px; padding: 14px 18px; background: #fffaf5f7; box-shadow: 0 6px 36px #35242a29; color: #35242a; backdrop-filter: blur(12px); }
+.nafas-player-top { display: flex; align-items: center; gap: 12px; }
+.nafas-player-top > div { flex: 1; min-width: 0; }
+.nafas-player strong { display: block; font-size: .95rem; }
+.nafas-player-status { display: block; font-size: .72rem; color: #805265; }
+.nafas-player button { min-height: 44px; border-radius: 24px; padding: 8px 12px; background: #f8e3ec; cursor: pointer; font-size: .8rem; font-weight: 650; }
+.nafas-player-options { display: flex; align-items: flex-start; gap: 16px; margin-top: 8px; font-size: .78rem; }
+.nafas-player-options label { display: flex; align-items: center; gap: 6px; white-space: nowrap; min-height: 32px; }
+.nafas-player-options input { accent-color: #d70063; }
+.nafas-player details { flex: 1; }
+.nafas-player summary { cursor: pointer; padding: 8px 0; }
+.nafas-player details p { line-height: 1.55; margin-bottom: 8px; max-height: 20vh; overflow-y: auto; }
+.nafas-player small { color: #805265; font-size: .65rem; }
+@media (hover: none), (max-width: 767px) { .nafas-art-invite { opacity: 1; top: 10px; left: 10px; right: 10px; } .nafas-art-invite .nafas-listen { font-size: .73rem; padding: .5rem .7rem; } .nafas-player { bottom: 78px; padding: 12px; } }
+@media (prefers-reduced-motion: reduce) { .nafas-art-invite { transition: none; } }

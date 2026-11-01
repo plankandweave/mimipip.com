@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Colorful hand-drawn wallpaper pattern preview">
+<rect width="640" height="480" rx="28" fill="#ffe4a4"/>
+<path d="M0 335Q120 260 240 335T480 335T720 335V500H0Z" fill="#f5a8c2"/>
+<path d="M0 393Q140 325 280 393T560 393T840 393V500H0Z" fill="#7ec4bc"/>
+<g stroke="#71361f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M96 132q34-57 69 0q-35 68-69 0Z" fill="#ef6c45"/><path d="M130 120v72" fill="none"/>
+<path d="M276 94l12 31 33 2-25 21 8 32-28-18-28 18 8-32-25-21 33-2Z" fill="#ffe05e"/>
+<circle cx="466" cy="143" r="45" fill="#5ca7cf"/><path d="M448 142q18-24 36 0q-18 24-36 0Z" fill="#fffaf0"/><circle cx="466" cy="143" r="7" fill="#71361f"/>
+<path d="M217 282q-2-49 34-48t35 48v31h-69Z" fill="#df4a73"/><path d="M251 235v-26m-15 2 15-20 15 20" fill="none"/>
+<path d="M383 266q21-34 41 0t41 0" fill="none" stroke="#d94c12"/><circle cx="383" cy="266" r="9" fill="#fffaf0"/><circle cx="465" cy="266" r="9" fill="#fffaf0"/>
+</g><text x="320" y="442" text-anchor="middle" font-family="Nunito, sans-serif" font-size="22" font-weight="700" fill="#71361f">A little artwork preview</text></svg>

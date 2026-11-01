@@ -1,0 +1,489 @@
+[
+  {
+    "handle": "mimi-border-sage-meadow",
+    "sku": "MP-B01",
+    "title": "Sage Meadow",
+    "description": "Little rabbits and hedgehogs wander through sage leaves and meadow flowers. A gentle woodland story to run just above the skirting.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Green",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Animal",
+      "Botanical"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Green",
+    "placement": "Skirting",
+    "stages": [
+      "Nursery",
+      "Toddler"
+    ],
+    "coordinates_with": "Animals & woodland",
+    "listing_url": "/wall-borders/sage-meadow/",
+    "images": [
+      {
+        "url": "/assets/borders/sage-meadow-room.png",
+        "alt": "Sage Meadow border styled at skirting level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-rose-garden",
+    "sku": "MP-B02",
+    "title": "Rose Garden",
+    "description": "Blush roses, soft butterflies and trailing leaves bring a quiet garden around the room. Pair with warm white walls and soft pink textiles.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Pink",
+      "Pattern",
+      "Mood: Playful",
+      "Toddler",
+      "Kids",
+      "Floral",
+      "Botanical",
+      "Pastel"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Pink",
+    "placement": "Ceiling",
+    "stages": [
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Garden Archive",
+    "listing_url": "/wall-borders/rose-garden/",
+    "images": [
+      {
+        "url": "/assets/borders/rose-garden-room.png",
+        "alt": "Rose Garden border styled at ceiling level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-honey-orchard",
+    "sku": "MP-B03",
+    "title": "Honey Orchard",
+    "description": "Caramel squirrels, orchard pears and tiny birds make a warm woodland procession. A playful companion to natural wood and cream.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Brown",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Animal",
+      "Botanical"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Brown",
+    "placement": "Skirting",
+    "stages": [
+      "Nursery",
+      "Toddler"
+    ],
+    "coordinates_with": "Garden & woodland",
+    "listing_url": "/wall-borders/honey-orchard/",
+    "images": [
+      {
+        "url": "/assets/borders/honey-orchard-room.png",
+        "alt": "Honey Orchard border styled at skirting level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-sand-and-seed",
+    "sku": "MP-B04",
+    "title": "Sand & Seed",
+    "description": "Small birds and seedheads sit beneath softly drawn arches in sand and taupe. A calm botanical frame for a nursery or shared bedroom.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Neutral",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Kids",
+      "Animal",
+      "Botanical"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Neutral",
+    "placement": "Cornice effect",
+    "stages": [
+      "Nursery",
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Garden Archive",
+    "listing_url": "/wall-borders/sand-and-seed/",
+    "images": [
+      {
+        "url": "/assets/borders/sand-and-seed-room.png",
+        "alt": "Sand & Seed border styled at cornice effect level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-cloud-parade",
+    "sku": "MP-B05",
+    "title": "Cloud Parade",
+    "description": "Pale blue clouds, little birds and yellow suns float through a light, open sky. A cheerful finishing touch just beneath the ceiling.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Blue",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Sky",
+      "Pastel"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Blue",
+    "placement": "Ceiling",
+    "stages": [
+      "Nursery",
+      "Toddler"
+    ],
+    "coordinates_with": "Sky & wonder",
+    "listing_url": "/wall-borders/cloud-parade/",
+    "images": [
+      {
+        "url": "/assets/borders/cloud-parade-room.png",
+        "alt": "Cloud Parade border styled at ceiling level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-buttercup-morning",
+    "sku": "MP-B06",
+    "title": "Buttercup Morning",
+    "description": "Yellow flowers and sunny faces weave through a pale blue ribbon. A bright little garland for an airy bedroom.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Yellow",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Floral",
+      "Botanical",
+      "Pastel"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Yellow",
+    "placement": "Ceiling",
+    "stages": [
+      "Nursery",
+      "Toddler"
+    ],
+    "coordinates_with": "Sky & garden",
+    "listing_url": "/wall-borders/buttercup-morning/",
+    "images": [
+      {
+        "url": "/assets/borders/buttercup-morning-room.png",
+        "alt": "Buttercup Morning border styled at ceiling level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-lilac-twilight",
+    "sku": "MP-B07",
+    "title": "Lilac Twilight",
+    "description": "Little owls, plum branches and crescent moons trace a gentle twilight garden. Pair with lilac accents and plenty of warm white.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Purple",
+      "Pattern",
+      "Mood: Playful",
+      "Toddler",
+      "Kids",
+      "Animal",
+      "Botanical",
+      "Sky",
+      "Pastel"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Purple",
+    "placement": "Ceiling",
+    "stages": [
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Winter Worlds",
+    "listing_url": "/wall-borders/lilac-twilight/",
+    "images": [
+      {
+        "url": "/assets/borders/lilac-twilight-room.png",
+        "alt": "Lilac Twilight border styled at ceiling level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-silver-snow",
+    "sku": "MP-B08",
+    "title": "Silver Snow",
+    "description": "Grey winter trees, small rabbits and white swans make a quiet snowy landscape. A delicate band of detail above the skirting.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Grey",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Kids",
+      "Animal",
+      "Botanical"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Grey",
+    "placement": "Skirting",
+    "stages": [
+      "Nursery",
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Winter Worlds",
+    "listing_url": "/wall-borders/silver-snow/",
+    "images": [
+      {
+        "url": "/assets/borders/silver-snow-room.png",
+        "alt": "Silver Snow border styled at skirting level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-apricot-arches",
+    "sku": "MP-B09",
+    "title": "Apricot Arches",
+    "description": "Alternating orange and peach arches sit beneath a fine double line. This flat printed border gives the ceiling edge a playful cornice effect.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Orange",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Kids"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Orange",
+    "placement": "Cornice effect",
+    "stages": [
+      "Nursery",
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Colour & pattern",
+    "listing_url": "/wall-borders/apricot-arches/",
+    "images": [
+      {
+        "url": "/assets/borders/apricot-arches-room.png",
+        "alt": "Apricot Arches border styled at cornice effect level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-cherry-confetti",
+    "sku": "MP-B10",
+    "title": "Cherry Confetti",
+    "description": "Rounded red and coral marks, yellow dots and blue strokes create a loose, joyful rhythm. An original Mimi Pip pattern to coordinate with colourful rooms.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Red",
+      "Pattern",
+      "Mood: Playful",
+      "Toddler",
+      "Kids"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Red",
+    "placement": "Ceiling",
+    "stages": [
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "Nafas’s Face Parade",
+    "listing_url": "/wall-borders/cherry-confetti/",
+    "images": [
+      {
+        "url": "/assets/borders/cherry-confetti-room.png",
+        "alt": "Cherry Confetti border styled at ceiling level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-paper-petals",
+    "sku": "MP-B11",
+    "title": "Paper Petals",
+    "description": "White daisies with yellow centres and pale blue stems sit on a warm ivory ground. A light botanical finish for a nursery or toddler room.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "White",
+      "Pattern",
+      "Mood: Playful",
+      "Nursery",
+      "Toddler",
+      "Floral",
+      "Botanical",
+      "Pastel"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "White",
+    "placement": "Cornice effect",
+    "stages": [
+      "Nursery",
+      "Toddler"
+    ],
+    "coordinates_with": "Mimi Pip botanicals",
+    "listing_url": "/wall-borders/paper-petals/",
+    "images": [
+      {
+        "url": "/assets/borders/paper-petals-room.png",
+        "alt": "Paper Petals border styled at cornice effect level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "handle": "mimi-border-little-rooftops",
+    "sku": "MP-B12",
+    "title": "Little Rooftops",
+    "description": "Little houses with softly drawn black rooftops and orange doors form a miniature neighbourhood. A graphic story for growing children and shared rooms.",
+    "category": "border",
+    "vendor": "Mimi Pip",
+    "tags": [
+      "Black",
+      "Pattern",
+      "Mood: Playful",
+      "Toddler",
+      "Kids",
+      "Cityscape",
+      "Adventure"
+    ],
+    "is_mimipip_border": true,
+    "border_height_cm": 15,
+    "pack_length_m": 5,
+    "segment_length_m": 1,
+    "sections_per_pack": 5,
+    "media": "Standard repositionable media",
+    "colour": "Black",
+    "placement": "Skirting",
+    "stages": [
+      "Toddler",
+      "Kids"
+    ],
+    "coordinates_with": "City Worlds",
+    "listing_url": "/wall-borders/little-rooftops/",
+    "images": [
+      {
+        "url": "/assets/borders/little-rooftops-room.png",
+        "alt": "Little Rooftops border styled at skirting level in a children's room",
+        "is_flat": false,
+        "scene_key": "kidsroom",
+        "position": 0
+      }
+    ]
+  }
+]

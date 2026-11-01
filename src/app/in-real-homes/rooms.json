@@ -1,0 +1,170 @@
+[
+  {
+    "id": "BR01",
+    "title": "Rainbow Hooray",
+    "image": "/in-real-homes/BR01.webp",
+    "alt": "Rainbow Hooray border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR02",
+    "title": "Up Up Balloon Club",
+    "image": "/in-real-homes/BR02.webp",
+    "alt": "Up Up Balloon Club border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR03",
+    "title": "Little Sky Voyagers",
+    "image": "/in-real-homes/BR03.webp",
+    "alt": "Little Sky Voyagers border at ceiling level in an everyday child bedroom setting",
+    "placement": "Ceiling",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR04",
+    "title": "Everyday Party Flags",
+    "image": "/in-real-homes/BR04.webp",
+    "alt": "Everyday Party Flags border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR05",
+    "title": "Hello Sunshine",
+    "image": "/in-real-homes/BR05.webp",
+    "alt": "Hello Sunshine border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR06",
+    "title": "Rainbow Kite Day",
+    "image": "/in-real-homes/BR06.webp",
+    "alt": "Rainbow Kite Day border at ceiling level in an everyday child bedroom setting",
+    "placement": "Ceiling",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR07",
+    "title": "Cherry Pop Picnic",
+    "image": "/in-real-homes/BR07.webp",
+    "alt": "Cherry Pop Picnic border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR08",
+    "title": "Ducky Puddle Parade",
+    "image": "/in-real-homes/BR08.webp",
+    "alt": "Ducky Puddle Parade border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR09",
+    "title": "Confetti Cloud Bunting",
+    "image": "/in-real-homes/BR09.webp",
+    "alt": "Confetti Cloud Bunting border at ceiling level in an everyday child bedroom setting",
+    "placement": "Ceiling",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR10",
+    "title": "Happy Wheels",
+    "image": "/in-real-homes/BR10.webp",
+    "alt": "Happy Wheels border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR11",
+    "title": "Jungle Peekaboo",
+    "image": "/in-real-homes/BR11.webp",
+    "alt": "Jungle Peekaboo border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR12",
+    "title": "Balloon Puppy Party",
+    "image": "/in-real-homes/BR12.webp",
+    "alt": "Balloon Puppy Party border at skirting level in an everyday child bedroom setting",
+    "placement": "Skirting",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR13",
+    "title": "Rainbow Ribbon Parade",
+    "image": "/in-real-homes/BR13.webp",
+    "alt": "Rainbow Ribbon Parade border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR14",
+    "title": "Tiny Town Fiesta",
+    "image": "/in-real-homes/BR14.webp",
+    "alt": "Tiny Town Fiesta border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR15",
+    "title": "Moon Balloon Bedtime",
+    "image": "/in-real-homes/BR15.webp",
+    "alt": "Moon Balloon Bedtime border at ceiling level in an everyday child bedroom setting",
+    "placement": "Ceiling",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR16",
+    "title": "Dinosaur Birthday Line",
+    "image": "/in-real-homes/BR16.webp",
+    "alt": "Dinosaur Birthday Line border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR17",
+    "title": "Flower Power Smiles",
+    "image": "/in-real-homes/BR17.webp",
+    "alt": "Flower Power Smiles border at middle level in an everyday nursery setting",
+    "placement": "Middle",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR18",
+    "title": "Colour Pop Pennants",
+    "image": "/in-real-homes/BR18.webp",
+    "alt": "Colour Pop Pennants border at ceiling level in an everyday child bedroom setting",
+    "placement": "Ceiling",
+    "room": "Kids room"
+  },
+  {
+    "id": "BR19",
+    "title": "Little Ocean Giggles",
+    "image": "/in-real-homes/BR19.webp",
+    "alt": "Little Ocean Giggles border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR20",
+    "title": "Ice Cream Sky",
+    "image": "/in-real-homes/BR20.webp",
+    "alt": "Ice Cream Sky border at ceiling level in an everyday nursery setting",
+    "placement": "Ceiling",
+    "room": "Nursery"
+  },
+  {
+    "id": "BR21",
+    "title": "Fruit Loop Rainbows",
+    "image": "/in-real-homes/BR21.webp",
+    "alt": "Fruit Loop Rainbows border at skirting level in an everyday child bedroom setting",
+    "placement": "Skirting",
+    "room": "Kids room"
+  }
+]

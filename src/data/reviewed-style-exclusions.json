@@ -1,0 +1,802 @@
+{
+  "aa-0050": [
+    "Textures"
+  ],
+  "aa-0052": [
+    "Textures"
+  ],
+  "aa-0064": [
+    "Art"
+  ],
+  "aa-0068": [
+    "Textures"
+  ],
+  "aa-0070": [
+    "Textures"
+  ],
+  "aa-0073": [
+    "Indian Ethnic"
+  ],
+  "aa-0074": [
+    "Textures"
+  ],
+  "aa-0076": [
+    "Art"
+  ],
+  "activity-room": [
+    "Pattern"
+  ],
+  "ahimsa-a-place-between": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-common-measure": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-gentle-boundary": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-held-in-balance": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-many-held-together": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-open-ground": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-quiet-accord": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-shared-ground": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-soft-strength": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-space-to-yield": [
+    "Indian Ethnic"
+  ],
+  "ahimsa-together-still": [
+    "Indian Ethnic"
+  ],
+  "amphitheatre-wall": [
+    "Ceiling Wallpaper",
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "arcadian-manor": [
+    "Chinoiserie"
+  ],
+  "art-craft-room": [
+    "Pattern",
+    "Art"
+  ],
+  "art-studio": [
+    "Abstract",
+    "Pattern",
+    "Art"
+  ],
+  "ascent-dawn": [
+    "Abstract"
+  ],
+  "ascent-dusk": [
+    "Abstract"
+  ],
+  "aviary-chinoiserie": [
+    "Chinoiserie"
+  ],
+  "bagh-bagh-jaali": [
+    "Floral"
+  ],
+  "bar-lounge": [
+    "Abstract",
+    "Textures"
+  ],
+  "blue-notes-quiet-estuary": [
+    "Landscape"
+  ],
+  "board-games-room": [
+    "Pattern"
+  ],
+  "booking-consultation-room": [
+    "Art"
+  ],
+  "breathe": [
+    "Botanical"
+  ],
+  "brihaspati": [
+    "Pattern"
+  ],
+  "cafe": [
+    "Textures"
+  ],
+  "celestial-atrium": [
+    "Modern"
+  ],
+  "changing-room": [
+    "Abstract",
+    "Pattern",
+    "Textures",
+    "Art"
+  ],
+  "children-s-outdoor-play-zone": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "children-s-party-room": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "children-s-playroom": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "children-s-pool-area": [
+    "Pattern"
+  ],
+  "chromatic-calm": [
+    "Pattern"
+  ],
+  "citadel-of-many-windows": [
+    "Art"
+  ],
+  "city-midnight-metropolis": [
+    "Art"
+  ],
+  "city-of-seven-bridges": [
+    "Art"
+  ],
+  "city-rooftop-dispatch-painted": [
+    "Art"
+  ],
+  "city-secret-city-painted": [
+    "Art"
+  ],
+  "cloud-observatory": [
+    "Watercolor",
+    "Art"
+  ],
+  "co-working-lounge": [
+    "Abstract",
+    "Pattern",
+    "Textures"
+  ],
+  "coral-fan-reverie": [
+    "Floral"
+  ],
+  "countryside-citadel": [
+    "Chinoiserie"
+  ],
+  "courtyard-sketch": [
+    "Modern"
+  ],
+  "crane-flight": [
+    "Landscape"
+  ],
+  "crane-peony-f5e6": [
+    "Japandi"
+  ],
+  "crane-waters": [
+    "Japandi",
+    "Landscape"
+  ],
+  "crimson-tide": [
+    "Japandi"
+  ],
+  "customer-lounge": [
+    "Pattern"
+  ],
+  "dance-studio": [
+    "Art"
+  ],
+  "dappled-aristocrat": [
+    "Abstract"
+  ],
+  "dappled-ascent": [
+    "Abstract"
+  ],
+  "delft-blossom": [
+    "Chinoiserie"
+  ],
+  "delft-florals": [
+    "Chinoiserie"
+  ],
+  "desert-observatory": [
+    "Art"
+  ],
+  "discussion-lounge": [
+    "Pattern",
+    "Textures"
+  ],
+  "divine-balaji-ii": [
+    "Pattern"
+  ],
+  "divine-lotus": [
+    "Floral"
+  ],
+  "dwadasha-ekadanta-canvas": [
+    "Animal"
+  ],
+  "dwadasha-ganapati": [
+    "Animal"
+  ],
+  "dwadasha-ganapati-canvas": [
+    "Animal"
+  ],
+  "dwadasha-vinayaka": [
+    "Animal"
+  ],
+  "dwadasha-vinayaka-canvas": [
+    "Animal"
+  ],
+  "elephant-s-orchard": [
+    "Pattern"
+  ],
+  "fa-00052": [
+    "Art"
+  ],
+  "fa-00054": [
+    "Textures",
+    "Art"
+  ],
+  "fa-00056": [
+    "Art"
+  ],
+  "fa-00057": [
+    "Art"
+  ],
+  "family-lounge": [
+    "Japandi"
+  ],
+  "feast-dusk": [
+    "Pattern"
+  ],
+  "flo-00100": [
+    "Floral"
+  ],
+  "flo-00106": [
+    "Textures"
+  ],
+  "flo-00108": [
+    "Watercolor"
+  ],
+  "flo-00120": [
+    "Watercolor",
+    "Art"
+  ],
+  "flo-0018": [
+    "Japandi"
+  ],
+  "flo-0021": [
+    "Japandi"
+  ],
+  "flo-0044": [
+    "Art"
+  ],
+  "foosball-area": [
+    "Abstract",
+    "Textures"
+  ],
+  "french-apartment-foyer": [
+    "Art"
+  ],
+  "french-apartment-living-dining": [
+    "Pattern"
+  ],
+  "ganesha-divine-ii": [
+    "Pattern"
+  ],
+  "ganesha-s-blessing-ii": [
+    "Pattern"
+  ],
+  "ganesha-s-grace": [
+    "Pattern"
+  ],
+  "garden-paradise": [
+    "Pattern"
+  ],
+  "geo-0009": [
+    "Textures"
+  ],
+  "geo-0022-a": [
+    "Textured"
+  ],
+  "golden-umbel": [
+    "Textured"
+  ],
+  "grand-lawn-backdrop": [
+    "Pattern",
+    "Textures"
+  ],
+  "grove-dusk": [
+    "Chinoiserie"
+  ],
+  "heron-s-garden": [
+    "Textures"
+  ],
+  "hobby-room": [
+    "Pattern"
+  ],
+  "homework-room": [
+    "Abstract"
+  ],
+  "impossible-voyage": [
+    "Art"
+  ],
+  "indigo-delft-ceiling": [
+    "Chinoiserie"
+  ],
+  "indigo-delft-garden": [
+    "Chinoiserie"
+  ],
+  "ink-hyderabad": [
+    "Art"
+  ],
+  "ink-london": [
+    "Art"
+  ],
+  "ink-manila": [
+    "Tropical"
+  ],
+  "ink-new-york": [
+    "Art"
+  ],
+  "ink-shanghai": [
+    "Chinoiserie"
+  ],
+  "ink-venice": [
+    "Watercolor"
+  ],
+  "ink-vietnam": [
+    "Chinoiserie"
+  ],
+  "islands-of-elsewhere": [
+    "Art"
+  ],
+  "jacuzzi-lounge": [
+    "Abstract",
+    "Pattern"
+  ],
+  "japanese-inspired-home-primary-bedroom": [
+    "Landscape"
+  ],
+  "japanese-inspired-home-study": [
+    "Watercolor"
+  ],
+  "kaalchakra": [
+    "Art"
+  ],
+  "kd-0012": [
+    "Art"
+  ],
+  "khel": [
+    "Art"
+  ],
+  "lagoon-dusk": [
+    "Landscape"
+  ],
+  "landscaped-garden-pavilion": [
+    "Pattern"
+  ],
+  "leopard-reverie": [
+    "Pattern"
+  ],
+  "linen-weave-3483": [
+    "Geometric"
+  ],
+  "linen-weave-39cz": [
+    "Geometric"
+  ],
+  "linen-weave-ii": [
+    "Geometric"
+  ],
+  "linen-weave-ii-d072": [
+    "Geometric"
+  ],
+  "linen-weave-iv-eb9f": [
+    "Geometric"
+  ],
+  "linen-weave-v-53da": [
+    "Abstract"
+  ],
+  "linen-weave-vii": [
+    "Geometric"
+  ],
+  "lotus-pavilion": [
+    "Chinoiserie"
+  ],
+  "maharaja-s-elephant": [
+    "Pattern"
+  ],
+  "maharaja-s-garden": [
+    "Pattern"
+  ],
+  "maharaja-s-leopard": [
+    "Pattern"
+  ],
+  "maharaja-s-majesty-ii": [
+    "Pattern"
+  ],
+  "maharaja-s-procession": [
+    "Pattern"
+  ],
+  "maharaja-s-profile-ii": [
+    "Pattern"
+  ],
+  "maharani-s-reverie": [
+    "Pattern"
+  ],
+  "maharani-s-splendor": [
+    "Pattern"
+  ],
+  "meditation-garden": [
+    "Japandi"
+  ],
+  "meditation-room": [
+    "Abstract",
+    "Ceiling Wallpaper",
+    "Textures"
+  ],
+  "midnight-express": [
+    "Art"
+  ],
+  "mini-theatre": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "moonlit-winter-garden": [
+    "Chinoiserie"
+  ],
+  "mughal-arcadia-garden": [
+    "Pattern"
+  ],
+  "mughal-pavilion": [
+    "Pattern"
+  ],
+  "mumbai-home-living-dining": [
+    "Abstract"
+  ],
+  "music-room": [
+    "Pattern"
+  ],
+  "nafas-face-parade-pattern": [
+    "Abstract"
+  ],
+  "nafas-pink-pop": [
+    "Abstract"
+  ],
+  "nafas-ruby-and-snow": [
+    "Abstract"
+  ],
+  "natural-weave": [
+    "Geometric"
+  ],
+  "natural-weave-iii": [
+    "Geometric"
+  ],
+  "natural-weave-iv": [
+    "Botanical"
+  ],
+  "office-electric-current-meet": [
+    "Textures"
+  ],
+  "office-electric-current-work": [
+    "Textures"
+  ],
+  "office-local-frequency-work": [
+    "Japandi"
+  ],
+  "office-quiet-ambition-meet": [
+    "Textures"
+  ],
+  "office-quiet-ambition-pause": [
+    "Textured"
+  ],
+  "office-quiet-ambition-work": [
+    "Textures"
+  ],
+  "outdoor-dining-pavilion": [
+    "Pattern"
+  ],
+  "painted-crossing-scarlet-gallop": [
+    "Spiritual"
+  ],
+  "painted-crossing-the-riders-pause": [
+    "Spiritual"
+  ],
+  "painted-crossing-the-village-procession": [
+    "Pattern"
+  ],
+  "palazzo-botanica": [
+    "Chinoiserie"
+  ],
+  "party-room": [
+    "Abstract",
+    "Pattern",
+    "Art"
+  ],
+  "party-terrace": [
+    "Ceiling Wallpaper",
+    "Pattern"
+  ],
+  "passage-dawn": [
+    "Pattern"
+  ],
+  "passage-dusk": [
+    "Abstract",
+    "Pattern",
+    "Textures"
+  ],
+  "peacock-arcadia": [
+    "Pattern"
+  ],
+  "peacock-archway": [
+    "Chinoiserie"
+  ],
+  "peacock-pavilion-garden": [
+    "Chinoiserie"
+  ],
+  "peacock-pavilion-ii": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "peacock-pavilion-iii": [
+    "Pattern"
+  ],
+  "peacock-regalia": [
+    "Pattern",
+    "Spiritual"
+  ],
+  "pet-park-entrance": [
+    "Pattern"
+  ],
+  "pilates-studio": [
+    "Pattern"
+  ],
+  "pool-cafe": [
+    "Pattern",
+    "Textures"
+  ],
+  "pool-changing-area": [
+    "Abstract",
+    "Pattern",
+    "Textures"
+  ],
+  "pool-deck-wall": [
+    "Abstract",
+    "Pattern",
+    "Textures",
+    "Art"
+  ],
+  "pool-entrance": [
+    "Chinoiserie",
+    "Pattern",
+    "Textures"
+  ],
+  "pool-lounge": [
+    "Abstract",
+    "Pattern"
+  ],
+  "pool-pavilion": [
+    "Ceiling Wallpaper",
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "pre-function-area": [
+    "Abstract",
+    "Pattern"
+  ],
+  "private-entertainment-room": [
+    "Art"
+  ],
+  "private-meeting-room": [
+    "Art"
+  ],
+  "project-entrance-experience-wall": [
+    "Abstract",
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "project-model-room": [
+    "Japandi"
+  ],
+  "raani": [
+    "Art"
+  ],
+  "reading-room": [
+    "Chinoiserie"
+  ],
+  "regal-profile": [
+    "Pattern",
+    "Art"
+  ],
+  "restaurant": [
+    "Abstract",
+    "Pattern"
+  ],
+  "royal-profile": [
+    "Art"
+  ],
+  "royal-steed-ii": [
+    "Pattern"
+  ],
+  "saffron-caravan": [
+    "Art"
+  ],
+  "sample-flat-entrance": [
+    "Pattern"
+  ],
+  "sauna-steam-transition": [
+    "Abstract",
+    "Japandi",
+    "Textures"
+  ],
+  "senior-citizens-area": [
+    "Chinoiserie"
+  ],
+  "shore-lounge-dusk": [
+    "Pattern"
+  ],
+  "sky-lounge": [
+    "Chinoiserie"
+  ],
+  "spa-reception": [
+    "Abstract",
+    "Pattern",
+    "Textures"
+  ],
+  "steed-in-bloom": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "strength-training-zone": [
+    "Japandi"
+  ],
+  "suraj": [
+    "Art"
+  ],
+  "taash-bahi": [
+    "Art"
+  ],
+  "taash-chuna": [
+    "Pattern"
+  ],
+  "taash-dhalai": [
+    "Pattern"
+  ],
+  "taash-resha": [
+    "Pattern"
+  ],
+  "table-tennis-room": [
+    "Chinoiserie",
+    "Pattern"
+  ],
+  "teen-lounge": [
+    "Art"
+  ],
+  "tern-dance": [
+    "Abstract"
+  ],
+  "tex-0004": [
+    "Geometric",
+    "Art"
+  ],
+  "tex-0005": [
+    "Geometric",
+    "Art"
+  ],
+  "tex-0006": [
+    "Geometric",
+    "Pattern",
+    "Art"
+  ],
+  "tex-0007": [
+    "Geometric",
+    "Art"
+  ],
+  "tex-0008": [
+    "Geometric",
+    "Pattern",
+    "Art"
+  ],
+  "tex-0009": [
+    "Geometric",
+    "Pattern",
+    "Art"
+  ],
+  "tex-0017": [
+    "Geometric"
+  ],
+  "tex-0021": [
+    "Art"
+  ],
+  "tex-0022": [
+    "Art"
+  ],
+  "tex-0023": [
+    "Art"
+  ],
+  "tex-0025": [
+    "Art"
+  ],
+  "tex-0026": [
+    "Art"
+  ],
+  "tex-0027": [
+    "Art"
+  ],
+  "tex-0028": [
+    "Art"
+  ],
+  "tex-0034": [
+    "Art"
+  ],
+  "tex-0034-a": [
+    "Art"
+  ],
+  "the-astronomer-s-garden": [
+    "Art"
+  ],
+  "the-copper-coast": [
+    "Art"
+  ],
+  "the-library-of-winds": [
+    "Art"
+  ],
+  "the-sunken-atlas": [
+    "Art"
+  ],
+  "the-telling-dusk": [
+    "Abstract"
+  ],
+  "tide-dawn": [
+    "Textures"
+  ],
+  "tide-dusk": [
+    "Abstract",
+    "Pattern",
+    "Textures"
+  ],
+  "triple-lift-botanical-etching": [
+    "Art"
+  ],
+  "triple-lift-sepia-sketch": [
+    "Art"
+  ],
+  "va-0001": [
+    "Watercolor"
+  ],
+  "va-00010": [
+    "Watercolor"
+  ],
+  "va-00013": [
+    "Watercolor",
+    "Art"
+  ],
+  "va-0003": [
+    "Watercolor"
+  ],
+  "va-0004": [
+    "Watercolor"
+  ],
+  "va-0008": [
+    "Watercolor"
+  ],
+  "viewing-deck": [
+    "Chinoiserie"
+  ],
+  "viewing-lounge": [
+    "Abstract",
+    "Textures"
+  ],
+  "wellness-lounge": [
+    "Chinoiserie"
+  ],
+  "woven-warmth": [
+    "Botanical",
+    "Geometric"
+  ],
+  "yoga-studio": [
+    "Abstract"
+  ]
+}

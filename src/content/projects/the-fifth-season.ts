@@ -1,0 +1,162 @@
+import type { Project } from "./types";
+
+/** Original Zyvorah concept for an imagined 40-key Bandra boutique hotel. */
+export const theFifthSeason: Project = {
+  slug: "the-fifth-season",
+  kind: "concept",
+  theme: "dusk",
+  segments: ["hospitality"],
+  client: "An imagined 40-room boutique hotel in Bandra",
+  title: "The Fifth Season",
+  standfirst: "A small hotel with an extraordinary inner world. Forty rooms in an imagined Bandra address, where impossible painted courtyards, monsoon gardens and borrowed skies turn a city stay into something quietly unforgettable.",
+  facts: [
+    { label: "Setting", value: "Bandra, Mumbai · imagined urban hotel" },
+    { label: "Scale", value: "40 rooms · intimate shared spaces" },
+    { label: "Wall programme", value: "27 wall opportunities · 8 rendered spaces" },
+    { label: "Visual authorship", value: "An original Zyvorah concept" },
+  ],
+  cover: "the-fifth-season/arrival.jpg",
+  brief: {
+    intro: "A 30–50-room boutique hotel needs a world of its own at the scale of a neighbourhood address. Here the working brief is forty rooms in Bandra: a discreet street entrance, a small concierge, a salon that welcomes residents and guests, a dining room that changes with the day and a sheltered rooftop for the last light. The architecture stays intimate. The walls open into somewhere extraordinary.",
+    requirements: [
+      "Create a memorable hotel identity through original artwork and the emotional character of each room.",
+      "Deliver a signature arrival within a compact city footprint and realistic ceiling heights.",
+      "Let colour, perspective and light create a feeling of discovery throughout the stay.",
+      "Give each guestroom family its own painted world, with enough quiet ground for rest.",
+      "Make the café, salon and rooftop appealing to neighbourhood visitors as well as hotel guests.",
+      "Carry the concept through luggage routes, room recognition, lighting, daily rituals and material detail.",
+    ],
+  },
+  interpretation: [
+    "The fifth season is the weather inside the hotel: the feeling that appears when city light meets an imagined world. A cloud sits inside a painted window. A flowering branch crosses a stair that could never exist. A shallow wall becomes a deep courtyard. Guests discover the artwork in fragments, then remember the whole place as a mood.",
+    "The signature arrival is The Impossible Courtyard. An original mural uses layered terraces, midnight apertures, a sculptural flowering tree and a small moon to give one flat wall the depth of an entire secret garden. Walnut seating and a discreet concierge desk sit in front of it. The illusion belongs to the artwork; practical doors and directions remain immediately clear.",
+    "The public heart is The Borrowed Sky salon and The Monsoon Table dining room. The salon seats roughly twelve, with a reading alcove and a small writing table. The dining room proposes about twenty-two covers and moves from breakfast to evening through light and table setting. The roof is an intimate sheltered gathering for around twenty. These are planning targets for an imagined building, to be checked against a real site.",
+    "The forty-room mix is 24 Rain Window guestrooms, 8 Moon Garden corner rooms, 6 Roof Garden studios and 2 Second Sky signature suites. Rain Window rooms use fine branches and softened perspective; corner rooms become moon gardens; studios open into painted roof gardens; the two suites carry the richest imaginary worlds. The illustrations vary within each family, so a return visit can reveal another chapter.",
+    "The working room-size targets are approximately 22–24 square metres for a standard guestroom, 26–28 for a corner room, 30–32 for a studio and 38–42 for a signature suite, including the bathroom. The room images study their character; exact areas, occupancy, access and the building stack require measured plans. Luggage space, useful charging, reading light and a good shower belong to the same brief as the mural.",
+    "Bandra is the imagined first setting. Coastal light, rain, close urban roofs and an intimate neighbourhood scale inform the artwork. The images invent their own architecture and gardens; a commissioned local layer would be developed with artists and contributors from the place. The hotel makes no promise of a real sea view. Its most extraordinary outlook is authored on the wall.",
+    "The identity continues in small details: a framed cloud as the hotel mark, a deep teal key sleeve, a room-family emblem, a handwritten seasonal note and one commissioned postcard per room. The hotel name lives at the threshold and on stationery. Inside the rooms, imagery carries the conversation.",
+    "Three rituals make the art part of a stay. Morning arrives with a seasonal breakfast card. At dusk, the salon lamps reveal a different depth in the painted skies. At departure, guests choose a postcard of the world they slept beside. A proposed monthly artist supper at The Monsoon Table brings the neighbourhood into the hotel at the scale of one shared table.",
+  ],
+  palette: {
+    intro: "Deep colour, warm paper and low light. A jewel-like public world gradually opens into quieter private rooms.",
+    entries: [
+      { name: "Weathered Parchment", hex: "#E5DAC7", purpose: "The breathing ground of murals, rooms and supporting surfaces.", share: "38%" },
+      { name: "Peacock at Dusk", hex: "#235554", purpose: "Painted sky depth, intimate seating and the main point of recognition.", share: "23%" },
+      { name: "Aubergine Night", hex: "#452A40", purpose: "The salon's enveloping depth and the richest private gardens.", share: "15%" },
+      { name: "Faded Vermilion", hex: "#B96452", purpose: "Terraces, evening warmth and a restrained note of drama.", share: "12%" },
+      { name: "Monsoon Lilac", hex: "#A69AAC", purpose: "Clouds, distance and the softness of guestrooms.", share: "9%" },
+      { name: "Old Brass", hex: "#AA8655", purpose: "Small material details and a moon-like glint.", share: "3%" },
+    ],
+    note: "These are proposed visual proportions. Brass belongs mainly to real fittings; pale ground expands in bedrooms. Dark walnut, honed stone, woven linen and handmade ceramics make the artwork feel part of a collected interior.",
+  },
+  motifs: {
+    intro: "One visual grammar creates eight different worlds without repeating a full mural.",
+    entries: [
+      { name: "Impossible courtyards", description: "Original painted terraces and stair fragments create extraordinary depth on compact elevations." },
+      { name: "Borrowed skies", description: "Clouds and colour fields are held inside drawn architectural frames, allowing an ordinary room an unexpected outlook." },
+      { name: "Gardens out of time", description: "Sculptural flowering branches move between daylight, rain and moonlight across the hotel." },
+      { name: "Rain as rhythm", description: "Fine vertical marks and water-like planes give dining and standard rooms a slower pulse." },
+      { name: "A small moon", description: "A tiny disc quietly links thresholds, artwork fragments and stationery; its scale varies with each composition." },
+    ],
+  },
+  buildingLabel: "The complete boutique-hotel wall programme",
+  buildings: {
+    intro: "27 wall opportunities at the scale of a forty-room city hotel. Eight spaces are rendered below. Other locations and the Moon Garden corner-room family are proposed applications of the visual system, to be designed around a real plan.",
+    entries: [
+      {
+        name: "Arrive inside another world",
+        subtitle: "A small threshold, a lasting first impression",
+        body: "The street face receives a restrained mark and one deep colour. Inside, the arrival mural provides the main event while concierge and luggage remain easy to find. Most nearby surfaces stay open so the courtyard has room to work.",
+        draws: ["Street threshold — a discreet hotel identity", "Vestibule — the first framed sky", "Concierge backdrop — warm human arrival", "Arrival feature wall — The Impossible Courtyard", "Luggage alcove — a composed everyday pause"],
+      },
+      {
+        name: "Spend the day in good company",
+        subtitle: "The public rooms feel like a collected house",
+        body: "The salon is rich, close and conversational. The library is a quieter fragment of the same sky. Café and dining share a room but can use different elevations, while the small drinks counter takes a deeper evening tone.",
+        draws: ["Salon wall — The Borrowed Sky", "Reading / library alcove — a cloud held in a frame", "Breakfast / café elevation — gentle morning rain", "Dining banquette wall — The Monsoon Table", "Drinks counter backdrop — a deeper evening garden"],
+      },
+      {
+        name: "Move between seasons",
+        subtitle: "Art changes pace; room finding stays clear",
+        body: "Each floor receives a small season fragment and a distinct room-family cue. Corridors use low visual density, warm light and a clear numbering system. Imaginary openings remain framed as art, away from places where they could be mistaken for usable doors.",
+        draws: ["Ground-floor lift lobby — the first transition", "Lift interior — a small season study", "Guest-floor landings — recognisable floor identity", "Guest corridors — a gallery of quiet fragments", "Room-door recesses — clear number and family emblem"],
+      },
+      {
+        name: "Forty rooms, four private worlds",
+        subtitle: "A reason to return for another chapter",
+        body: "24 Rain Window rooms soften into a rain garden. 8 Moon Garden corner rooms use pale moonlight and aubergine branches. 6 Roof Garden studios offer space to write and linger. 2 Second Sky suites receive the most immersive compositions. Final artwork is adapted within each family to the actual room and elevation.",
+        draws: ["Rain Window guestrooms × 24 — quiet headboard gardens", "Moon Garden corner rooms × 8 — a private night landscape", "Roof Garden studios × 6 — painted terraces and a writing alcove", "Second Sky signature suites × 2 — the richest authored worlds"],
+      },
+      {
+        name: "Give the small moments care",
+        subtitle: "The identity continues at a quieter scale",
+        body: "A vanity can hold a single branch or a small sky field. Meeting and staff rooms receive generous open ground. Artwork and hospitality information are kept separate, with surfaces selected around actual moisture and cleaning.",
+        draws: ["Guest vanity wall — a small morning branch", "Public washroom vanity / approach — a framed pause", "Small meeting / writing room — an open horizon", "Staff break / briefing wall — warmth for the team"],
+      },
+      {
+        name: "Keep the last light",
+        subtitle: "The stay closes with a small ritual",
+        body: "The sheltered rooftop receives a dusk mural and compact seating. A stair-gallery landing carries a final season fragment. At departure, the postcard shelf offers a piece of the room's painted world to take away.",
+        draws: ["Sheltered rooftop bar-back — The Last Light", "Covered rooftop seating wall — the city's borrowed sky", "Stair-gallery landing — Between Seasons", "Checkout / postcard shelf — a world to take home"],
+      },
+    ],
+  },
+  wallHierarchy: {
+    intro: "A proposed balance of wall area. The art is memorable because the hotel also offers places for the eye to rest.",
+    levels: [
+      { level: "Signature worlds", purpose: "Arrival, salon, dining and selected suite walls hold the richest compositions.", share: 18 },
+      { level: "Season fragments", purpose: "Landings, private-room art and smaller touchpoints connect the story.", share: 27 },
+      { level: "Quiet ground", purpose: "Supporting walls, circulation, service zones and bedroom surfaces allow calm.", share: 55 },
+    ],
+    note: "Recalculate the allocation from measured elevations. One dominant art wall usually carries each room; secondary surfaces are selected deliberately.",
+  },
+  journeys: {
+    intro: "The same intimate hotel holds a neighbourhood afternoon, a city weekend and a working stay.",
+    entries: [
+      { who: "The weekend guest", route: ["Impossible Courtyard", "Bandra afternoon", "Monsoon Table", "Last Light", "Rain Window"], body: "An extraordinary arrival gives way to neighbourhood wandering, a small dinner and a room that feels like a private world." },
+      { who: "The neighbourhood visitor", route: ["Street threshold", "Borrowed Sky", "Seasonal table", "Postcard shelf"], body: "The public rooms give local visitors a reason to return for coffee, conversation or an artist supper without entering the private guest floors." },
+      { who: "The guest between meetings", route: ["Breakfast", "Studio writing alcove", "City", "Salon at dusk", "Second Sky"], body: "Useful working space and a restorative evening sit within one authored experience. Guestrooms remain calm when shared rooms become more social." },
+    ],
+  },
+  journeyHeading: "Eight spaces. An entire inner world.",
+  chapters: [
+    { space: "Compact arrival and concierge", title: "The Impossible Courtyard", rationale: "A flat wall opens visually into stepped terraces, a flowering tree and midnight windows. The mural creates the depth and wonder; the real arrival remains an intimate, useful place to put down a bag and be welcomed.", curated: "the-fifth-season/arrival.jpg", alt: "Imagined Bandra boutique hotel arrival with an original impossible-courtyard mural and discreet walnut concierge", aspect: "3/2" },
+    { space: "The twelve-seat salon", title: "The Borrowed Sky", rationale: "Layered painted roofs and sky compartments meet aubergine upholstery, walnut and warm lamp light. Small groups can settle into conversation while a reading alcove offers a quieter place inside the same room.", curated: "the-fifth-season/salon.jpg", alt: "Intimate Fifth Season salon with jewel-toned seating and an original mural of imaginary roofs and borrowed skies", aspect: "3/2" },
+    { space: "Breakfast-to-dinner room", title: "The Monsoon Table", rationale: "Fine rain marks, peacock water planes and flowering branches create a slow visual rhythm behind the dining banquette. Morning daylight and evening lamps reveal different depths in one composition.", curated: "the-fifth-season/dining.jpg", alt: "Small boutique-hotel dining room with peacock banquettes and an original monsoon architecture and garden mural", aspect: "3/2" },
+    { space: "Guest-floor landing and corridor", title: "Between Seasons", rationale: "One framed opening, a thin terrace and a small moon identify the landing. Most of the corridor stays quiet; actual room signs use an immediately legible system distinct from the painted world.", curated: "the-fifth-season/corridor.jpg", alt: "Fifth Season guest landing with a restrained original season-fragment mural and separate room-number signs", aspect: "3/2" },
+    { space: "Rain Window standard guestroom", title: "A Garden in the Rain", rationale: "A softened headboard composition opens into a rain garden through painted architectural frames. Useful luggage space, linen, a reading seat and low light let the smallest room feel considered and restful.", curated: "the-fifth-season/guestroom.jpg", alt: "Compact Rain Window boutique guestroom with a calm peacock and parchment imaginary-garden mural", aspect: "3/2" },
+    { space: "Roof Garden studio", title: "Above an Imagined City", rationale: "Painted stepped roofs and a suspended garden give the studio a wider internal horizon. A writing alcove and a small sitting area make this a room for a longer stay, with the art held at a calmer register than the salon.", curated: "the-fifth-season/studio.jpg", alt: "Fifth Season Roof Garden studio with walnut furniture, a writing alcove and an original surreal rooftop-garden mural", aspect: "3/2" },
+    { space: "One of two Second Sky suites", title: "A Private World After Dark", rationale: "The most immersive mural belongs to the two signature suites: midnight peacock skies, pale stair fragments, flowering branches and cloud-filled openings. A small sitting area lets guests linger with the artwork.", curated: "the-fifth-season/suite.jpg", alt: "Second Sky signature suite with an original dramatic moon-garden mural, aubergine seating and warm brass lighting", aspect: "3/2" },
+    { space: "Sheltered rooftop salon", title: "The Last Light", rationale: "A large dusk disc and imaginary roof terraces hold the sheltered drinks counter. Compact seating and low lamps invite a small evening gathering; ordinary neighbouring rooftops remain part of the real outlook.", curated: "the-fifth-season/rooftop.jpg", alt: "Intimate Fifth Season sheltered rooftop with an original vermilion dusk mural and a close urban Mumbai outlook", aspect: "3/2" },
+  ],
+  process: {
+    intro: "The visual world is complete as a concept. Its commissioned version begins with a real building and its everyday guest life.",
+    steps: [
+      { title: "Fit the boutique scale", body: "Check the room mix, shared-room capacity, arrival, service access and guest routes against measured plans. Give the signature arrival one strong elevation." },
+      { title: "Author the inner world", body: "Develop original composition families and a locally informed layer with artists and collaborators. Draw full elevations rather than repeating one image throughout the hotel." },
+      { title: "Rehearse changing light", body: "Review each art wall under actual daylight, reading lights and evening lamps. Test colour samples beside wood, stone, upholstery and ceramic." },
+      { title: "Compose the forty rooms", body: "Adapt each room family to its door, window, bed, luggage space and bathroom. Keep practical signs distinct from perspective art and preserve restful supporting surfaces." },
+      { title: "Prepare, prove and install", body: "Build final large-format master artwork, approve physical colour proofs and resolve material, panel seams, wear, moisture and installation access wall by wall." },
+    ],
+  },
+  shop: {
+    heading: "Create your hotel's inner world.",
+    body: "Choose from the eight rendered visual directions and size the walls you want to develop. These images are room references: final measured artwork preparation and your artwork proof are included before printing. For a complete 30–50-room hotel, commission the programme around your address, architecture and room mix.",
+    href: "https://zyvorah.com/concepts/the-fifth-season/shop",
+    label: "Choose your hotel walls",
+  },
+  productionNote: {
+    title: "An imagined forty-room hotel, clearly presented",
+    body: "The Fifth Season is an original Zyvorah concept for an invented Bandra boutique hotel. The eight images are AI-generated architectural concept visuals, not photographs of an existing property. The room mix, areas, cover counts and 27 wall opportunities are planning proposals. Room references are kept separate from final print artwork; the other mapped locations and corner-room family have not been rendered.",
+    points: [
+      "Measured architecture, room mix, access, circulation and service requirements",
+      "Locally commissioned artwork, content provenance and agreed usage rights",
+      "Full-resolution master compositions and approved physical colour proofs",
+      "Day and evening lighting, useful sightlines and clearly separate practical signage",
+      "Material fire performance, abrasion and cleaning requirements for each zone",
+      "Separate wet-area and exterior specifications; rooftop offers cover sheltered wall directions",
+      "Panel divisions, seams, furniture interruptions and installation access",
+    ],
+  },
+  ask: { heading: "Give a small hotel a world of its own.", body: "Share the city, room count, plans and photographs of arrival, dining and one guestroom. Zyvorah can develop the complete visual identity, room families, wall programme and commissioned artwork for your boutique address." },
+};

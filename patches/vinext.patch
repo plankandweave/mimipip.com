@@ -1,0 +1,63 @@
+diff --git a/dist/server/app-page-element-builder.js b/dist/server/app-page-element-builder.js
+index 6612f9dee0386d5b5186242bff35a6aa64d8e16f..3358182a539d8293422b92a5165fc472b8981815 100644
+--- a/dist/server/app-page-element-builder.js
++++ b/dist/server/app-page-element-builder.js
+@@ -115,7 +115,9 @@ async function buildPageElements(options) {
+ 		ownerTreePosition: route.routeSegments?.length ?? 0
+ 	} : null;
+ 	const parallelRoutes = [...primaryParallelRouteHeadInput ? [primaryParallelRouteHeadInput.head] : [], ...activeParallelRouteHeadInputs.map((input) => input.head)];
+-	const metadataSearchParamsObserver = observeMetadataSearchParamsAccess ? createAppPageSearchParamsObserver() : void 0;
++	// zyvorah patch: a bare URL has no query to vary on, so reading searchParams in
++	// generateMetadata must not mark it dynamic (same rule as the page component).
++	const metadataSearchParamsObserver = observeMetadataSearchParamsAccess ? createAppPageSearchParamsObserver({ markDynamic: !!searchParams && !searchParams.keys().next().done }) : void 0;
+ 	const preparedHead = prepareAppPageHead({
+ 		applyFileBasedMetadata: options.applyFileBasedMetadata,
+ 		basePath: options.basePath ?? "",
+@@ -210,7 +212,9 @@ async function buildPageElements(options) {
+ 		}
+ 		const PageInvoker = () => {
+ 			const invocationProps = { ...props };
+-			if (searchParams) invocationProps.searchParams = observePageSearchParamsAccess ? makeObservedAppPageSearchParamsThenable(pageSearchParams) : makeThenableParams(pageSearchParams);
++			// zyvorah patch: the async (non-React-owned) page branch gets the same
++			// rule as the branch above it — only a request with a query is dynamic.
++			if (searchParams) invocationProps.searchParams = observePageSearchParamsAccess ? makeObservedAppPageSearchParamsThenable(pageSearchParams, { markDynamic: hasRequestSearchParams }) : makeThenableParams(pageSearchParams);
+ 			try {
+ 				const result = invokeAppComponent(PageComponent, invocationProps);
+ 				if (isPromiseLike(result)) {
+diff --git a/dist/server/app-page-probe.js b/dist/server/app-page-probe.js
+index 5d859f81f50e249323ac875e1aba24599bcc1f4b..924869b10a92f1ac8e7c82452a08c9dcdb35c22b 100644
+--- a/dist/server/app-page-probe.js
++++ b/dist/server/app-page-probe.js
+@@ -151,10 +151,12 @@ async function probeReactServerSubtreeForDynamicUsage(node) {
+ function probeAppPage(options) {
+ 	const { pageComponent, asyncRouteParams, searchParams } = options;
+ 	if (typeof pageComponent !== "function") return null;
+-	const { pageSearchParams } = collectAppPageSearchParams(searchParams);
++	const { hasSearchParams, pageSearchParams } = collectAppPageSearchParams(searchParams);
+ 	const result = pageComponent(markAppPagePropsForUseCache({
+ 		params: asyncRouteParams,
+-		searchParams: makeObservedAppPageSearchParamsThenable(pageSearchParams, { observeReactPromiseStatus: true })
++		// zyvorah patch: same rule as the render (app-page-element-builder) — a
++		// bare URL has no query to vary on; a request with one still bails out.
++		searchParams: makeObservedAppPageSearchParamsThenable(pageSearchParams, { observeReactPromiseStatus: true, markDynamic: hasSearchParams })
+ 	}));
+ 	if (isPromiseLike(result)) return result.then(async (resolved) => {
+ 		await probeReactServerSubtreeForDynamicUsage(resolved);
+diff --git a/dist/server/app-rsc-handler.js b/dist/server/app-rsc-handler.js
+index d6a33553cd29ff975fe288fe0d995b4bfa0fc673..bbeee03f6fd4a9dbecbe8be86e0f85b40b03c1f0 100644
+--- a/dist/server/app-rsc-handler.js
++++ b/dist/server/app-rsc-handler.js
+@@ -535,7 +535,12 @@ async function handleAppRscRequest(options, request, preMiddlewareRequestContext
+ 		return notFoundResponse();
+ 	}
+ 	let progressiveActionResult = null;
+-	if (filesystemRouteEligible && isPostRequest && contentType.startsWith("multipart/form-data") && !actionId) {
++	// zyvorah patch: a multipart POST to a route handler (no page at this path) is
++	// a file upload for that handler, never a progressive server action. Without
++	// this, vinext buffered the body and refused anything over the 1 MB
++	// serverActions.bodySizeLimit with a plain-text 413 before the handler ran.
++	const isRouteHandlerUpload = !!preActionMatch?.route.__loadRouteHandler && !preActionMatch.route.__loadPage;
++	if (filesystemRouteEligible && isPostRequest && contentType.startsWith("multipart/form-data") && !actionId && !isRouteHandlerUpload) {
+ 		if (options.handleProgressiveActionRequest) progressiveActionResult = await options.handleProgressiveActionRequest({
+ 			actionId,
+ 			cleanPathname,
