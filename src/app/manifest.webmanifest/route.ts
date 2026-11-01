@@ -24,12 +24,7 @@ const MANIFEST: MetadataRoute.Manifest = {
   background_color: brand.theme.background,
   theme_color: brand.theme.foreground,
   categories: ["shopping", "lifestyle", "home"],
-  icons: [
-    { src: "/api/brand/icon.svg", type: "image/svg+xml", sizes: "any", purpose: "any" },
-    { src: "/api/brand/icon-192.png", type: "image/png", sizes: "192x192", purpose: "any" },
-    { src: "/api/brand/icon-512.png", type: "image/png", sizes: "512x512", purpose: "any" },
-    { src: "/api/brand/icon-maskable.png", type: "image/png", sizes: "512x512", purpose: "maskable" },
-  ],
+  icons: [192,512].map(size=>({src:`/brand/mimi-pip/half-sun-${size}.png`,type:'image/png',sizes:`${size}x${size}`,purpose:'any'})),
 };
 
 export function GET() {

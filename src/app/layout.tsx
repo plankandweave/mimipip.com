@@ -64,10 +64,9 @@ export const metadata: Metadata = {
     description:
       brand.description,
   },
-  // App mark (favicon + apple-touch) served weekly-coloured from /api/brand/*.
   icons: {
-    icon: [{ url: "/api/brand/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/api/brand/icon-180.png", sizes: "180x180" }],
+    icon: [32,48,192].map(size=>({url:`/brand/mimi-pip/half-sun-${size}.png`,type:'image/png',sizes:`${size}x${size}`})),
+    apple: [{url:'/brand/mimi-pip/half-sun-180.png',sizes:'180x180'}],
   },
   // The shop's install manifest (app/manifest.webmanifest/route.ts). Declared
   // here rather than by file convention so a partner portal's layout can
