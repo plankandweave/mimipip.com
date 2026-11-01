@@ -13,3 +13,13 @@
 .polka-crop{aspect-ratio:1/1}.polka-crop .polka-room{left:-100%!important}.polka-crop .polka-flat{opacity:0;transition:opacity .2s ease}.image-button:hover .polka-flat,.image-button:focus-visible .polka-flat,.discovery-card:hover .polka-flat,.discovery-card:focus-visible .polka-flat{opacity:1}.product h2 a,.product h2 a:hover,.product h2 a:visited{color:inherit}@media(prefers-reduced-motion:reduce){.polka-crop .polka-flat{transition:none}}
 
 .polka-crop img{width:calc(200% * var(--panel-ratio,1))!important}.polka-crop .polka-room{left:calc(-100% * var(--panel-ratio,1))!important}
+
+/* Dedicated single-scene collection covers; never show source presentation boards. */
+.collection-room-cover{display:block;position:relative;aspect-ratio:1;overflow:hidden;background:#fff9ed}
+.collection-room-cover img{position:absolute;top:0;left:0;width:100%!important;height:100%!important;aspect-ratio:auto!important;max-width:none!important;object-fit:cover!important}
+.collection-room-cover.stairs img{width:160%!important;height:auto!important;left:-60%;object-fit:initial!important}
+.collection-room-cover.floor img{width:300%!important;height:auto!important;object-fit:initial!important}
+.polka-crop .polka-room{transform:scale(1.08);transform-origin:75% 25%}.polka-crop .polka-flat{transform:scale(1.08);transform-origin:25% 25%}.polka-crop.diptych .polka-room{transform-origin:75% 50%}.polka-crop.diptych .polka-flat{transform-origin:25% 50%}
+/* Keep the complete collection overview aligned, including existing ranges. */
+.discovery-grid>.discovery-card>img{display:block;width:100%!important;height:auto!important;aspect-ratio:1/1!important;object-fit:cover!important;object-position:center!important}
+.collection-room-cover.single img{object-position:65% center!important}

@@ -10,3 +10,5 @@
 @media(prefers-reduced-motion:reduce){.card-views .flat-view{transition:none}}
 
 .pattern-view img{width:calc(200% * var(--panel-ratio,1));left:calc(-100% * var(--x) * var(--panel-ratio,1))}
+
+.card-views .pattern-view{transform:scale(1.08)}
