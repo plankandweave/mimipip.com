@@ -23,7 +23,7 @@ function harness(){
   else data={status:captured?'paid':'attempted',amount:total,amount_paid:captured?total:0,currency:'INR'};
   return Response.json(data);
  };
- const env:any={DB,RAZORPAY_KEY_ID:'test',RAZORPAY_KEY_SECRET:'test-secret',PEACH_POP_FULFILMENT_JSON:JSON.stringify(stock)};
+ const env:any={DB,RAZORPAY_KEY_ID:'test',RAZORPAY_KEY_SECRET:'test-secret',RAZORPAY_WEBHOOK_SECRET:'webhook-test',PEACH_POP_FULFILMENT_JSON:JSON.stringify(stock)};
  const call=(action:string,data:any={},origin='https://mimipip.com')=>handleCommerce(new Request('https://mimipip.com/api/india-checkout/'+action,{method:'POST',headers:{origin,'Content-Type':'application/json'},body:JSON.stringify({token:'a'.repeat(64),...data})}),env,transport as any);
  return {db,env,call,setCaptured:()=>{captured=true;},calls:()=>calls};
 }

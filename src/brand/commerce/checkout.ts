@@ -28,7 +28,7 @@ export function paymentMatches(p:any,o:Order){return p?.status==='captured'&&p.c
 export async function handleCommerce(request:Request,env:Env,transport:typeof fetch):Promise<Response>{
  const path=new URL(request.url).pathname.replace(/\/$/,'');
  const f=fulfilment(env.PEACH_POP_FULFILMENT_JSON);
- const configured=!!(env.DB&&env.RAZORPAY_KEY_ID&&env.RAZORPAY_KEY_SECRET);
+ const configured=!!(env.DB&&env.RAZORPAY_KEY_ID&&env.RAZORPAY_KEY_SECRET&&env.RAZORPAY_WEBHOOK_SECRET);
  if(path==='/api/india-checkout/readiness'&&request.method==='GET')return json({product:peachPop,packing:tubeDimensions(75,260),available:configured&&!!f,quote:f?{pin:f.quote.destinationPin,shippingPaise:f.quote.shippingPaise,expiresAt:f.quote.expiresAt}:null,message:f?'':'Delivery and availability are being confirmed. Payment is not open yet.'});
  if(!env.DB||!env.RAZORPAY_KEY_ID||!env.RAZORPAY_KEY_SECRET)return json({error:'Checkout is temporarily unavailable.'},503);
  const db=env.DB;
@@ -60,7 +60,7 @@ export async function handleCommerce(request:Request,env:Env,transport:typeof fe
   let o=await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
   if(path==='/api/india-checkout/create'){
    if(!o){
-    if(!f)return json({error:'Delivery and stock must be confirmed before payment.'},409);
+    if(!f||!env.RAZORPAY_WEBHOOK_SECRET)return json({error:'Delivery and stock must be confirmed before payment.'},409);
     if(b.slug!==peachPop.slug||b.quantity!==1||!validCustomer(b.customer)||b.customer.pin!==f.quote.destinationPin)return json({error:'Check the delivery address and product selection.'},400);
     const customer={name:b.customer.name.trim(),email:b.customer.email.trim(),phone:b.customer.phone,address:b.customer.address.trim(),city:b.customer.city.trim(),state:b.customer.state.trim(),pin:b.customer.pin};
     const id='MP-'+crypto.randomUUID();const now=Date.now();
