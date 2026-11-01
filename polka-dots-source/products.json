@@ -51,7 +51,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/happy-dots/"
+    "detailURL": "/collections/polka-dots/happy-dots/",
+    "imagePanelRatio": 1.0
   },
   {
     "id": "MP-PD02",
@@ -106,7 +107,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/blue-pebble/"
+    "detailURL": "/collections/polka-dots/blue-pebble/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD03",
@@ -161,7 +163,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunshine-spots/"
+    "detailURL": "/collections/polka-dots/sunshine-spots/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD04",
@@ -216,7 +219,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/orange-pop/"
+    "detailURL": "/collections/polka-dots/orange-pop/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD05",
@@ -271,7 +275,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/cloud-dots/"
+    "detailURL": "/collections/polka-dots/cloud-dots/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD06",
@@ -327,7 +332,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunny-sky/"
+    "detailURL": "/collections/polka-dots/sunny-sky/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD07",
@@ -384,7 +390,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/little-carnival/"
+    "detailURL": "/collections/polka-dots/little-carnival/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD08",
@@ -439,7 +446,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/blue-button/"
+    "detailURL": "/collections/polka-dots/blue-button/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD09",
@@ -494,7 +502,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunbeam-on-blue/"
+    "detailURL": "/collections/polka-dots/sunbeam-on-blue/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD10",
@@ -550,7 +559,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/tangerine-sky/"
+    "detailURL": "/collections/polka-dots/tangerine-sky/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD11",
@@ -605,7 +615,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunny-button/"
+    "detailURL": "/collections/polka-dots/sunny-button/",
+    "imagePanelRatio": 1.3333333333333333
   },
   {
     "id": "MP-PD12",
@@ -662,7 +673,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/confetti-dance/"
+    "detailURL": "/collections/polka-dots/confetti-dance/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD13",
@@ -717,7 +729,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/blue-bubble/"
+    "detailURL": "/collections/polka-dots/blue-bubble/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD14",
@@ -772,7 +785,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunshine-sprinkle/"
+    "detailURL": "/collections/polka-dots/sunshine-sprinkle/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD15",
@@ -827,7 +841,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/tangerine-tumble/"
+    "detailURL": "/collections/polka-dots/tangerine-tumble/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD16",
@@ -882,7 +897,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/cloud-sprinkle/"
+    "detailURL": "/collections/polka-dots/cloud-sprinkle/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD17",
@@ -938,7 +954,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sunny-bubbles/"
+    "detailURL": "/collections/polka-dots/sunny-bubbles/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD18",
@@ -994,7 +1011,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/blue-pop/"
+    "detailURL": "/collections/polka-dots/blue-pop/",
+    "imagePanelRatio": 1.5
   },
   {
     "id": "MP-PD19",
@@ -1050,7 +1068,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/sky-sprinkles/"
+    "detailURL": "/collections/polka-dots/sky-sprinkles/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD20",
@@ -1106,7 +1125,8 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/citrus-bubbles/"
+    "detailURL": "/collections/polka-dots/citrus-bubbles/",
+    "imagePanelRatio": 1.0942452043369475
   },
   {
     "id": "MP-PD21",
@@ -1163,6 +1183,7 @@
     "price": null,
     "personalization": null,
     "collectionURL": "/collections/polka-dots/",
-    "detailURL": "/collections/polka-dots/tiny-confetti/"
+    "detailURL": "/collections/polka-dots/tiny-confetti/",
+    "imagePanelRatio": 1.5
   }
 ]

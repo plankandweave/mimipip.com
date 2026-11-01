@@ -9,3 +9,7 @@
 .discovery-age img{object-fit:contain;object-position:center center;background:#f7f2e9}
 
 .polka-crop{display:block;position:relative;width:100%;aspect-ratio:1.15;overflow:hidden;background:#fff9ed}.polka-crop img{position:absolute!important;top:0;left:0;width:200%!important;max-width:none!important;height:200%!important;object-fit:fill!important}.polka-crop.diptych img{height:100%!important}
+
+.polka-crop{aspect-ratio:1/1}.polka-crop .polka-room{left:-100%!important}.polka-crop .polka-flat{opacity:0;transition:opacity .2s ease}.image-button:hover .polka-flat,.image-button:focus-visible .polka-flat,.discovery-card:hover .polka-flat,.discovery-card:focus-visible .polka-flat{opacity:1}.product h2 a,.product h2 a:hover,.product h2 a:visited{color:inherit}@media(prefers-reduced-motion:reduce){.polka-crop .polka-flat{transition:none}}
+
+.polka-crop img{width:calc(200% * var(--panel-ratio,1))!important}.polka-crop .polka-room{left:calc(-100% * var(--panel-ratio,1))!important}
