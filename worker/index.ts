@@ -6,7 +6,7 @@ import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand
 import records from '../src/brand/review/catalogue.json';
 // Read-only release gate. Retain the original connected application source;
 // service and mutation routes must never be invoked by this browsing release.
-const families:Record<string,string>={'step-smiles':'little-steps-big-adventures','happy-lines':'happy-lines','polka-dots':'polka-dots'};
+const families:Record<string,string>={'step-smiles':'little-steps-big-adventures','happy-lines':'happy-lines','polka-dots':'dotty-days','random-dots':'dotty-days','classic-dots':'dotty-days'};
 const offline=()=>withOfflineBrowserPolicy(Response.json({available:false,message:'Ordering and live services are unavailable.'},{status:503}));
 const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin).href,302);
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
@@ -16,6 +16,9 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
+ const oldDotCollections=['polka-dots','random-dots','classic-dots'];
+ if(p==='/browse/collection' && oldDotCollections.includes(u.searchParams.get('value')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
+ if(p==='/shop/collection' && oldDotCollections.includes(u.searchParams.get('collection')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
  const browseRoutes: Record<string,string> = {
    '/collections/wall-art':'/browse/collection?value=wallpaper-worlds', '/collections':'/browse/collection',
    '/concepts':'/browse/concept', '/rooms':'/browse/space', '/colours':'/browse/color',
@@ -33,7 +36,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = ['/', '/in-real-homes/', ...['collection','color','concept','gender','age','space'].map(axis=>'/browse/'+axis),
+   const paths = ['/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','gender','age','space'].map(axis=>'/browse/'+axis),
      ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
    const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
    return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});
