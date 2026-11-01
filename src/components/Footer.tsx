@@ -118,6 +118,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
   const columns = disconnected ? [
     { title: "Shop", links: ["Collection", "Color", "Concept", "Gender", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })) },
     { title: "Plan your room", links: [
+      { label: "In real homes", href: "/in-real-homes/" },
       { label: "Wallpaper buying guide", href: "/wallpaper-buying-guide" }, { label: "How to measure", href: "/how-to-measure" },
       { label: "Surfaces and materials", href: "/materials" }, { label: "Installation and removal", href: "/installation" }, { label: "Saved designs", href: "/wishlist" }
     ] },
