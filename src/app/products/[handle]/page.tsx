@@ -348,10 +348,10 @@ export default async function ProductPage({
   searchParams,
 }: {
   params: Promise<{ handle: string }>;
-  searchParams: Promise<{ w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
+  searchParams: Promise<{ colourway?: string; w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
 }) {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);if(!p)notFound();return <ReviewDetail p={p}/>;}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);if(!p)notFound();return <ReviewDetail p={p} colourway={handle === "happy-petals" ? (await searchParams).colourway : undefined}/>;}
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.

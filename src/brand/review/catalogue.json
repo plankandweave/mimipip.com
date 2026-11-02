@@ -9310,5 +9310,54 @@
         "height": 500
       }
     ]
+  },
+  {
+    "id": "MP-HP01",
+    "slug": "happy-petals",
+    "name": "Happy Petals",
+    "description": "Cheerful flowers, tiny hearts and leafy sprigs for nursery walls and growing children’s rooms. Explore 21 colourways in the artwork and styled room views.",
+    "collection": [
+      "signature-wallpapers"
+    ],
+    "concept": [
+      "flowers",
+      "hearts"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "pink",
+      "green",
+      "lavender",
+      "peach"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-21.png",
+    "flatImage": "/review/happy-petals/flat-21.png",
+    "imageRole": "Signature Blue illustrated in a room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null
   }
 ]

@@ -1,0 +1,128 @@
+[
+  {
+    "index": 1,
+    "label": "Sunny Yellow",
+    "flat": "flat-01.png",
+    "room": "room-01.png"
+  },
+  {
+    "index": 2,
+    "label": "Pink and Yellow",
+    "flat": "flat-02.png",
+    "room": "room-03.png"
+  },
+  {
+    "index": 3,
+    "label": "Peach and Sage",
+    "flat": "flat-03.png",
+    "room": "room-02.png"
+  },
+  {
+    "index": 4,
+    "label": "Baby Pink",
+    "flat": "flat-04.png",
+    "room": "room-04.png"
+  },
+  {
+    "index": 5,
+    "label": "Soft Sage",
+    "flat": "flat-05.png",
+    "room": "room-07.png"
+  },
+  {
+    "index": 6,
+    "label": "Blush and Butter",
+    "flat": "flat-06.png",
+    "room": "room-05.png"
+  },
+  {
+    "index": 7,
+    "label": "Pink on Yellow",
+    "flat": "flat-07.png",
+    "room": "room-06.png"
+  },
+  {
+    "index": 8,
+    "label": "Lavender",
+    "flat": "flat-08.png",
+    "room": "room-08.png"
+  },
+  {
+    "index": 9,
+    "label": "Apricot",
+    "flat": "flat-09.png",
+    "room": "room-10.png"
+  },
+  {
+    "index": 10,
+    "label": "Golden Butter",
+    "flat": "flat-10.png",
+    "room": "room-12.png"
+  },
+  {
+    "index": 11,
+    "label": "Coral",
+    "flat": "flat-11.png",
+    "room": "room-09.png"
+  },
+  {
+    "index": 12,
+    "label": "Pink and Lavender",
+    "flat": "flat-12.png",
+    "room": "room-11.png"
+  },
+  {
+    "index": 13,
+    "label": "Sunshine Hearts",
+    "flat": "flat-13.png",
+    "room": "room-16.png"
+  },
+  {
+    "index": 14,
+    "label": "Pink Posies",
+    "flat": "flat-14.png",
+    "room": "room-13.png"
+  },
+  {
+    "index": 15,
+    "label": "Peach and Lilac",
+    "flat": "flat-15.png",
+    "room": "room-14.png"
+  },
+  {
+    "index": 16,
+    "label": "Pastel Mix",
+    "flat": "flat-16.png",
+    "room": "room-15.png"
+  },
+  {
+    "index": 17,
+    "label": "Golden Garden",
+    "flat": "flat-17.png",
+    "room": "room-19.png"
+  },
+  {
+    "index": 18,
+    "label": "Blush Garden",
+    "flat": "flat-18.png",
+    "room": "room-18.png"
+  },
+  {
+    "index": 19,
+    "label": "Pink and Gold",
+    "flat": "flat-19.png",
+    "room": "room-20.png"
+  },
+  {
+    "index": 20,
+    "label": "Lavender Meadow",
+    "flat": "flat-20.png",
+    "room": "room-17.png"
+  },
+  {
+    "index": 21,
+    "label": "Signature Blue",
+    "flat": "flat-21.png",
+    "room": "room-21.png"
+  }
+]
