@@ -59,6 +59,7 @@ export function MegaMenu({
   align?: "start" | "end";
 }) {
   const [open, setOpen] = useState(false);
+  const pinned = useRef(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -69,18 +70,27 @@ export function MegaMenu({
   const hide = () => {
     closeTimer.current = setTimeout(() => setOpen(false), 120);
   };
-  const close = () => setOpen(false);
+  const close = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    pinned.current = false;
+    setOpen(false);
+  };
 
   return (
     /* Deliberately not `relative`: the panel below anchors to the header's page
        container instead, so it stays on screen at every width. It remains a DOM
        child here, so hover in/out still covers button and panel as one. */
-    <div onMouseEnter={columns ? undefined : show} onMouseLeave={columns ? undefined : hide}
+    <div onPointerEnter={e=>{if(e.pointerType==="mouse") show()}}
+      onPointerLeave={e=>{if(e.pointerType==="mouse" && !pinned.current && !e.currentTarget.contains(document.activeElement)) hide()}}
+      onPointerDownCapture={e=>{if(e.pointerType==="mouse" && closeTimer.current) clearTimeout(closeTimer.current)}}
       onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget)) close()}}
       onKeyDown={e=>{if(e.key==="Escape" && open){e.preventDefault();close();trigger.current?.focus()}}}>
       <button
         ref={trigger}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          if (pinned.current) close();
+          else {pinned.current = true; show()}
+        }}
         aria-expanded={open}
         className="flex items-center gap-1 whitespace-nowrap text-[0.82rem] font-medium text-slate transition-colors hover:text-charcoal"
       >
