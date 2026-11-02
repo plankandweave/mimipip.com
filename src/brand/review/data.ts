@@ -1,4 +1,5 @@
 import {pickFlatSource} from './hover';
+import panelFlats from './panel-flats.json';
 import checkedHover from './hover-images.json';
 import records from './catalogue.json';
 import type { ProductCardData } from '@/lib/types';
@@ -20,8 +21,9 @@ export const card=(p:RecordData):ProductCardData=>({
     const reviewed=(checkedHover as Record<string,string>)[p.slug];
     const galleryFlat=p.gallery?.find(image=>image.url.startsWith('/review/') && /(?:^|[-_/])flat(?:[-_.\/]|$)/i.test(image.url))?.url;
     const approvedPanels=p.id==="MP-SS-04"?"/listing-details/beep-beep/design-panels.svg":null;
-    const floorFlat=p.slug==="hopscotch-peach-pop"?"/floor-play-images/hopscotch-peach-pop/art.png":null;
-    const flat=floorFlat??approvedPanels??record.flatImage??galleryFlat??(candidate&&reviewed===candidate?"/review/hover-art/"+p.slug+".webp":null);
+    const floorFlat=["hopscotch-peach-pop","hopscotch-pastel-play","hopscotch-bold-adventure"].includes(p.slug) ? "/floor-play-images/"+p.slug+"/art.png" : null;
+    const recoveredPanel=(panelFlats as Record<string,string>)[p.id];
+    const flat=floorFlat??approvedPanels??recoveredPanel??record.flatImage??galleryFlat??(candidate&&reviewed===candidate?"/review/hover-art/"+p.slug+".webp":null);
     return flat !== p.image ? flat : null;
   })(),
   cardImageCrop:p.roomPresentation==='stairs'
