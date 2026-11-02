@@ -49,14 +49,14 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', '/collections/happy-petals/', ...['collection','color','concept','age','space'].map(axis=>'/browse/'+axis),
+   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', '/collections/happy-petals/', ...['collection','color','concept','age','size','space'].map(axis=>'/browse/'+axis),
      ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
    const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
    return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});
  }
  if(p.startsWith('/design/'))return redirect(u,'/products/'+encodeURIComponent(p.slice(8)));
  if(p==='/shop')return redirect(u,'/browse/collection');
- const facet=/^\/shop\/(collection|color|concept|gender|age|space)$/.exec(p);
+ const facet=/^\/shop\/(collection|color|concept|gender|age|size|space)$/.exec(p);
  if(facet)return redirect(u,'/browse/'+facet[1]+(u.searchParams.has(facet[1])?'?value='+encodeURIComponent(u.searchParams.get(facet[1])!):''));
  const collection=/^\/collections\/([^/]+)(?:\/([^/]+))?$/.exec(p);
  if(collection?.[2]){const item=records.find(r=>'detailURL' in r&&r.detailURL===p+'/');if(item)return redirect(u,'/products/'+item.slug);}
