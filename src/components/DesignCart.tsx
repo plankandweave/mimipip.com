@@ -1,5 +1,6 @@
 "use client";
 import {useEffect,useState} from "react";
+import {toCm, type Unit} from "@/lib/pricing";
 import {useMarket} from "./MarketProvider";
 import {DesignVisualizer} from "./DesignVisualizer";
 import {RoomVisualizer} from "./RoomVisualizer";
@@ -9,22 +10,30 @@ import {readLines,saveLines,addLine,wallpaperPrice,type Line} from "./design-car
 export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,indiaRate}:{slug:string;name:string;width:number|null;height:number|null;custom:boolean;wallpaper:boolean;art?:string|null;indiaRate?:number|null}){
  const {market}=useMarket();
  const [w,W]=useState(""),[h,H]=useState(""),[qty,Q]=useState(1),[status,S]=useState("");
- const [design,setDesign]=useState(slug);
+ const hopscotch = slug.startsWith("hopscotch-");
  const [mode,show]=useState<"size"|"room"|null>(null),[crop,setCrop]=useState({offsetX:.5,offsetY:.5,zoom:1,flipH:false,flipV:false});
- const wallWidth=Number(w),wallHeight=Number(h),ready=wallWidth>0&&wallHeight>0&&wallWidth<=100000&&wallHeight<=100000;
+ const [unit,setUnit]=useState<Unit | "mm">("cm");
+ function changeUnit(next: Unit | "mm") {
+   const convert = (value:string) => value ? String(Number((toCm(Number(value),unit)/toCm(1,next)).toPrecision(12))) : "";
+   W(convert(w)); H(convert(h)); setUnit(next);
+ }
+ const wallWidth=toCm(Number(w),unit),wallHeight=toCm(Number(h),unit),ready=wallWidth>0&&wallHeight>0&&wallWidth<=100000&&wallHeight<=100000;
  const [selection,select]=useState<"size"|"room"|null>(null);
  const payload=art&&ready?{...crop,imageUrl:art,wallWidthCm:wallWidth,wallHeightCm:wallHeight}:undefined;
- const game=games.find(g=>g.slug===design);
+ const game=games.find(g=>g.slug===slug);
  const colors=games.filter(g=>g.slug.startsWith("hopscotch-"));
- const size=custom?w+" × "+h+" cm":width&&height?width+" × "+height+" cm":game?game.width_mm/10+" × "+game.height_mm/10+" cm":"Size to confirm";
+ const size=custom?wallWidth+" × "+wallHeight+" cm":width&&height?width+" × "+height+" cm":game?game.width_mm/10+" × "+game.height_mm/10+" cm":"Size to confirm";
  const india=market.countryCode==="IN";
- const internationalPrice=wallpaper&&custom&&!india&&Number(w)>0&&Number(h)>0?wallpaperPrice({width:Number(w),height:Number(h)}):null;
+ const internationalPrice=wallpaper&&custom&&!india&&ready?wallpaperPrice({width:wallWidth,height:wallHeight}):null;
  const amount=india&&game?game.price_inr:india&&wallpaper&&custom&&ready&&indiaRate?wallpaperPrice({width:wallWidth,height:wallHeight},indiaRate):internationalPrice;
- return <><form className="my-5 grid gap-3" onSubmit={e=>{e.preventDefault();try{saveLines(addLine(readLines(),{slug:design,name:design===slug?name:game?.title??name,size,qty,amount,currency:india?"INR":"USD",stickersOnly:!wallpaper,wallpaper,indiaRate:india&&wallpaper&&indiaRate?indiaRate:undefined,crop:payload,dimensions:custom?{width:Number(w),height:Number(h)}:undefined}));S("Added to your cart.");}catch{S("Could not save this selection on this device.");}}}>
- {slug.startsWith("hopscotch-")&&<label>Colourway <select value={design} onChange={e=>{setDesign(e.target.value);S("")}}>{colors.map(g=><option key={g.slug} value={g.slug}>{g.colourway}</option>)}</select></label>}
- {custom&&<fieldset className="grid grid-cols-2 gap-3"><legend>Your wall measurements</legend>{([[w,W,"Width"],[h,H,"Height"]] as const).map(([val,set,label])=><label className="grid gap-1" key={label}>{label} (cm) <input className="w-full rounded-lg border p-2" id={label==="Width"?"mimi-wall-width":"mimi-wall-height"} placeholder={label==="Width"?"e.g. 300":"e.g. 240"} required type="number" min=".01" max="100000" step=".01" value={val} onChange={e=>set(e.target.value)}/></label>)}</fieldset>}
+ return <><form className="my-5 grid gap-3" onSubmit={e=>{e.preventDefault();try{saveLines(addLine(readLines(),{slug,name,size,qty,amount,currency:india?"INR":"USD",stickersOnly:!wallpaper,wallpaper,indiaRate:india&&wallpaper&&indiaRate?indiaRate:undefined,crop:payload,dimensions:custom?{width:wallWidth,height:wallHeight}:undefined}));S("Added to your cart.");}catch{S("Could not save this selection on this device.");}}}>
+ {hopscotch&&<label>Colourway <select value={slug} onChange={e=>window.location.assign("/products/"+e.target.value)}>{colors.map(g=><option key={g.slug} value={g.slug}>{g.colourway}</option>)}</select></label>}
+ {custom&&<fieldset className="grid grid-cols-2 gap-3"><legend>Your wall measurements</legend><label className="col-span-2">Measurement unit <select value={unit} onChange={e=>changeUnit(e.target.value as Unit | "mm")}>
+   <option value="cm">Centimetres</option><option value="mm">Millimetres</option><option value="in">Inches</option><option value="ft">Feet</option>
+ </select></label>{([[w,W,"Width"],[h,H,"Height"]] as const).map(([val,set,label])=><label className="grid gap-1" key={label}>{label} ({unit}) <input className="w-full rounded-lg border p-2" id={label==="Width"?"mimi-wall-width":"mimi-wall-height"} required type="number" min={0.01/toCm(1,unit)} max={100000/toCm(1,unit)} step="any" value={val} onChange={e=>set(e.target.value)}/></label>)}</fieldset>}
  {custom&&art&&<div><div className="flex flex-wrap gap-3">{(["size","room"] as const).map(m=><button type="button" className="btn rounded-lg border px-4 py-2" key={m} onClick={()=>{select(m);if(ready)show(m);else document.getElementById("mimi-wall-width")?.focus()}}>{m==="size"?"Visualize my wall":"See it in my room"}</button>)}</div>{selection&&!ready&&<p role="status">Enter your wall width and height above, then choose a preview.</p>}</div>}
- <p>{amount===null?"Price to confirm":new Intl.NumberFormat("en",{style:"currency",currency:india?"INR":"USD"}).format(amount)}{internationalPrice!==null?" · delivery included":""}</p>
+ <p>{amount===null?(hopscotch?"International price to confirm":"Price to confirm"):new Intl.NumberFormat("en",{style:"currency",currency:india?"INR":"USD"}).format(amount)}{internationalPrice!==null?" · delivery included":""}{hopscotch&&india?" · GST included":""}</p>
+ {hopscotch&&!india&&game&&<p>India retail price: ₹{game.price_inr.toLocaleString("en-IN")} including GST.</p>}
  <label>Quantity <input type="number" required min="1" max="99" value={qty||""} onChange={e=>Q(Number(e.target.value))}/></label>
  <button className="btn btn-primary">Add to cart</button><span role="status">{status}</span><a href="/cart/">View cart</a></form>
  {art&&ready&&mode==="size"&&<section><DesignVisualizer imageUrl={art} imageAlt={name} wallWidthCm={wallWidth} wallHeightCm={wallHeight} {...crop} heading="Visualize my wall" onChange={setCrop} onImageMeta={ignoreMeta}/><button type="button" onClick={()=>show(null)}>Close wall preview</button></section>}

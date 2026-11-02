@@ -36,6 +36,6 @@ export const guides: Record<string, [string, string[]]> = {
   contact: ["Shopping help", ["Email Mimi Pip for help choosing a design or planning your room. Include the product name or link and your question."]],
   us: ["Mimi Pip in the United States", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product sizes may be shown in centimeters. Divide by 2.54 for inches. For made-to-measure wallpaper, enter wall dimensions to see US pricing including delivery."]],
   in: ["Mimi Pip in India", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product pages show available dimensions in centimeters. Check individual designs for INR pricing and delivery availability."]],
-  tools: ["Plan your room", ["Open a made-to-measure wallpaper, enter the width and height of your wall in centimetres, then choose Visualize my wall to adjust the crop. Choose See it in my room to place the design on a room photo or try the sample room."]],
+  tools: ["Plan your room", ["Open a made-to-measure wallpaper, enter the width and height of your wall in your preferred unit, then choose Visualize my wall to adjust the crop. Choose See it in my room to place the design on a room photo or try the sample room."]],
   about: ["About Mimi Pip", ["Mimi Pip brings wallpapers, wall borders and stickers together for nurseries, bedrooms and play spaces. Explore by collection, color, concept, age or space."]]
 };

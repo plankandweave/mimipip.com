@@ -9,7 +9,8 @@ export const MM_PER_FOOT = 304.8;
 
 export type Unit = "cm" | "ft" | "in";
 
-export function toCm(value: number, unit: Unit): number {
+export function toCm(value: number, unit: Unit | "mm"): number {
+  if (unit === "mm") return value / 10;
   if (unit === "ft") return value * CM_PER_FOOT;
   if (unit === "in") return value * CM_PER_INCH;
   return value;
