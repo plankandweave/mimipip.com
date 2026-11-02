@@ -55,7 +55,9 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       href={href ?? `/products/${product.handle}`}
       className="group block"
       onPointerEnter={(e) => { if (e.pointerType === "mouse" && flatHoverImage) setHoverWanted(true); }}
-      onFocus={() => { if (flatHoverImage) setHoverWanted(true); }}
+      onPointerLeave={()=>{setHoverWanted(false);setHoverReady(false);}}
+      onBlur={()=>{setHoverWanted(false);setHoverReady(false);}}
+      onFocus={e=>{if(flatHoverImage&&e.currentTarget.matches(":focus-visible"))setHoverWanted(true);}}
     >
       {/* The card's FOOTPRINT stays square so every grid row lines up, but a
           piece with a fixed finished shape is framed at that shape inside it —
@@ -110,7 +112,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
         ) : (
           <div className="grid h-full place-items-center text-mist">No image</div>
         )}
-        {flatHover && product.cardImageCrop ? flatHover : null}
+        {flatHover && (product.cardImageCrop || product.roomPanel) ? flatHover : null}
         {badge ? (
           <span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full max-w-[calc(100%-4.25rem)] px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] backdrop-blur-sm ${badge.className}`}>
             <BadgeIcon badgeKey={badge.key} className="h-3 w-3 shrink-0" />
@@ -121,7 +123,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
           </span>
         ) : (
           <span className="absolute left-3 top-3 rounded-full bg-surface/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-slate opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            {product.cardLabel?.startsWith("Design preview") ? "Design preview" : familyChip(product)}
+            {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW === "1" ? product.cardLabel : familyChip(product)}
           </span>
         )}
       </div>

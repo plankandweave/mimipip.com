@@ -1,3 +1,4 @@
+import floorPlay from './floor-play.json';
 import {secretSetup,getWebhookSecret,type SetupEnv} from '../src/brand/commerce/secret-setup';
 import {handleCommerce} from '../src/brand/commerce/checkout';
 import {razorpayTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
@@ -13,6 +14,7 @@ const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin)
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
+ if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/payment-setup')return secretSetup(request,env as SetupEnv);
  if(p.startsWith('/api/india-checkout/')){
   try {const secret=await getWebhookSecret(env as SetupEnv);return withCheckoutBrowserPolicy(await handleCommerce(request,{...(env as Parameters<typeof handleCommerce>[1]),RAZORPAY_WEBHOOK_SECRET:secret},razorpayTransport));}
@@ -21,6 +23,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
+ if(Object.hasOwn(floorPlay,p))return withOfflineBrowserPolicy(new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
  const oldDotCollections=['polka-dots','random-dots','classic-dots'];
  if(p==='/browse/collection' && oldDotCollections.includes(u.searchParams.get('value')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
  if(p==='/shop/collection' && oldDotCollections.includes(u.searchParams.get('collection')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
@@ -41,7 +44,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = ['/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','gender','age','space'].map(axis=>'/browse/'+axis),
+   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','age','space'].map(axis=>'/browse/'+axis),
      ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
    const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
    return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});

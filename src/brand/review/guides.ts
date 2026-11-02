@@ -18,7 +18,7 @@ export const guides: Record<string, [string, string[]]> = {
   ]],
   faq: ["Shopping questions", [
     "How do I save a design? Tap its heart, then open Saved designs. The list stays in the same browser on this device. Tap the heart again to remove it.",
-    "Can I order? The US and India catalogues are open for browsing. Pricing, checkout, sample orders and delivery bookings are currently closed.",
+    "How does the cart work? Choose your design, size and quantity, then add it to your cart. Your selections stay on this device. Where a price or size needs confirmation, the cart labels it. Saving a selection does not place an order.",
     "Does a nursery or toddler label certify a product for that age? These labels organize decorating ideas. Check each product’s intended use, materials and instructions before choosing it."
   ]],
   "shipping-returns": ["Delivery and returns", [
@@ -27,8 +27,8 @@ export const guides: Record<string, [string, string[]]> = {
   privacy: ["Privacy while browsing", ["Saved designs are stored in this browser on your device. Removing a saved design updates that local list. Clearing this site’s browser storage removes it."]],
   terms: ["Using the catalogue", ["Browse designs and save ideas for your room. The catalogue does not accept orders or reserve stock. Dimensions described as nominal are planning references."]],
   contact: ["Shopping help", ["Our support channel is being prepared. For help now, use the measuring, surface and installation guides below. To find a design again, search by its name or visit Saved designs."]],
-  us: ["Mimi Pip in the United States", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product sizes may be shown in centimeters. Divide by 2.54 for inches. US pricing, shipping and checkout are not yet available."]],
-  in: ["Mimi Pip in India", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product pages show available dimensions in centimeters. India pricing, shipping and checkout are not yet available."]],
+  us: ["Mimi Pip in the United States", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product sizes may be shown in centimeters. Divide by 2.54 for inches. For made-to-measure wallpaper, enter wall dimensions to see US pricing including delivery."]],
+  in: ["Mimi Pip in India", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product pages show available dimensions in centimeters. Check individual designs for INR pricing and delivery availability."]],
   tools: ["Plan your room", ["Room-photo previews, image matching, custom uploads and sample orders are currently unavailable. Choose a palette using Shop by Color, pick a subject using Shop by Concept, or save designs to compare them later."]],
-  about: ["About Mimi Pip", ["Mimi Pip brings wallpapers, wall borders and stickers together for nurseries, bedrooms and play spaces. Explore by collection, color, concept, gender, age or space."]]
+  about: ["About Mimi Pip", ["Mimi Pip brings wallpapers, wall borders and stickers together for nurseries, bedrooms and play spaces. Explore by collection, color, concept, age or space."]]
 };

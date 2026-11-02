@@ -197,7 +197,7 @@ export async function Header() {
   // resolved above. Kids & nursery opens the sister brand's shop inside the
   // site (founder, 29 October 2026), which lists Zyvorah's own children's
   // rooms beneath its own collection — so it never depends on a menu read.
-  const browseLinks: BrowseLink[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [...axes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a})),{label:"In real homes",href:"/in-real-homes/"}] : [
+  const browseLinks: BrowseLink[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [...axes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a})),{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : [
     // The two first-wall answers lead (7 October 2026): on a phone they were a
     // separate chip row on the homepage only, under the header's own rows.
     { label: "Price my wall", href: "/wall-price" },
@@ -259,12 +259,12 @@ export async function Header() {
           <div className="container-x flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-[0.68rem] font-semibold text-charcoal/80">
               <span className="min-w-0">
-                {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "US & India · Catalogue preview" : <ShippingBannerText />}
+                {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "Wall stickers, borders and wallpapers" : <ShippingBannerText />}
               </span>
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
-              {process.env.MIMIPIP_LOCAL_REVIEW!=="1" && <ShipToCountry className="hidden min-w-0 md:block" />}
+              <ShipToCountry className="min-w-0" />
             </div>
-            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />}</div>
+            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />}</div>
           </div>
         </div>
       </StorefrontOnly>
@@ -304,7 +304,7 @@ export async function Header() {
               <MegaMenu families={shopFamilies} />
             </div>
             <nav className="header-left-journeys hidden items-center gap-4 min-[1200px]:flex xl:gap-5">
-              {(process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [{label:"Find a design",href:"/search"},{label:"In real homes",href:"/in-real-homes/"}] : DESKTOP_JOURNEYS).map((journey) => (
+              {(process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [{label:"Find a design",href:"/search"},{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : DESKTOP_JOURNEYS).map((journey) => (
                 <JourneyLink
                   key={journey.href}
                   href={journey.href}
@@ -383,7 +383,7 @@ export async function Header() {
         </div>
       </div>
       <StorefrontOnly>
-        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />} />
+        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />} />
       </StorefrontOnly>
     </ScrollHeader>
   );
