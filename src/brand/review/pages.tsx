@@ -20,12 +20,16 @@ export function ReviewDetail({p}:{p:RecordData}) {
    {!wallpaper&&<p>Stickers only. Furniture and room accessories are not included.</p>}
    <p>{p.description}</p><WishlistButton handle={p.slug} variant="inline"/>
    <h2>Size and selection</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to wall measurements":"Size to confirm"}</p>
-   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper}/>
+   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} art={wallpaper?card(p).flatHoverImage:null}/>
    {beep&&<section><h2>Inside the design</h2><p>A car, bus, train and airplane fill four sky-blue scenes for vertical, closed stair risers.</p>
     <h3>What comes in the pack?</h3><p>Supplied piece count, sheet layout, accessories and packaging are awaiting confirmation. The four pictured designs show the artwork.</p>
     <h3>Will it fit my stairs?</h3><p>Measure each vertical riser separately. Record its clear width and height and note handles, trim or curves. Panel dimensions and trim allowance need confirmation.</p>
     <h3>How do I apply and clean it?</h3><p>Material, adhesive, compatible surfaces, installation, removal and cleaning instructions are awaiting confirmation for this design.</p></section>}
-   <nav aria-label="Planning help" className="mt-4 flex flex-wrap gap-4"><Link href="/materials">Check your surface</Link><Link href="/how-to-measure">How to measure</Link><Link href="/installation">Installation and removal</Link></nav></div>
+   <section aria-label="Planning help">{[
+    ["Check your surface","Identify the surface and finish before ordering. For textured, freshly painted or damp surfaces, confirm suitability for this design first.","/materials"],
+    ["How to measure",wallpaper?"Measure the full wall in several places. Enter its widest width and tallest height in centimetres. Note doors and windows separately.":"Measure the clear area where the design will sit. Compare both dimensions with the product size, allowing for handles, trim and edges.","/how-to-measure"],
+    ["Installation and removal","Check the instructions for your product and surface before fitting. Test an inconspicuous spot first; removal depends on the adhesive and the underlying finish.","/installation"]
+   ].map(([title,body,url])=><details key={title} className="border-b py-3"><summary className="cursor-pointer font-semibold">{title}</summary><p className="mt-2">{body}</p><Link className="underline" href={url}>Read the full guide</Link></details>)}</section></div>
  </section></WallBuilderProvider>;
 }
 

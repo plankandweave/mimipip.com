@@ -1,5 +1,5 @@
 export type Dimensions={width:number;height:number};
-export type Line={slug:string;name:string;size:string;qty:number;currency:"INR"|"USD";amount:number|null;dimensions?:Dimensions;wallpaper?:boolean;stickersOnly?:boolean};
+export type Line={slug:string;name:string;size:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;wallpaper?:boolean;stickersOnly?:boolean};
 const key="mimipip.design-cart.v1";
 export const validQuantity=(n:number)=>Number.isInteger(n)&&n>=1&&n<=99;
 export const validLength=(n:number)=>Number.isFinite(n)&&n>0&&n<=100000;
@@ -23,7 +23,7 @@ export function saveLines(lines:Line[]){
 }
 export function addLine(lines:Line[],line:Line):Line[]{
  if(!validLine(line))throw new Error("Invalid selection");
- const index=lines.findIndex(l=>l.slug===line.slug&&l.size===line.size&&l.currency===line.currency);
+ const index=lines.findIndex(l=>l.slug===line.slug&&l.size===line.size&&l.currency===line.currency&&JSON.stringify(l.crop)===JSON.stringify(line.crop));
  if(index<0)return [...lines,line];
  const qty=lines[index].qty+line.qty;
  if(!validQuantity(qty))throw new Error("Select up to 99 per design and size.");
