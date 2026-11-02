@@ -9312,24 +9312,1089 @@
     ]
   },
   {
-    "id": "MP-HP01",
-    "slug": "happy-petals",
-    "name": "Happy Petals",
-    "description": "Cheerful flowers, tiny hearts and leafy sprigs for nursery walls and growing children’s rooms. Explore 21 colourways in the artwork and styled room views.",
+    "id": "MP-HP-01",
+    "slug": "happy-petals-sunny-yellow",
+    "name": "Happy Petals · Sunny Yellow",
+    "description": "Sunny Yellow is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
     "collection": [
-      "signature-wallpapers"
+      "happy-petals"
     ],
     "concept": [
-      "flowers",
-      "hearts"
+      "flowers"
     ],
     "color": [
-      "blue",
-      "yellow",
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-01.png",
+    "flatImage": "/review/happy-petals/flat-01.png",
+    "imageRole": "Happy Petals · Sunny Yellow in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-01.png",
+        "alt": "Happy Petals · Sunny Yellow in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-01.png",
+        "alt": "Happy Petals · Sunny Yellow flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-02",
+    "slug": "happy-petals-pink-and-yellow",
+    "name": "Happy Petals · Pink and Yellow",
+    "description": "Pink and Yellow is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
       "pink",
-      "green",
-      "lavender",
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-03.png",
+    "flatImage": "/review/happy-petals/flat-02.png",
+    "imageRole": "Happy Petals · Pink and Yellow in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-03.png",
+        "alt": "Happy Petals · Pink and Yellow in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-02.png",
+        "alt": "Happy Petals · Pink and Yellow flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-03",
+    "slug": "happy-petals-peach-and-sage",
+    "name": "Happy Petals · Peach and Sage",
+    "description": "Peach and Sage is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "peach",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-02.png",
+    "flatImage": "/review/happy-petals/flat-03.png",
+    "imageRole": "Happy Petals · Peach and Sage in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-02.png",
+        "alt": "Happy Petals · Peach and Sage in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-03.png",
+        "alt": "Happy Petals · Peach and Sage flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-04",
+    "slug": "happy-petals-baby-pink",
+    "name": "Happy Petals · Baby Pink",
+    "description": "Baby Pink is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-04.png",
+    "flatImage": "/review/happy-petals/flat-04.png",
+    "imageRole": "Happy Petals · Baby Pink in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-04.png",
+        "alt": "Happy Petals · Baby Pink in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-04.png",
+        "alt": "Happy Petals · Baby Pink flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-05",
+    "slug": "happy-petals-soft-sage",
+    "name": "Happy Petals · Soft Sage",
+    "description": "Soft Sage is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-07.png",
+    "flatImage": "/review/happy-petals/flat-05.png",
+    "imageRole": "Happy Petals · Soft Sage in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-07.png",
+        "alt": "Happy Petals · Soft Sage in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-05.png",
+        "alt": "Happy Petals · Soft Sage flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-06",
+    "slug": "happy-petals-blush-and-butter",
+    "name": "Happy Petals · Blush and Butter",
+    "description": "Blush and Butter is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-05.png",
+    "flatImage": "/review/happy-petals/flat-06.png",
+    "imageRole": "Happy Petals · Blush and Butter in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-05.png",
+        "alt": "Happy Petals · Blush and Butter in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-06.png",
+        "alt": "Happy Petals · Blush and Butter flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-07",
+    "slug": "happy-petals-pink-on-yellow",
+    "name": "Happy Petals · Pink on Yellow",
+    "description": "Pink on Yellow is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-06.png",
+    "flatImage": "/review/happy-petals/flat-07.png",
+    "imageRole": "Happy Petals · Pink on Yellow in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-06.png",
+        "alt": "Happy Petals · Pink on Yellow in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-07.png",
+        "alt": "Happy Petals · Pink on Yellow flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-08",
+    "slug": "happy-petals-lavender",
+    "name": "Happy Petals · Lavender",
+    "description": "Lavender is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "lavender"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-08.png",
+    "flatImage": "/review/happy-petals/flat-08.png",
+    "imageRole": "Happy Petals · Lavender in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-08.png",
+        "alt": "Happy Petals · Lavender in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-08.png",
+        "alt": "Happy Petals · Lavender flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-09",
+    "slug": "happy-petals-apricot",
+    "name": "Happy Petals · Apricot",
+    "description": "Apricot is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
       "peach"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-10.png",
+    "flatImage": "/review/happy-petals/flat-09.png",
+    "imageRole": "Happy Petals · Apricot in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-10.png",
+        "alt": "Happy Petals · Apricot in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-09.png",
+        "alt": "Happy Petals · Apricot flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-10",
+    "slug": "happy-petals-golden-butter",
+    "name": "Happy Petals · Golden Butter",
+    "description": "Golden Butter is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-12.png",
+    "flatImage": "/review/happy-petals/flat-10.png",
+    "imageRole": "Happy Petals · Golden Butter in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-12.png",
+        "alt": "Happy Petals · Golden Butter in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-10.png",
+        "alt": "Happy Petals · Golden Butter flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-11",
+    "slug": "happy-petals-coral",
+    "name": "Happy Petals · Coral",
+    "description": "Coral is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "coral"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-09.png",
+    "flatImage": "/review/happy-petals/flat-11.png",
+    "imageRole": "Happy Petals · Coral in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-09.png",
+        "alt": "Happy Petals · Coral in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-11.png",
+        "alt": "Happy Petals · Coral flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-12",
+    "slug": "happy-petals-pink-and-lavender",
+    "name": "Happy Petals · Pink and Lavender",
+    "description": "Pink and Lavender is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "lavender"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-11.png",
+    "flatImage": "/review/happy-petals/flat-12.png",
+    "imageRole": "Happy Petals · Pink and Lavender in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-11.png",
+        "alt": "Happy Petals · Pink and Lavender in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-12.png",
+        "alt": "Happy Petals · Pink and Lavender flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-13",
+    "slug": "happy-petals-sunshine-hearts",
+    "name": "Happy Petals · Sunshine Hearts",
+    "description": "Sunshine Hearts is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-16.png",
+    "flatImage": "/review/happy-petals/flat-13.png",
+    "imageRole": "Happy Petals · Sunshine Hearts in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-16.png",
+        "alt": "Happy Petals · Sunshine Hearts in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-13.png",
+        "alt": "Happy Petals · Sunshine Hearts flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-14",
+    "slug": "happy-petals-pink-posies",
+    "name": "Happy Petals · Pink Posies",
+    "description": "Pink Posies is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-13.png",
+    "flatImage": "/review/happy-petals/flat-14.png",
+    "imageRole": "Happy Petals · Pink Posies in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-13.png",
+        "alt": "Happy Petals · Pink Posies in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-14.png",
+        "alt": "Happy Petals · Pink Posies flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-15",
+    "slug": "happy-petals-peach-and-lilac",
+    "name": "Happy Petals · Peach and Lilac",
+    "description": "Peach and Lilac is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "peach",
+      "lavender"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-14.png",
+    "flatImage": "/review/happy-petals/flat-15.png",
+    "imageRole": "Happy Petals · Peach and Lilac in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-14.png",
+        "alt": "Happy Petals · Peach and Lilac in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-15.png",
+        "alt": "Happy Petals · Peach and Lilac flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-16",
+    "slug": "happy-petals-pastel-mix",
+    "name": "Happy Petals · Pastel Mix",
+    "description": "Pastel Mix is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "yellow",
+      "blue"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-15.png",
+    "flatImage": "/review/happy-petals/flat-16.png",
+    "imageRole": "Happy Petals · Pastel Mix in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-15.png",
+        "alt": "Happy Petals · Pastel Mix in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-16.png",
+        "alt": "Happy Petals · Pastel Mix flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-17",
+    "slug": "happy-petals-golden-garden",
+    "name": "Happy Petals · Golden Garden",
+    "description": "Golden Garden is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "yellow",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-19.png",
+    "flatImage": "/review/happy-petals/flat-17.png",
+    "imageRole": "Happy Petals · Golden Garden in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-19.png",
+        "alt": "Happy Petals · Golden Garden in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-17.png",
+        "alt": "Happy Petals · Golden Garden flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-18",
+    "slug": "happy-petals-blush-garden",
+    "name": "Happy Petals · Blush Garden",
+    "description": "Blush Garden is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-18.png",
+    "flatImage": "/review/happy-petals/flat-18.png",
+    "imageRole": "Happy Petals · Blush Garden in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-18.png",
+        "alt": "Happy Petals · Blush Garden in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-18.png",
+        "alt": "Happy Petals · Blush Garden flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-19",
+    "slug": "happy-petals-pink-and-gold",
+    "name": "Happy Petals · Pink and Gold",
+    "description": "Pink and Gold is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "pink",
+      "yellow"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-20.png",
+    "flatImage": "/review/happy-petals/flat-19.png",
+    "imageRole": "Happy Petals · Pink and Gold in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-20.png",
+        "alt": "Happy Petals · Pink and Gold in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-19.png",
+        "alt": "Happy Petals · Pink and Gold flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-20",
+    "slug": "happy-petals-lavender-meadow",
+    "name": "Happy Petals · Lavender Meadow",
+    "description": "Lavender Meadow is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "lavender"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "nursery",
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/happy-petals/room-17.png",
+    "flatImage": "/review/happy-petals/flat-20.png",
+    "imageRole": "Happy Petals · Lavender Meadow in a styled room",
+    "source": "Mimi Pip · Happy Petals",
+    "status": "Design preview",
+    "price": null,
+    "personalization": null,
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-17.png",
+        "alt": "Happy Petals · Lavender Meadow in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-20.png",
+        "alt": "Happy Petals · Lavender Meadow flat artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-HP-21",
+    "slug": "happy-petals-blue",
+    "name": "Happy Petals · Blue",
+    "description": "Blue is a floral wallpaper design in the Happy Petals collection. Explore its flower artwork up close or preview it at your wall size.",
+    "collection": [
+      "happy-petals"
+    ],
+    "concept": [
+      "flowers"
+    ],
+    "color": [
+      "blue"
     ],
     "age": [
       "baby",
@@ -9353,11 +10418,21 @@
     "measurementType": "made-to-measure",
     "image": "/review/happy-petals/room-21.png",
     "flatImage": "/review/happy-petals/flat-21.png",
-    "imageRole": "Signature Blue illustrated in a room",
+    "imageRole": "Happy Petals · Blue in a styled room",
     "source": "Mimi Pip · Happy Petals",
     "status": "Design preview",
     "price": null,
     "personalization": null,
-    "sourceIndiaPricePerSqft": null
+    "sourceIndiaPricePerSqft": null,
+    "gallery": [
+      {
+        "url": "/review/happy-petals/room-21.png",
+        "alt": "Happy Petals · Blue in a styled room"
+      },
+      {
+        "url": "/review/happy-petals/flat-21.png",
+        "alt": "Happy Petals · Blue flat artwork"
+      }
+    ]
   }
 ]

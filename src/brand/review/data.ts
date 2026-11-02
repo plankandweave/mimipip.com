@@ -38,4 +38,4 @@ export const card=(p:RecordData):ProductCardData=>({
   sampleable:false,
 });
 export const find=(slug:string)=>records.find(p=>p.slug===slug);
-export const label=(s:string)=>s==='dotty-days'?'Dotty Days':s==='colour-create'?'Colour & Create':s.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
+export const label=(s:string)=>s==='happy-petals'?'Happy Petals':s==='dotty-days'?'Dotty Days':s==='colour-create'?'Colour & Create':s.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());

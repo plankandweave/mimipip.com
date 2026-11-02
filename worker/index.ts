@@ -1,3 +1,4 @@
+import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {secretSetup,getWebhookSecret,type SetupEnv} from '../src/brand/commerce/secret-setup';
 import {handleCommerce} from '../src/brand/commerce/checkout';
@@ -24,6 +25,9 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
  if(Object.hasOwn(floorPlay,p))return withOfflineBrowserPolicy(new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
+ if (p === '/products/happy-petals' || p === '/design/happy-petals') return Response.redirect(new URL(legacyPetalsDestination(u.searchParams.get('colourway')),u.origin),301);
+ const collectionKey = p === '/browse/collection' ? u.searchParams.get('value') : p === '/shop/collection' ? u.searchParams.get('collection') : null;
+ if (p === '/collections/signature-wallpapers' || ['signature-wallpapers','happy-petals'].includes(collectionKey ?? '')) return Response.redirect(new URL('/collections/happy-petals/',u.origin),301);
  const oldDotCollections=['polka-dots','random-dots','classic-dots'];
  if(p==='/browse/collection' && oldDotCollections.includes(u.searchParams.get('value')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
  if(p==='/shop/collection' && oldDotCollections.includes(u.searchParams.get('collection')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
@@ -45,7 +49,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','age','space'].map(axis=>'/browse/'+axis),
+   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', '/collections/happy-petals/', ...['collection','color','concept','age','space'].map(axis=>'/browse/'+axis),
      ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
    const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
    return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});

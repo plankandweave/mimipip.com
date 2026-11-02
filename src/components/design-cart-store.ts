@@ -1,3 +1,4 @@
+import {migratePetalsLine} from "../brand/review/petals-legacy";
 export type Dimensions={width:number;height:number};
 export type Line={slug:string;name:string;size:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;indiaRate?:number;wallpaper?:boolean;stickersOnly?:boolean};
 const key="mimipip.design-cart.v1";
@@ -14,7 +15,9 @@ export function readLines():Line[]{
  if(!raw)return [];
  const lines=JSON.parse(raw);
  if(!Array.isArray(lines)||!lines.every(validLine))throw new Error("Invalid cart");
- return lines;
+ const migrated = (lines as Line[]).map(migratePetalsLine);
+ if (migrated.some((line,i)=>line!==lines[i])) localStorage.setItem(key,JSON.stringify(migrated));
+ return migrated;
 }
 export function saveLines(lines:Line[]){
  if(!lines.every(validLine))throw new Error("Invalid cart selection");

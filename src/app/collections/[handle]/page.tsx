@@ -166,6 +166,7 @@ const HIDE_GROUP_ON: Record<string, "colour" | "style" | "subject" | "room" | un
   searchParams: Promise<SP>;
 }): Promise<Metadata> {
   const { handle } = await params;
+  if (handle === "happy-petals") return {title:"Happy Petals collection", description:"Explore 21 distinct floral wallpaper designs from MimiPip.", alternates:{canonical:"https://mimipip.com/collections/happy-petals/"}};
   const { page: pageRaw, market } = await searchParams;
   const page = parsePage(pageRaw);
   const { countryCode } = marketLanding(`/collections/${handle}`, market);
