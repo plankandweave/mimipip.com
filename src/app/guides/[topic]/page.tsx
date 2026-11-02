@@ -24,6 +24,7 @@ export default async function Guide({params}: Props) {
         ["Stair stickers", "/browse/collection?value=little-steps-big-adventures"],
       ].map(([name, href]) => <Link className="underline" key={href} href={href}>{name}</Link>)}
     </nav>}
+    {(topic === "contact" || topic === "trade") && <p className="my-5"><a className="underline" href="mailto:hello@mimipip.com">hello@mimipip.com</a></p>}
     {topic === "contact" && <Link className="underline" href="/trade">Retail buyers and marketplace teams</Link>}
     {topic === "tools" && <Link className="underline" href="/products/colour-create-bunny-garden">Try the wall and room previews with Bunny Garden</Link>}
     <nav aria-label="Explore and plan" className="mt-8 flex flex-wrap gap-5">
