@@ -32,6 +32,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
   const [hoverWanted, setHoverWanted] = useState(false);
   const [hoverReady, setHoverReady] = useState(false);
   const flatHoverImage = product.flatHoverImage && product.flatHoverImage !== product.image ? product.flatHoverImage : null;
+  const showFullArtwork = Boolean(product.roomPanel || flatHoverImage?.endsWith("-original-board-crop.png") || flatHoverImage?.startsWith("/floor-play-images/"));
   const flatHover = flatHoverImage && hoverWanted ? (
     <Image
       src={flatHoverImage}
@@ -39,7 +40,8 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       fill
       sizes="(max-width:768px) 50vw, 25vw"
       onLoad={() => setHoverReady(true)}
-      className={`card-hover-img ${product.roomPanel || flatHoverImage.endsWith("-original-board-crop.png") || flatHoverImage.startsWith("/floor-play-images/") ? "object-contain bg-wash" : "object-cover"} ${hoverReady ? "is-ready" : ""}`}
+      style={showFullArtwork ? {objectFit: "scale-down", transform: "none"} : undefined}
+      className={`card-hover-img ${showFullArtwork ? "bg-wash" : "object-cover"} ${hoverReady ? "is-ready" : ""}`}
     />
   ) : null;
   // Show the single highest-priority editorial badge (if any).
