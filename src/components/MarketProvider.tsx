@@ -119,6 +119,10 @@ export function MarketProvider({
     named.current = true;
     setMarket(next);
     setReady(true);
+    if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1"){
+      document.cookie=MARKET_COUNTRY_COOKIE+"="+encodeURIComponent(next.countryCode)+"; Path=/; SameSite=Lax; Max-Age=31536000";
+      return;
+    }
     try {
       await fetch("/api/market", {
         method: "POST",

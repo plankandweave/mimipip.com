@@ -259,12 +259,12 @@ export async function Header() {
           <div className="container-x flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-[0.68rem] font-semibold text-charcoal/80">
               <span className="min-w-0">
-                {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "US & India · Catalogue preview" : <ShippingBannerText />}
+                {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "Wall stickers, borders and wallpapers" : <ShippingBannerText />}
               </span>
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
-              {process.env.MIMIPIP_LOCAL_REVIEW!=="1" && <ShipToCountry className="hidden min-w-0 md:block" />}
+              <ShipToCountry className="min-w-0" />
             </div>
-            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />}</div>
+            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />}</div>
           </div>
         </div>
       </StorefrontOnly>
@@ -383,7 +383,7 @@ export async function Header() {
         </div>
       </div>
       <StorefrontOnly>
-        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping help</Link> : <Concierge />} />
+        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />} />
       </StorefrontOnly>
     </ScrollHeader>
   );

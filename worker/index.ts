@@ -14,6 +14,7 @@ const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin)
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
+ if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/payment-setup')return secretSetup(request,env as SetupEnv);
  if(p.startsWith('/api/india-checkout/')){
   try {const secret=await getWebhookSecret(env as SetupEnv);return withCheckoutBrowserPolicy(await handleCommerce(request,{...(env as Parameters<typeof handleCommerce>[1]),RAZORPAY_WEBHOOK_SECRET:secret},razorpayTransport));}
@@ -43,7 +44,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','gender','age','space'].map(axis=>'/browse/'+axis),
+   const paths = [...Object.keys(floorPlay).map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', ...['collection','color','concept','age','space'].map(axis=>'/browse/'+axis),
      ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
    const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
    return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});

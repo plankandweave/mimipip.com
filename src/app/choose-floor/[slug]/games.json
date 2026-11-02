@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "hopscotch-peach-pop",
+    "name": "Peach Pop",
+    "width": 75.0,
+    "height": 260.0
+  },
+  {
+    "slug": "wiggleway",
+    "name": "Wiggleway",
+    "width": 114.0,
+    "height": 152.0
+  },
+  {
+    "slug": "jump-jamboree",
+    "name": "Jump Jamboree",
+    "width": 82.0,
+    "height": 214.0
+  },
+  {
+    "slug": "fork-and-friends",
+    "name": "Fork & Friends",
+    "width": 114.0,
+    "height": 178.0
+  }
+]

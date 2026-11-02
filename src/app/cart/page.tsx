@@ -1,5 +1,6 @@
 "use client";
 
+import { DesignCart } from "@/components/DesignCart";
 import { PendingOrderRecovery } from "@/components/PendingOrderRecovery";
 
 import { useEffect, useRef, useState } from "react";
@@ -27,7 +28,7 @@ import {
 } from "@/lib/homecoming-offer";
 
 export default function CartPage(){
- if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1")return <div className="container-x py-10"><h1 className="font-display text-2xl font-bold">Your cart</h1><p className="py-6">Ordering is unavailable in this preview. No items can be purchased.</p><Link className="btn" href="/browse/collection">Browse designs</Link></div>;
+ if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1")return <DesignCart/>;
  return <ConnectedCartPage/>;
 }
 function ConnectedCartPage() {
