@@ -39,7 +39,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       fill
       sizes="(max-width:768px) 50vw, 25vw"
       onLoad={() => setHoverReady(true)}
-      className={`card-hover-img object-cover ${hoverReady ? "is-ready" : ""}`}
+      className={`card-hover-img ${product.roomPanel || flatHoverImage.startsWith("/floor-play-images/") ? "object-contain bg-wash" : "object-cover"} ${hoverReady ? "is-ready" : ""}`}
     />
   ) : null;
   // Show the single highest-priority editorial badge (if any).
