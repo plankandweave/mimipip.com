@@ -270,7 +270,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
   searchParams: Promise<{ market?: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);return {title:p?.name??'Design not found',description:p?.description,...(p?.collection.includes('happy-petals') ? {alternates:{canonical:'https://mimipip.com/products/'+p.slug}} : {})};}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);return {title:p?.name??'Design not found',description:p?.description,...(p ? {alternates:{canonical:'https://mimipip.com/products/'+p.slug}} : {})};}
   const p = await getProductByHandle(handle, true);
   if (!p) return { title: "Product" };
 
