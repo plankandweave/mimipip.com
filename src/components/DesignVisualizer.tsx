@@ -106,7 +106,11 @@ export function DesignVisualizer({
   // preserved — the customer just sees the flipped artwork and can re-drag).
   const flipTransform = `scaleX(${flipH ? -1 : 1}) scaleY(${flipV ? -1 : 1})`;
   const wallWidthFt = wallWidthCm / CM_PER_FOOT;
-  const wallHeightFt = wallHeightCm / CM_PER_FOOT;
+  // The visualiser normally receives centimetres. Older measurement flows can
+  // still pass raw millimetres; a value over 1,000 cannot be a plausible
+  // single-wall height in cm, so normalize it before drawing the 5.5 ft person.
+  const scaleHeightCm = wallHeightCm > 1000 ? wallHeightCm / 10 : wallHeightCm;
+  const wallHeightFt = scaleHeightCm / CM_PER_FOOT;
 
   // A CALLBACK ref, not an effect: this component renders two different shapes
   // (the framed view below, and the long-run strip view which returns early),
