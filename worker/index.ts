@@ -38,8 +38,8 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
    '/print-your-own':'tools', '/match-a-photo':'tools', '/see-it-in-my-room':'tools', '/samples':'tools',
    '/custom-sizing':'how-to-measure', '/shipping-policy':'shipping-returns', '/refund-policy':'shipping-returns',
    '/where-to-buy':'faq', '/founders-note':'about', '/our-story':'about', '/sustainability':'materials',
-   '/bespoke':'tools', '/collaborate':'contact', '/commercial':'contact', '/press':'contact', '/trade':'contact',
-   '/office':'contact', '/hospitality':'contact', '/hospitals':'contact', '/retail':'contact', '/real-estate':'contact',
+   '/bespoke':'tools', '/collaborate':'contact', '/commercial':'contact', '/press':'contact', '/trade':'trade', '/account/trade':'trade', '/account/trade/apply':'trade',
+   '/office':'contact', '/hospitality':'contact', '/hospitals':'contact', '/retail':'trade', '/real-estate':'contact',
    '/projects':'contact', '/become-an-installer':'contact'
  };
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);

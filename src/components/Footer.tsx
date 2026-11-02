@@ -124,7 +124,8 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
     ] },
     { title: "Help", links: [
       { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
-      { label: "United States", href: "/us" }, { label: "India", href: "/in" }
+      { label: "United States", href: "/us" }, { label: "India", href: "/in" },
+      { label: "Retail buyer guide", href: "/trade" }
     ] }
   ] : canvas ? COLS.map(column => column.title === "Shop" ? {
     title: "Shop",

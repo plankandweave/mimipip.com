@@ -26,9 +26,16 @@ export const guides: Record<string, [string, string[]]> = {
   ]],
   privacy: ["Privacy while browsing", ["Saved designs are stored in this browser on your device. Removing a saved design updates that local list. Clearing this site’s browser storage removes it."]],
   terms: ["Using the catalogue", ["Browse designs and save ideas for your room. The catalogue does not accept orders or reserve stock. Dimensions described as nominal are planning references."]],
+  trade: ["Retail buyer guide", [
+    "Explore made-to-measure wallpapers, wall borders, floor games, bathroom character stickers and stair stickers for nursery and children’s spaces. Use the collection links below to review designs and save the product page for each item on your shortlist.",
+    "Wallpaper prices use the wall dimensions entered on the product page. US and international wallpaper is US$60 per square foot including delivery. Select India to see available INR prices. Product pages show retail pricing. Wholesale pricing, minimum quantities, lead times and delivery terms need separate confirmation.",
+    "The border design specifies a height of 15 cm and five 1 m sections. Final production dimensions and pack contents still need confirmation. The three Hopscotch colourways have a nominal size of 75 × 260 cm and an India retail price of ₹3,999 each. For bathroom characters, check the individual design dimensions. Stair panel sizes and final fit still need confirmation.",
+    "Sticker listings include only the stickers. Beds, furniture and props pictured in room renders illustrate placement. Flat previews show the design artwork. Retail packaging photographs, final pack contents, barcode identifiers, material specifications and any applicable test documentation need confirmation for the individual item before onboarding.",
+    "A verified trade contact and application channel has yet to be published. Browsing or saving a design does not send an enquiry."
+  ]],
   contact: ["Shopping help", ["Our support channel is being prepared. For help now, use the measuring, surface and installation guides below. To find a design again, search by its name or visit Saved designs."]],
   us: ["Mimi Pip in the United States", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product sizes may be shown in centimeters. Divide by 2.54 for inches. For made-to-measure wallpaper, enter wall dimensions to see US pricing including delivery."]],
   in: ["Mimi Pip in India", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product pages show available dimensions in centimeters. Check individual designs for INR pricing and delivery availability."]],
-  tools: ["Plan your room", ["Room-photo previews, image matching, custom uploads and sample orders are currently unavailable. Choose a palette using Shop by Color, pick a subject using Shop by Concept, or save designs to compare them later."]],
+  tools: ["Plan your room", ["Open a made-to-measure wallpaper, enter the width and height of your wall in centimetres, then choose Visualize my wall to adjust the crop. Choose See it in my room to place the design on a room photo or try the sample room."]],
   about: ["About Mimi Pip", ["Mimi Pip brings wallpapers, wall borders and stickers together for nurseries, bedrooms and play spaces. Explore by collection, color, concept, age or space."]]
 };
