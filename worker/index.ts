@@ -28,6 +28,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(p==='/browse/collection' && oldDotCollections.includes(u.searchParams.get('value')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
  if(p==='/shop/collection' && oldDotCollections.includes(u.searchParams.get('collection')||''))return Response.redirect(new URL('/collections/dotty-days/',u.origin).href,301);
  const browseRoutes: Record<string,string> = {
+   '/wall-borders':'/browse/collection?value=mimi-borders',
    '/collections/wall-art':'/browse/collection?value=wallpaper-worlds', '/collections':'/browse/collection',
    '/concepts':'/browse/concept', '/rooms':'/browse/space', '/colours':'/browse/color',
    '/lookbook':'/browse/collection', '/new':'/browse/collection', '/design-with':'/search'
