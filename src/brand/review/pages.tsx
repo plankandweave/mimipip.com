@@ -20,7 +20,7 @@ export function ReviewDetail({p}:{p:RecordData}) {
    {!wallpaper&&<p>Stickers only. Furniture and room accessories are not included.</p>}
    <p>{p.description}</p><WishlistButton handle={p.slug} variant="inline"/>
    <h2>Size and selection</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to wall measurements":"Size to confirm"}</p>
-   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} art={wallpaper?card(p).flatHoverImage:null}/>
+   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} indiaRate={p.sourceIndiaPricePerSqft} art={wallpaper?card(p).flatHoverImage:null}/>
    {beep&&<section><h2>Inside the design</h2><p>A car, bus, train and airplane fill four sky-blue scenes for vertical, closed stair risers.</p>
     <h3>What comes in the pack?</h3><p>Supplied piece count, sheet layout, accessories and packaging are awaiting confirmation. The four pictured designs show the artwork.</p>
     <h3>Will it fit my stairs?</h3><p>Measure each vertical riser separately. Record its clear width and height and note handles, trim or curves. Panel dimensions and trim allowance need confirmation.</p>
