@@ -1,6 +1,6 @@
 import {migratePetalsLine} from "../brand/review/petals-legacy";
 export type Dimensions={width:number;height:number};
-export type Line={slug:string;name:string;size:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;indiaRate?:number;wallpaper?:boolean;stickersOnly?:boolean};
+export type Line={slug:string;name:string;size:string;artworkUrl?:string;sku?:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;indiaRate?:number;wallpaper?:boolean;stickersOnly?:boolean};
 const key="mimipip.design-cart.v1";
 export const validQuantity=(n:number)=>Number.isInteger(n)&&n>=1&&n<=99;
 export const validLength=(n:number)=>Number.isFinite(n)&&n>0&&n<=100000;

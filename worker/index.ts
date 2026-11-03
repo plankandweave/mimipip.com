@@ -1,3 +1,4 @@
+import {publishedSitemapXml} from "../src/brand/review/published-sitemap";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {secretSetup,getWebhookSecret,type SetupEnv} from '../src/brand/commerce/secret-setup';
@@ -49,10 +50,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const topic = guideAliases[p] || (Object.hasOwn(guides,p.slice(1)) ? p.slice(1) : undefined);
  if (topic) return redirect(u,'/guides/'+topic);
  if (p === '/sitemap.xml') {
-   const paths = [...Object.keys(floorPlay).filter(path=>path!=='/floor-games/hopscotch-peach-pop').map(k=>k+'/'), '/', '/in-real-homes/', '/collections/dotty-days/', '/collections/happy-petals/', ...['collection','color','concept','age','size','space'].map(axis=>'/browse/'+axis),
-     ...Object.keys(guides).map(key=>'/guides/'+key), ...records.map(product=>'/products/'+encodeURIComponent(product.slug))];
-   const xml = paths.map(path=>'<url><loc>https://mimipip.com'+path+'</loc></url>').join('');
-   return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+xml+'</urlset>', {headers:{'Content-Type':'application/xml'}});
+   return new Response(publishedSitemapXml, {headers:{'Content-Type':'application/xml'}});
  }
  if(p.startsWith('/design/'))return redirect(u,'/products/'+encodeURIComponent(p.slice(8)));
  if(p==='/shop')return redirect(u,'/browse/collection');

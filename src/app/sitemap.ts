@@ -179,6 +179,10 @@ const getSitemapData = cachedCatalogue("sitemap-data", async (): Promise<Sitemap
 }, CATALOGUE_REVALIDATE, { deadlineMs: 20_000, staleFallbackTtl: 7 * 24 * 3600 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  if (process.env.MIMIPIP_LOCAL_REVIEW === "1") {
+    const {publishedUrls} = await import("@/brand/review/published-sitemap");
+    return publishedUrls.map(url => ({url}));
+  }
   const hidden = await hiddenConceptSlugs();
   const [{ products, collections }, categories] = await Promise.all([getSitemapData(), getProductCategories()]);
   // The canvas shop-by-size pages come from the catalogue too. They are an
