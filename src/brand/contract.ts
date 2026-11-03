@@ -24,7 +24,7 @@ export interface IsolationPolicy { mode: 'offline'; services: Record<ServiceName
 export function validateBrand(brand: BrandAdapter): BrandAdapter {
   if (brand.schemaVersion !== 1 || !brand.name.trim()) throw new Error('Invalid brand identity');
   const url = new URL(brand.origin);
-  if (!url.hostname.endsWith('.invalid')) throw new Error('Offline brand origin must use a reserved .invalid hostname');
+  if (url.protocol !== 'https:' || (url.hostname !== 'mimipip.com' && !url.hostname.endsWith('.invalid'))) throw new Error('Brand origin must be the Mimi Pip domain or a reserved offline hostname');
   for (const value of [brand.logo]) if (value && (!value.startsWith('/') || value.startsWith('//'))) throw new Error('Brand assets must be local paths');
   return brand;
 }
