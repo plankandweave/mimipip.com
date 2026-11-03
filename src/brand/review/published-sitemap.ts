@@ -1,4 +1,5 @@
 import floorPages from '../../../worker/floor-play.json';
+import editorials from "./editorial.json";
 import records from './catalogue.json';
 import {guides} from './guides';
 
@@ -7,6 +8,7 @@ const floorPaths = Object.keys(floorPages)
   .filter(path => path !== '/floor-games/hopscotch-peach-pop')
   .map(path => path + '/');
 const paths = [
+  ...Object.keys(editorials).map(key => "/"+key+"/"),
   ...floorPaths, '/', '/in-real-homes/', '/collections/dotty-days/', '/collections/happy-petals/',
   ...['collection','color','concept','age','size','space'].map(axis => '/browse/' + axis),
   ...Object.keys(guides).map(key => '/guides/' + key),

@@ -1,3 +1,4 @@
+import {publicPage} from "./public-page";
 import {publishedSitemapXml} from "../src/brand/review/published-sitemap";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
@@ -17,6 +18,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
+ if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
  if(p==='/payment-setup')return secretSetup(request,env as SetupEnv);
  if(p.startsWith('/api/india-checkout/')){
   try {const secret=await getWebhookSecret(env as SetupEnv);return withCheckoutBrowserPolicy(await handleCommerce(request,{...(env as Parameters<typeof handleCommerce>[1]),RAZORPAY_WEBHOOK_SECRET:secret},razorpayTransport));}
@@ -25,7 +27,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
- if(Object.hasOwn(floorPlay,p))return withOfflineBrowserPolicy(new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
+ if(Object.hasOwn(floorPlay,p))return publicPage(request,new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
  if (p === '/products/happy-petals' || p === '/design/happy-petals') return Response.redirect(new URL(legacyPetalsDestination(u.searchParams.get('colourway')),u.origin),301);
  const collectionKey = p === '/browse/collection' ? u.searchParams.get('value') : p === '/shop/collection' ? u.searchParams.get('collection') : null;
  if (p === '/collections/signature-wallpapers' || ['signature-wallpapers','happy-petals'].includes(collectionKey ?? '')) return Response.redirect(new URL('/collections/happy-petals/',u.origin),301);
@@ -59,5 +61,5 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const collection=/^\/collections\/([^/]+)(?:\/([^/]+))?$/.exec(p);
  if(collection?.[2]){const item=records.find(r=>'detailURL' in r&&r.detailURL===p+'/');if(item)return redirect(u,'/products/'+item.slug);}
  if(collection&&!collection[2]&&families[collection[1]]&&families[collection[1]]!==collection[1])return redirect(u,'/collections/'+families[collection[1]]);
- return withOfflineBrowserPolicy(await handler.fetch(request,env,ctx));
+ return publicPage(request,await handler.fetch(request,env,ctx));
 }};
