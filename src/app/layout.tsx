@@ -74,8 +74,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   // Installable-app metadata (iOS home-screen title + standalone chrome).
   appleWebApp: { capable: true, title: brand.name, statusBarStyle: "default" },
-  // Pinterest domain verification.
-  other: {},
+  // Pinterest website claim for @hellomimipip.
+  other: { "p:domain_verify": "9ceca53a9c63ec7049a2e5187dcc9e06" },
 };
 
 // Every page is an hour of ISR unless it says otherwise. The Header no longer
