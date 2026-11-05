@@ -16,6 +16,7 @@ const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin)
 export default {async fetch(request:Request,env:unknown,ctx:unknown){
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
+ if(u.hostname==='www.mimipip.com'){u.hostname='mimipip.com';return Response.redirect(u.href,301);}
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
  if(p.startsWith('/api/checkout/')){
