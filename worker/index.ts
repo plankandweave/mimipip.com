@@ -2,9 +2,8 @@ import {publicPage} from "./public-page";
 import {publishedSitemapXml} from "../src/brand/review/published-sitemap";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
-import {secretSetup,getWebhookSecret,type SetupEnv} from '../src/brand/commerce/secret-setup';
-import {handleCommerce} from '../src/brand/commerce/checkout';
-import {razorpayTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
+import {handleCommerce,sweep,type Env as CheckoutEnv} from '../src/brand/commerce/checkout';
+import {razorpayTransport,osTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
 import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand/network-policy';
@@ -19,12 +18,12 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
- if(p==='/payment-setup')return secretSetup(request,env as SetupEnv);
- if(p.startsWith('/api/india-checkout/')){
-  try {const secret=await getWebhookSecret(env as SetupEnv);return withCheckoutBrowserPolicy(await handleCommerce(request,{...(env as Parameters<typeof handleCommerce>[1]),RAZORPAY_WEBHOOK_SECRET:secret},razorpayTransport));}
+ if(p.startsWith('/api/checkout/')){
+  try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv,razorpayTransport,osTransport));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
  }
- if(p==='/india-checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
+ if(p==='/india-checkout')return redirect(u,'/checkout/');
+ if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
  if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
  if(Object.hasOwn(floorPlay,p))return publicPage(request,new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
@@ -62,4 +61,7 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(collection?.[2]){const item=records.find(r=>'detailURL' in r&&r.detailURL===p+'/');if(item)return redirect(u,'/products/'+item.slug);}
  if(collection&&!collection[2]&&families[collection[1]]&&families[collection[1]]!==collection[1])return redirect(u,'/collections/'+families[collection[1]]);
  return publicPage(request,await handler.fetch(request,env,ctx));
-}};
+},
+// Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
+async scheduled(_event:unknown,env:unknown){installOfflineFetchBoundary();await sweep(env as CheckoutEnv,razorpayTransport,osTransport);}
+};

@@ -2,6 +2,7 @@ import {pickFlatSource} from './hover';
 import panelFlats from './panel-flats.json';
 import checkedHover from './hover-images.json';
 import records from './catalogue.json';
+import {saleOf,sellableAnywhere} from '../commerce/sale';
 import type { ProductCardData } from '@/lib/types';
 export const discoveryAxes=['collection','color','concept','age','space'] as const;
 export const shopAxes=['collection','color','age','size'] as const;
@@ -15,11 +16,12 @@ function sizeGroup(p:RecordData) {
   return 'size-to-confirm';
 }
 export const options=(axis:Axis) => {
-  if(axis==='size') return ['made-to-measure','fixed-dimensions','size-to-confirm'].filter(key=>records.some(p=>sizeGroup(p)===key));
+  if(axis==='size') return ['made-to-measure','fixed-dimensions'].filter(key=>shop.some(p=>sizeGroup(p)===key));
   if(axis==='age') return ['baby','toddler','preschool','school-age'];
-  return [...new Set(records.flatMap(p=>p[axis]??[]))].sort();
+  return [...new Set(shop.flatMap(p=>p[axis]??[]))].sort();
 };
-export const filter=(axis:Axis,value:string)=>records.filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
+const shop=records.filter(p=>sellableAnywhere(p.slug));
+export const filter=(axis:Axis,value:string)=>shop.filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
 export const browseHref=(axis:Axis,value:string)=>axis==='collection'?'/collections/'+encodeURIComponent(value)+'/':'/browse/'+axis+'?value='+encodeURIComponent(value);
 export const card=(p:RecordData):ProductCardData=>({
   roomPanel: (p as RecordData & {roomPanel?:import("@/components/RoomPanel").RoomPanelBounds}).roomPanel,
@@ -47,6 +49,7 @@ export const card=(p:RecordData):ProductCardData=>({
         : undefined,
   fromPricePerSqft:null,
   cardLabel:label(p.type[0]),
+  sale:saleOf(p.slug),
   sampleable:false,
 });
 export const find=(slug:string)=>records.find(p=>p.slug===slug);

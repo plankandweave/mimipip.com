@@ -169,6 +169,7 @@ export type ProductCardData = {
   /** The category's promise line, owned by the DB
    *  so no card can borrow another family's words. */
   cardLabel?: string | null;
+  sale?: import("@/brand/commerce/sale").Sale;
   /** Per-metre price for per-metre categories — replaces the ₹/sq ft card line. */
   pricePerMetre?: number | null;
   /** width ÷ height of the finished piece, for a family sold at a fixed shape

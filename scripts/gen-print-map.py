@@ -13,6 +13,9 @@ for r in catalogue:
         continue
     if 'wallpaper' not in r['type']:
         continue
+    # A design still in preview (proofing or print file outstanding) is not sold.
+    if not r.get('status', '').startswith('Made-to-measure'):
+        continue
     source = zyvorah.get(r.get('sourceHandle') or slug)
     flat = next((i['url'] for i in (source or {}).get('images', []) if i.get('is_flat')), None)
     if flat:
@@ -21,7 +24,5 @@ for r in catalogue:
         pick = next((m for m in mats if m['slug'] == 'smooth-matt' and m['price_per_sqft'] == rate), None) \
             or next((m for m in mats if m['price_per_sqft'] == rate), mats[0])
         out[slug] = {'art': flat, 'material': 'paste', 'materialSlug': pick['slug']}
-    elif r.get('flatImage'):
-        out[slug] = {'art': r['flatImage'], 'material': 'paste', 'materialSlug': 'smooth-matt'}
 json.dump(out, open('src/brand/commerce/print-map.json', 'w'), indent=0, sort_keys=True)
 print(len(out), 'designs have print artwork')

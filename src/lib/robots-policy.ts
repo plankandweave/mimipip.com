@@ -11,7 +11,6 @@ const SITE_URL = "https://mimipip.com";
 // and the admin console.
 const PRIVATE_PATHS = [
   "/choose-floor/",
-  "/india-checkout",
   "/payment-setup",
   "/cart",
   "/checkout",

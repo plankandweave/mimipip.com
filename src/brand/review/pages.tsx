@@ -1,5 +1,6 @@
 import { RoomPanel, type RoomPanelBounds } from "@/components/RoomPanel";
 import { ChooseDesign } from "@/components/DesignCart";
+import { saleOf } from "@/brand/commerce/sale";
 import { WishlistButton } from "@/components/WishlistButton";
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
@@ -20,23 +21,21 @@ export function ReviewDetail({p}:{p:RecordData}) {
  const wallpaper=p.type.some(type=>type.includes("wallpaper"));
  return <WallBuilderProvider><section className="container-x grid gap-10 py-8 lg:grid-cols-2">
   <WallBuilderStage gallery={<div>{panel?<RoomPanel src={p.image} alt={p.name+" shown in a room illustration"} panel={panel}/>:<ProductGallery images={gallery} title={p.name} fit="contain" showActions={false} showSample={false}/>}
-   {happyPetals && <p className="mt-3 text-sm">The styled room is a visualization. Your order includes wallpaper only. Furniture and accessories are for illustration. The pattern repeat needs a final print proof before production.</p>}
-   {beep&&<><p>Illustrative application mockup · Stickers only · Furniture not included</p><figure className="mt-6"><img src="/listing-details/beep-beep/design-panels.svg" alt="Car, bus, train and airplane designs shown individually" className="mx-auto max-h-96"/><figcaption>Design illustration · Sizes to confirm</figcaption></figure></>}</div>}/>
+   {happyPetals && <p className="mt-3 text-sm">The styled room is a visualization. Your order includes wallpaper only. Furniture and accessories are for illustration.</p>}
+   {beep&&<><p>Illustrative application mockup · Stickers only · Furniture not included</p><figure className="mt-6"><img src="/listing-details/beep-beep/design-panels.svg" alt="Car, bus, train and airplane designs shown individually" className="mx-auto max-h-96"/><figcaption>Design illustration</figcaption></figure></>}</div>}/>
   <div><Link href={happyPetals ? "/collections/happy-petals/" : "/browse/collection?value="+encodeURIComponent(p.collection[0])}>{label(p.collection[0])}</Link><h1>{p.name}</h1>
    {!wallpaper&&<p>Stickers only. Furniture and room accessories are not included.</p>}
    {hopscotch && <div><h2>Hopscotch floor game</h2><p>One connected contour-cut floor sticker, 75 × 260 cm.</p></div>}
    <p>{p.description}</p><WishlistButton handle={p.slug} variant="inline"/>
    {happyPetals && <p className="my-4">SKU {p.id} · <Link className="underline" href="/collections/happy-petals/">Explore all Happy Petals designs</Link></p>}
-   <h2>Size and selection</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to wall measurements":"Size to confirm"}</p>
-   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} indiaRate={p.sourceIndiaPricePerSqft} art={wallpaper?card(p).flatHoverImage:null}/>
+   <h2>Size and price</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to your wall measurements":""}</p>
+   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} sale={saleOf(p.slug)} art={wallpaper?card(p).flatHoverImage:null}/>
    {hopscotch && <section className="my-6 space-y-2"><h2>How to play</h2>
     <p>Start below 1 on a clear, level indoor floor. Step onto 1, then place one foot on each square of the next pair. Follow the numbers to 10 and walk back beside the sticker. Try small hops when comfortable.</p>
     <p>For Secret Stop, choose a number before starting. Freeze on that number, then continue to 10. Take turns choosing the next stop.</p>
     <Link className="underline" href="/play/hopscotch-peach-pop/">Explore four ways to play Hopscotch</Link></section>}
    {beep&&<section><h2>Inside the design</h2><p>A car, bus, train and airplane fill four sky-blue scenes for vertical, closed stair risers.</p>
-    <h3>What comes in the pack?</h3><p>Supplied piece count, sheet layout, accessories and packaging are awaiting confirmation. The four pictured designs show the artwork.</p>
-    <h3>Will it fit my stairs?</h3><p>Measure each vertical riser separately. Record its clear width and height and note handles, trim or curves. Panel dimensions and trim allowance need confirmation.</p>
-    <h3>How do I apply and clean it?</h3><p>Material, adhesive, compatible surfaces, installation, removal and cleaning instructions are awaiting confirmation for this design.</p></section>}
+    <h3>Will it fit my stairs?</h3><p>Measure each vertical riser separately. Record its clear width and height and note handles, trim or curves.</p></section>}
    <section aria-label="Planning help">{[
     ["Check your surface","Identify the surface and finish before ordering. For textured, freshly painted or damp surfaces, confirm suitability for this design first.","/materials"],
     ["How to measure",wallpaper?"Measure the full wall in several places. Enter its widest width and tallest height in your selected unit. Note doors and windows separately.":"Measure the clear area where the design will sit. Compare both dimensions with the product size, allowing for handles, trim and edges.","/how-to-measure"],
