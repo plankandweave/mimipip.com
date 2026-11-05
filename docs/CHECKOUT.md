@@ -21,7 +21,9 @@ One file: `src/brand/commerce/prices.json`. A design with no figure there is not
 
 To price a family: add it to `fixedInr` / `fixedUsd`, or set `indiaRateUnlisted` for the wallpapers with no India rate.
 
-`src/brand/commerce/print-map.json` (made by `scripts/gen-print-map.py`) names each design's print artwork. No artwork, no sale. Designs still in preview are left out until proofed.
+`src/brand/commerce/print-map.json` (made by `scripts/gen-print-map.py`) names each design's print artwork. No artwork, no sale. Designs still in preview are left out until proofed. A picture from this site is never a print file: the OS holds any order that names a file it has no record of. Masters live at `media.zyvorah.com/_print-masters/mimipip/`, listed in `src/brand/commerce/print-masters.json`, built by `scripts/masters/`; the table of every family is `docs/MIMIPIP_PRINT_MASTERS.md` in the OS repo.
+
+To sell a family that now has masters: price it in `prices.json`, and for a sticker or stair set add its `printWidthCm` / `printHeightCm` to the print map. A repeat also needs the site to send `placement.seamless.repeatWidthCm` from the master, which `order-payload.ts` does not do yet.
 
 ## Abroad
 

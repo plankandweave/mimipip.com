@@ -11,11 +11,9 @@ export type StoredCustomer = {
   name: string; email: string; phone: string; address: string; city: string;
   state: string; postcode: string; countryCode: string; country: string;
 };
-type Art = { art: string; material: 'paste' | 'self_adhesive'; materialSlug?: string };
+type Art = { art: string; material: 'paste' | 'self_adhesive'; materialSlug?: string; printWidthCm?: number; printHeightCm?: number };
 
 export const artFor = (slug: string) => (printMap as Record<string, Art>)[slug] ?? null;
-export const SITE = 'https://mimipip.com';
-const absolute = (u: string) => (u.startsWith('http') ? u : SITE + u);
 
 /** Rupees for each line. Abroad the rupee total is Razorpay's own figure, shared by
  *  each line's part of the bill, and the shares add back to it exactly. */
@@ -45,8 +43,9 @@ export function webOrderBody(o: { id: string; paymentId: string; amountInr: numb
       if (l.widthCm === null || l.heightCm === null) throw new Error('No size for ' + l.slug);
       return {
         lineRef: String(i + 1), brand: 'lorange',
-        designUrl: absolute(a.art), designName: l.name, orderedTitle: l.name, productHandle: l.slug,
-        widthMm: Math.round(l.widthCm * 10), heightMm: Math.round(l.heightCm * 10),
+        designUrl: a.art, designName: l.name, orderedTitle: l.name, productHandle: l.slug,
+        // A fixed piece prints at its master's size, which carries the white edge the cutter follows.
+        widthMm: Math.round((a.printWidthCm ?? l.widthCm) * 10), heightMm: Math.round((a.printHeightCm ?? l.heightCm) * 10),
         material: a.material, ...(a.materialSlug ? { materialSlug: a.materialSlug } : {}),
         qty: l.qty, lineTotalInr: inr[i],
         ...(l.ratePerSqft !== null && c.countryCode === 'IN' ? { catalogueRatePerSqft: l.ratePerSqft } : {}),

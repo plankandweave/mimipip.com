@@ -96,7 +96,7 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   assert.equal(body.customer.pincode, '411008'); assert.equal(body.customer.countryCode, 'IN'); assert.equal(body.orderRef, made.orderNumber);
   assert.equal(body.items[0].widthMm, 3000); assert.equal(body.items[0].heightMm, 2500); assert.equal(body.items[0].catalogueRatePerSqft, 200); assert.equal(body.items[0].materialSlug, 'smooth-matt');
   assert.match(body.items[0].designUrl, /^https:\/\/zyvorah\.com\//); assert.deepEqual(body.items[0].placement, { zoom: 1.5, cropX: .2, cropY: .3, flipH: false, flipV: false });
-  assert.equal(body.items[1].widthMm, 750); assert.equal(body.items[1].qty, 2); assert.equal(body.items[1].material, 'self_adhesive'); assert.equal(body.items[1].designUrl, 'https://mimipip.com/floor-play-images/hopscotch-peach-pop/art.png');
+  assert.equal(body.items[1].widthMm, 780); assert.equal(body.items[1].heightMm, 2630); assert.equal(body.items[1].qty, 2); assert.equal(body.items[1].material, 'self_adhesive'); assert.match(body.items[1].designUrl, /^https:\/\/media\.zyvorah\.com\/_print-masters\/mimipip\/hopscotch-peach-pop-[0-9a-f]{10}\.jpg$/);
   await h.pass(); await h.call('status'); assert.equal(h.posts.length, 1, 'a repeat never sends twice');
 });
 test('abroad: USD is charged and the OS gets Razorpay’s own rupee figure', async () => {
