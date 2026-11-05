@@ -10,6 +10,7 @@ import { BadgeIcon } from "@/components/BadgeIcon";
 import { WishlistButton } from "@/components/WishlistButton";
 import { cardCopy, familyChip, cardPrice } from "@/lib/card-copy";
 import { useCardMoney } from "@/lib/use-card-money";
+import { useMarket } from "@/components/MarketProvider";
 
 /** `href` overrides the product link — a size landing page sends the shopper
  *  to the product with that size already chosen. */
@@ -125,7 +126,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
           </span>
         ) : (
           <span className="absolute left-3 top-3 rounded-full bg-surface/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-slate opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW === "1" ? product.cardLabel : familyChip(product)}
+            {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW === "1" ? <>{product.cardLabel}<SalePrice sale={product.sale}/></> : familyChip(product)}
           </span>
         )}
       </div>
@@ -138,4 +139,15 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       </div>
     </Link>
   );
+}
+
+/** The price on a shop card, in the visitor's own currency. */
+function SalePrice({ sale }: { sale?: ProductCardData["sale"] }) {
+  const { market } = useMarket();
+  const india = market.countryCode === "IN";
+  const offer = india ? sale?.india : sale?.abroad;
+  if (!offer) return null;
+  const sign = india ? "₹" : "$";
+  const figure = offer.fixed ?? offer.rate;
+  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}</>;
 }

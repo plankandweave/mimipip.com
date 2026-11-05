@@ -1,3 +1,4 @@
+import {legacyPetalsDestination} from "@/brand/review/petals-legacy";
 import {find as findReview} from "@/brand/review/data";
 import {ReviewDetail} from "@/brand/review/pages";
 
@@ -6,7 +7,7 @@ import { JAIN_DESIGNS, JAIN_SHORT_RESPECT } from "@/content/jain-temples";
 import { isLorangeVendor, LORANGE_FAMILY_LINE, LORANGE_NAME, LORANGE_PATH } from "@/lib/lorange-kids";
 import { ShoppingJourney } from "@/components/ShoppingJourney";
 import { religiousIdentity, religionHref } from "@/lib/religion";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { FreightToPayNote } from "@/components/FreightBasis";
 import { isSampleableForPage } from "@/lib/queries";
 import Link from "next/link";
@@ -269,7 +270,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
   searchParams: Promise<{ market?: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);return {title:p?.name??'Design not found',description:p?.description};}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);return {title:p?.name??'Design not found',description:p?.description,...(p ? {alternates:{canonical:'https://mimipip.com/products/'+p.slug}} : {})};}
   const p = await getProductByHandle(handle, true);
   if (!p) return { title: "Product" };
 
@@ -348,10 +349,10 @@ export default async function ProductPage({
   searchParams,
 }: {
   params: Promise<{ handle: string }>;
-  searchParams: Promise<{ w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
+  searchParams: Promise<{ colourway?: string; w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
 }) {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);if(!p)notFound();return <ReviewDetail p={p}/>;}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));const p=findReview(handle);if(!p)notFound();return <ReviewDetail p={p}/>;}
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.

@@ -48,15 +48,19 @@ export function MegaMenu({
   label = "Shop",
   families,
   align = "start",
+  columns = false,
 }: {
   label?: string;
   families: MegaMenuFamily[];
   /** Which edge of the header container the panel card hugs. The panel itself
       always spans the container (see below); this only slides the card inside
       it, so a Shop button on the right of the bar gets a card under itself. */
+  columns?: boolean;
   align?: "start" | "end";
 }) {
   const [open, setOpen] = useState(false);
+  const pinned = useRef(false);
+  const trigger = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const show = () => {
@@ -66,15 +70,27 @@ export function MegaMenu({
   const hide = () => {
     closeTimer.current = setTimeout(() => setOpen(false), 120);
   };
-  const close = () => setOpen(false);
+  const close = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    pinned.current = false;
+    setOpen(false);
+  };
 
   return (
     /* Deliberately not `relative`: the panel below anchors to the header's page
        container instead, so it stays on screen at every width. It remains a DOM
        child here, so hover in/out still covers button and panel as one. */
-    <div onMouseEnter={show} onMouseLeave={hide}>
+    <div onPointerEnter={e=>{if(e.pointerType==="mouse") show()}}
+      onPointerLeave={e=>{if(e.pointerType==="mouse" && !pinned.current && !e.currentTarget.contains(document.activeElement)) hide()}}
+      onPointerDownCapture={e=>{if(e.pointerType==="mouse" && closeTimer.current) clearTimeout(closeTimer.current)}}
+      onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget)) close()}}
+      onKeyDown={e=>{if(e.key==="Escape" && open){e.preventDefault();close();trigger.current?.focus()}}}>
       <button
-        onClick={() => setOpen((v) => !v)}
+        ref={trigger}
+        onClick={() => {
+          if (pinned.current) close();
+          else {pinned.current = true; show()}
+        }}
         aria-expanded={open}
         className="flex items-center gap-1 whitespace-nowrap text-[0.82rem] font-medium text-slate transition-colors hover:text-charcoal"
       >
@@ -92,7 +108,12 @@ export function MegaMenu({
           {/* Five families deep, the panel is taller than a short laptop
               viewport — it scrolls inside itself rather than running off the
               bottom with Gift Cards unreachable. */}
-          <div className={`flex max-h-[calc(100vh-8rem)] max-w-[1080px] flex-col gap-6 overflow-y-auto rounded-[20px] border border-edge bg-surface p-6 shadow-xl ${align === "end" ? "ml-auto" : ""}`}>
+          {columns ? <nav aria-label="Shop options" className="grid max-h-[calc(100dvh-8rem)] grid-cols-4 gap-5 overflow-y-auto rounded-2xl border border-edge bg-surface p-5 shadow-xl">
+            {families.map(f=><section key={f.href} className="min-w-0"><Link className="font-semibold" href={f.href} onClick={close}>{f.title}</Link>
+              <ul className="mt-2 space-y-1">{f.items?.map(item=><li key={item.href}><Link prefetch={false} className="block break-words py-1 text-sm" href={item.href} onClick={close}>{item.label}</Link></li>)}</ul>
+            </section>)}
+            <div className="col-span-4 flex flex-col items-start gap-2 border-t pt-3"><Link href="/browse/concept" onClick={close}>Shop by Concept</Link><Link href="/browse/space" onClick={close}>Shop by Space</Link></div>
+          </nav> : <div className={`flex max-h-[calc(100vh-8rem)] max-w-[1080px] flex-col gap-6 overflow-y-auto rounded-[20px] border border-edge bg-surface p-6 shadow-xl ${align === "end" ? "ml-auto" : ""}`}>
             {families.map((f) => {
               const hasChildren = Boolean(f.groups?.length || f.items?.length);
               return (
@@ -154,7 +175,7 @@ export function MegaMenu({
                 </div>
               );
             })}
-          </div>
+          </div>}
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@
 
 import { useJourneyBrowseLinks, useCanvasJourney } from "./ShoppingJourney";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 
@@ -38,6 +38,9 @@ export function MobileNav({
    *  Wall art's href there is Canvas Art's real destination, never a guess. */
   browse: BrowseLink[];
 }) {
+  const trigger = useRef<HTMLButtonElement>(null);
+  const drawer = useRef<HTMLDivElement>(null);
+  const review = process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW === "1";
   const canvas = useCanvasJourney();
   const journeyDestinations = useJourneyBrowseLinks(journeys);
   const journeyLinks = useJourneyBrowseLinks(browse);
@@ -49,9 +52,10 @@ export function MobileNav({
   // lock body scroll while the drawer is open
   useEffect(() => {
     if (!open) return;
+    drawer.current?.querySelector<HTMLButtonElement>('[aria-label="Close menu"]')?.focus();
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => { document.body.style.overflow = prev; trigger.current?.focus(); };
   }, [open]);
 
   const close = () => setOpen(false);
@@ -64,7 +68,7 @@ export function MobileNav({
   return (
     <>
       <button
-        aria-label="Menu"
+        ref={trigger} aria-expanded={open} aria-label="Menu"
         onClick={() => setOpen(true)}
         className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-charcoal transition-colors hover:bg-wash lg:hidden"
       >
@@ -74,7 +78,15 @@ export function MobileNav({
       </button>
 
       {open && mounted && createPortal(
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div ref={drawer} role="dialog" aria-modal="true" aria-label="Shopping menu" className="fixed inset-0 z-[60] lg:hidden" onKeyDown={e=>{
+          if(e.key==="Escape") close();
+          if(e.key==="Tab"){
+            const controls=Array.from(e.currentTarget.querySelectorAll<HTMLElement>("a[href],button,summary,select,input")).filter(el=>el.getClientRects().length && !el.matches(":disabled"));
+            const first=controls[0],last=controls.at(-1);
+            if(e.shiftKey && document.activeElement===first){e.preventDefault();last?.focus()}
+            if(!e.shiftKey && document.activeElement===last){e.preventDefault();first?.focus()}
+          }
+        }}>
           <div className="absolute inset-0 bg-charcoal/40 backdrop-blur-sm" onClick={close} />
           <div className="absolute inset-y-0 left-0 flex w-[85%] max-w-sm flex-col bg-cloud shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-edge px-5">
@@ -105,7 +117,13 @@ export function MobileNav({
                   asked "how do I look around?" and found no answer, so the
                   answer now comes first, the same list as the rail under the
                   header. */}
-              <p className="caps mb-2 px-1 text-mist">Shop by</p>
+              {review ? <div className="flex flex-col">
+                {shop.map(f=><details key={f.href} className="border-b py-2"><summary className="cursor-pointer py-2 font-semibold">{f.title}</summary>
+                  <div className="flex flex-col items-start pl-3"><Link href={f.href} onClick={close} className="py-2">See all</Link>
+                    {f.items?.map(it=><Link key={it.href} href={it.href} onClick={close} prefetch={false} className="py-2">{it.label}</Link>)}
+                  </div></details>)}
+                {journeyLinks.filter(l=>!shop.some(f=>f.href===l.href)).map(l=><Link key={l.href} href={l.href} className="py-2" onClick={close}>{l.label}</Link>)}
+              </div> : <><p className="caps mb-2 px-1 text-mist">Shop by</p>
               <div className="mb-6 grid grid-cols-2 gap-2">
                 {journeyLinks.map((b) => (
                   <Link
@@ -120,6 +138,7 @@ export function MobileNav({
                   </Link>
                 ))}
               </div>
+              </>}
               {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW !== "1" && <>
               <Link
                 href="/mati"
@@ -215,7 +234,7 @@ export function MobileNav({
               </div>
 
               </>}
-              <p className="caps mt-8 mb-2 px-1 text-mist">Shop</p>
+              {!review && <><p className="caps mt-8 mb-2 px-1 text-mist">Shop</p>
               <div className="flex flex-col">
                 {shop.map((f) => {
                   return (
@@ -269,6 +288,7 @@ export function MobileNav({
                 })}
               </div>
 
+              </>}
               {/* H7: a first-time buyer's practical questions (measuring,
                   installing, delivery, returns) used to live only in the
                   footer, a long scroll down on a phone. */}

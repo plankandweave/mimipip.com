@@ -1,11 +1,11 @@
 export const guides: Record<string, [string, string[]]> = {
   materials: ["Will it suit my surface?", [
     "Start with the placement shown on the design page. A wall border, floor sticker and bathroom decal are three different uses. A room photograph illustrates the artwork and does not establish surface compatibility.",
-    "Note whether your surface is smooth or textured, painted or tiled, and whether it regularly gets wet. Match those details to the material and adhesive specification before ordering. Those specifications are still being confirmed."
+    "Note whether your surface is smooth or textured, painted or tiled, and whether it regularly gets wet. Tell us about anything unusual before you buy and we will help you choose."
   ]],
   installation: ["Planning installation and removal", [
     "Mark the intended position on a paper sketch. Note trim, sockets, doors and furniture so the design can be seen at the height you want.",
-    "Use the application and removal instructions supplied for the specific product and finish. Adhesive strength, suitability for wet areas and removal without damage are unconfirmed. For a rented room, check the finish and your landlord’s requirements before choosing an adhesive."
+    "Use the application and removal instructions supplied for the specific product and finish. For a rented room, check the finish and your landlord’s requirements before choosing an adhesive."
   ]],
   "how-to-measure": ["How to measure your space", [
     "For wallpaper, measure the wall width at the top, middle and bottom, then its height at both ends and the center. Record each measurement and its unit. Sketch windows, doors and trim in their actual positions.",
@@ -18,17 +18,27 @@ export const guides: Record<string, [string, string[]]> = {
   ]],
   faq: ["Shopping questions", [
     "How do I save a design? Tap its heart, then open Saved designs. The list stays in the same browser on this device. Tap the heart again to remove it.",
-    "How does the cart work? Choose your design, size and quantity, then add it to your cart. Your selections stay on this device. Where a price or size needs confirmation, the cart labels it. Saving a selection does not place an order.",
+    "How does the cart work? Choose your design, size and quantity, then add it to your cart. Your selections stay on this device until you check out. Your wall size sets the price, and delivery is included.",
     "Does a nursery or toddler label certify a product for that age? These labels organize decorating ideas. Check each product’s intended use, materials and instructions before choosing it."
   ]],
   "shipping-returns": ["Delivery and returns", [
-    "Orders are closed in the United States and India. There are no confirmed delivery charges, dispatch dates or return windows for these designs. Regional terms will accompany purchasable products."
+    "Delivery is included in your price, in India and abroad. Every wallpaper is made for you and delivered within 10 working days in India. Abroad, allow extra time for shipping and customs; any import duty or tax in your country is paid on delivery.",
+    "Cancellations: email us with your order number within 12 hours for a full refund, as long as production has not started. Once production starts, the order cannot be cancelled.",
+    "Returns: each piece is made to your size and cannot be resold, so we cannot accept returns for a change of mind. We print to the sizes you enter, so please measure carefully. Slight colour differences between your screen and the print are normal.",
+    "Damage or faults: if your order arrives damaged, email us within 48 hours of delivery with your order number and clear photos. For a print fault, tell us within 7 days of delivery. We will replace or reprint it at no cost, and where that is not possible, offer a refund."
   ]],
-  privacy: ["Privacy while browsing", ["Saved designs are stored in this browser on your device. Removing a saved design updates that local list. Clearing this site’s browser storage removes it."]],
-  terms: ["Using the catalogue", ["Browse designs and save ideas for your room. The catalogue does not accept orders or reserve stock. Dimensions described as nominal are planning references."]],
-  contact: ["Shopping help", ["Our support channel is being prepared. For help now, use the measuring, surface and installation guides below. To find a design again, search by its name or visit Saved designs."]],
-  us: ["Mimi Pip in the United States", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product sizes may be shown in centimeters. Divide by 2.54 for inches. For made-to-measure wallpaper, enter wall dimensions to see US pricing including delivery."]],
-  in: ["Mimi Pip in India", ["Explore nursery, toddler and kids’ designs and save favorites on this device. Product pages show available dimensions in centimeters. Check individual designs for INR pricing and delivery availability."]],
-  tools: ["Plan your room", ["Room-photo previews, image matching, custom uploads and sample orders are currently unavailable. Choose a palette using Shop by Color, pick a subject using Shop by Concept, or save designs to compare them later."]],
+  privacy: ["Privacy while browsing", ["Saved designs and your cart are stored in this browser on your device. When you buy, we use your name, contact details and address to make and deliver your order. Payments are handled by Razorpay; we do not see or keep your card details."]],
+  terms: ["Terms of sale", ["MimiPip is a brand of Magnitude Brands Private Limited. Prices are shown in rupees including GST in India and in US dollars abroad, and include delivery. Your order is confirmed once payment is received. Dimensions described as nominal are planning references."]],
+  trade: ["Retail buyer guide", [
+    "Explore made-to-measure wallpapers, wall borders, floor games, bathroom character stickers and stair stickers for nursery and children’s spaces. Use the collection links below to review designs and save the product page for each item on your shortlist.",
+    "Wallpaper prices use the wall dimensions entered on the product page. US and international wallpaper is US$60 per square foot including delivery. Select India to see available INR prices. Product pages show retail pricing. Email us for wholesale pricing and quantities.",
+    "The border design specifies a height of 15 cm and five 1 m sections. The three Hopscotch colourways have a nominal size of 75 × 260 cm and an India retail price of ₹3,999 each. For bathroom characters, check the individual design dimensions.",
+    "Sticker listings include only the stickers. Beds, furniture and props pictured in room renders illustrate placement. Flat previews show the design artwork.",
+    "For a retail enquiry, email us with the product names or links, your market and the quantities you are considering."
+  ]],
+  contact: ["Shopping help", ["Email Mimi Pip for help choosing a design or planning your room. Include the product name or link and your question."]],
+  us: ["Mimi Pip in the United States", ["Shop nursery, toddler and kids’ designs. Product sizes may be shown in centimeters. Divide by 2.54 for inches. For made-to-measure wallpaper, enter wall dimensions to see US pricing including delivery."]],
+  in: ["Mimi Pip in India", ["Shop nursery, toddler and kids’ designs. Product pages show available dimensions in centimeters. Enter your wall size on any wallpaper to see your price in rupees, including GST and delivery."]],
+  tools: ["Plan your room", ["Open a made-to-measure wallpaper, enter the width and height of your wall in your preferred unit, then choose Visualize my wall to adjust the crop. Choose See it in my room to place the design on a room photo or try the sample room."]],
   about: ["About Mimi Pip", ["Mimi Pip brings wallpapers, wall borders and stickers together for nurseries, bedrooms and play spaces. Explore by collection, color, concept, age or space."]]
 };

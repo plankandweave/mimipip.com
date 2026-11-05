@@ -18,12 +18,17 @@ export function withOfflineBrowserPolicy(response: Response): Response {
  return new Response(response.body, {status: response.status, statusText: response.statusText, headers});
 }
 
-// The only retained live transport is restricted to Razorpay order/payment operations.
-const paymentFetch = globalThis.fetch.bind(globalThis);
+// The only live transports: Razorpay's order/payment operations, and the OS's order door.
+const liveFetch = globalThis.fetch.bind(globalThis);
 export const razorpayTransport: typeof fetch = async (input, init) => {
  const url = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
  if (url.origin !== 'https://api.razorpay.com' || !/^\/v1\/(orders(?:\/order_[A-Za-z0-9]+(?:\/payments)?)?|payments\/pay_[A-Za-z0-9]+)$/.test(url.pathname)) throw new Error('Payment endpoint not allowed');
- return paymentFetch(input, {...init, redirect:'error'});
+ return liveFetch(input, {...init, redirect:'error'});
+};
+export const osTransport: typeof fetch = async (input, init) => {
+ const url = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
+ if (url.origin !== 'https://os.magnitudegroup.in' || url.pathname !== '/api/zyvorah/web-order') throw new Error('OS endpoint not allowed');
+ return liveFetch(input, {...init, redirect:'error'});
 };
 export function withCheckoutBrowserPolicy(response:Response):Response {
  const headers=new Headers(response.headers);

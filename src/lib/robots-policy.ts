@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/seo";
+const SITE_URL = "https://mimipip.com";
 
 // Served at /robots.txt (HTTP 200, text/plain). Public pages crawlable;
 // transactional/account/internal routes blocked; sitemap advertised.
@@ -10,6 +10,8 @@ import { SITE_URL } from "@/lib/seo";
 // so any group that forgot this list would quietly hand that bot the checkout
 // and the admin console.
 const PRIVATE_PATHS = [
+  "/choose-floor/",
+  "/payment-setup",
   "/cart",
   "/checkout",
   "/wishlist",

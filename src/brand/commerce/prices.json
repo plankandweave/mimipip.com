@@ -1,0 +1,11 @@
+{
+  "abroadWallpaperUsdPerSqft": 60,
+  "indiaRateUnlisted": null,
+  "indiaRateOverrides": {},
+  "fixedInr": {
+    "hopscotch-peach-pop": 3999,
+    "hopscotch-pastel-play": 3999,
+    "hopscotch-bold-adventure": 3999
+  },
+  "fixedUsd": {}
+}

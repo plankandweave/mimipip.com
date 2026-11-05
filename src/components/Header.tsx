@@ -1,4 +1,4 @@
-import {axes,label,options} from "@/brand/review/data";
+import {axes,shopAxes,browseHref,label,options} from "@/brand/review/data";
 import { JourneyLink } from "./ShoppingJourney";
 import Link from "next/link";
 import { unstable_rethrow } from "next/navigation";
@@ -214,7 +214,7 @@ export async function Header() {
     { label: "Moods", href: "/moods" },
   ];
 
-  const shopFamilies: MegaMenuFamily[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? axes.map(a=>({title:"Shop by "+label(a),href:"/browse/"+a,items:options(a).map(v=>({label:label(v),href:"/browse/"+a+"?value="+encodeURIComponent(v)}))})) : [
+  const shopFamilies: MegaMenuFamily[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? shopAxes.map(a=>({title:"Shop by "+label(a),href:"/browse/"+a,items:options(a).map(v=>({label:label(v),href:browseHref(a,v)}))})) : [
     // The menu opens on "Shop by" and its five columns. The artist launches
     // (TAASH, Nafas's Face Parade) lead its Collections column, and Shop
     // Concepts is the first column, so neither needs a row of its own here.
@@ -301,7 +301,7 @@ export async function Header() {
               secondarySection={{heading:"By Concepts",href:conceptsFor("homes"),items:homeConceptItems,seeAllLabel:"See all home concepts"}}
             />}
             <div className="hidden min-[900px]:block">
-              <MegaMenu families={shopFamilies} />
+              <MegaMenu families={shopFamilies} columns={process.env.MIMIPIP_LOCAL_REVIEW === "1"} />
             </div>
             <nav className="header-left-journeys hidden items-center gap-4 min-[1200px]:flex xl:gap-5">
               {(process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [{label:"Find a design",href:"/search"},{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : DESKTOP_JOURNEYS).map((journey) => (
@@ -383,7 +383,7 @@ export async function Header() {
         </div>
       </div>
       <StorefrontOnly>
-        <MobileBrowseRail links={browseLinks} lead={process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />} />
+        {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <MobileBrowseRail links={browseLinks} lead={<Concierge />} />}
       </StorefrontOnly>
     </ScrollHeader>
   );
