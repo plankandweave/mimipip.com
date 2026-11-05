@@ -137,7 +137,7 @@ export async function handleCommerce(request: Request, env: Env, transport: type
   const db = env.DB;
   if (path === '/api/checkout/unsent' && request.method === 'GET') {
     if (!env.ZYVORAH_WEBHOOK_TOKEN || request.headers.get('x-zyvorah-token') !== env.ZYVORAH_WEBHOOK_TOKEN) return json({ error: 'Not authorised' }, 401);
-    const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
+    const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,created_at,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
     return json({ unsent: rows.results });
   }
   // A price is the site's own arithmetic: showing one needs no payment keys.
