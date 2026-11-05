@@ -31,7 +31,7 @@ export const guides: Record<string, [string, string[]]> = {
   terms: ["Terms of sale", ["MimiPip is a brand of Magnitude Brands Private Limited. Prices are shown in rupees including GST in India and in US dollars abroad, and include delivery. Your order is confirmed once payment is received. Dimensions described as nominal are planning references."]],
   trade: ["Retail buyer guide", [
     "Explore made-to-measure wallpapers, wall borders, floor games, bathroom character stickers and stair stickers for nursery and children’s spaces. Use the collection links below to review designs and save the product page for each item on your shortlist.",
-    "Wallpaper prices use the wall dimensions entered on the product page. US and international wallpaper is US$60 per square foot including delivery. Select India to see available INR prices. Product pages show retail pricing. Email us for wholesale pricing and quantities.",
+    "Wallpaper prices use the wall dimensions entered on the product page. US and international wallpaper is US$10 per square foot including delivery. Select India to see available INR prices. Product pages show retail pricing. Email us for wholesale pricing and quantities.",
     "The border design specifies a height of 15 cm and five 1 m sections. The three Hopscotch colourways have a nominal size of 75 × 260 cm and an India retail price of ₹3,999 each. For bathroom characters, check the individual design dimensions.",
     "Sticker listings include only the stickers. Beds, furniture and props pictured in room renders illustrate placement. Flat previews show the design artwork.",
     "For a retail enquiry, email us with the product names or links, your market and the quantities you are considering."

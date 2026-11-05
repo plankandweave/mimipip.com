@@ -16,5 +16,6 @@ test("invalid quantities, invalid sizes and oversized merged selections are reje
  for(const qty of [0,1.5,-1,100])assert.throws(()=>addLine([],{...line,qty}));
  assert.throws(()=>addLine([{...line,qty:99}],line));
  assert.throws(()=>addLine([],{...line,dimensions:{width:0,height:90}}));
- assert.equal(wallpaperPrice({width:30.48,height:30.48}),60);
+ assert.equal(wallpaperPrice({width:30.48,height:30.48},10),200);
+ assert.equal(wallpaperPrice({width:300,height:250},10),807.29);
 });

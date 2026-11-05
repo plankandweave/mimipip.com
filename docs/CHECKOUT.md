@@ -14,7 +14,7 @@ One file: `src/brand/commerce/prices.json`. A design with no figure there is not
 
 | What | Figure | Source |
 |---|---|---|
-| Wallpaper abroad | US$60 per sq ft, delivery included | Roheena, 2 Nov 2026 |
+| Wallpaper abroad | US$10 per sq ft, delivery included | Roheena, 5 Nov 2026 (replaces US$60), at ₹50 per sq ft cost |
 | Wallpaper India | ₹200, ₹300 or ₹400 per sq ft by design | `sourceIndiaPricePerSqft`, the Zyvorah rate of each design; "retain India INR prices", Roheena, 2 Nov 2026 |
 | Hopscotch India | ₹3,999 including GST | product record |
 | Minimum | 20 sq ft billed; delivery free in India | Zyvorah's rule, carried over |

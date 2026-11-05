@@ -44,10 +44,10 @@ test('a wall is priced from the catalogue, billed at 20 sq ft at least', () => {
   const small = priceLine({ ...wall, widthCm: 100, heightCm: 100 }, 'IN'); assert.ok(!refused(small)); assert.equal(small.unitMinor, 400000);
   assert.equal(billedSqft(10, 10), 20);
 });
-test('abroad every wall is her US$60 a sq ft; in India the design keeps its own rate', () => {
-  assert.equal(ratePerSqft('almond-blossom', 'ABROAD'), 60);
+test('abroad every wall is her US$10 a sq ft; in India the design keeps its own rate', () => {
+  assert.equal(ratePerSqft('almond-blossom', 'ABROAD'), 10);
   assert.equal(ratePerSqft('nafas-spiral-bloom', 'IN'), 300);
-  const p = priceLine(wall, 'ABROAD'); assert.ok(!refused(p)); assert.equal(p.currency, 'USD'); assert.equal(p.unitMinor, wallMinor(60));
+  const p = priceLine(wall, 'ABROAD'); assert.ok(!refused(p)); assert.equal(p.currency, 'USD'); assert.equal(p.unitMinor, wallMinor(10));
 });
 test('Hopscotch is ₹3,999 in India; with no price abroad it is not sold there', () => {
   const p = priceLine(hop, 'IN'); assert.ok(!refused(p)); assert.equal(p.lineMinor, 799800); assert.equal(p.widthCm, 75);
