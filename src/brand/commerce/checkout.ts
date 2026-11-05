@@ -140,6 +140,18 @@ export async function handleCommerce(request: Request, env: Env, transport: type
     const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
     return json({ unsent: rows.results });
   }
+  // A price is the site's own arithmetic: showing one needs no payment keys.
+  if (path === '/api/checkout/quote' && request.method === 'POST') {
+    if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'Invalid request origin' }, 403);
+    try {
+      const raw = await request.text();
+      if (raw.length > 32768) return json({ error: 'Payload too large' }, 413);
+      const b = JSON.parse(raw);
+      const priced = priceCart(b.lines, String(b.countryCode ?? ''));
+      if ('refused' in priced) return json({ error: priced.refused }, 400);
+      return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
+    } catch { return json({ error: 'Check your cart and try again.' }, 400); }
+  }
   if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
   const call = provider(env, transport);
   try {
@@ -163,11 +175,6 @@ export async function handleCommerce(request: Request, env: Env, transport: type
     const raw = await request.text();
     if (raw.length > 32768) return json({ error: 'Payload too large' }, 413);
     const b = JSON.parse(raw);
-    if (path === '/api/checkout/quote') {
-      const priced = priceCart(b.lines, String(b.countryCode ?? ''));
-      if ('refused' in priced) return json({ error: priced.refused }, 400);
-      return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
-    }
     if (typeof b.token !== 'string' || !/^\w{64}$/.test(b.token)) return json({ error: 'Invalid checkout session' }, 400);
     const tokenHash = await digest(b.token);
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();

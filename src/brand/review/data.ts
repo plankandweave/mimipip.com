@@ -21,6 +21,8 @@ export const options=(axis:Axis) => {
   return [...new Set(shop.flatMap(p=>p[axis]??[]))].sort();
 };
 const shop=records.filter(p=>sellableAnywhere(p.slug));
+/** A collection page keeps all its designs; the shop lists only what can be bought. */
+export const collectionDesigns=(handle:string)=>records.filter(p=>p.collection.includes(handle));
 export const filter=(axis:Axis,value:string)=>shop.filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
 export const browseHref=(axis:Axis,value:string)=>axis==='collection'?'/collections/'+encodeURIComponent(value)+'/':'/browse/'+axis+'?value='+encodeURIComponent(value);
 export const card=(p:RecordData):ProductCardData=>({

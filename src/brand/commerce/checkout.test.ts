@@ -150,6 +150,15 @@ test('one session cannot pay for a different cart; a missing key keeps checkout 
   delete h.env.ZYVORAH_WEBHOOK_TOKEN;
   assert.equal((await h.call('create', { lines: [hop], customer: india, token: 'c'.repeat(64) })).status, 503);
 });
+test('a price can be shown before any payment key exists, but money cannot be taken', async () => {
+  const h = harness();
+  delete h.env.RAZORPAY_KEY_ID; delete h.env.RAZORPAY_KEY_SECRET;
+  const quote = await h.call('quote', { lines: [hop], countryCode: 'IN' });
+  assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 799800);
+  assert.equal((await h.call('quote', { lines: [hop], countryCode: 'US' })).status, 400);
+  assert.equal((await h.call('quote', { lines: [hop], countryCode: 'IN' }, 'https://evil.test')).status, 403);
+  assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 503);
+});
 test('webOrderBody refuses a line with no artwork rather than sending a blank', () => {
   assert.throws(() => webOrderBody({ id: 'MP-1', paymentId: 'pay_1', amountInr: 1, lines: [{ slug: 'no-such', name: 'x', qty: 1, lineMinor: 1, widthCm: 1, heightCm: 1, ratePerSqft: null, billedSqft: null }], customer: india as any }));
 });
