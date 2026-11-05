@@ -1,0 +1,549 @@
+{
+ "bear-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 21.7,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2563
+  ],
+  "sha256": "20f2ccb3f1579ae0966a2fe44ff41207352ff3e6e73bb84f42c9ec002a3727d6",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/bear-bathroom-buddy-20f2ccb3f1.png"
+ },
+ "beep-beep-stair-sticker-set": {
+  "cut": "four strips",
+  "family": "stairs",
+  "printHeightCm": 68.5,
+  "printWidthCm": 46.4,
+  "px": [
+   5480,
+   8091
+  ],
+  "sha256": "d99b8584d3eb9d61ae1f033a1c6fda4f6cf25d5c943c1da6f187a7f56516119b",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/beep-beep-stair-sticker-set-d99b8584d3.png"
+ },
+ "bunny-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 25.0,
+  "printWidthCm": 23.3,
+  "px": [
+   2752,
+   2953
+  ],
+  "sha256": "c29294dff9c88f27550f5d68e1e6d33ab0b364561de345c714f12b3fcdcbc873",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/bunny-bathroom-buddy-c29294dff9.png"
+ },
+ "cat-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 22.1,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2610
+  ],
+  "sha256": "c98e66b4966d8b523c610e6c6ab1d2a92bf53a8a4b3a17e95c5e47dd00624962",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/cat-bathroom-buddy-c98e66b496.png"
+ },
+ "colour-create-balloons": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "69f4dba4b7bc091fcc1a469313287fc924fa327d9820ac78448d547af4f78f2d",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-balloons-69f4dba4b7.png"
+ },
+ "colour-create-bunny-garden": {
+  "family": "colour-create",
+  "px": [
+   24300,
+   16200
+  ],
+  "sha256": "f623442e63832cc1890ac09ca168ad07fbc97c9c5fc43fce76d3acca2c6d44ca",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-bunny-garden-f623442e63.png"
+ },
+ "colour-create-castle": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "de51b3a06801cb65a956c9f96198d184b05c447594fea2f04db0e77d6c711e0d",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-castle-de51b3a068.png"
+ },
+ "colour-create-dinosaurs": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "b82eb0ba7dcf1755e2659248c91921953fda9f82e31e994fd391bee90f965e41",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-dinosaurs-b82eb0ba7d.png"
+ },
+ "colour-create-farm": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "28fb66b57eca8229396c2eb61f06b0893b13d68a6e423bfdc4c343a0f435a984",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-farm-28fb66b57e.png"
+ },
+ "colour-create-little-town": {
+  "family": "colour-create",
+  "px": [
+   24300,
+   16200
+  ],
+  "sha256": "7ad50015f49759c370363adc5ec1d412eb206b06aba360630ea8947424e3b4d1",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-little-town-7ad50015f4.png"
+ },
+ "colour-create-ocean": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "064d4b152249a1b0288c7b90012188216864cf67479f8365281a6efc1878bfec",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-ocean-064d4b1522.png"
+ },
+ "colour-create-pastel-blue": {
+  "family": "colour-create",
+  "px": [
+   3543,
+   3543
+  ],
+  "repeatWidthCm": 60,
+  "sha256": "4ab0adb87c715a621af846fc5bbb62bde1eae391ace301eca961773170110e95",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-pastel-blue-4ab0adb87c.png"
+ },
+ "colour-create-safari": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "feee884affc4d934dd3dba07b88f47a4cc94614a3df17bd493a53ce839308cf7",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-safari-feee884aff.png"
+ },
+ "colour-create-space": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "f82a963f85c9e65878d2f301e136c225a303685619ba0a06ffe55fe78f2b83f9",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-space-f82a963f85.png"
+ },
+ "colour-create-vehicles": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "b98b9868f73458c5ab46ff74eeaa293f51e4eff4d7a2b533eb38152801b9111c",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-vehicles-b98b9868f7.png"
+ },
+ "colour-create-woodland": {
+  "family": "colour-create",
+  "px": [
+   1536,
+   1024
+  ],
+  "sha256": "9f2553f7566f316892e141ad3c6a3dc07ee8ef20657648374e1478fb5759278b",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/colour-create-woodland-9f2553f756.png"
+ },
+ "dino-days-stair-sticker-set": {
+  "cut": "four strips",
+  "family": "stairs",
+  "printHeightCm": 68.5,
+  "printWidthCm": 46.4,
+  "px": [
+   5480,
+   8091
+  ],
+  "sha256": "82b06952fc35a281c316d0492bb14637115d35a5cdbf0f9261d3bc0fc39ae706",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/dino-days-stair-sticker-set-82b06952fc.png"
+ },
+ "forest-friends-stair-sticker-set": {
+  "cut": "four strips",
+  "family": "stairs",
+  "printHeightCm": 68.5,
+  "printWidthCm": 46.4,
+  "px": [
+   5480,
+   8091
+  ],
+  "sha256": "c6617890507c355a6257b671f3dab79c36474310f4818a597b426f172d8da372",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/forest-friends-stair-sticker-set-c661789050.png"
+ },
+ "fox-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 22.1,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2610
+  ],
+  "sha256": "de7392562d22eab898b580f44e464845a183f98e2732056c12d5e7e88cef98ff",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/fox-bathroom-buddy-de7392562d.png"
+ },
+ "frog-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 21.9,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2587
+  ],
+  "sha256": "0115c3da4595dacc55b3fe4e4e6278359cf0fa538b7598251ec8b4db0a5f8dc3",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/frog-bathroom-buddy-0115c3da45.png"
+ },
+ "hopscotch-bold-adventure": {
+  "cut": "along the grey guide",
+  "family": "hopscotch",
+  "printHeightCm": 263.0,
+  "printWidthCm": 78.0,
+  "px": [
+   6142,
+   20709
+  ],
+  "sha256": "afe7f14f08bd340f901700dbe1170726a267fdccb58bccdda0ea443f27e324ac",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-bold-adventure-afe7f14f08.jpg"
+ },
+ "hopscotch-pastel-play": {
+  "cut": "along the grey guide",
+  "family": "hopscotch",
+  "printHeightCm": 263.0,
+  "printWidthCm": 78.0,
+  "px": [
+   6142,
+   20709
+  ],
+  "sha256": "9fd3e8fefd321a89681ce05cf7863d5f7535247af9260f8c2327dcf99ac4488c",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-pastel-play-9fd3e8fefd.jpg"
+ },
+ "hopscotch-peach-pop": {
+  "cut": "along the grey guide",
+  "family": "hopscotch",
+  "printHeightCm": 263.0,
+  "printWidthCm": 78.0,
+  "px": [
+   6142,
+   20709
+  ],
+  "sha256": "f17342ce4703715676e2b5bd042cb42525ab6420f881f6deeabea2ec602c0652",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-peach-pop-f17342ce47.jpg"
+ },
+ "koala-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 16.5,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   1949
+  ],
+  "sha256": "4f59ab1921dcc59b8e3caa4e3d2106f999a35d3053c3ad38e8265def61d8144c",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/koala-bathroom-buddy-4f59ab1921.png"
+ },
+ "lion-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 22.3,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2634
+  ],
+  "sha256": "a0f8c03a767aca8fcb54d03c45251ed3b8036b181bbbb473a5d39a15a2d09d12",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/lion-bathroom-buddy-a0f8c03a76.png"
+ },
+ "ocean-pals-stair-sticker-set": {
+  "cut": "four strips",
+  "family": "stairs",
+  "printHeightCm": 68.5,
+  "printWidthCm": 46.4,
+  "px": [
+   5480,
+   8091
+  ],
+  "sha256": "281fa5e37930aa4c6228d0f06c8bd0d0e6efc270468433afc56c94d77d5bf1b5",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/ocean-pals-stair-sticker-set-281fa5e379.png"
+ },
+ "owl-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 20.1,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2374
+  ],
+  "sha256": "9bf26bb555e288133f602f634e980813802e2ba24531085b4316a7b34023c565",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/owl-bathroom-buddy-9bf26bb555.png"
+ },
+ "panda-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 21.6,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2551
+  ],
+  "sha256": "3efd9ad3a97cf972137152e5f0b4320fd69e999342916d947ff4ebcdba7055e3",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/panda-bathroom-buddy-3efd9ad3a9.png"
+ },
+ "piglet-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 21.3,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   2516
+  ],
+  "sha256": "44e78e3214eb01d9591bc8c4ccdc333466eb3983b69d14b82bbd14bfb24df0be",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/piglet-bathroom-buddy-44e78e3214.png"
+ },
+ "polka-dots-blue-bubble": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "d7320e93e7ec25fd317305e5a771aeb01cfc9b16682daed9307d77a4351424a7",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-blue-bubble-d7320e93e7.png"
+ },
+ "polka-dots-blue-button": {
+  "family": "polka-dots",
+  "px": [
+   5023,
+   3708
+  ],
+  "repeatWidthCm": 63.8,
+  "sha256": "be53a101426ed67508337c01095fdbc3c268de5a6f0996bc4a3eee4c61eaf3bb",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-blue-button-be53a10142.png"
+ },
+ "polka-dots-blue-pebble": {
+  "family": "polka-dots",
+  "px": [
+   4711,
+   3680
+  ],
+  "repeatWidthCm": 59.8,
+  "sha256": "4756966e5683279714f1f9b55b2b4096b850ecffafb60263e4e054204247e4fd",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-blue-pebble-4756966e56.png"
+ },
+ "polka-dots-blue-pop": {
+  "family": "polka-dots",
+  "px": [
+   4962,
+   3273
+  ],
+  "repeatWidthCm": 63.0,
+  "sha256": "2d896d66cc35d73616d1e456a36bfd7028227ae3794615451295a76e266a5be3",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-blue-pop-2d896d66cc.png"
+ },
+ "polka-dots-citrus-bubbles": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "45506c0614e087e295f7a451dc9cfb1a6f30fc4a462aeb0f891d43838279cfeb",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-citrus-bubbles-45506c0614.png"
+ },
+ "polka-dots-cloud-dots": {
+  "family": "polka-dots",
+  "px": [
+   4876,
+   3286
+  ],
+  "repeatWidthCm": 61.9,
+  "sha256": "c9e7aa4be8fb1811c32532ca091717698bd9149697ee09da48509370ca7e0169",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-cloud-dots-c9e7aa4be8.png"
+ },
+ "polka-dots-cloud-sprinkle": {
+  "family": "polka-dots",
+  "px": [
+   4962,
+   3273
+  ],
+  "repeatWidthCm": 63.0,
+  "sha256": "fef7c12e0e28e9e2dec1a6efc51514cf9908f8322d5b500f9185fb162e369caa",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-cloud-sprinkle-fef7c12e0e.png"
+ },
+ "polka-dots-confetti-dance": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "7a13942d9a60e895afd79e103f666b1345f01dada97a253ff3c5e9aa98ddbe04",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-confetti-dance-7a13942d9a.png"
+ },
+ "polka-dots-happy-dots": {
+  "family": "polka-dots",
+  "px": [
+   5199,
+   5199
+  ],
+  "repeatWidthCm": 66.0,
+  "sha256": "96a6deb712cc4383f1be290c58a1c9029e1a914a0272e99ae52d05a81579509c",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-happy-dots-96a6deb712.png"
+ },
+ "polka-dots-little-carnival": {
+  "family": "polka-dots",
+  "px": [
+   5090,
+   3431
+  ],
+  "repeatWidthCm": 64.6,
+  "sha256": "2c44cb7b061573daa9c147ebffedb3b59a4d4c3bc72128be43a22a836e6afc7c",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-little-carnival-2c44cb7b06.png"
+ },
+ "polka-dots-orange-pop": {
+  "family": "polka-dots",
+  "px": [
+   4718,
+   3423
+  ],
+  "repeatWidthCm": 59.9,
+  "sha256": "48135482ee05d501195c44220f59d686d8ab197a0074a55e1244f081ba214708",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-orange-pop-48135482ee.png"
+ },
+ "polka-dots-sky-sprinkles": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "82570e6bf0d1066c29dc735d424cdf178772cba84aba341285712c9dc8cc3fd9",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sky-sprinkles-82570e6bf0.png"
+ },
+ "polka-dots-sunbeam-on-blue": {
+  "family": "polka-dots",
+  "px": [
+   4720,
+   3510
+  ],
+  "repeatWidthCm": 59.9,
+  "sha256": "00df14f890c6136a2802699fdb413d6e4f13d33e9c051889b35cd2111af1d41e",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunbeam-on-blue-00df14f890.png"
+ },
+ "polka-dots-sunny-bubbles": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "5d977fec0b2a4ec6c6d34dca9f69857f98ff093e64a0cf209e4e3a38e1bccf53",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunny-bubbles-5d977fec0b.png"
+ },
+ "polka-dots-sunny-button": {
+  "family": "polka-dots",
+  "px": [
+   4516,
+   3757
+  ],
+  "repeatWidthCm": 57.3,
+  "sha256": "dfd6861e2c9af142f2a82a99d41579688678dbb185cb92a8994186fa44bfc2df",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunny-button-dfd6861e2c.png"
+ },
+ "polka-dots-sunny-sky": {
+  "family": "polka-dots",
+  "px": [
+   4672,
+   3893
+  ],
+  "repeatWidthCm": 59.3,
+  "sha256": "69749079226b8b6c43a25ae4fd78120b1c20ee4527ab009e1d30b57e1c7b385e",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunny-sky-6974907922.png"
+ },
+ "polka-dots-sunshine-spots": {
+  "family": "polka-dots",
+  "px": [
+   4742,
+   3522
+  ],
+  "repeatWidthCm": 60.2,
+  "sha256": "d9c3f43348833edb1ad4a8a53935d32a33cdeb11efb194ac25b8e4b406651cef",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunshine-spots-d9c3f43348.png"
+ },
+ "polka-dots-sunshine-sprinkle": {
+  "family": "polka-dots",
+  "px": [
+   4223,
+   3847
+  ],
+  "repeatWidthCm": 53.6,
+  "sha256": "237ee3e542892599fcd8d47dc55a377f52f6e2e89abb8d069bf10aff2e996084",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-sunshine-sprinkle-237ee3e542.png"
+ },
+ "polka-dots-tangerine-sky": {
+  "family": "polka-dots",
+  "px": [
+   4464,
+   3830
+  ],
+  "repeatWidthCm": 56.7,
+  "sha256": "02865803ccd3800da58c603f1314096911ad1f3b0e82aee833ec508269f4b512",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-tangerine-sky-02865803cc.png"
+ },
+ "polka-dots-tangerine-tumble": {
+  "family": "polka-dots",
+  "px": [
+   4962,
+   3273
+  ],
+  "repeatWidthCm": 63.0,
+  "sha256": "94847cf21c6392ffe1c10bfc62ad01dba10993bf04cdd375965d53ce00cd1e79",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-tangerine-tumble-94847cf21c.png"
+ },
+ "polka-dots-tiny-confetti": {
+  "family": "polka-dots",
+  "px": [
+   4962,
+   3273
+  ],
+  "repeatWidthCm": 63.0,
+  "sha256": "1e1d7b49680e3832a503ea7719359d0d0cb595d52fb2916ed851632ab6ad61f3",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-tiny-confetti-1e1d7b4968.png"
+ },
+ "puppy-bathroom-buddy": {
+  "cut": "round the face",
+  "family": "buddies",
+  "printHeightCm": 16.6,
+  "printWidthCm": 25.0,
+  "px": [
+   2953,
+   1961
+  ],
+  "sha256": "ad855b4d0a5e276d5d68520bc4800f96903325528db243034dfeae9ab2cd94cd",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/puppy-bathroom-buddy-ad855b4d0a.png"
+ },
+ "space-club-stair-sticker-set": {
+  "cut": "four strips",
+  "family": "stairs",
+  "printHeightCm": 68.5,
+  "printWidthCm": 46.4,
+  "px": [
+   5480,
+   8091
+  ],
+  "sha256": "1e64831f47cf96cad1015dea7daddf6ef83ed8821bf308f6b5d283f631da562b",
+  "url": "https://media.zyvorah.com/_print-masters/mimipip/space-club-stair-sticker-set-1e64831f47.png"
+ }
+}

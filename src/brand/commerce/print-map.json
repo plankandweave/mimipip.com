@@ -170,16 +170,22 @@
 "materialSlug": "smooth-matt"
 },
 "hopscotch-bold-adventure": {
-"art": "/floor-play-images/hopscotch-bold-adventure/art.png",
-"material": "self_adhesive"
+"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-bold-adventure-afe7f14f08.jpg",
+"material": "self_adhesive",
+"printHeightCm": 263.0,
+"printWidthCm": 78.0
 },
 "hopscotch-pastel-play": {
-"art": "/floor-play-images/hopscotch-pastel-play/art.png",
-"material": "self_adhesive"
+"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-pastel-play-9fd3e8fefd.jpg",
+"material": "self_adhesive",
+"printHeightCm": 263.0,
+"printWidthCm": 78.0
 },
 "hopscotch-peach-pop": {
-"art": "/floor-play-images/hopscotch-peach-pop/art.png",
-"material": "self_adhesive"
+"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-peach-pop-f17342ce47.jpg",
+"material": "self_adhesive",
+"printHeightCm": 263.0,
+"printWidthCm": 78.0
 },
 "iris-lagoon": {
 "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99281663-7907-4cd2-87e0-f79973f57969.png",
