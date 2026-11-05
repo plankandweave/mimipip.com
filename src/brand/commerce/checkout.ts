@@ -1,92 +1,231 @@
-/** MimiPip-only payment boundary. No legacy customer or order services are enabled. */
-export const peachPop={slug:'hopscotch-peach-pop',name:'Peach Pop',pricePaise:399900,widthCm:75,heightCm:260};
-export function tubeDimensions(widthCm:number,heightCm:number){
- if(!Number.isFinite(widthCm)||!Number.isFinite(heightCm)||Math.min(widthCm,heightCm)<=0)throw new Error('Invalid product dimensions');
- return {lengthCm:Math.min(widthCm,heightCm)+2,widthCm:8.3,heightCm:8.3};
+/**
+ * MimiPip's checkout. The server owns every figure: it re-prices the cart from
+ * prices.ts, takes the money through Razorpay, proves the capture against
+ * Razorpay's own records, and hands the paid order to the OS. D1 keeps only the
+ * payment record; the OS order is the order.
+ *
+ * Trigger: a cart. Check: signature, then the captured payment and the paid
+ * order fetched again from Razorpay. Record: mimipip_orders. A paid order that
+ * has not reached the OS is retried on the cron and listed at /unsent.
+ */
+import { marketOf, currencyOf, priceLine, refused, onSale, type Priced } from './prices';
+import { artFor, webOrderBody, type StoredCustomer, type StoredLine } from './order-payload';
+
+type Statement = {
+  bind(...values: unknown[]): Statement;
+  first<T = any>(): Promise<T | null>;
+  run(): Promise<{ meta: { changes: number } }>;
+  all<T = any>(): Promise<{ results: T[] }>;
+};
+export type Env = {
+  MIMIPIP_CHECKOUT_ENABLED?: string;
+  DB?: { prepare(sql: string): Statement };
+  RAZORPAY_KEY_ID?: string; RAZORPAY_KEY_SECRET?: string; RAZORPAY_WEBHOOK_SECRET?: string;
+  OS_BASE_URL?: string; ZYVORAH_WEBHOOK_TOKEN?: string;
+};
+type Order = {
+  id: string; token_hash: string; status: string; amount: number; shipping: number;
+  currency: 'INR' | 'USD'; lines: string; lines_hash: string | null; customer: string;
+  razorpay_order_id: string | null; payment_id: string | null; amount_inr: number | null;
+  os_status: string; os_error: string | null; os_tries: number; created_at: number; updated_at: number;
+};
+
+const encoder = new TextEncoder();
+const hex = (v: ArrayBuffer) => Array.from(new Uint8Array(v), n => n.toString(16).padStart(2, '0')).join('');
+export async function digest(v: string) { return hex(await crypto.subtle.digest('SHA-256', encoder.encode(v))); }
+export async function validSignature(secret: string, message: string, signature: string) {
+  if (!/^[a-f0-9]{64}$/.test(signature)) return false;
+  const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+  return crypto.subtle.verify('HMAC', key, Uint8Array.from(signature.match(/../g)!, s => parseInt(s, 16)), encoder.encode(message));
 }
-export type Fulfilment={availability?:'stock_or_jit';stock?:number;qcReleased?:boolean;weightKg:number;pickupPin:string;warehouse:string;batch:string;quote:{destinationPin:string;shippingPaise:number;reference:string;expiresAt:number;carrier:'Delhivery'}};
-export function fulfilment(raw:string|undefined):Fulfilment|null{
- try{const f=JSON.parse(raw||'null');
- if(!f||(f.availability!=='stock_or_jit'&&(!Number.isSafeInteger(f.stock)||f.stock<=0||f.qcReleased!==true))||!Number.isFinite(f.weightKg)||f.weightKg<=0||!/^\d{6}$/.test(f.pickupPin)||!f.warehouse||!f.batch||f.quote?.carrier!=='Delhivery'||!/^\d{6}$/.test(f.quote.destinationPin)||!Number.isSafeInteger(f.quote.shippingPaise)||f.quote.shippingPaise<0||!f.quote.reference||!Number.isFinite(f.quote.expiresAt)||f.quote.expiresAt<=Date.now())return null;
- return f;
- }catch{return null;}
+const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
+
+const text = (v: unknown, min: number, max: number): v is string => typeof v === 'string' && v.trim().length >= min && v.length <= max;
+export function validCustomer(c: any): boolean {
+  if (!c || !text(c.name, 2, 100) || !text(c.email, 5, 254) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) return false;
+  if (!text(c.address, 8, 500) || !text(c.city, 2, 80) || !text(c.state, 2, 80) || typeof c.countryCode !== 'string' || !/^[A-Z]{2}$/.test(c.countryCode)) return false;
+  if (c.countryCode === 'IN') return /^[6-9]\d{9}$/.test(c.phone ?? '') && /^[1-9]\d{5}$/.test(c.postcode ?? '');
+  return /^\+?[0-9 ()-]{7,19}$/.test(c.phone ?? '') && text(c.postcode, 2, 20);
 }
-type Statement={bind(...values:unknown[]):Statement;first<T=any>():Promise<T|null>;run():Promise<{meta:{changes:number}}>};
-type Env={MIMIPIP_INDIA_CHECKOUT_ENABLED?:string;DB?:{prepare(sql:string):Statement};RAZORPAY_KEY_ID?:string;RAZORPAY_KEY_SECRET?:string;RAZORPAY_WEBHOOK_SECRET?:string;PEACH_POP_FULFILMENT_JSON?:string};
-type Order={id:string;token_hash:string;status:string;amount:number;shipping:number;customer:string;fulfilment:string;razorpay_order_id:string|null;payment_id:string|null;created_at:number;updated_at:number};
-const encoder=new TextEncoder();
-const hex=(v:ArrayBuffer)=>Array.from(new Uint8Array(v),n=>n.toString(16).padStart(2,'0')).join('');
-export async function digest(v:string){return hex(await crypto.subtle.digest('SHA-256',encoder.encode(v)));}
-export async function validSignature(secret:string,message:string,signature:string){
- if(!/^[a-f0-9]{64}$/.test(signature))return false;
- const key=await crypto.subtle.importKey('raw',encoder.encode(secret),{name:'HMAC',hash:'SHA-256'},false,['verify']);
- return crypto.subtle.verify('HMAC',key,Uint8Array.from(signature.match(/../g)!,s=>parseInt(s,16)),encoder.encode(message));
+
+/** Razorpay's rupee figure for what was captured: the amount itself in India,
+ *  its stated rupee base abroad. No rate of ours; absent, the order waits. */
+export function capturedInr(p: any, o: Pick<Order, 'currency'>): number | null {
+  if (o.currency === 'INR') return p.amount / 100;
+  return p.base_currency === 'INR' && Number.isSafeInteger(p.base_amount) && p.base_amount > 0 ? p.base_amount / 100 : null;
 }
-const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
-export function validCustomer(c:any){return c&&typeof c.name==='string'&&c.name.trim().length>=2&&c.name.length<=100&&typeof c.email==='string'&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)&&c.email.length<=254&&typeof c.phone==='string'&&/^[6-9]\d{9}$/.test(c.phone)&&typeof c.address==='string'&&c.address.trim().length>=8&&c.address.length<=500&&typeof c.city==='string'&&c.city.length>=2&&c.city.length<=100&&typeof c.state==='string'&&c.state.length>=2&&c.state.length<=100&&typeof c.pin==='string'&&/^[1-9]\d{5}$/.test(c.pin);}
-export function paymentMatches(p:any,o:Order){return p?.status==='captured'&&p.captured===true&&p.order_id===o.razorpay_order_id&&p.amount===o.amount&&p.currency==='INR'&&p.amount_refunded===0&&/^pay_[A-Za-z0-9]+$/.test(p.id);}
-export async function handleCommerce(request:Request,env:Env,transport:typeof fetch):Promise<Response>{
- const path=new URL(request.url).pathname.replace(/\/$/,'');
- const f=fulfilment(env.PEACH_POP_FULFILMENT_JSON);
- const configured=!!(env.MIMIPIP_INDIA_CHECKOUT_ENABLED==='1'&&env.DB&&env.RAZORPAY_KEY_ID&&env.RAZORPAY_KEY_SECRET&&env.RAZORPAY_WEBHOOK_SECRET);
- if(path==='/api/india-checkout/readiness'&&request.method==='GET')return json({product:peachPop,packing:tubeDimensions(75,260),available:configured&&!!f,availability:f?.availability||'stock',quote:f?{pin:f.quote.destinationPin,shippingPaise:f.quote.shippingPaise,expiresAt:f.quote.expiresAt}:null,message:configured&&f?'':f?'Checkout is being connected. Payment is not open yet.':'Delivery and availability are being confirmed. Payment is not open yet.'});
- if(!env.DB||!env.RAZORPAY_KEY_ID||!env.RAZORPAY_KEY_SECRET)return json({error:'Checkout is temporarily unavailable.'},503);
- const db=env.DB;
- async function provider(path:string,body?:unknown){
-  const res=await transport('https://api.razorpay.com/v1/'+path,{method:body?'POST':'GET',headers:{Authorization:'Basic '+btoa(env.RAZORPAY_KEY_ID+':'+env.RAZORPAY_KEY_SECRET),'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(15000),redirect:'error'});
-  if(!res.ok)throw new Error('Payment provider unavailable');return res.json() as Promise<any>;
- }
- async function confirm(o:Order,p:any){
-  if(!paymentMatches(p,o))return false;
-  const ro=await provider('orders/'+o.razorpay_order_id);
-  if(ro.status!=='paid'||ro.amount!==o.amount||ro.currency!=='INR'||ro.amount_paid!==o.amount)return false;
-  await db.prepare("UPDATE mimipip_orders SET status='paid', payment_id=?, updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id,Date.now(),o.id).run();return true;
- }
- try{
-  if(path==='/api/india-checkout/webhook'&&request.method==='POST'){
-   if(!env.RAZORPAY_WEBHOOK_SECRET)return json({error:'Webhook not configured'},503);
-   const raw=await request.text();if(raw.length>65536)return json({error:'Payload too large'},413);
-   if(!await validSignature(env.RAZORPAY_WEBHOOK_SECRET,raw,request.headers.get('x-razorpay-signature')||''))return json({error:'Invalid signature'},401);
-   const event=JSON.parse(raw);const p=event.payload?.payment?.entity;
-   if(p?.order_id){const o=await db.prepare('SELECT * FROM mimipip_orders WHERE razorpay_order_id=?').bind(p.order_id).first<Order>();if(o&&event.event==='payment.captured')await confirm(o,p);}
-   return json({received:true});
+export function paymentMatches(p: any, o: Pick<Order, 'razorpay_order_id' | 'amount' | 'currency'>) {
+  return p?.status === 'captured' && p.captured === true && p.order_id === o.razorpay_order_id && p.amount === o.amount
+    && p.currency === o.currency && p.amount_refunded === 0 && /^pay_[A-Za-z0-9]+$/.test(p.id);
+}
+
+function cleanPlacement(p: any): StoredLine['placement'] {
+  if (!p) return undefined;
+  const { zoom, cropX, cropY } = p;
+  if (![zoom, cropX, cropY].every(n => typeof n === 'number' && Number.isFinite(n)) || zoom < 1 || zoom > 8 || cropX < 0 || cropX > 1 || cropY < 0 || cropY > 1) return undefined;
+  return { zoom, cropX, cropY, flipH: !!p.flipH, flipV: !!p.flipV };
+}
+
+/** Prices a cart for a country, or says why it cannot be sold there. */
+export function priceCart(lines: unknown, countryCode: string):
+  { lines: (Priced & { placement?: StoredLine['placement'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
+  if (!Array.isArray(lines) || !lines.length || lines.length > 50) return { refused: 'Your cart is empty.' };
+  const market = marketOf(countryCode);
+  const out = [];
+  for (const raw of lines as any[]) {
+    const slug = String(raw?.slug ?? '');
+    if (!artFor(slug) || !onSale(slug, market)) return { refused: 'One design in your cart cannot be delivered to this country. Please remove it.' };
+    const priced = priceLine({ slug, qty: raw.qty, widthCm: raw.widthCm, heightCm: raw.heightCm }, market);
+    if (refused(priced)) return priced;
+    out.push({ ...priced, placement: cleanPlacement(raw.placement) });
   }
-  if(request.method!=='POST')return json({error:'Method not allowed'},405);
-  if(request.headers.get('origin')!==new URL(request.url).origin)return json({error:'Invalid request origin'},403);
-  if(!request.headers.get('content-type')?.startsWith('application/json'))return json({error:'JSON required'},415);
-  const raw=await request.text();if(raw.length>8192)return json({error:'Payload too large'},413);const b=JSON.parse(raw);
-  if(typeof b.token!=='string'||!/^\w{64}$/.test(b.token))return json({error:'Invalid checkout session'},400);
-  const tokenHash=await digest(b.token);
-  let o=await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
-  if(path==='/api/india-checkout/create'){
-   if(!o){
-    if(!f||!env.RAZORPAY_WEBHOOK_SECRET||env.MIMIPIP_INDIA_CHECKOUT_ENABLED!=='1')return json({error:'Delivery and stock must be confirmed before payment.'},409);
-    if(b.slug!==peachPop.slug||b.quantity!==1||!validCustomer(b.customer)||b.customer.pin!==f.quote.destinationPin)return json({error:'Check the delivery address and product selection.'},400);
-    const customer={name:b.customer.name.trim(),email:b.customer.email.trim(),phone:b.customer.phone,address:b.customer.address.trim(),city:b.customer.city.trim(),state:b.customer.state.trim(),pin:b.customer.pin};
-    const id='MP-'+crypto.randomUUID();const now=Date.now();
-    // A single conditional insert prevents simultaneous shoppers overselling the confirmed batch.
-    // Reservations are conservative: ambiguous provider failures are never automatically released.
-    const r=await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,customer,fulfilment,created_at,updated_at) SELECT ?,?,'creating',?,?,?,?,?,? WHERE ? = 'stock_or_jit' OR (SELECT COUNT(*) FROM mimipip_orders WHERE json_extract(fulfilment,'$.batch')=? AND status!='cancelled') < ?")
-     .bind(id,tokenHash,peachPop.pricePaise+f.quote.shippingPaise,f.quote.shippingPaise,JSON.stringify(customer),JSON.stringify({...f,packing:tubeDimensions(75,260)}),now,now,f.availability||'stock',f.batch,f.stock||0).run();
-    if(!r.meta.changes)return json({error:'This batch is currently reserved. Please try later.'},409);
-    o=(await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
-    const ro=await provider('orders',{amount:o.amount,currency:'INR',receipt:id.replaceAll('-','').slice(0,40),notes:{brand:'MimiPip',mimipip_order_id:id,sku:peachPop.slug}});
-    if(!/^order_[A-Za-z0-9]+$/.test(ro.id)||ro.amount!==o.amount||ro.currency!=='INR')throw new Error('Invalid provider order');
-    await db.prepare("UPDATE mimipip_orders SET razorpay_order_id=?,status='pending',updated_at=? WHERE id=?").bind(ro.id,Date.now(),id).run();o.razorpay_order_id=ro.id;o.status='pending';
-   }
-   if(o.status==='creating')return json({error:'Your payment session is being checked. Please do not create another order.'},409);
-   if(o.status==='paid')return json({paid:true,orderNumber:o.id});
-   if(o.status!=='pending')return json({error:'This order cannot be paid.'},409);
-   return json({keyId:env.RAZORPAY_KEY_ID,orderId:o.razorpay_order_id,amount:o.amount,currency:'INR',orderNumber:o.id,customer:JSON.parse(o.customer)});
+  return { lines: out, totalMinor: out.reduce((s, l) => s + l.lineMinor, 0), currency: currencyOf(market) };
+}
+
+const countryName = (code: string) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code; } catch { return code; } };
+
+function provider(env: Env, transport: typeof fetch) {
+  return async (path: string, body?: unknown) => {
+    const res = await transport('https://api.razorpay.com/v1/' + path, {
+      method: body ? 'POST' : 'GET',
+      headers: { Authorization: 'Basic ' + btoa(env.RAZORPAY_KEY_ID + ':' + env.RAZORPAY_KEY_SECRET), 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!res.ok) throw new Error('Payment provider unavailable');
+    return res.json() as Promise<any>;
+  };
+}
+
+/** Hands one paid order to the OS. The OS is idempotent per order and line, so a repeat is safe. */
+export async function sendToOs(o: Order, env: Env, db: NonNullable<Env['DB']>, osFetch: typeof fetch): Promise<boolean> {
+  if (o.status !== 'paid' || o.os_status === 'sent') return o.os_status === 'sent';
+  const fail = async (why: string) => {
+    await db.prepare('UPDATE mimipip_orders SET os_error=?,os_tries=os_tries+1,updated_at=? WHERE id=?').bind(why.slice(0, 500), Date.now(), o.id).run();
+    return false;
+  };
+  if (o.amount_inr === null) return fail('Razorpay gave no rupee figure for this payment.');
+  if (!env.ZYVORAH_WEBHOOK_TOKEN) return fail('The OS token is not set on this site.');
+  let body;
+  try { body = webOrderBody({ id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
+  catch (e) { return fail((e as Error).message); }
+  try {
+    const res = await osFetch((env.OS_BASE_URL || 'https://os.magnitudegroup.in') + '/api/zyvorah/web-order', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-zyvorah-token': env.ZYVORAH_WEBHOOK_TOKEN }, body: JSON.stringify(body),
+    });
+    if (!res.ok) return fail(`The OS answered ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  } catch (e) { return fail('The OS could not be reached: ' + (e as Error).message); }
+  await db.prepare("UPDATE mimipip_orders SET os_status='sent',os_error=NULL,os_sent_at=?,updated_at=? WHERE id=?").bind(Date.now(), Date.now(), o.id).run();
+  return true;
+}
+
+async function confirm(o: Order, p: any, env: Env, db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>, osFetch: typeof fetch) {
+  if (!paymentMatches(p, o)) return false;
+  const ro = await call('orders/' + o.razorpay_order_id);
+  if (ro.status !== 'paid' || ro.amount !== o.amount || ro.currency !== o.currency || ro.amount_paid !== o.amount) return false;
+  await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, capturedInr(p, o), Date.now(), o.id).run();
+  const fresh = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
+  await sendToOs(fresh, env, db, osFetch);
+  return true;
+}
+
+export const checkoutReady = (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED === '1' && env.DB && env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET && env.RAZORPAY_WEBHOOK_SECRET && env.ZYVORAH_WEBHOOK_TOKEN);
+
+export async function handleCommerce(request: Request, env: Env, transport: typeof fetch, osFetch: typeof fetch): Promise<Response> {
+  const path = new URL(request.url).pathname.replace(/\/$/, '');
+  if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: checkoutReady(env) });
+  if (!env.DB) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+  const db = env.DB;
+  if (path === '/api/checkout/unsent' && request.method === 'GET') {
+    if (!env.ZYVORAH_WEBHOOK_TOKEN || request.headers.get('x-zyvorah-token') !== env.ZYVORAH_WEBHOOK_TOKEN) return json({ error: 'Not authorised' }, 401);
+    const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
+    return json({ unsent: rows.results });
   }
-  if(!o)return json({error:'Order not found'},404);
-  if(path==='/api/india-checkout/verify'){
-   if(b.razorpay_order_id!==o.razorpay_order_id||!/^pay_[A-Za-z0-9]+$/.test(b.razorpay_payment_id||'')||!await validSignature(env.RAZORPAY_KEY_SECRET,o.razorpay_order_id+'|'+b.razorpay_payment_id,b.razorpay_signature||''))return json({error:'Payment verification failed.'},400);
-   await confirm(o,await provider('payments/'+b.razorpay_payment_id));
-  }else if(path==='/api/india-checkout/status'){
-   if(o.razorpay_order_id){const ps=await provider('orders/'+o.razorpay_order_id+'/payments');for(const p of ps.items||[])if(paymentMatches(p,o)){await confirm(o,p);break;}}
-  }else return json({error:'Not found'},404);
-  o=(await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
-  return json({paid:o.status==='paid',orderNumber:o.id,amount:o.amount,shipping:o.shipping,currency:'INR',product:peachPop.name,customer:JSON.parse(o.customer),message:o.status==='paid'?'Payment received. Your order is confirmed.':'Payment has not yet been confirmed. If debited, check again before paying.'});
- }catch{return json({error:'We could not complete this step. Please retry checking the same order; do not pay again if already debited.'},503);}
+  if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+  const call = provider(env, transport);
+  try {
+    if (path === '/api/checkout/webhook' && request.method === 'POST') {
+      if (!env.RAZORPAY_WEBHOOK_SECRET) return json({ error: 'Webhook not configured' }, 503);
+      const raw = await request.text();
+      if (raw.length > 65536) return json({ error: 'Payload too large' }, 413);
+      if (!await validSignature(env.RAZORPAY_WEBHOOK_SECRET, raw, request.headers.get('x-razorpay-signature') || '')) return json({ error: 'Invalid signature' }, 401);
+      const event = JSON.parse(raw);
+      const p = event.payload?.payment?.entity;
+      if (p?.order_id && event.event === 'payment.captured') {
+        const o = await db.prepare('SELECT * FROM mimipip_orders WHERE razorpay_order_id=?').bind(p.order_id).first<Order>();
+        // The webhook only names the order: the money is read again from Razorpay.
+        if (o) await confirm(o, await call('payments/' + p.id), env, db, call, osFetch);
+      }
+      return json({ received: true });
+    }
+    if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+    if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'Invalid request origin' }, 403);
+    if (!request.headers.get('content-type')?.startsWith('application/json')) return json({ error: 'JSON required' }, 415);
+    const raw = await request.text();
+    if (raw.length > 32768) return json({ error: 'Payload too large' }, 413);
+    const b = JSON.parse(raw);
+    if (path === '/api/checkout/quote') {
+      const priced = priceCart(b.lines, String(b.countryCode ?? ''));
+      if ('refused' in priced) return json({ error: priced.refused }, 400);
+      return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
+    }
+    if (typeof b.token !== 'string' || !/^\w{64}$/.test(b.token)) return json({ error: 'Invalid checkout session' }, 400);
+    const tokenHash = await digest(b.token);
+    let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
+    if (path === '/api/checkout/create') {
+      if (!checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+      if (!validCustomer(b.customer)) return json({ error: 'Check your delivery details.' }, 400);
+      const priced = priceCart(b.lines, b.customer.countryCode);
+      if ('refused' in priced) return json({ error: priced.refused }, 400);
+      const linesHash = await digest(JSON.stringify(priced.lines));
+      if (o && o.status === 'pending' && o.lines_hash !== linesHash) return json({ error: 'Your cart changed. Please try again.', renew: true }, 409);
+      if (!o) {
+        const c = b.customer;
+        const customer: StoredCustomer = { name: c.name.trim(), email: c.email.trim(), phone: c.phone.trim(), address: c.address.trim(), city: c.city.trim(), state: c.state.trim(), postcode: c.postcode.trim(), countryCode: c.countryCode, country: countryName(c.countryCode) };
+        const id = 'MP-' + crypto.randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase();
+        const now = Date.now();
+        await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,'{}',?,?)")
+          .bind(id, tokenHash, priced.totalMinor, priced.currency, JSON.stringify(priced.lines), linesHash, JSON.stringify(customer), now, now).run();
+        const ro = await call('orders', { amount: priced.totalMinor, currency: priced.currency, receipt: id, payment: { capture: 'automatic', capture_options: { refund_speed: 'normal' } }, notes: { brand: 'MimiPip', mimipip_order_id: id } });
+        if (!/^order_[A-Za-z0-9]+$/.test(ro.id) || ro.amount !== priced.totalMinor || ro.currency !== priced.currency) throw new Error('Invalid provider order');
+        await db.prepare("UPDATE mimipip_orders SET razorpay_order_id=?,status='pending',updated_at=? WHERE id=?").bind(ro.id, Date.now(), id).run();
+        o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
+      }
+      if (o.status === 'creating') return json({ error: 'Your payment session is being checked. Please do not pay again.' }, 409);
+      if (o.status === 'paid') return json({ paid: true, orderNumber: o.id });
+      if (o.status !== 'pending') return json({ error: 'This order cannot be paid.' }, 409);
+      return json({ keyId: env.RAZORPAY_KEY_ID, orderId: o.razorpay_order_id, amount: o.amount, currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
+    }
+    if (!o) return json({ error: 'Order not found' }, 404);
+    if (path === '/api/checkout/verify') {
+      if (b.razorpay_order_id !== o.razorpay_order_id || !/^pay_[A-Za-z0-9]+$/.test(b.razorpay_payment_id || '') || !await validSignature(env.RAZORPAY_KEY_SECRET, o.razorpay_order_id + '|' + b.razorpay_payment_id, b.razorpay_signature || '')) return json({ error: 'Payment verification failed.' }, 400);
+      await confirm(o, await call('payments/' + b.razorpay_payment_id), env, db, call, osFetch);
+    } else if (path === '/api/checkout/status') {
+      if (o.status === 'pending' && o.razorpay_order_id) {
+        const ps = await call('orders/' + o.razorpay_order_id + '/payments');
+        for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, env, db, call, osFetch); break; }
+      }
+    } else return json({ error: 'Not found' }, 404);
+    o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
+    return json({
+      paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, currency: o.currency,
+      lines: JSON.parse(o.lines).map((l: StoredLine) => ({ name: l.name, qty: l.qty, lineMinor: l.lineMinor })),
+      customer: JSON.parse(o.customer),
+      message: o.status === 'paid' ? 'Payment received. Your order is confirmed.' : 'Payment has not been confirmed yet. If you were charged, please check again before paying.',
+    });
+  } catch { return json({ error: 'We could not complete this step. Please check this order again; do not pay twice if you were charged.' }, 503); }
+}
+
+/** Every few minutes: pending payments are asked of Razorpay, paid orders are offered to the OS again. */
+export async function sweep(env: Env, transport: typeof fetch, osFetch: typeof fetch) {
+  if (!env.DB || !env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return;
+  const db = env.DB, call = provider(env, transport), cutoff = Date.now() - 5 * 60_000;
+  const pending = await db.prepare("SELECT * FROM mimipip_orders WHERE status='pending' AND razorpay_order_id IS NOT NULL AND created_at<? AND created_at>? ORDER BY created_at LIMIT 25").bind(cutoff, Date.now() - 3 * 864e5).all<Order>();
+  for (const o of pending.results) {
+    try {
+      const ps = await call('orders/' + o.razorpay_order_id + '/payments');
+      for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, env, db, call, osFetch); break; }
+    } catch { /* asked again on the next pass */ }
+  }
+  const unsent = await db.prepare("SELECT * FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 25").bind().all<Order>();
+  for (const o of unsent.results) await sendToOs(o, env, db, osFetch);
 }
