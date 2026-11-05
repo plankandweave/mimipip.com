@@ -121,7 +121,10 @@ test('the OS being down loses nothing: the sweep delivers it, /unsent lists it t
   const row = h.db.prepare('select os_status,os_error,os_tries from mimipip_orders').get();
   assert.equal(row.os_status, 'waiting'); assert.match(row.os_error, /503/); assert.equal(row.os_tries, 1);
   const list = (t?: string) => handleCommerce(new Request('https://mimipip.com/api/checkout/unsent', { headers: t ? { 'x-zyvorah-token': t } : {} }), h.env, h.transport, h.osFetch);
-  assert.equal((await list()).status, 401); assert.equal((await (await list('os-token')).json()).unsent.length, 1);
+  assert.equal((await list()).status, 401);
+  const waiting = (await (await list('os-token')).json()).unsent;
+  assert.equal(waiting.length, 1);
+  assert.equal(typeof waiting[0].created_at, 'number', 'retries move updated_at, so the OS alarm must count from created_at');
   h.setOs(200); await sweep(h.env, h.transport, h.osFetch);
   assert.equal(h.db.prepare('select os_status from mimipip_orders').get().os_status, 'sent'); assert.equal((await (await list('os-token')).json()).unsent.length, 0);
 });
