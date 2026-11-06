@@ -5,6 +5,12 @@ const key="mimipip.design-cart.v1";
 export const validQuantity=(n:number)=>Number.isInteger(n)&&n>=1&&n<=99;
 export const validLength=(n:number)=>Number.isFinite(n)&&n>0&&n<=100000;
 export function wallpaperPrice(d:Dimensions, rate:number){return Math.round(Math.max(d.width*d.height/929.0304,20)*rate*100)/100}
+/** A cart line as the server prices it. The browser's own figures are never sent. */
+export const linePayload=(l:Line)=>({
+ slug:l.slug,qty:l.qty,
+ ...(l.dimensions?{widthCm:l.dimensions.width,heightCm:l.dimensions.height}:{}),
+ ...(l.crop?{placement:{zoom:l.crop.zoom,cropX:l.crop.offsetX,cropY:l.crop.offsetY,flipH:l.crop.flipH,flipV:l.crop.flipV}}:{}),
+});
 export function clearCart(){localStorage.removeItem(key);window.dispatchEvent(new Event("mimipip-cart"));}
 function validLine(l:Line){
  return l&&typeof l.slug==="string"&&typeof l.name==="string"&&typeof l.size==="string"&&validQuantity(l.qty)

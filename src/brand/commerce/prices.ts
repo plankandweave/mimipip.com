@@ -75,6 +75,8 @@ export function priceLine(input: { slug: string; qty: number; widthCm?: number; 
   return { slug: r.slug, name: r.name, qty: input.qty, currency, unitMinor, lineMinor: unitMinor * input.qty, widthCm: r.widthCm ?? null, heightCm: r.heightCm ?? null, ratePerSqft: null, billedSqft: null };
 }
 
+export const nameOf = (slug: string) => bySlug.get(slug)?.name ?? 'This design';
+
 /** Is this design for sale in this market? The shop filters on the same answer. */
 export function onSale(slug: string, market: Market): boolean {
   const r = bySlug.get(slug);
