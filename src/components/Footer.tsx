@@ -5,6 +5,7 @@ import { useCanvasJourney } from "./ShoppingJourney";
 import { SHIKHA_LAUNCH_ENABLED } from "@/lib/customer-service-flag";
 import Link from "next/link";
 import { NewsletterForm } from "./NewsletterForm";
+import { HearFromUsFirst } from "./HearFromUsFirst";
 import { INSTAGRAM_URL, PINTEREST_URL, YOUTUBE_URL } from "@/lib/seo";
 
 const COLS: { title: string; links: { label: string; href: string }[] }[] = [
@@ -145,7 +146,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
           <p className="mt-3 max-w-xs text-sm text-slate">
             {brand.description}
           </p>
-          {!disconnected && <NewsletterForm />}
+          <div className="mt-5 text-sm">{disconnected ? <HearFromUsFirst source="footer" /> : <NewsletterForm />}</div>
           <div className="mt-5 flex gap-4 text-sm text-slate">
             {INSTAGRAM_URL && <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-charcoal">
               Instagram

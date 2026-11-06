@@ -74,7 +74,7 @@
   --color-slate: #525252;
   --color-mist: #9CA3AF;
   --color-edge: #EEEBE5;
-  --color-wash: #F5F3EE;
+  --color-wash: #FFF9ED;
   /* A step card has to read as a panel, not as the page. --color-wash sits
      ~2% off white and vanished against the product column; this is the
      surface for "do this next" blocks so the numeral has something to sit on. */

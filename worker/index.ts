@@ -3,6 +3,7 @@ import {publishedSitemapXml} from "../src/brand/review/published-sitemap";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {handleCommerce,sweep,type Env as CheckoutEnv} from '../src/brand/commerce/checkout';
+import {handleSignup} from '../src/brand/commerce/signup';
 import {razorpayTransport,osTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
@@ -33,6 +34,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
   try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv,razorpayTransport,osTransport));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
  }
+ if(p==='/api/signup'||p==='/api/signup/leave')return withOfflineBrowserPolicy(await handleSignup(request,env as Parameters<typeof handleSignup>[1]));
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(!['GET','HEAD'].includes(request.method))return offline();
