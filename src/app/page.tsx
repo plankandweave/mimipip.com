@@ -78,6 +78,7 @@ import { LaunchTeaser } from "@/components/LaunchTeaser";
 import { getLaunches, getLaunchCollection, getTeaserImages } from "@/lib/launch-queries";
 import { resolveHomepageLaunch, sliderHandles, teaserKicker } from "@/lib/launch";
 import { launchCopyFor } from "@/lib/launch-copy";
+import { HearFromUsFirst } from "@/components/HearFromUsFirst";
 import { filter as reviewFilter, discoveryAxes as reviewAxes, label as reviewLabel, card as reviewCard } from "@/brand/review/data";
 import { istMidnight } from "@/lib/ist";
 import { MarketMoney, MarketPricingNote } from "@/components/MarketMoney";
@@ -192,6 +193,7 @@ const HERO_SLIDES = 3;
     {rows.map(([title,key])=><Unroll key={key} variant="settle"><section className="container-x py-10"><div className="mb-6 flex items-end justify-between"><h2 className="mt-2 text-3xl lg:text-4xl">{title}</h2><Link href={'/browse/collection?value='+key}>See all →</Link></div><div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">{reviewFilter('collection',key).slice(0,4).map(p=><ProductCard key={p.id} product={reviewCard(p)}/>)}</div></section></Unroll>)}
     <InRealHomesSection />
     <Reveal><section className="container-x py-20"><h2 className="text-3xl lg:text-4xl">Find your look</h2><div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">{reviewAxes.map((a,i)=><SpaceTile key={a} href={'/browse/'+a} tile={{slug:a,label:'Shop by '+reviewLabel(a),tease:['Meet the design families.','Start with a favorite shade.','Follow an animal, a story or a theme.','From newborn nurseries to school-age rooms.','Choose the corner you are decorating.'][i],image:'/review/assets/'+['sage-meadow-front-v2', 'discovery-color-v2', 'discovery-concept-v2', 'discovery-age-v3', 'sand-and-seed-front-v3'][i]+'.webp',portrait:true}}/>)}</div></section></Reveal>
+    <section className="my-10 bg-[#99CFE5] py-14"><div className="container-x"><HearFromUsFirst source="home" /></div></section>
     <Reveal><section className="container-x pb-16"><h2 className="text-3xl">Printed for your wall</h2><p>Every wallpaper is printed to your wall’s size. Enter your measurements on any design to see your price. Delivery is included, in India and abroad.</p></section></Reveal>
     <Reveal><section className="container-x pb-6"><h2 className="text-2xl">Designs for shared places</h2><Link href="/commercial">Commercial projects</Link> · <Link href="/trade">Trade and partners</Link></section></Reveal></div>
   }
