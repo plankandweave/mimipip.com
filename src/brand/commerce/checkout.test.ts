@@ -162,6 +162,10 @@ test('a price can be shown before any payment key exists, but money cannot be ta
   assert.equal((await h.call('quote', { lines: [hop], countryCode: 'IN' }, 'https://evil.test')).status, 403);
   assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 503);
 });
+test('a design that cannot be bought is named, so the shopper knows which to remove', () => {
+  const r = priceCart([{ slug: 'sage-meadow', qty: 1 }], 'US');
+  assert.ok('refused' in r); assert.match(r.refused, /Sage Meadow/);
+});
 test('webOrderBody refuses a line with no artwork rather than sending a blank', () => {
   assert.throws(() => webOrderBody({ id: 'MP-1', paymentId: 'pay_1', amountInr: 1, lines: [{ slug: 'no-such', name: 'x', qty: 1, lineMinor: 1, widthCm: 1, heightCm: 1, ratePerSqft: null, billedSqft: null }], customer: india as any }));
 });

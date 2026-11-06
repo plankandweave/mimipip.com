@@ -6,7 +6,7 @@ import {DesignVisualizer} from "./DesignVisualizer";
 import {RoomVisualizer} from "./RoomVisualizer";
 const ignoreMeta=()=>{};
 import games from "../../floor-games/products.json";
-import {readLines,saveLines,addLine,wallpaperPrice,type Line} from "./design-cart-store";
+import {readLines,saveLines,addLine,wallpaperPrice,linePayload,type Line} from "./design-cart-store";
 import type {Sale} from "@/brand/commerce/sale";
 export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,floorArtwork,sku}:{slug:string;name:string;width:number|null;height:number|null;custom:boolean;wallpaper:boolean;art?:string|null;sale:Sale;floorArtwork?:string;sku?:string}){
  const {market}=useMarket();
@@ -43,15 +43,37 @@ export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,f
  {art&&ready&&mode==="size"&&<section><DesignVisualizer imageUrl={art} imageAlt={name} wallWidthCm={wallWidth} wallHeightCm={wallHeight} {...crop} heading="Visualize my wall" onChange={setCrop} onImageMeta={ignoreMeta}/><button type="button" onClick={()=>show(null)}>Close wall preview</button></section>}
  {art&&ready&&mode==="room"&&<RoomVisualizer open imageUrl={art} imageAlt={name} wallWidthCm={wallWidth} wallHeightCm={wallHeight} wallLabel="Your wall" initial={payload??null} onClose={()=>show(null)} onApply={c=>{setCrop({offsetX:c.offsetX,offsetY:c.offsetY,zoom:c.zoom,flipH:!!c.flipH,flipV:!!c.flipV});show("size")}}/>}</>;
 }
+type Priced={lineMinor:number;currency:"INR"|"USD"};
+type Quote=Priced|{refused:string};
+async function quoteLine(line:Line,countryCode:string):Promise<Quote>{
+ try{
+  const r=await fetch("/api/checkout/quote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lines:[linePayload(line)],countryCode})});
+  const d=await r.json();
+  return r.ok?{lineMinor:d.totalMinor,currency:d.currency}:{refused:d.error||"This design cannot be bought right now."};
+ }catch{return {refused:"We could not check this price. Please refresh the page."}}
+}
+function LinePrice({quote}:{quote?:Quote}){
+ if(!quote)return <p>Checking the price…</p>;
+ return "refused" in quote?<p>{quote.refused}</p>:<p>{money(quote.currency,quote.lineMinor/100)}</p>;
+}
 function money(currency:string,amount:number){return new Intl.NumberFormat("en",{style:"currency",currency}).format(amount)}
 export function DesignCart(){
+ const {market}=useMarket();
  const [lines,set]=useState<Line[]>([]),[error,E]=useState("");
+ /* Every line is priced by the server for the shopper's country: a figure saved on this device may be old. */
+ const [quotes,setQuotes]=useState<Quote[]|null>(null);
+ useEffect(()=>{
+  if(!lines.length){setQuotes([]);return;}
+  let live=true;
+  setQuotes(null);
+  Promise.all(lines.map(line=>quoteLine(line,market.countryCode))).then(q=>{if(live)setQuotes(q)});
+  return()=>{live=false};
+ },[lines,market.countryCode]);
+ const refusals=(quotes??[]).filter(q=>"refused" in q).length;
+ const priced=(quotes??[]).filter((q):q is Priced=>"lineMinor" in q);
  useEffect(()=>{const refresh=()=>{try{set(readLines());E("")}catch{E("Your saved selection could not be read.")}};refresh();window.addEventListener("storage",refresh);window.addEventListener("pageshow",refresh);window.addEventListener("mimipip-cart",refresh);return()=>{window.removeEventListener("storage",refresh);window.removeEventListener("pageshow",refresh);window.removeEventListener("mimipip-cart",refresh)}},[]);
  function change(next:Line[]){try{saveLines(next);set(next)}catch{E("Your change could not be saved.")}}
  return <main className="container-x space-y-5 py-10"><h1>Your cart</h1>{!lines.length&&<p>Your cart is empty.</p>}{lines.map((l,i)=><article className="space-y-2 border-b py-4" key={JSON.stringify([l.slug,l.size,l.currency,l.crop])}><h2>{l.name}</h2>{l.sku && <p>SKU {l.sku}</p>}{l.artworkUrl === "/floor-play-images/"+l.slug+"/art.png" && <img src={l.artworkUrl} alt={l.name+" flat artwork"} width={96} height={96} className="object-contain"/>}{l.slug.startsWith("hopscotch-")&&<label>Colourway <select value={l.slug} onChange={e=>{const game=games.find(g=>g.slug===e.target.value);if(game)try{change(addLine(lines.filter((_,j)=>j!==i),{...l,slug:game.slug,name:game.title,amount:game.price_inr}))}catch{E("Check your quantity before combining colourways.")}}}>{games.filter(g=>g.slug.startsWith("hopscotch-")).map(g=><option key={g.slug} value={g.slug}>{g.colourway}</option>)}</select></label>}<p>{l.size}</p>{l.stickersOnly&&<p>Stickers only. Furniture in room images is for illustration.</p>}
  {l.dimensions&&<form onSubmit={e=>{e.preventDefault();const fields=new FormData(e.currentTarget);const d={width:Number(fields.get("width")),height:Number(fields.get("height"))};try{change(addLine(lines.filter((_,j)=>j!==i),{...l,dimensions:d,crop:l.crop?{...l.crop,wallWidthCm:d.width,wallHeightCm:d.height}:undefined,size:d.width+" × "+d.height+" cm",amount:l.rate?wallpaperPrice(d,l.rate):l.amount}))}catch{E("Check the dimensions and quantity.")}}}>
- {(["width","height"] as const).map(field=><label key={field}>{field} (cm) <input name={field} type="number" step=".01" min="10" max="3000" required defaultValue={l.dimensions![field]}/></label>)}<button>Update size</button></form>}{l.amount!==null&&<p>Unit price {money(l.currency,l.amount)} · Line total {money(l.currency,l.amount*l.qty)}</p>}<label>Quantity <select value={l.qty} onChange={e=>change(lines.map((x,j)=>j===i?{...x,qty:Number(e.target.value)}:x))}>{Array.from({length:99},(_,n)=><option key={n}>{n+1}</option>)}</select></label> <button onClick={()=>change(lines.filter((_,j)=>i!==j))}>Remove {l.name}</button></article>)}{lines.length>0&&<section aria-label="Cart subtotal"><h2>Your total</h2>{(["INR","USD"] as const).map(currency=>{
- const priced=lines.filter(line=>line.currency===currency&&line.amount!==null);
- return priced.length?<p key={currency}>Subtotal {money(currency,priced.reduce((sum,line)=>sum+Math.round(line.amount!*100)*line.qty,0)/100)}</p>:null;
- })}</section>}<p role="status">{error}</p>{lines.length>0&&<a className="btn btn-primary inline-block" href="/checkout/">Checkout</a>} <a href="/browse/collection">Continue shopping</a></main>
+ {(["width","height"] as const).map(field=><label key={field}>{field} (cm) <input name={field} type="number" step=".01" min="10" max="3000" required defaultValue={l.dimensions![field]}/></label>)}<button>Update size</button></form>}<LinePrice quote={quotes?.[i]}/><label>Quantity <select value={l.qty} onChange={e=>change(lines.map((x,j)=>j===i?{...x,qty:Number(e.target.value)}:x))}>{Array.from({length:99},(_,n)=><option key={n}>{n+1}</option>)}</select></label> <button onClick={()=>change(lines.filter((_,j)=>i!==j))}>Remove {l.name}</button></article>)}{priced.length>0&&<section aria-label="Cart subtotal"><h2>Your total</h2><p>{money(priced[0].currency,priced.reduce((sum,q)=>sum+q.lineMinor,0)/100)} · delivery included</p></section>}<p role="status">{error}</p>{refusals>0&&<p>Remove the {refusals===1?"design":"designs"} marked above to check out.</p>}{quotes!==null&&lines.length>0&&!refusals&&<a className="btn btn-primary inline-block" href="/checkout/">Checkout</a>} <a href="/browse/collection">Continue shopping</a></main>
 }

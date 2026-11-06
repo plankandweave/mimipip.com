@@ -8,7 +8,7 @@
  * order fetched again from Razorpay. Record: mimipip_orders. A paid order that
  * has not reached the OS is retried on the cron and listed at /unsent.
  */
-import { marketOf, currencyOf, priceLine, refused, onSale, type Priced } from './prices';
+import { marketOf, currencyOf, nameOf, priceLine, refused, onSale, type Priced } from './prices';
 import { artFor, webOrderBody, type StoredCustomer, type StoredLine } from './order-payload';
 
 type Statement = {
@@ -74,7 +74,7 @@ export function priceCart(lines: unknown, countryCode: string):
   const out = [];
   for (const raw of lines as any[]) {
     const slug = String(raw?.slug ?? '');
-    if (!artFor(slug) || !onSale(slug, market)) return { refused: 'One design in your cart cannot be delivered to this country. Please remove it.' };
+    if (!artFor(slug) || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
     const priced = priceLine({ slug, qty: raw.qty, widthCm: raw.widthCm, heightCm: raw.heightCm }, market);
     if (refused(priced)) return priced;
     out.push({ ...priced, placement: cleanPlacement(raw.placement) });

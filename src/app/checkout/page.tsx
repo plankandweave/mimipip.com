@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { countryOptions } from '@/lib/markets';
 import { useMarket } from '@/components/MarketProvider';
-import { clearCart, readLines, type Line } from '@/components/design-cart-store';
+import { clearCart, linePayload as payload, readLines, type Line } from '@/components/design-cart-store';
 
 type Quote = { currency: 'INR' | 'USD'; totalMinor: number; lines: { slug: string; name: string; qty: number; lineMinor: number; billedSqft: number | null }[] };
 type Paid = { paid: boolean; orderNumber: string; amount: number; currency: 'INR' | 'USD'; lines: { name: string; qty: number; lineMinor: number }[]; customer: { name: string; email: string }; message: string };
@@ -16,11 +16,6 @@ function session() {
   if (!s) { s = newSession(); sessionStorage.setItem(SESSION_KEY, s); }
   return s;
 }
-const payload = (l: Line) => ({
-  slug: l.slug, qty: l.qty,
-  ...(l.dimensions ? { widthCm: l.dimensions.width, heightCm: l.dimensions.height } : {}),
-  ...(l.crop ? { placement: { zoom: l.crop.zoom, cropX: l.crop.offsetX, cropY: l.crop.offsetY, flipH: l.crop.flipH, flipV: l.crop.flipV } } : {}),
-});
 async function post(action: string, body: object) {
   const r = await fetch('/api/checkout/' + action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const d = await r.json();
