@@ -4,7 +4,7 @@ import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {handleCommerce,sweep,type Env as CheckoutEnv} from '../src/brand/commerce/checkout';
 import {handleSignup} from '../src/brand/commerce/signup';
-import {razorpayTransport,osTransport,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
+import {withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
 import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand/network-policy';
@@ -31,7 +31,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
  if(p.startsWith('/api/checkout/')){
-  try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv,razorpayTransport,osTransport));}
+  try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
  }
  if(p==='/api/signup'||p==='/api/signup/leave')return withOfflineBrowserPolicy(await handleSignup(request,env as Parameters<typeof handleSignup>[1]));
@@ -77,5 +77,5 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
 }
 export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
-async scheduled(_event:unknown,env:unknown){installOfflineFetchBoundary();await sweep(env as CheckoutEnv,razorpayTransport,osTransport);}
+async scheduled(_event:unknown,env:unknown){installOfflineFetchBoundary();await sweep(env as CheckoutEnv);}
 };

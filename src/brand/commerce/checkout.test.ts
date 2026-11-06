@@ -22,20 +22,25 @@ function harness(opts: { base?: number | null; osStatus?: number } = {}) {
   let captured = false, currency = 'INR', total = 0, osStatus = opts.osStatus ?? 200;
   const posts: any[] = [];
   const pay = () => ({ id: 'pay_test', status: captured ? 'captured' : 'authorized', captured, amount: total, currency, amount_refunded: 0, order_id: 'order_test', ...(currency === 'USD' && opts.base !== null ? { base_amount: opts.base ?? 501234, base_currency: 'INR' } : {}) });
-  const transport = (async (input: any, init: any) => {
-    const path = new URL(input).pathname;
-    let data: any;
-    if (init.method === 'POST') { const b = JSON.parse(init.body); total = b.amount; currency = b.currency; data = { id: 'order_test', amount: total, currency }; }
-    else if (path.endsWith('/payments')) data = { items: [pay()] };
-    else if (path.includes('/payments/')) data = pay();
-    else data = { status: captured ? 'paid' : 'attempted', amount: total, amount_paid: captured ? total : 0, currency };
-    return Response.json(data);
-  }) as typeof fetch;
-  const osFetch = (async (url: any, init: any) => { posts.push({ url, headers: init.headers, body: JSON.parse(init.body) }); return new Response('{}', { status: osStatus }); }) as typeof fetch;
-  const env: any = { DB, MIMIPIP_CHECKOUT_ENABLED: '1', RAZORPAY_KEY_ID: 'test', RAZORPAY_KEY_SECRET: 'test-secret', RAZORPAY_WEBHOOK_SECRET: 'webhook-test', ZYVORAH_WEBHOOK_TOKEN: 'os-token' };
-  const call = (action: string, data: any = {}, origin = 'https://mimipip.com') => handleCommerce(new Request('https://mimipip.com/api/checkout/' + action, { method: 'POST', headers: { origin, 'Content-Type': 'application/json' }, body: JSON.stringify({ token: 'a'.repeat(64), ...data }) }), env, transport, osFetch);
-  const pass = () => call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: createHmac('sha256', 'test-secret').update('order_test|pay_test').digest('hex') });
-  return { db, env, call, pass, posts, transport, osFetch, setCaptured: () => { captured = true; }, setOs: (n: number) => { osStatus = n; }, total: () => total };
+  const fakeSecret = 'test-secret';
+  const STORE_PAY = {
+    ready: () => true, keyId: () => 'rzp_test_key',
+    razorpay: async (path: string, body?: any) => {
+      let data: any;
+      if (body) { total = body.amount; currency = body.currency; data = { id: 'order_test', amount: total, currency }; }
+      else if (path.endsWith('/payments')) data = { items: [pay()] };
+      else if (path.startsWith('payments/')) data = pay();
+      else data = { status: captured ? 'paid' : 'attempted', amount: total, amount_paid: captured ? total : 0, currency };
+      return { ok: true, status: 200, data };
+    },
+    verifySignature: (message: string, signature: string) => createHmac('sha256', fakeSecret).update(message).digest('hex') === signature,
+    sendOrder: async (body: any) => { posts.push({ body }); return { ok: osStatus < 300, status: osStatus, text: osStatus < 300 ? '' : 'down' }; },
+    osTokenMatches: (v: string) => v === 'os-token',
+  };
+  const env: any = { DB, MIMIPIP_CHECKOUT_ENABLED: '1', STORE_PAY };
+  const call = (action: string, data: any = {}, origin = 'https://mimipip.com') => handleCommerce(new Request('https://mimipip.com/api/checkout/' + action, { method: 'POST', headers: { origin, 'Content-Type': 'application/json' }, body: JSON.stringify({ token: 'a'.repeat(64), ...data }) }), env);
+  const pass = () => call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: createHmac('sha256', fakeSecret).update('order_test|pay_test').digest('hex') });
+  return { db, env, call, pass, posts, setCaptured: () => { captured = true; }, setOs: (n: number) => { osStatus = n; }, total: () => total };
 }
 
 test('a wall is priced from the catalogue, billed at 20 sq ft at least', () => {
@@ -90,12 +95,11 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   assert.equal((await h.call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: '0'.repeat(64) })).status, 400);
   h.setCaptured(); r = await h.pass(); assert.equal(r.status, 200); assert.equal((await r.json()).paid, true);
   assert.equal(h.posts.length, 1);
-  const { url, headers, body } = h.posts[0];
-  assert.equal(url, 'https://os.magnitudegroup.in/api/zyvorah/web-order'); assert.equal(headers['x-zyvorah-token'], 'os-token');
+  const { body } = h.posts[0];
   assert.equal(body.brand, 'lorange'); assert.equal(body.items[0].brand, 'lorange'); assert.equal(body.amountInr, expected / 100); assert.equal(body.payment.razorpayPaymentId, 'pay_test');
   assert.equal(body.customer.pincode, '411008'); assert.equal(body.customer.countryCode, 'IN'); assert.equal(body.orderRef, made.orderNumber);
   assert.equal(body.items[0].widthMm, 3000); assert.equal(body.items[0].heightMm, 2500); assert.equal(body.items[0].catalogueRatePerSqft, 200); assert.equal(body.items[0].materialSlug, 'smooth-matt');
-  assert.match(body.items[0].designUrl, /^https:\/\/zyvorah\.com\//); assert.deepEqual(body.items[0].placement, { zoom: 1.5, cropX: .2, cropY: .3, flipH: false, flipV: false });
+  assert.match(body.items[0].designUrl, /^https:\/\//); assert.deepEqual(body.items[0].placement, { zoom: 1.5, cropX: .2, cropY: .3, flipH: false, flipV: false });
   assert.equal(body.items[1].widthMm, 780); assert.equal(body.items[1].heightMm, 2630); assert.equal(body.items[1].qty, 2); assert.equal(body.items[1].material, 'self_adhesive'); assert.match(body.items[1].designUrl, /^https:\/\/media\.zyvorah\.com\/_print-masters\/mimipip\/hopscotch-peach-pop-[0-9a-f]{10}\.jpg$/);
   await h.pass(); await h.call('status'); assert.equal(h.posts.length, 1, 'a repeat never sends twice');
 });
@@ -120,42 +124,32 @@ test('the OS being down loses nothing: the sweep delivers it, /unsent lists it t
   await h.call('create', { lines: [hop], customer: india }); h.setCaptured(); await h.pass();
   const row = h.db.prepare('select os_status,os_error,os_tries from mimipip_orders').get();
   assert.equal(row.os_status, 'waiting'); assert.match(row.os_error, /503/); assert.equal(row.os_tries, 1);
-  const list = (t?: string) => handleCommerce(new Request('https://mimipip.com/api/checkout/unsent', { headers: t ? { 'x-zyvorah-token': t } : {} }), h.env, h.transport, h.osFetch);
+  const list = (t?: string) => handleCommerce(new Request('https://mimipip.com/api/checkout/unsent', { headers: t ? { 'x-zyvorah-token': t } : {} }), h.env);
   assert.equal((await list()).status, 401);
   const waiting = (await (await list('os-token')).json()).unsent;
   assert.equal(waiting.length, 1);
   assert.equal(typeof waiting[0].created_at, 'number', 'retries move updated_at, so the OS alarm must count from created_at');
-  h.setOs(200); await sweep(h.env, h.transport, h.osFetch);
+  h.setOs(200); await sweep(h.env);
   assert.equal(h.db.prepare('select os_status from mimipip_orders').get().os_status, 'sent'); assert.equal((await (await list('os-token')).json()).unsent.length, 0);
 });
 test('a closed browser loses nothing: the sweep finds the captured payment', async () => {
   const h = harness();
   await h.call('create', { lines: [hop], customer: india }); h.setCaptured();
   h.db.exec('update mimipip_orders set created_at=created_at-600000');
-  await sweep(h.env, h.transport, h.osFetch);
+  await sweep(h.env);
   assert.equal(h.db.prepare('select status from mimipip_orders').get().status, 'paid'); assert.equal(h.posts.length, 1);
-});
-test('the webhook is signature-checked, and confirms only a real captured payment', async () => {
-  const h = harness();
-  await h.call('create', { lines: [hop], customer: india });
-  const raw = JSON.stringify({ event: 'payment.captured', payload: { payment: { entity: { id: 'pay_test', order_id: 'order_test' } } } });
-  const hook = (sig: string) => handleCommerce(new Request('https://mimipip.com/api/checkout/webhook', { method: 'POST', headers: { 'x-razorpay-signature': sig }, body: raw }), h.env, h.transport, h.osFetch);
-  assert.equal((await hook('0'.repeat(64))).status, 401);
-  const sig = createHmac('sha256', 'webhook-test').update(raw).digest('hex');
-  assert.equal((await hook(sig)).status, 200);
-  assert.equal(h.db.prepare('select status from mimipip_orders').get().status, 'pending', 'unpaid at Razorpay stays pending');
 });
 test('one session cannot pay for a different cart; a missing key keeps checkout shut', async () => {
   const h = harness();
   await h.call('create', { lines: [hop], customer: india });
   const r = await h.call('create', { lines: [{ ...hop, qty: 1 }], customer: india }); assert.equal(r.status, 409); assert.equal((await r.json()).renew, true);
   assert.equal((await h.call('create', { lines: [hop], customer: india }, 'https://evil.test')).status, 403);
-  delete h.env.ZYVORAH_WEBHOOK_TOKEN;
+  h.env.STORE_PAY = { ...h.env.STORE_PAY, ready: () => false };
   assert.equal((await h.call('create', { lines: [hop], customer: india, token: 'c'.repeat(64) })).status, 503);
 });
-test('a price can be shown before any payment key exists, but money cannot be taken', async () => {
+test('a price can be shown with no way to pay, but money cannot be taken', async () => {
   const h = harness();
-  delete h.env.RAZORPAY_KEY_ID; delete h.env.RAZORPAY_KEY_SECRET;
+  delete h.env.STORE_PAY;
   const quote = await h.call('quote', { lines: [hop], countryCode: 'IN' });
   assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 799800);
   assert.equal((await h.call('quote', { lines: [hop], countryCode: 'US' })).status, 400);

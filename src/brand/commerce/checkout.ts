@@ -5,7 +5,9 @@
  * payment record; the OS order is the order.
  *
  * Trigger: a cart. Check: signature, then the captured payment and the paid
- * order fetched again from Razorpay. Record: mimipip_orders. A paid order that
+ * order fetched again from Razorpay. All of that goes through the store Worker,
+ * which holds the keys (STORE_PAY); this site holds none.
+ * Record: mimipip_orders. A paid order that
  * has not reached the OS is retried on the cron and listed at /unsent.
  */
 import { marketOf, currencyOf, nameOf, priceLine, refused, onSale, type Priced } from './prices';
@@ -17,11 +19,19 @@ type Statement = {
   run(): Promise<{ meta: { changes: number } }>;
   all<T = any>(): Promise<{ results: T[] }>;
 };
+export type Pay = {
+  ready(): boolean | Promise<boolean>;
+  keyId(): string | null | Promise<string | null>;
+  razorpay(path: string, body?: unknown): Promise<{ ok: boolean; status: number; data: any }>;
+  verifySignature(message: string, signature: string): boolean | Promise<boolean>;
+  sendOrder(order: { brand?: unknown }): Promise<{ ok: boolean; status: number; text: string }>;
+  osTokenMatches(value: string): boolean | Promise<boolean>;
+};
 export type Env = {
   MIMIPIP_CHECKOUT_ENABLED?: string;
   DB?: { prepare(sql: string): Statement };
-  RAZORPAY_KEY_ID?: string; RAZORPAY_KEY_SECRET?: string; RAZORPAY_WEBHOOK_SECRET?: string;
-  OS_BASE_URL?: string; ZYVORAH_WEBHOOK_TOKEN?: string;
+  /** The store Worker's private door to Razorpay and the OS. The keys stay there; this site holds none. */
+  STORE_PAY?: Pay;
 };
 type Order = {
   id: string; token_hash: string; status: string; amount: number; shipping: number;
@@ -33,11 +43,6 @@ type Order = {
 const encoder = new TextEncoder();
 const hex = (v: ArrayBuffer) => Array.from(new Uint8Array(v), n => n.toString(16).padStart(2, '0')).join('');
 export async function digest(v: string) { return hex(await crypto.subtle.digest('SHA-256', encoder.encode(v))); }
-export async function validSignature(secret: string, message: string, signature: string) {
-  if (!/^[a-f0-9]{64}$/.test(signature)) return false;
-  const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  return crypto.subtle.verify('HMAC', key, Uint8Array.from(signature.match(/../g)!, s => parseInt(s, 16)), encoder.encode(message));
-}
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
 
 const text = (v: unknown, min: number, max: number): v is string => typeof v === 'string' && v.trim().length >= min && v.length <= max;
@@ -84,59 +89,52 @@ export function priceCart(lines: unknown, countryCode: string):
 
 const countryName = (code: string) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code; } catch { return code; } };
 
-function provider(env: Env, transport: typeof fetch) {
+function provider(pay: Pay) {
   return async (path: string, body?: unknown) => {
-    const res = await transport('https://api.razorpay.com/v1/' + path, {
-      method: body ? 'POST' : 'GET',
-      headers: { Authorization: 'Basic ' + btoa(env.RAZORPAY_KEY_ID + ':' + env.RAZORPAY_KEY_SECRET), 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if (!res.ok) throw new Error('Payment provider unavailable');
-    return res.json() as Promise<any>;
+    const r = await pay.razorpay(path, body);
+    if (!r.ok) throw new Error('Payment provider unavailable');
+    return r.data;
   };
 }
 
 /** Hands one paid order to the OS. The OS is idempotent per order and line, so a repeat is safe. */
-export async function sendToOs(o: Order, env: Env, db: NonNullable<Env['DB']>, osFetch: typeof fetch): Promise<boolean> {
+export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): Promise<boolean> {
   if (o.status !== 'paid' || o.os_status === 'sent') return o.os_status === 'sent';
   const fail = async (why: string) => {
     await db.prepare('UPDATE mimipip_orders SET os_error=?,os_tries=os_tries+1,updated_at=? WHERE id=?').bind(why.slice(0, 500), Date.now(), o.id).run();
     return false;
   };
   if (o.amount_inr === null) return fail('Razorpay gave no rupee figure for this payment.');
-  if (!env.ZYVORAH_WEBHOOK_TOKEN) return fail('The OS token is not set on this site.');
   let body;
   try { body = webOrderBody({ id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
   catch (e) { return fail((e as Error).message); }
   try {
-    const res = await osFetch((env.OS_BASE_URL || 'https://os.magnitudegroup.in') + '/api/zyvorah/web-order', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-zyvorah-token': env.ZYVORAH_WEBHOOK_TOKEN }, body: JSON.stringify(body),
-    });
-    if (!res.ok) return fail(`The OS answered ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const res = await pay.sendOrder(body);
+    if (!res.ok) return fail(`The OS answered ${res.status}: ${res.text}`);
   } catch (e) { return fail('The OS could not be reached: ' + (e as Error).message); }
   await db.prepare("UPDATE mimipip_orders SET os_status='sent',os_error=NULL,os_sent_at=?,updated_at=? WHERE id=?").bind(Date.now(), Date.now(), o.id).run();
   return true;
 }
 
-async function confirm(o: Order, p: any, env: Env, db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>, osFetch: typeof fetch) {
+async function confirm(o: Order, p: any, pay: Pay, db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>) {
   if (!paymentMatches(p, o)) return false;
   const ro = await call('orders/' + o.razorpay_order_id);
   if (ro.status !== 'paid' || ro.amount !== o.amount || ro.currency !== o.currency || ro.amount_paid !== o.amount) return false;
   await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, capturedInr(p, o), Date.now(), o.id).run();
   const fresh = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
-  await sendToOs(fresh, env, db, osFetch);
+  await sendToOs(fresh, pay, db);
   return true;
 }
 
-export const checkoutReady = (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED === '1' && env.DB && env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET && env.RAZORPAY_WEBHOOK_SECRET && env.ZYVORAH_WEBHOOK_TOKEN);
+export const checkoutReady = async (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED === '1' && env.DB && env.STORE_PAY && await env.STORE_PAY.ready());
 
-export async function handleCommerce(request: Request, env: Env, transport: typeof fetch, osFetch: typeof fetch): Promise<Response> {
+export async function handleCommerce(request: Request, env: Env): Promise<Response> {
   const path = new URL(request.url).pathname.replace(/\/$/, '');
-  if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: checkoutReady(env) });
+  if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: await checkoutReady(env) });
   if (!env.DB) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
   const db = env.DB;
   if (path === '/api/checkout/unsent' && request.method === 'GET') {
-    if (!env.ZYVORAH_WEBHOOK_TOKEN || request.headers.get('x-zyvorah-token') !== env.ZYVORAH_WEBHOOK_TOKEN) return json({ error: 'Not authorised' }, 401);
+    if (!env.STORE_PAY || !await env.STORE_PAY.osTokenMatches(request.headers.get('x-zyvorah-token') ?? '')) return json({ error: 'Not authorised' }, 401);
     const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,created_at,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
     return json({ unsent: rows.results });
   }
@@ -152,23 +150,10 @@ export async function handleCommerce(request: Request, env: Env, transport: type
       return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
     } catch { return json({ error: 'Check your cart and try again.' }, 400); }
   }
-  if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
-  const call = provider(env, transport);
+  const pay = env.STORE_PAY;
+  if (!pay) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+  const call = provider(pay);
   try {
-    if (path === '/api/checkout/webhook' && request.method === 'POST') {
-      if (!env.RAZORPAY_WEBHOOK_SECRET) return json({ error: 'Webhook not configured' }, 503);
-      const raw = await request.text();
-      if (raw.length > 65536) return json({ error: 'Payload too large' }, 413);
-      if (!await validSignature(env.RAZORPAY_WEBHOOK_SECRET, raw, request.headers.get('x-razorpay-signature') || '')) return json({ error: 'Invalid signature' }, 401);
-      const event = JSON.parse(raw);
-      const p = event.payload?.payment?.entity;
-      if (p?.order_id && event.event === 'payment.captured') {
-        const o = await db.prepare('SELECT * FROM mimipip_orders WHERE razorpay_order_id=?').bind(p.order_id).first<Order>();
-        // The webhook only names the order: the money is read again from Razorpay.
-        if (o) await confirm(o, await call('payments/' + p.id), env, db, call, osFetch);
-      }
-      return json({ received: true });
-    }
     if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
     if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'Invalid request origin' }, 403);
     if (!request.headers.get('content-type')?.startsWith('application/json')) return json({ error: 'JSON required' }, 415);
@@ -179,7 +164,7 @@ export async function handleCommerce(request: Request, env: Env, transport: type
     const tokenHash = await digest(b.token);
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
     if (path === '/api/checkout/create') {
-      if (!checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+      if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
       if (!validCustomer(b.customer)) return json({ error: 'Check your delivery details.' }, 400);
       const priced = priceCart(b.lines, b.customer.countryCode);
       if ('refused' in priced) return json({ error: priced.refused }, 400);
@@ -200,16 +185,16 @@ export async function handleCommerce(request: Request, env: Env, transport: type
       if (o.status === 'creating') return json({ error: 'Your payment session is being checked. Please do not pay again.' }, 409);
       if (o.status === 'paid') return json({ paid: true, orderNumber: o.id });
       if (o.status !== 'pending') return json({ error: 'This order cannot be paid.' }, 409);
-      return json({ keyId: env.RAZORPAY_KEY_ID, orderId: o.razorpay_order_id, amount: o.amount, currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
+      return json({ keyId: await pay.keyId(), orderId: o.razorpay_order_id, amount: o.amount, currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
     }
     if (!o) return json({ error: 'Order not found' }, 404);
     if (path === '/api/checkout/verify') {
-      if (b.razorpay_order_id !== o.razorpay_order_id || !/^pay_[A-Za-z0-9]+$/.test(b.razorpay_payment_id || '') || !await validSignature(env.RAZORPAY_KEY_SECRET, o.razorpay_order_id + '|' + b.razorpay_payment_id, b.razorpay_signature || '')) return json({ error: 'Payment verification failed.' }, 400);
-      await confirm(o, await call('payments/' + b.razorpay_payment_id), env, db, call, osFetch);
+      if (b.razorpay_order_id !== o.razorpay_order_id || !/^pay_[A-Za-z0-9]+$/.test(b.razorpay_payment_id || '') || !await pay.verifySignature(o.razorpay_order_id + '|' + b.razorpay_payment_id, b.razorpay_signature || '')) return json({ error: 'Payment verification failed.' }, 400);
+      await confirm(o, await call('payments/' + b.razorpay_payment_id), pay, db, call);
     } else if (path === '/api/checkout/status') {
       if (o.status === 'pending' && o.razorpay_order_id) {
         const ps = await call('orders/' + o.razorpay_order_id + '/payments');
-        for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, env, db, call, osFetch); break; }
+        for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, pay, db, call); break; }
       }
     } else return json({ error: 'Not found' }, 404);
     o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
@@ -223,16 +208,16 @@ export async function handleCommerce(request: Request, env: Env, transport: type
 }
 
 /** Every few minutes: pending payments are asked of Razorpay, paid orders are offered to the OS again. */
-export async function sweep(env: Env, transport: typeof fetch, osFetch: typeof fetch) {
-  if (!env.DB || !env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return;
-  const db = env.DB, call = provider(env, transport), cutoff = Date.now() - 5 * 60_000;
+export async function sweep(env: Env) {
+  if (!env.DB || !env.STORE_PAY) return;
+  const pay = env.STORE_PAY, db = env.DB, call = provider(pay), cutoff = Date.now() - 5 * 60_000;
   const pending = await db.prepare("SELECT * FROM mimipip_orders WHERE status='pending' AND razorpay_order_id IS NOT NULL AND created_at<? AND created_at>? ORDER BY created_at LIMIT 25").bind(cutoff, Date.now() - 3 * 864e5).all<Order>();
   for (const o of pending.results) {
     try {
       const ps = await call('orders/' + o.razorpay_order_id + '/payments');
-      for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, env, db, call, osFetch); break; }
+      for (const p of ps.items || []) if (paymentMatches(p, o)) { await confirm(o, p, pay, db, call); break; }
     } catch { /* asked again on the next pass */ }
   }
   const unsent = await db.prepare("SELECT * FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 25").bind().all<Order>();
-  for (const o of unsent.results) await sendToOs(o, env, db, osFetch);
+  for (const o of unsent.results) await sendToOs(o, pay, db);
 }
