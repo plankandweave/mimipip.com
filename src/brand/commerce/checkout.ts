@@ -92,7 +92,7 @@ const countryName = (code: string) => { try { return new Intl.DisplayNames(['en'
 function provider(pay: Pay) {
   return async (path: string, body?: unknown) => {
     const r = await pay.razorpay(path, body);
-    if (!r.ok) throw new Error('Payment provider unavailable');
+    if (!r.ok) throw new Error(`Razorpay answered ${r.status} for ${path}`);
     return r.data;
   };
 }
@@ -177,8 +177,16 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
         const now = Date.now();
         await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,'{}',?,?)")
           .bind(id, tokenHash, priced.totalMinor, priced.currency, JSON.stringify(priced.lines), linesHash, JSON.stringify(customer), now, now).run();
-        const ro = await call('orders', { amount: priced.totalMinor, currency: priced.currency, receipt: id, payment: { capture: 'automatic', capture_options: { refund_speed: 'normal' } }, notes: { brand: 'MimiPip', mimipip_order_id: id } });
-        if (!/^order_[A-Za-z0-9]+$/.test(ro.id) || ro.amount !== priced.totalMinor || ro.currency !== priced.currency) throw new Error('Invalid provider order');
+        let ro;
+        try {
+          // Capture follows the account's own setting, as the store's orders do.
+          ro = await call('orders', { amount: priced.totalMinor, currency: priced.currency, receipt: id, notes: { brand: 'MimiPip', mimipip_order_id: id } });
+          if (!/^order_[A-Za-z0-9]+$/.test(ro.id) || ro.amount !== priced.totalMinor || ro.currency !== priced.currency) throw new Error('Invalid provider order');
+        } catch (e) {
+          // The shopper never saw a payment window, so nothing can have been paid: let them try again.
+          await db.prepare("DELETE FROM mimipip_orders WHERE id=? AND status='creating'").bind(id).run();
+          throw e;
+        }
         await db.prepare("UPDATE mimipip_orders SET razorpay_order_id=?,status='pending',updated_at=? WHERE id=?").bind(ro.id, Date.now(), id).run();
         o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
       }
@@ -204,7 +212,10 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       customer: JSON.parse(o.customer),
       message: o.status === 'paid' ? 'Payment received. Your order is confirmed.' : 'Payment has not been confirmed yet. If you were charged, please check again before paying.',
     });
-  } catch { return json({ error: 'We could not complete this step. Please check this order again; do not pay twice if you were charged.' }, 503); }
+  } catch (e) {
+    console.error('checkout:', (e as Error).message);
+    return json({ error: 'We could not complete this step. Please check this order again; do not pay twice if you were charged.' }, 503);
+  }
 }
 
 /** Every few minutes: pending payments are asked of Razorpay, paid orders are offered to the OS again. */

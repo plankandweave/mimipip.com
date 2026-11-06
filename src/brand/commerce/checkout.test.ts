@@ -160,6 +160,23 @@ test('a design that cannot be bought is named, so the shopper knows which to rem
   const r = priceCart([{ slug: 'sage-meadow', qty: 1 }], 'US');
   assert.ok('refused' in r); assert.match(r.refused, /Sage Meadow/);
 });
+test('an order Razorpay refuses leaves the shopper free to try again', async () => {
+  const h = harness();
+  const real = h.env.STORE_PAY.razorpay;
+  h.env.STORE_PAY = { ...h.env.STORE_PAY, razorpay: async () => ({ ok: false, status: 400, data: null }) };
+  assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 503);
+  assert.equal(h.db.prepare('select count(*) as n from mimipip_orders').get().n, 0);
+  h.env.STORE_PAY = { ...h.env.STORE_PAY, razorpay: real };
+  assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 200);
+});
+test('the order sent to Razorpay carries only what the store sends', async () => {
+  const h = harness();
+  const real = h.env.STORE_PAY.razorpay;
+  let sent: any;
+  h.env.STORE_PAY = { ...h.env.STORE_PAY, razorpay: async (p: string, b?: any) => { if (b) sent = b; return real(p, b); } };
+  await h.call('create', { lines: [hop], customer: india });
+  assert.deepEqual(Object.keys(sent).sort(), ['amount', 'currency', 'notes', 'receipt']);
+});
 test('webOrderBody refuses a line with no artwork rather than sending a blank', () => {
   assert.throws(() => webOrderBody({ id: 'MP-1', paymentId: 'pay_1', amountInr: 1, lines: [{ slug: 'no-such', name: 'x', qty: 1, lineMinor: 1, widthCm: 1, heightCm: 1, ratePerSqft: null, billedSqft: null }], customer: india as any }));
 });
