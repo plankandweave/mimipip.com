@@ -132,7 +132,7 @@ export default function RootLayout({
         {serviceAvailable("analytics") && <Script id="openai-pixel" strategy="afterInteractive">
           {openAiPixelBootstrap(OPENAI_PIXEL_ID, process.env.NODE_ENV !== "production")}
         </Script>}
-        <MarketProvider initialCountryCode={process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "US" : undefined}>
+        <MarketProvider>
           <AuthProvider>
             <PartnerProvider>
             <CartProvider>

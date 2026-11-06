@@ -13,7 +13,17 @@ import records from '../src/brand/review/catalogue.json';
 const families:Record<string,string>={'step-smiles':'little-steps-big-adventures','happy-lines':'happy-lines','polka-dots':'dotty-days','random-dots':'dotty-days','classic-dots':'dotty-days'};
 const offline=()=>withOfflineBrowserPolicy(Response.json({available:false,message:'Ordering and live services are unavailable.'},{status:503}));
 const redirect=(url:URL,path:string)=>Response.redirect(new URL(path,url.origin).href,302);
-export default {async fetch(request:Request,env:unknown,ctx:unknown){
+/** The visitor's country, from Cloudflare, for the page's market. A country they picked is never replaced. */
+function withVisitorCountry(request:Request,response:Response){
+ const country=(request as Request&{cf?:{country?:string}}).cf?.country;
+ if(!country||!/^[A-Z]{2}$/.test(country)||['XX','T1'].includes(country))return response;
+ if(/(?:^|;\s*)zyv_country=/.test(request.headers.get('cookie')??''))return response;
+ if(!response.headers.get('Content-Type')?.includes('text/html'))return response;
+ const out=new Response(response.body,response);
+ out.headers.append('Set-Cookie','zyv_country='+country+'; Path=/; SameSite=Lax; Secure; Max-Age=31536000');
+ return out;
+}
+async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  installOfflineFetchBoundary();
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(u.hostname==='www.mimipip.com'){u.hostname='mimipip.com';return Response.redirect(u.href,301);}
@@ -62,7 +72,8 @@ export default {async fetch(request:Request,env:unknown,ctx:unknown){
  if(collection?.[2]){const item=records.find(r=>'detailURL' in r&&r.detailURL===p+'/');if(item)return redirect(u,'/products/'+item.slug);}
  if(collection&&!collection[2]&&families[collection[1]]&&families[collection[1]]!==collection[1])return redirect(u,'/collections/'+families[collection[1]]);
  return publicPage(request,await handler.fetch(request,env,ctx));
-},
+}
+export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
 async scheduled(_event:unknown,env:unknown){installOfflineFetchBoundary();await sweep(env as CheckoutEnv,razorpayTransport,osTransport);}
 };
