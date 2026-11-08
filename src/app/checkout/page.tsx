@@ -1,11 +1,15 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {checkedBillingIdentity} from '@/brand/commerce/billing-identity';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
+import { InvoiceBreakdown } from '@/components/InvoiceBreakdown';
+import { loadRazorpay } from '@/lib/load-razorpay';
 import { countryOptions } from '@/lib/markets';
 import { useMarket } from '@/components/MarketProvider';
-import { clearCart, linePayload as payload, readLines, type Line } from '@/components/design-cart-store';
+import { saveLines, linePayload as payload, readLines, type Line } from '@/components/design-cart-store';
 
-type Quote = { currency: 'INR' | 'USD'; totalMinor: number; lines: { slug: string; name: string; qty: number; lineMinor: number; billedSqft: number | null }[] };
+type Quote = { requestKey: string; currency: 'INR' | 'USD'; totalMinor: number; lines: { slug: string; name: string; qty: number; lineMinor: number; billedSqft: number | null; installationMinor?:number; personalisationMinor?:number }[] };
 type Paid = { paid: boolean; orderNumber: string; amount: number; currency: 'INR' | 'USD'; lines: { name: string; qty: number; lineMinor: number }[]; customer: { name: string; email: string }; message: string };
 
 const SESSION_KEY = 'mimipip-checkout-session';
@@ -22,57 +26,94 @@ async function post(action: string, body: object) {
   if (!r.ok) throw Object.assign(new Error(d.error || 'Please try again.'), { renew: !!d.renew });
   return d;
 }
-const loadRazorpay = () => new Promise<void>((resolve, reject) => {
-  if ((window as any).Razorpay) { resolve(); return; }
-  const s = document.createElement('script');
-  s.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  s.onload = () => resolve();
-  s.onerror = () => { s.remove(); reject(new Error('The payment window could not load. Please try again.')); };
-  document.head.appendChild(s);
-});
 
 export default function Checkout() {
-  const { market } = useMarket();
+  const { market, setCountry } = useMarket();
+  const nativeCart = useCart();
+  const checkoutItemIds = useRef<{item_id:string;quantity:number;crop_data:unknown}[]>([]);
+  const legacySnapshot = useRef<Line[]>([]);
   const [lines, setLines] = useState<Line[] | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [problem, setProblem] = useState('');
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<boolean | null>(null);
   const [paid, setPaid] = useState<Paid | null>(null);
-  const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', city: '', state: '', postcode: '', countryCode: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', city: '', state: '', postcode: '', gstin:'',billingName:'' });
   const countries = useMemo(() => countryOptions(), []);
-  const countryCode = form.countryCode || market.countryCode;
+  const countryCode = market.countryCode;
   const india = countryCode === 'IN';
+  const quoteKey = JSON.stringify({lines: lines?.map(payload) ?? [], countryCode});
+  const quoteReady = !!quote && quote.requestKey === quoteKey && !nativeCart.loading && !nativeCart.readError;
 
   const check = useCallback(async () => {
     try {
       const d = await post('status', { token: session() });
-      if (d.paid) { setPaid(d); clearCart(); sessionStorage.removeItem(SESSION_KEY); sessionStorage.removeItem('mimipip-checkout-started'); }
+      if (d.paid) {
+        setPaid(d);
+        // Clear only the selections captured when this payment began. A resumed
+        // payment must never erase items added to the cart afterwards.
+        try {
+          const saved = JSON.parse(sessionStorage.getItem('mimipip-checkout-selection') || 'null');
+          if (saved?.token === session()) {
+            const current = await fetch('/api/cart').then(r => r.ok ? r.json() : null);
+            for (const bought of saved.native ?? []) {
+              const item = current?.items?.find((i: any) => i.item_id === bought.item_id);
+              if (item && item.quantity === bought.quantity && JSON.stringify(item.crop_data) === JSON.stringify(bought.crop_data))
+                await fetch('/api/cart', {method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({itemId:bought.item_id})});
+            }
+            const remaining = readLines();
+            for (const bought of saved.legacy ?? []) {
+              const index = remaining.findIndex(item => JSON.stringify(item) === JSON.stringify(bought));
+              if (index >= 0) remaining.splice(index, 1);
+            }
+            saveLines(remaining);
+          }
+        } catch { /* A confirmed payment stays confirmed if local cleanup fails. */ }
+        sessionStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem('mimipip-checkout-started');
+        sessionStorage.removeItem('mimipip-checkout-selection');
+      }
       else setProblem(d.message);
     } catch (e) { setProblem((e as Error).message); }
   }, []);
 
   useEffect(() => {
-    try { setLines(readLines()); } catch { setLines([]); setProblem('Your cart could not be read. Please add your designs again.'); }
+    // Existing browser selections are retained when no native cart is present.
     fetch('/api/checkout/readiness').then(r => r.json()).then(d => setOpen(!!d.open)).catch(() => setOpen(false));
     if (sessionStorage.getItem('mimipip-checkout-started')) void check();
   }, [check]);
 
   useEffect(() => {
-    if (!lines?.length) return;
+    if(nativeCart.loading)return;
+    if(nativeCart.readError){setLines(null);setQuote(null);setProblem('Your cart could not be read. Please reload before checking out.');return;}
+    checkoutItemIds.current=nativeCart.items.map(({item_id,quantity,crop_data})=>({item_id,quantity,crop_data}));
+    try {
+      legacySnapshot.current=readLines();
+      const nativeLines:Line[]=nativeCart.items.map(item=>({slug:item.handle,name:item.title,size:`${item.width_cm} × ${item.height_cm} cm`,qty:item.quantity,currency:'INR',amount:item.line_total/item.quantity,dimensions:{width:item.width_cm,height:item.height_cm},crop:item.crop_data??undefined,wallpaper:item.category==='wallpaper'}));
+      setLines([...nativeLines,...legacySnapshot.current]);
+    } catch { setLines(null);setProblem('Your saved cart could not be read.'); }
+
+  },[nativeCart.items,nativeCart.loading,nativeCart.readError]);
+
+  useEffect(() => {
+    if (!lines?.length) { setQuote(null); return; }
     let live = true;
+    setQuote(null);
     post('quote', { lines: lines.map(payload), countryCode })
-      .then(q => { if (live) { setQuote(q); setProblem(''); } })
+      .then(q => { if (live) { setQuote({...q, requestKey: quoteKey}); setProblem(''); } })
       .catch(e => { if (live) { setQuote(null); setProblem((e as Error).message); } });
     return () => { live = false; };
-  }, [lines, countryCode]);
+  }, [lines, countryCode, quoteKey]);
 
   async function pay(e: React.FormEvent) {
     e.preventDefault();
-    if (busy || !lines) return;
+    if (busy || !lines || !quoteReady || open !== true) return;
     setBusy(true); setProblem('');
-    const customer = { ...form, countryCode, phone: form.phone.replace(india ? /\D/g : /^$/, '') };
+    const selection = {native:checkoutItemIds.current,legacy:legacySnapshot.current};
     try {
+      const billingIdentity=checkedBillingIdentity(form.gstin.trim()||form.billingName.trim()?{gstin:form.gstin,legalName:form.billingName}:undefined,countryCode);
+      const {gstin,billingName,...contact}=form;
+      const customer = { ...contact, countryCode, phone: form.phone.replace(india ? /\D/g : /^$/, ''),...(billingIdentity?{billingIdentity}:{}) };
       let d;
       try { d = await post('create', { token: session(), lines: lines.map(payload), customer }); }
       catch (err) {
@@ -81,8 +122,9 @@ export default function Checkout() {
         d = await post('create', { token: session(), lines: lines.map(payload), customer });
       }
       if (d.paid) { await check(); return; }
+      sessionStorage.setItem('mimipip-checkout-selection', JSON.stringify({token:session(),...selection}));
       sessionStorage.setItem('mimipip-checkout-started', '1');
-      await loadRazorpay();
+      if (!await loadRazorpay()) throw new Error('The payment window could not load. Please try again.');
       const widget = new (window as any).Razorpay({
         key: d.keyId, order_id: d.orderId, amount: d.amount, currency: d.currency, name: 'MimiPip', description: 'Your MimiPip order',
         prefill: { name: d.customer.name, email: d.customer.email, contact: india ? '+91' + d.customer.phone : d.customer.phone },
@@ -94,7 +136,7 @@ export default function Checkout() {
           setBusy(false);
         },
       });
-      widget.on('payment.failed', () => { setProblem('The payment did not go through. You have not been charged. Please try again.'); setBusy(false); });
+      widget.on('payment.failed', () => { setProblem('The payment was not confirmed. If your bank shows a debit, check this order before trying again.'); setBusy(false); });
       widget.open();
     } catch (err) { setProblem((err as Error).message); setBusy(false); }
   }
@@ -102,7 +144,7 @@ export default function Checkout() {
   if (paid) return (
     <main className="container-x max-w-3xl py-10">
       <h1 className="text-3xl">Thank you, {paid.customer.name}.</h1>
-      <p className="my-4">Your order {paid.orderNumber} is confirmed. We have sent the details to {paid.customer.email}.</p>
+      <p className="my-4">Your order {paid.orderNumber} is confirmed. Your order details are below.</p>
       <ul className="my-4 space-y-1">{paid.lines.map((l, i) => <li key={i}>{l.name} × {l.qty} · {money(paid.currency, l.lineMinor)}</li>)}</ul>
       <p className="font-semibold">Paid {money(paid.currency, paid.amount)}</p>
       <Link className="underline" href="/browse/collection">Continue shopping</Link>
@@ -110,38 +152,68 @@ export default function Checkout() {
   );
   if (lines && !lines.length) return <main className="container-x py-10"><h1 className="text-3xl">Your cart is empty</h1><p className="my-4">{problem}</p><Link className="underline" href="/browse/collection">Shop designs</Link></main>;
 
+  // Layout and field treatment from the actual Zyvorah checkout. Payment and
+  // totals remain connected to Mimi Pip's server-authoritative order adapter.
+  const fieldClass = 'h-12 w-full min-w-0 rounded-[14px] border border-edge bg-surface px-4 outline-none transition-colors focus:border-charcoal';
   const field = (key: keyof typeof form, label: string, auto: string, type = 'text') => (
-    <label className="grid gap-1" key={key}>{label}
-      <input className="w-full rounded-lg border p-2" required type={type} autoComplete={auto} value={form[key]} onChange={e => setForm({ ...form, [key]: e.target.value })} />
+    <label className="grid min-w-0 gap-1.5 text-xs text-slate" key={key}>{label}
+      <input className={fieldClass + ' text-base text-charcoal'} name={key} required type={type} autoComplete={auto} value={form[key]} onChange={e => setForm({ ...form, [key]: e.target.value })} />
     </label>
   );
+  const bill = quoteReady && quote ? india ? (
+    <InvoiceBreakdown lines={quote.lines.flatMap(l=>[{label:`${l.name} × ${l.qty}${l.billedSqft ? ` · ${l.billedSqft} sq ft each` : ''}`,incl:(l.lineMinor-(l.installationMinor??0)-(l.personalisationMinor??0))/100},...(l.installationMinor?[{label:`Installation — ${l.name}`,incl:l.installationMinor/100}]:[]),...(l.personalisationMinor?[{label:`Name cloud — ${l.name}`,incl:l.personalisationMinor/100}]:[])])} />
+  ) : (
+    <div className="space-y-3 text-sm">
+      <ul className="divide-y divide-edge">
+        {quote.lines.map((l, i) => <li className="flex items-start justify-between gap-3 py-3" key={i}>
+          <div className="min-w-0"><p className="font-semibold">{l.name}</p><p className="mt-1 text-xs text-slate">Quantity {l.qty}{l.billedSqft ? ` · ${l.billedSqft} sq ft each` : ''}</p></div>
+          <span className="shrink-0 tabular-nums">{money(quote.currency, l.lineMinor)}</span>
+        </li>)}
+      </ul>
+      <p className="flex justify-between gap-3 text-slate"><span>Delivery</span><span>Included</span></p>
+      <div className="flex justify-between gap-3 border-t border-edge pt-3 text-lg font-bold"><span>Total</span><span className="tabular-nums">{money(quote.currency, quote.totalMinor)}</span></div>
+      <p className="text-xs text-slate">Duties and customs are payable locally if charged.</p>
+    </div>
+  ) : <p className="text-sm text-slate" role="status">{problem ? 'Check your cart and delivery country to continue.' : 'Updating your order…'}</p>;
+  const placeButton = <button type="submit" form="mimipip-checkout" className="btn btn-primary w-full" disabled={busy || !quoteReady || open !== true}>{busy ? 'Opening payment…' : quoteReady && quote ? `Pay ${money(quote.currency, quote.totalMinor)}` : 'Pay'}</button>;
+  const terms = <p className="mt-3 text-xs leading-relaxed text-slate">By paying you accept our <Link className="underline" href="/guides/shipping-returns">delivery and returns</Link> and <Link className="underline" href="/guides/terms">terms</Link>.</p>;
   return (
-    <main className="container-x max-w-3xl py-10">
-      <Link href="/cart/">← Back to your cart</Link>
-      <h1 className="mt-6 text-3xl">Checkout</h1>
-      {quote && <section className="my-6 space-y-1" aria-label="Your order">
-        {quote.lines.map((l, i) => <p key={i}>{l.name} × {l.qty}{l.billedSqft ? ` · ${l.billedSqft} sq ft` : ''} · {money(quote.currency, l.lineMinor)}</p>)}
-        <p>Delivery included</p>
-        <p className="text-xl font-semibold">Total {money(quote.currency, quote.totalMinor)}{india ? ' including GST' : ''}</p>
-      </section>}
-      <form className="grid gap-3" onSubmit={pay}>
-        <label className="grid gap-1">Deliver to
-          <select className="w-full rounded-lg border p-2" autoComplete="country" value={countryCode} onChange={e => setForm({ ...form, countryCode: e.target.value })}>
-            {countries.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
-          </select>
-        </label>
-        {field('name', 'Full name', 'name')}
-        {field('email', 'Email', 'email', 'email')}
-        {field('phone', india ? 'Mobile number' : 'Phone number with country code', 'tel', 'tel')}
-        {field('address', 'Street address', 'street-address')}
-        {field('city', 'City', 'address-level2')}
-        {field('state', 'State', 'address-level1')}
-        {field('postcode', india ? 'PIN code' : 'Postcode', 'postal-code')}
-        <p role="status">{problem}</p>
-        <button className="btn btn-primary" disabled={busy || !quote || open === false}>{busy ? 'Opening payment…' : quote ? `Pay ${money(quote.currency, quote.totalMinor)}` : 'Pay'}</button>
-        {open === false && <p role="status">Payments are paused for a moment. Your cart is saved on this device.</p>}
-        <p className="text-sm">By paying you accept our <Link className="underline" href="/guides/shipping-returns">delivery and returns</Link> and <Link className="underline" href="/guides/terms">terms</Link>.</p>
-      </form>
+    <main className="container-x py-10 pb-[calc(env(safe-area-inset-bottom)+140px)] lg:pb-10">
+      <Link className="text-xs text-slate underline underline-offset-2" href="/cart/">← Back to your cart</Link>
+      <h1 className="mt-4 font-display text-2xl font-bold">Checkout</h1>
+      <section aria-label="Order summary" className="mt-3 rounded-[18px] bg-wash p-3.5 lg:hidden">{bill}</section>
+      <div className="mt-5 grid gap-5 lg:mt-8 lg:grid-cols-[1.4fr_1fr] lg:gap-10">
+        <form id="mimipip-checkout" className="min-w-0 space-y-4" onSubmit={pay}>
+          <p className="caps text-slate">Your details</p>
+          <label className="grid gap-1.5 text-xs text-slate">Deliver to
+            <select className={fieldClass + ' text-base text-charcoal'} autoComplete="shipping country" value={countryCode} onChange={e => void setCountry(e.target.value)}>
+              {countries.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
+            </select>
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {field('name', 'Full name', 'name')}
+            {field('phone', india ? 'Mobile number' : 'Phone number with country code', 'tel', 'tel')}
+          </div>
+          {field('email', 'Email', 'email', 'email')}
+          {field('address', 'Street address', 'shipping street-address')}
+          <div className="grid gap-3 sm:grid-cols-3">
+            {field('postcode', india ? 'PIN code' : 'Postcode', 'shipping postal-code')}
+            {field('city', 'City', 'shipping address-level2')}
+            {field('state', 'State', 'shipping address-level1')}
+          </div>
+          {(india || form.gstin || form.billingName) && <details className="rounded-[14px] border border-edge p-4"><summary className="cursor-pointer text-sm font-semibold">Business GST invoice (optional)</summary><div className="mt-3 grid gap-3"><label className="grid gap-1.5 text-xs text-slate">GSTIN<input className={fieldClass+' text-base text-charcoal'} value={form.gstin} maxLength={15} autoCapitalize="characters" onChange={e=>setForm({...form,gstin:e.target.value.toUpperCase()})}/></label><label className="grid gap-1.5 text-xs text-slate">Registered business name<input className={fieldClass+' text-base text-charcoal'} value={form.billingName} maxLength={200} onChange={e=>setForm({...form,billingName:e.target.value})}/></label></div></details>}
+          {problem && <p role="alert" className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{problem}</p>}
+          {open === false && <p role="status" className="text-sm">Payments are paused for a moment. Your cart is saved.</p>}
+          {terms}
+        </form>
+        <section aria-label="Order summary" className="hidden h-fit lg:sticky lg:top-32 lg:flex lg:max-h-[calc(100vh-10rem)] lg:flex-col lg:rounded-[22px] lg:bg-wash lg:p-6">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1"><p className="caps mb-3 text-slate">Order summary</p>{bill}</div>
+          <div className="mt-4 shrink-0 border-t border-edge pt-4">{placeButton}<p className="mt-3 text-center text-xs text-slate">Secure payment by Razorpay.</p></div>
+        </section>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-edge bg-cloud/95 px-4 pt-3 backdrop-blur-md lg:hidden" style={{paddingBottom:'calc(env(safe-area-inset-bottom) + 0.5rem)'}}>
+        {placeButton}<p className="mt-2 text-center text-xs text-slate">Secure payment by Razorpay.</p>
+      </div>
     </main>
   );
 }

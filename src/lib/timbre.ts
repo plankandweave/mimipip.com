@@ -1,7 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { anthropicKeyFor } from "@/lib/ai-keys";
 import { caDownload, caUpload } from "@/lib/corporate-art-store";
 import { signArt, DAY } from "@/lib/corporate-files";

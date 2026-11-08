@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 // Shared bits of the walkthrough routes, so the three of them agree about what
 // a walkthrough is and where its files live.

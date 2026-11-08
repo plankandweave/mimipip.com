@@ -1,4 +1,5 @@
-import { offlineDatabaseFetch } from "../brand/offline-database";
+import { isolatedStorage } from "@/brand/storage";
+import { backendUrl, backendPublicKey, MIMIPIP_SCHEMA } from "../brand/backend";
 import { createClient } from "@supabase/supabase-js";
 
 // Read-only public catalogue access (RLS: anon can only read active catalogue).
@@ -15,23 +16,13 @@ import { createClient } from "@supabase/supabase-js";
 // callers. Deriving it from a concrete call expression reproduces it exactly.
 const make = (religionBrowse = false) =>
   createClient(
-    "https://database.invalid",
-    "offline-public-placeholder",
+    backendUrl(),
+    backendPublicKey(),
     {
       auth: { persistSession: false },
-      // Catalogue endpoints are gated DB-side (gatekeeper.pre_request): an
-      // anon request to a gated path must carry this header or PostgREST
-      // answers 401. In Sep 2026, 96% of edge traffic was scrapers replaying
-      // the public anon key against the catalogue RPCs — the header is held
-      // as a Worker secret (SSR_GATE_SECRET, never NEXT_PUBLIC_*), so it
-      // exists on every server-side call and never ships in a client bundle.
-      // Client components keep using supabase-browser.ts, which only touches
-      // ungated endpoints. See
-      // supabase/migrations/20260923050000_scraper_gate_pre_request.sql.
+      db: { schema: MIMIPIP_SCHEMA },
       global: {
-        fetch: offlineDatabaseFetch,
         headers: {
-          ...(process.env.SSR_GATE_SECRET ? { "x-zyv-ssr": process.env.SSR_GATE_SECRET } : {}),
           ...(religionBrowse ? { "x-zyv-religion": "browse" } : {}),
         },
       },
@@ -47,6 +38,7 @@ function client(): Client {
 
 export const supabase: Client = new Proxy({} as Client, {
   get(_target, prop) {
+    if (prop === "storage") return isolatedStorage(client().storage);
     const c = client() as unknown as Record<PropertyKey, unknown>;
     const value = c[prop];
     return typeof value === "function" ? (value as (...a: unknown[]) => unknown).bind(c) : value;

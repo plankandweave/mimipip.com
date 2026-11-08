@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { assetFetch } from "@/lib/asset-fetch";
 import { mediaBucket } from "@/lib/r2-media";
 import { MEDIA_BASE } from "@/lib/media-url";

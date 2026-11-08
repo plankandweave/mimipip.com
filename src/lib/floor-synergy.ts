@@ -1,6 +1,6 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { caDownload } from "@/lib/corporate-art-store";
 import { thumbnailBytesRemote } from "@/lib/media-client";
 import type { SiteBatchWall } from "@/lib/site-batch";

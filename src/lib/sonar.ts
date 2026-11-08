@@ -1,7 +1,7 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import QRCode from "qrcode";
 import { anthropicKeyFor } from "@/lib/ai-keys";
 import { sayIn } from "@/lib/timbre";

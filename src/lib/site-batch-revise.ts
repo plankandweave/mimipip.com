@@ -1,6 +1,6 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { approvedCandidates, type SiteBatch, type SiteBatchWall } from "@/lib/site-batch";
 import { cityAllows, storeCity } from "@/lib/site-batch-rules";
 import { anthropicKeyFor } from "@/lib/ai-keys";

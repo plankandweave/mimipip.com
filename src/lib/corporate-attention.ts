@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import type { OsOrderStatus } from "./corporate-os";
 import { settledStatus } from "./partner-stage-label";
 
@@ -236,7 +236,7 @@ export function firstStuckAt(
  */
 export async function syncAttention(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sb: SupabaseClient<any, "public", any>,
+  sb: SupabaseClient,
   rows: Array<{
     id: string;
     status?: string | null;
@@ -315,7 +315,7 @@ export async function syncAttention(
  */
 export async function rememberSettled(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sb: SupabaseClient<any, "public", any>,
+  sb: SupabaseClient,
   rows: Array<{ id: string; status?: string | null; os_order_id?: unknown }>,
   statuses: Record<number, OsOrderStatus>,
 ): Promise<Map<string, string>> {

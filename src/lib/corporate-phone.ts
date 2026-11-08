@@ -1,3 +1,4 @@
+import { backendUrl, MIMIPIP_SCHEMA } from "@/brand/backend";
 import "server-only";
 import { serviceAvailable } from "../brand/services";
 import { partnerCapabilities } from "./partner-capabilities";
@@ -73,10 +74,10 @@ export async function memberByPhone(mobile: string): Promise<PhoneMember | null>
  *  session cookie is the only thing this door mints. */
 function otpClient() {
   if (!serviceAvailable("database")) return null;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
-  return createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } });
 }
 
 export type SendResult =

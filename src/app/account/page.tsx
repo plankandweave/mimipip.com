@@ -10,7 +10,7 @@ import { AdsConsentToggle } from "@/components/AdsConsentToggle";
 import { usePartner } from "@/components/PartnerProvider";
 
 const STATUS_PILL: Record<string, string> = {
-  pending: "Awaiting payment", paid: "Queued", in_production: "Printing",
+  pending: "Awaiting payment", paid: "Paid", in_production: "Printing",
   printed: "Ready to ship", shipped: "In transit", delivered: "Delivered", cancelled: "Cancelled",
 };
 
@@ -24,8 +24,12 @@ export default function AccountPage() {
   const email = session?.user?.email ?? null;
 
   useEffect(() => {
-    if (loading || !session) return;
-    supabaseBrowser.rpc("my_orders").then(({ data }) => setOrders((data as OrderLite[]) ?? []));
+    if (loading) return;
+    if (!session) {setOrders(null);return;}
+    let active=true;
+    setOrders(null);
+    fetch('/api/account/orders',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Orders unavailable');return r.json();}).then(d=>{if(active)setOrders(d.orders);}).catch(()=>{if(active)setOrders(null);});
+    return()=>{active=false};
   }, [session, loading]);
 
   // Orders come back newest-first from the RPC.
@@ -49,7 +53,7 @@ export default function AccountPage() {
       <div className="mx-auto max-w-2xl">
         <span className="caps text-slate">Account</span>
         <h1 className="mt-1 font-display text-2xl font-bold">Your account</h1>
-        {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1" ? <p role="status">Sign-in and saved orders are unavailable in local review.</p> : email ? (
+        {email ? (
           <p className="mt-1 text-sm text-slate">Signed in as {email}</p>
         ) : partner ? (
           <p className="mt-1 text-sm text-slate">Signed in as {partner.email} through the {partner.name} partner workspace.</p>

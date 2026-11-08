@@ -22,7 +22,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1"){setLoading(false);return;}
     supabaseBrowser.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);

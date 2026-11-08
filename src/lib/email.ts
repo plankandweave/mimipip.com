@@ -37,8 +37,8 @@ export async function sendEmailWithId(
   // tracking never needs a CNAME on www — that record belongs to the store.
   // mail.zyvorah.com has no inbox, so every send falls back to a reply-to on
   // zyvorah.com; a reply must always reach a mailbox someone actually reads.
-  const from = input.from || process.env.EMAIL_FROM || "Zyvorah <hello@mail.zyvorah.com>";
-  const replyTo = input.replyTo || process.env.EMAIL_REPLY_TO || "hello@zyvorah.com";
+  const from = input.from || process.env.EMAIL_FROM || "Mimi Pip <hello@mimipip.com>";
+  const replyTo = input.replyTo || process.env.EMAIL_REPLY_TO || "hello@mimipip.com";
   if (!key) {
     console.warn(`[email] RESEND_API_KEY not set — skipped "${input.subject}" → ${input.to}`);
     return { ok: false, id: null };

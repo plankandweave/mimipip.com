@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabaseAdmin } from "./supabase-admin";
 import { pickFlatImage } from "./queries";
 import { isOsSyncConfigured } from "./os-sync";

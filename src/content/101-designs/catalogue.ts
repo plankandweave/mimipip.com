@@ -1,4 +1,4 @@
-import type sourceRecords from '../../../fixtures/legacy-catalogue/101-catalogue.json';
+type EditorialRecord = { number:number; id:string; name:string; handle:string; flat:string; thumbnail:string; room:string; roomType:string; motif:string; description:string; colours:string[]; moods:string[]; spaces:string[]; sectors:string[]; aesthetics:string[] };
 import records from './catalogue.json';
 import roomRecords from './rooms.json';
 
@@ -10,7 +10,7 @@ export const COLLECTION_101 = '/collections/bagh';
 export const EXPERIENCE_101 = '/collections/bagh';
 // Names are shared with the editorial source. Namespace public handles so a
 // new collection cannot replace an existing database-backed product.
-export function buildEditorialDesigns(input: typeof sourceRecords, rooms: BaghRoom[], roomOrigin: string) {
+export function buildEditorialDesigns(input: EditorialRecord[], rooms: BaghRoom[], roomOrigin: string) {
 const designs = input.map(({ number, id, name, handle, flat, thumbnail, room, roomType, motif, description, colours, moods, spaces, sectors, aesthetics }) => ({
   number, id, name, handle, flat, thumbnail, room, roomType, motif, description, colours, moods, sectors, aesthetics,
   spaces: [...new Set([...spaces, ...rooms.filter(r => r.design === number).map(r => r.roomType)])],

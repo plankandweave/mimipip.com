@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import type { CorporateSession } from "./corporate-auth";
 import { can, sessionActor } from "./corporate-auth";
 import { caSignedUploadUrl } from "./corporate-art-store";

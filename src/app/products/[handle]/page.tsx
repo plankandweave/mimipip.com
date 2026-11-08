@@ -1,3 +1,4 @@
+import { MimiWallpaperRate } from "@/components/MimiWallpaperRate";
 import {legacyPetalsDestination} from "@/brand/review/petals-legacy";
 import {find as findReview} from "@/brand/review/data";
 import {ReviewDetail} from "@/brand/review/pages";
@@ -89,15 +90,15 @@ const ART_STORIES = {
   matsya: {
     heading: "The world worth carrying",
     introduction: "An immense fish fills the sky above a delicate world of boats, trees and human places. Hear the story held in the painting.",
-    film: "https://media.zyvorah.com/art-films/matsya-karma-river/matsya-landscape-v2.mp4",
-    poster: "https://media.zyvorah.com/product-images/matsya-karma-river/matsya-living-v1.webp",
+    film: "https://media.mimipip.com/art-films/matsya-karma-river/matsya-landscape-v2.mp4",
+    poster: "https://media.mimipip.com/product-images/matsya-karma-river/matsya-living-v1.webp",
     companion: { name: "Karma", handle: "karma", text: "The waters recede. Life begins again, and the work of renewal becomes ours." },
   },
   karma: {
     heading: "What happens after the waters",
     introduction: "A small fish, returning growth and a vessel on deep blue water carry the next chapter of the story.",
-    film: "https://media.zyvorah.com/art-films/matsya-karma-river/karma-landscape-v2.mp4",
-    poster: "https://media.zyvorah.com/product-images/matsya-karma-river/karma-reading-v1.webp",
+    film: "https://media.mimipip.com/art-films/matsya-karma-river/karma-landscape-v2.mp4",
+    poster: "https://media.mimipip.com/product-images/matsya-karma-river/karma-reading-v1.webp",
     companion: { name: "Matsya", handle: "matsya", text: "Return to the beginning: the protecting presence that carries a vulnerable world through pralaya." },
   },
 } as const;
@@ -202,7 +203,7 @@ function fixedSizeTitle(p: FixedMetaProduct, webMaterialSlug: string | null): st
   const shown = [...sizes].reverse().slice(0, 2).reverse();
   const head = `${p.title} ${noun}`;
   const withSizes = shown.length ? `${head} — ${shown.join(" & ")}` : head;
-  return `${withSizes.length <= 62 ? withSizes : head} | Zyvorah`;
+  return `${withSizes.length <= 62 ? withSizes : head} | Mimi Pip`;
 }
 
 /** The <head> description for a fixed-size piece. Both the medium and the
@@ -246,7 +247,7 @@ const SQUARE_TOLERANCE = 0.1;
  *  descriptive searches, clicks only on the brand. So the title carries the
  *  design's first subject and first room from its own attributes, falling
  *  back step by step to keep inside what Google displays (~60 characters
- *  before " | Zyvorah"). A subject already in the name is not repeated. */
+ *  before " | Mimi Pip"). A subject already in the name is not repeated. */
 function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAttributes> | null): string {
   const has = (word: string) => title.toLowerCase().includes(word.toLowerCase());
   const subject = attributes?.subjects.find((s) => s.length <= 20 && !has(s));
@@ -259,7 +260,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
     `${title} ${noun} — Custom Size`.replace(/\s+/g, " "),
   ].filter((c): c is string => !!c);
   const fit = candidates.find((c) => c.length <= 60) ?? candidates[candidates.length - 1];
-  return `${fit} | Zyvorah`;
+  return `${fit} | Mimi Pip`;
 }
 
  async function buildPageMetadata({
@@ -294,20 +295,20 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
     ? roomForIdeasWalls.find((wall) => wall.number === officeWallNumber)
     : undefined;
   const title = service
-    ? `${p.title} — a Zyvorah service | Zyvorah`
+    ? `${p.title} — a Mimi Pip service | Mimi Pip`
     : family === "length"
-      ? `${p.title} — ${category.title}, Sold Per Linear Metre | Zyvorah`
+      ? `${p.title} — ${category.title}, Sold Per Linear Metre | Mimi Pip`
       : family === "fixed"
         ? // "Canvas Art" is the family's name, not a promise about the medium —
           // a piece sold only as peel & stick must not be titled canvas.
           fixedSizeTitle(p, category.webMaterialSlug)
         : officeWall
-          ? `${officeWall.title} — ${officeWall.space} Wall Mural | Zyvorah`
+          ? `${officeWall.title} — ${officeWall.space} Wall Mural | Mimi Pip`
         : p.handle.startsWith("piano-")
-          ? `${p.title} Piano Wall Mural | Zyvorah`
+          ? `${p.title} Piano Wall Mural | Mimi Pip`
         : muralTitle(p.title, attributes);
   const description = service
-    ? truncate(stripHtml(p.description) || `${p.title}, a Zyvorah studio service.`, 155)
+    ? truncate(stripHtml(p.description) || `${p.title}, a Mimi Pip studio service.`, 155)
     : family === "length"
       ? `${p.title}, priced at ${marketPriceLabel(Number(p.price_per_metre ?? 0), marketCode)} per linear metre and supplied as ${supplyLabel(
           Math.max(category.minOrderQty, category.fixedLengthM ?? 1),
@@ -317,7 +318,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
       : family === "fixed"
         ? fixedSizeDescription(p, category.webMaterialSlug, marketCode)
         : officeWall
-          ? truncate(`${officeWall.title} for the ${officeWall.space.toLowerCase()} — a mural wallpaper design from Zyvorah's Room for Ideas office collection. Room image is a visualisation.`, 155)
+          ? truncate(`${officeWall.title} for the ${officeWall.space.toLowerCase()} — a mural wallpaper design from Mimi Pip's Room for Ideas office collection. Room image is a visualisation.`, 155)
         : productDescription(p.title, p.description, family, fromRateFor(p, category), marketCode, attributes);
   const path = `/products/${handle}`;
   const url = `${SITE_URL}${marketUrl(path, marketCode)}`;
@@ -332,7 +333,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
       title,
       description,
       url,
-      siteName: "Zyvorah",
+      siteName: "Mimi Pip",
       ...(ogImage ? { images: [{ url: ogImage, alt: ogImageRow.alt || productImageAlt(p.title, ogImageRow, attributes) }] } : {}),
     },
     twitter: {
@@ -352,7 +353,11 @@ export default async function ProductPage({
   searchParams: Promise<{ colourway?: string; w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
 }) {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));const p=findReview(handle);if(!p)notFound();return <ReviewDetail p={p}/>;}
+  if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));
+  const mimiProduct=findReview(handle);
+  if(!mimiProduct)notFound();
+  // Fixed-size Mimi ranges retain their own dimensions and product presentation.
+  if(!mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.
@@ -476,7 +481,7 @@ export default async function ProductPage({
   // two-tower framing. A shared amenity's second colourway is a palette
   // option, not another gym.
   const perTower = projectSpaces.some((sp) => sp.perTower);
-  // Autograph — the top price category. Exclusive to zyvorah.com, so an
+  // Autograph — the top price category. Exclusive to mimipip.com, so an
   // Autograph design NEVER shows the "also on Amazon" link below, whatever the
   // marketplace table happens to say.
   const isAutograph = isAutographTier(product.price_tier);
@@ -532,7 +537,7 @@ export default async function ProductPage({
     : null;
   const rating = ratingData as { count: number; average: number } | null;
   const attributes = cleanProductAttributes(attrRaw as RawAttributes | null);
-  const discoveryLine = designDiscoveryLine(attributes);
+  const discoveryLine = product.description ? truncate(stripHtml(product.description).split(/(?<=[.!?])\s+/)[0],240) : designDiscoveryLine(attributes);
   const discoveryImages = images.map((image) => ({
     ...image,
     alt: image.alt || productImageAlt(product.title, image, attributes),
@@ -632,7 +637,7 @@ export default async function ProductPage({
     ? videoObjectJsonLd(siteFilm, {
         path: `/products/${product.handle}`,
         name: `${product.title} — the film`,
-        description: truncate(stripHtml(product.description ?? ""), 300) || `${product.title} by Zyvorah, on the wall.`,
+        description: truncate(stripHtml(product.description ?? ""), 300) || `${product.title} by Mimi Pip, on the wall.`,
       })
     : null;
   const structuredData = [
@@ -834,7 +839,7 @@ export default async function ProductPage({
                 <span className="block text-xs text-mist">
                   {product.border_height_cm ? `${product.border_height_cm} cm tall · ` : ""}
                   {supplyLabel(Math.max(minMetres, category.fixedLengthM ?? 1), product.supply_format ?? null, product.segment_length_m ?? null)}
-                  {" · "}<MarketPricingNote india="GST included" />
+                  {" · "}<MarketPricingNote india="Cart and checkout totals include GST" />
                 </span>
               </p>
             ) : isFixedSize ? (
@@ -845,16 +850,16 @@ export default async function ProductPage({
                   {facts.fromPrice != null ? <>From <MarketMoney inr={facts.fromPrice} includeDelivery /></> : "Fixed sizes"}
                 </span>
                 <span className="block text-xs text-mist">
-                  {facts.fixedSizes.length} fixed sizes · <MarketPricingNote india="GST included" />
+                  {facts.fixedSizes.length} fixed sizes · <MarketPricingNote india="Cart and checkout totals include GST" />
                 </span>
               </p>
             ) : fromPrice != null ? (
               <p className="text-slate">
-                <span className="font-semibold text-charcoal"><MarketMoney inr={fromPrice} /> per sq ft</span>
+                <span className="font-semibold text-charcoal"><MimiWallpaperRate /></span>
                 <span className="block text-xs text-mist">
                   {product.ready_sizes?.length
-                    ? <>Ready sizes · Peel &amp; stick · <MarketPricingNote india="GST included" /></>
-                    : <MarketPricingNote india="GST included" />}
+                    ? <>Ready sizes · Peel &amp; stick · <MarketPricingNote india="Cart and checkout totals include GST" /></>
+                    : <MarketPricingNote india="Cart and checkout totals include GST" />}
                 </span>
               </p>
             ) : (
@@ -883,7 +888,7 @@ export default async function ProductPage({
                     // a warning, not a promise (founder, 8 October 2026); the
                     // builder explains made-to-measure once they are in it.
                     <p data-mkt-price className="min-w-0 shrink-0 text-sm font-semibold leading-tight text-charcoal">
-                      <MarketMoney inr={fromPrice} /> per sq ft
+                      <MimiWallpaperRate />
                     </p>
                   )}
                   <a href="#create-your-wall" className="btn flex min-h-11 min-w-0 flex-1 items-center justify-center px-3 text-center leading-tight">
@@ -1117,7 +1122,7 @@ export default async function ProductPage({
 
           {/* discreet founder link — below materials; must not crowd configuration */}
           <p className="mt-6 text-xs leading-relaxed text-mist">
-            Chosen for walls, not merely catalogues. Discover the thinking behind Zyvorah —{" "}
+            Chosen for walls, not merely catalogues. Discover the thinking behind Mimi Pip —{" "}
             <Link href="/founders-note" className="font-medium text-slate underline underline-offset-2 hover:text-charcoal">A Note from Our Founder</Link>.
           </p>
         </div>
@@ -1148,7 +1153,7 @@ export default async function ProductPage({
         <section className="container-x pb-12 lg:pb-20" aria-labelledby="art-pair-heading">
           <div className="grid overflow-hidden rounded-[28px] border border-[#ded5c8] bg-[#f7f2e9] lg:grid-cols-[minmax(0,1.75fr)_minmax(0,0.75fr)]">
             <Image
-              src="https://media.zyvorah.com/product-images/matsya-karma-river/matsya-karma-pair-v1.webp"
+              src="https://media.mimipip.com/product-images/matsya-karma-river/matsya-karma-pair-v1.webp"
               alt="Matsya and Karma displayed as two separate framed paintings in one room"
               width={1536}
               height={1024}

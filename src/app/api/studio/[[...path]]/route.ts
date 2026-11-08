@@ -3,7 +3,7 @@ import { STYLE_RULES_PROMPT } from "@/lib/style-rules";
 import { NextResponse, after } from "next/server";
 import { revalidatePath } from "next/cache";
 import { bumpCatalogueVersion } from "@/lib/catalogue-cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { staffKey } from "@/lib/staff-key";

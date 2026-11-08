@@ -1,3 +1,7 @@
+import {pricedLettering} from '@/brand/commerce/lettering';
+import {pricedInstallation} from '@/brand/commerce/installation';
+import { approvedLayout } from '@/brand/commerce/approved-layout';
+import { artFor } from '@/brand/commerce/order-payload';
 import { textOverlaySchema, overlayPlacementError } from "@/lib/text-overlay";
 import { renderTextOverlay } from "@/lib/text-overlay-server";
 import { NAME_FEE } from "@/lib/pricing";
@@ -10,7 +14,7 @@ import { supabase } from "@/lib/supabase";
 import { getGatedUser } from "@/lib/auth-server";
 import type { CropData } from "@/lib/visualizer";
 import { toUploadBody, CACHE_IMMUTABLE } from "@/lib/storage-body";
-import { docStorageClient } from "@/lib/private-doc";
+import { docStorageClient, docRef, signDoc } from "@/lib/private-doc";
 import { recordCommercialEvent, visitorTokenOf } from "@/lib/server-events";
 import { TASTE_COOKIE } from "@/lib/taste";
 import { recordCartFailure } from "@/lib/cart-diagnostics";
@@ -41,6 +45,14 @@ function withCookie(res: NextResponse, token: string, fresh: boolean) {
 async function readCart(token: string) {
   const { data, error } = await supabase.rpc("cart_get", { p_session_token: token });
   if (error) throw error;
+  if (data?.items) {
+    data.items = await Promise.all(data.items.map(async (item: {preview_url?:string|null}) => {
+      const ref=docRef(item.preview_url);
+      // RPC callers cannot make this service-role reader sign another cart's file.
+      const ownPreview=ref?.bucket==='mimipip-order-previews' && ref.path.startsWith(token+'/');
+      return {...item,preview_url:ownPreview?await signDoc(item.preview_url):null};
+    }));
+  }
   return data;
 }
 
@@ -81,6 +93,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
+  if (!Number.isInteger(body.quantity) || body.quantity < 1 || body.quantity > 99 ||
+      ![body.widthCm, body.heightCm].every(value => Number.isFinite(value) && value >= 10 && value <= 3000)) {
+    return NextResponse.json({error: 'Enter valid wall dimensions and a quantity from 1 to 99.'}, {status:400});
+  }
+
+  // Refuse production instructions before saving an unfulfillable cart or rendering paid extras.
+  const printArt=artFor(body.productHandle);
+  if(!printArt)return NextResponse.json({error:'This design is not available to order yet.'},{status:400});
+  try { approvedLayout(body.crop,body.widthCm,body.heightCm,printArt.art,body.productHandle); }
+  catch(error) { return NextResponse.json({error:error instanceof Error?error.message:'Please check your wall layout.'},{status:400}); }
+
+  if(body.crop?.installation){
+    try {body.crop.installation=pricedInstallation(body.crop.installation,body.widthCm,body.heightCm,body.quantity,'IN')!;}
+    catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Check installation.'},{status:400});}
+  }
+  try {pricedLettering(body.crop,body.widthCm,body.heightCm,'IN');}
+  catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Check lettering.'},{status:400});}
   if (body.crop?.personalisation?.childName && !body.crop.textOverlay) {
     return NextResponse.json({ error: "Please refresh and approve the name cloud preview." }, { status: 400 });
   }
@@ -107,7 +136,7 @@ export async function POST(req: Request) {
   }
 
   // Persist the room preview (if any) so the order copy can show it later.
-  // Only a verified customer's room preview is stored: the bucket is public,
+  // Only a verified customer's room preview is stored in the private Mimi bucket;
   // and since 30 Sep 2026 anonymous visitors can preview on their own photo in
   // the browser. The server decides, not the page — a stripped client check
   // must not turn this route into free public image hosting. Capped at ~4 MB.
@@ -140,7 +169,7 @@ export async function POST(req: Request) {
     p_height_cm: body.heightCm,
     p_area_sqft: body.areaSqft,
     p_unit_price: body.unitPrice,
-    p_quantity: Math.max(1, Math.floor(body.quantity || 1)),
+    p_quantity: body.quantity,
     p_line_total: body.lineTotal,
     p_crop_data: body.crop ?? null,
     p_preview_url: previewUrl,

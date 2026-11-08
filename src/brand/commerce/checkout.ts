@@ -1,3 +1,6 @@
+import {checkedBillingIdentity} from './billing-identity';
+import {pricedLettering} from './lettering';
+import {z} from 'zod';
 /**
  * MimiPip's checkout. The server owns every figure: it re-prices the cart from
  * prices.ts, takes the money through Razorpay, proves the capture against
@@ -10,6 +13,9 @@
  * Record: mimipip_orders. A paid order that
  * has not reached the OS is retried on the cron and listed at /unsent.
  */
+import {pricedInstallation,installationAddressAllowed} from './installation';
+import { priceSample } from './samples';
+import { approvedLayout } from './approved-layout';
 import { marketOf, currencyOf, nameOf, priceLine, refused, onSale, type Priced } from './prices';
 import { artFor, webOrderBody, type StoredCustomer, type StoredLine } from './order-payload';
 
@@ -29,6 +35,9 @@ export type Pay = {
 };
 export type Env = {
   MIMIPIP_CHECKOUT_ENABLED?: string;
+  MIMIPIP_SAMPLE_CHECKOUT_ENABLED?: string;
+  MIMIPIP_LETTERING_CHECKOUT_ENABLED?: string;
+  MIMIPIP_BUSINESS_INVOICE_ENABLED?: string;
   DB?: { prepare(sql: string): Statement };
   /** The store Worker's private door to Razorpay and the OS. The keys stay there; this site holds none. */
   STORE_PAY?: Pay;
@@ -64,25 +73,42 @@ export function paymentMatches(p: any, o: Pick<Order, 'razorpay_order_id' | 'amo
     && p.currency === o.currency && p.amount_refunded === 0 && /^pay_[A-Za-z0-9]+$/.test(p.id);
 }
 
-function cleanPlacement(p: any): StoredLine['placement'] {
-  if (!p) return undefined;
-  const { zoom, cropX, cropY } = p;
-  if (![zoom, cropX, cropY].every(n => typeof n === 'number' && Number.isFinite(n)) || zoom < 1 || zoom > 8 || cropX < 0 || cropX > 1 || cropY < 0 || cropY > 1) return undefined;
-  return { zoom, cropX, cropY, flipH: !!p.flipH, flipV: !!p.flipV };
+const plainPlacement=z.object({zoom:z.number().finite().min(1).max(8),cropX:z.number().finite().min(0).max(1),cropY:z.number().finite().min(0).max(1),flipH:z.boolean().optional(),flipV:z.boolean().optional()}).strict();
+function cleanPlacement(p: unknown): StoredLine['placement'] {
+  if (p == null) return undefined;
+  const checked=plainPlacement.safeParse(p);
+  if(!checked.success)throw new Error('Please reopen this design and check its placement.');
+  return {...checked.data,flipH:!!checked.data.flipH,flipV:!!checked.data.flipV};
 }
 
 /** Prices a cart for a country, or says why it cannot be sold there. */
 export function priceCart(lines: unknown, countryCode: string):
-  { lines: (Priced & { placement?: StoredLine['placement'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
+  { lines: (Priced & { kind?: 'sample'; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
   if (!Array.isArray(lines) || !lines.length || lines.length > 50) return { refused: 'Your cart is empty.' };
   const market = marketOf(countryCode);
   const out = [];
   for (const raw of lines as any[]) {
     const slug = String(raw?.slug ?? '');
+    if (raw?.kind === 'sample') {
+      const sample = priceSample(raw,countryCode);
+      if ('refused' in sample) return sample;
+      out.push(sample); continue;
+    }
+    if (raw?.kind != null) return {refused:'This order type is not supported.'};
     if (!artFor(slug) || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
     const priced = priceLine({ slug, qty: raw.qty, widthCm: raw.widthCm, heightCm: raw.heightCm }, market);
     if (refused(priced)) return priced;
-    out.push({ ...priced, placement: cleanPlacement(raw.placement) });
+    try {
+      const crop=approvedLayout(raw.crop,priced.widthCm,priced.heightCm,artFor(slug)!.art,slug);
+      const placement=crop?{zoom:crop.zoom,cropX:crop.offsetX,cropY:crop.offsetY,flipH:!!crop.flipH,flipV:!!crop.flipV}:cleanPlacement(raw.placement);
+      const installation=crop?.installation?pricedInstallation(crop.installation,priced.widthCm!,priced.heightCm!,priced.qty,countryCode):undefined;
+      if(installation && priced.ratePerSqft===null)return {refused:'Installation is available for measured wallpaper only.'};
+      if(crop && installation)crop.installation=installation;
+      const lettering=pricedLettering(crop,priced.widthCm!,priced.heightCm!,countryCode);
+      if(lettering && priced.ratePerSqft===null)return {refused:'Lettering is available for measured wallpaper only.'};
+      if(crop && lettering){crop.textOverlay=lettering.overlay;crop.personalisation=lettering.personalisation;}
+      out.push({ ...priced, lineMinor:priced.lineMinor+(installation?.total??0)*100+(lettering?.fee??0)*100, ...(lettering?{personalisationMinor:lettering.fee*100}:{}), ...(installation?{installationMinor:installation.total*100}:{}), placement, ...(crop?{crop}:{}) });
+    } catch (error) { return {refused:error instanceof Error?error.message:'Check your approved layout.'}; }
   }
   return { lines: out, totalMinor: out.reduce((s, l) => s + l.lineMinor, 0), currency: currencyOf(market) };
 }
@@ -166,13 +192,25 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     if (path === '/api/checkout/create') {
       if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
       if (!validCustomer(b.customer)) return json({ error: 'Check your delivery details.' }, 400);
+      let billingIdentity;
+      try{billingIdentity=checkedBillingIdentity(b.customer.billingIdentity,b.customer.countryCode);}
+      catch(error){return json({error:error instanceof Error?error.message:'Check business invoice details.'},400);}
+      if(billingIdentity && env.MIMIPIP_BUSINESS_INVOICE_ENABLED!=='1')return json({error:'Please contact Mimi Pip for a business invoice before ordering.'},503);
       const priced = priceCart(b.lines, b.customer.countryCode);
       if ('refused' in priced) return json({ error: priced.refused }, 400);
+      if (priced.lines.some(l=>l.kind==='sample') && env.MIMIPIP_SAMPLE_CHECKOUT_ENABLED !== '1')
+        return json({error:'Sample ordering is not available yet. Please ask us for a close-up of your design.'},503);
+      if(priced.lines.some(l=>l.crop?.textOverlay) && env.MIMIPIP_LETTERING_CHECKOUT_ENABLED!=='1')
+        return json({error:'Lettering orders are not available yet. Your approved layout is saved in your cart.'},503);
+      if(priced.lines.some(l=>l.crop?.installation) && !installationAddressAllowed(b.customer.countryCode,b.customer.postcode))
+        return json({error:'Installation is not available at your delivery PIN code. Remove installation or use a serviceable delivery address.'},400);
       const linesHash = await digest(JSON.stringify(priced.lines));
       if (o && o.status === 'pending' && o.lines_hash !== linesHash) return json({ error: 'Your cart changed. Please try again.', renew: true }, 409);
+      const c = b.customer;
+      const customer: StoredCustomer = { name: c.name.trim(), email: c.email.trim(), phone: c.phone.trim(), address: c.address.trim(), city: c.city.trim(), state: c.state.trim(), postcode: c.postcode.trim(), countryCode: c.countryCode, country: countryName(c.countryCode),...(billingIdentity?{billingIdentity}:{}) };
+      if (o && o.status === 'pending' && JSON.stringify(JSON.parse(o.customer)) !== JSON.stringify(customer))
+        return json({ error: 'Your delivery details changed. Please try again.', renew: true }, 409);
       if (!o) {
-        const c = b.customer;
-        const customer: StoredCustomer = { name: c.name.trim(), email: c.email.trim(), phone: c.phone.trim(), address: c.address.trim(), city: c.city.trim(), state: c.state.trim(), postcode: c.postcode.trim(), countryCode: c.countryCode, country: countryName(c.countryCode) };
         const id = 'MP-' + crypto.randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase();
         const now = Date.now();
         await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,'{}',?,?)")

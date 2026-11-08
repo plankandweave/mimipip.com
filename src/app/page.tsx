@@ -34,17 +34,17 @@ export const revalidate = 3600;
   const { countryCode, alternates } = marketLanding("/", (await searchParams)?.market);
   const home = countryCode === HOME_MARKET;
   const title = home
-    ? "Zyvorah | Designer Wallpapers for Homes & Workspaces"
-    : `Zyvorah | Wallpaper & Murals Delivered to ${countryPhrase(countryCode)}`;
+    ? "Mimi Pip | Designer Wallpapers for Homes & Workspaces"
+    : `Mimi Pip | Wallpaper & Murals Delivered to ${countryPhrase(countryCode)}`;
   const description = home
     ? "Discover designer wallpapers and bespoke wall murals for homes, offices and corporate spaces. Explore designs, preview your walls and create a space with character."
-    : `Explore Zyvorah mural wallpaper designs and canvas art from ${marketPriceLabel(CATALOGUE_FLOOR_RATE, countryCode)}/sq ft. ${deliveryPitch(countryCode)}`;
+    : `Explore Mimi Pip mural wallpaper designs and canvas art from ${marketPriceLabel(CATALOGUE_FLOOR_RATE, countryCode)}/sq ft. ${deliveryPitch(countryCode)}`;
   return {
     title: { absolute: title },
     description,
     openGraph: {
       type: "website",
-      siteName: "Zyvorah",
+      siteName: "Mimi Pip",
       locale: home ? "en_IN" : `en_${countryCode}`,
       url: alternates.canonical,
       title,
@@ -66,7 +66,7 @@ import { ForYouRow } from "@/components/ForYouRow";
 import { Reveal } from "@/components/Reveal";
 import { Unroll, MeasureLines } from "@/components/Unroll";
 import { BadgeIcon } from "@/components/BadgeIcon";
-import { FounderNote } from "@/components/FounderNote";
+import { MimiWallpaperRate } from "@/components/MimiWallpaperRate";
 import { sceneKeyForRoom, showsRoom } from "@/lib/rooms";
 import { logicalDayKey, logicalDayIndex, seededShuffle, TILE_PALETTE } from "@/lib/dailyRotation";
 import { buildHeroCandidates, heroCandidatesForDay, roomSettingOf } from "@/lib/heroRotation";
@@ -186,17 +186,6 @@ const HERO_SLIDES = 3;
   // cron job or stored state (nothing to fail silently or go stale): the
   // day's picks are a pure function of today's date, so every request already
   // reflects it, and it flips for every visitor the instant 5 AM IST arrives.
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){
-    const rows=[['Wallpaper worlds','wallpaper-worlds'],['Hopscotch','hopscotch'],['Colour & Create','colour-create'],['Borders','mimi-borders'],['Happy Lines','happy-lines'],['Little Steps, Big Adventures','little-steps-big-adventures']].filter(([,key])=>reviewFilter('collection',key).length>0);
-    return <div>
-    <section className="relative mx-4 mt-4 overflow-hidden rounded-[32px] lg:mx-6"><div className="relative h-[80vh] min-h-[540px] w-full lg:aspect-video lg:h-auto lg:max-h-[80vh] lg:min-h-0"><HeroSlider label="Featured rooms" slides={['cloud-parade-front-v2','sage-meadow-front-v2','buttercup-morning-front-v2','little-rooftops-front-v2'].map((s,i)=>({image:'/review/assets/'+s+'.webp',content:<div className="absolute inset-x-0 bottom-16 px-8 text-white lg:px-16"><p className="caps">Little spaces, big possibilities</p><h1 className="max-w-3xl text-4xl lg:text-6xl">{['A room for every little story.','Little beginnings. Lovely little worlds.','A color they can call their own.','Room for growing imaginations.'][i]}</h1><Link href={['/browse/collection','/browse/space?value=nursery','/browse/color','/browse/space?value=shared'][i]}>{['Explore the collections','Explore nursery ideas','Shop by Color','Explore shared rooms'][i]} →</Link></div>,alt:['Cloud Parade bedroom' ,'Sage Meadow nursery','Buttercup Morning bedroom','Little Rooftops shared room'][i]}))}><div className="container-x py-12 text-white"><p className="caps">Little spaces, big possibilities</p><h1 className="text-4xl lg:text-6xl">A room for every little story.</h1><Link href="/browse/collection">Explore the collections →</Link></div></HeroSlider></div></section>
-    {rows.map(([title,key])=><Unroll key={key} variant="settle"><section className="container-x py-10"><div className="mb-6 flex items-end justify-between"><h2 className="mt-2 text-3xl lg:text-4xl">{title}</h2><Link href={'/browse/collection?value='+key}>See all →</Link></div><div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">{reviewFilter('collection',key).slice(0,4).map(p=><ProductCard key={p.id} product={reviewCard(p)}/>)}</div></section></Unroll>)}
-    <InRealHomesSection />
-    <Reveal><section className="container-x py-20"><h2 className="text-3xl lg:text-4xl">Find your look</h2><div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">{reviewAxes.map((a,i)=><SpaceTile key={a} href={'/browse/'+a} tile={{slug:a,label:'Shop by '+reviewLabel(a),tease:['Meet the design families.','Start with a favorite shade.','Follow an animal, a story or a theme.','From newborn nurseries to school-age rooms.','Choose the corner you are decorating.'][i],image:'/review/assets/'+['sage-meadow-front-v2', 'discovery-color-v2', 'discovery-concept-v2', 'discovery-age-v3', 'sand-and-seed-front-v3'][i]+'.webp',portrait:true}}/>)}</div></section></Reveal>
-    <section className="my-10 bg-[#99CFE5] py-14"><div className="container-x"><HearFromUsFirst source="home" /></div></section>
-    <Reveal><section className="container-x pb-16"><h2 className="text-3xl">Printed for your wall</h2><p>Every wallpaper is printed to your wall’s size. Enter your measurements on any design to see your price. Delivery is included, in India and abroad.</p></section></Reveal>
-    <Reveal><section className="container-x pb-6"><h2 className="text-2xl">Designs for shared places</h2><Link href="/commercial">Commercial projects</Link> · <Link href="/trade">Trade and partners</Link></section></Reveal></div>
-  }
   const pool = await getShowcasePool();
   // Studio "Signature" spotlight — an editorial pick (the hero collections and
   // their marquee designs), NOT a bestseller/sales claim. Exactly ONE line,
@@ -212,7 +201,7 @@ const HERO_SLIDES = 3;
     getSignatureCollections(),
     getJustIn(12),
     getJustInCanvas(12),
-    getProductsByTag(canvasCategory.browseTag, 12),
+    getProductsByTag(canvasCategory.browseTag, 12, undefined, CANVAS_CATEGORY),
     getFacetVocab(),
     getMaterialOffers(),
     getCuratedCollections(),
@@ -411,9 +400,9 @@ const HERO_SLIDES = 3;
   const campaignDesigns = campaignActive ? campaignOrder.map(handle => campaignByHandle.get(handle)).filter((card): card is ProductCardData => !!card?.image && !card.imageIsFlat && heroSafe(card)) : [];
   // Never silently publish a partial campaign lineup.
   const mixedCampaign = campaignOrder.length > 0 && campaignDesigns.length === campaignOrder.length;
-  const campaignCollections = ["ink", "taash", "bagh", "nafas-face-parade", "angan-by-the-sea"];
+  const campaignCollections = ["wallpaper-worlds"];
   if (mixedCampaign) {
-    launchHero = { title: "TAASH", handle: "taash", blurb: null };
+    launchHero = { title: "Wallpaper worlds", handle: "wallpaper-worlds", blurb: null };
     campaignDesigns.forEach(variety.claimDesign);
     for (const handle of campaignCollections) variety.claimCollection(handle, curatedCollections.find(c => c.handle === handle)?.tags ?? [handle]);
   }
@@ -483,11 +472,11 @@ const HERO_SLIDES = 3;
   // It still obeys the variety rule (no design twice, no curated collection
   // fronted twice), and falls back to the old leftover fill if behaviour data
   // is too thin to fill a row — an empty row is worse than a repeated design.
-  const popularFiltered = variety.fillRow(rendered(popular.cards), 8, { hardCurated: true });
+  const popularFiltered = variety.fillRow(rendered(popular.cards), 8, { hardCurated: false });
   const grid = arrangeByAffinity(
     popularFiltered.length >= 4
       ? popularFiltered
-      : variety.fillRow(allLists.flat(), 8, { hardCurated: true }),
+      : variety.fillRow(allLists.flat(), 8, { hardCurated: false }),
     facetVocab,
   );
   // Say only what the data supports: "Best sellers" needs orders behind it,
@@ -549,7 +538,7 @@ const HERO_SLIDES = 3;
           // has its title burned into the left of the picture, and `object-cover`
           // keeps the whole picture only when the frame is at least as wide as
           // the film — at the old 80vh-tall frame (~1.5:1 on a laptop) the title
-          // read "AASH" / "i × Zyvorah". Wider-than-16:9 only trims the ceiling,
+          // read "AASH" / "i × Mimi Pip". Wider-than-16:9 only trims the ceiling,
           // which the floor rule (#8) already allows. Below lg the 9:16 film is
           // used and a taller frame crops only top and bottom.
           className="relative h-[80vh] min-h-[540px] w-full lg:aspect-video lg:h-auto lg:max-h-[80vh] lg:min-h-0"
@@ -565,6 +554,7 @@ const HERO_SLIDES = 3;
               .filter((d) => d.image)
               .map((d) => ({
                 image: d.image as string,
+                framing: { mobilePosition: "50% 100%", desktopPosition: "50% 100%", desktopFit: "contain" as const },
                 alt: d.imageAlt,
                 label: mixedCampaign ? campaignCopy[d.handle]?.kicker : undefined,
                 ...(mixedCampaign && campaignCopy[d.handle] ? { content: (
@@ -666,14 +656,13 @@ const HERO_SLIDES = 3;
                     Walls worth telling stories about.
                   </h1>
                   <p className="mt-4 max-w-md text-[1.05rem] text-surface/85">
-                    Hand-designed wallpaper and murals, cut to your exact wall size in the
-                    material you choose.
+                    Playful mural wallpapers for nurseries, bedrooms and rooms full of imagination.
                   </p>
                   <div className="mt-8 flex gap-3">
                     <Link href="/design-with" className="btn border-surface bg-surface text-charcoal hover:bg-surface/90">
                       Find My Wallpaper
                     </Link>
-                    <Link href="/collections/wall-art" className="btn border-surface/40 bg-transparent text-surface hover:bg-surface hover:text-charcoal">
+                    <Link href="/browse/collection?value=wallpaper-worlds" className="btn border-surface/40 bg-transparent text-surface hover:bg-surface hover:text-charcoal">
                       Shop Wallpapers
                     </Link>
                   </div>
@@ -756,7 +745,7 @@ const HERO_SLIDES = 3;
           {[
             { title: "Find My Wallpaper", desc: "Tell us about your room and receive a considered shortlist.", href: "/design-with", bg: "bg-lavender/40" },
             { title: "Match a Photo", desc: "Photograph something you love and find wallpapers that relate to it.", href: "/match-a-photo", bg: "bg-blush/40" },
-            { title: "Your Own Image", desc: "Bring your own artwork and we cut it to your exact wall size.", href: "/print-your-own", bg: "bg-peach/40" },
+            { title: "Your Own Image", desc: "Explore wallpaper possibilities with your own artwork.", href: "/print-your-own", bg: "bg-peach/40" },
           ].map((j) => (
             <Link key={j.href} href={j.href} className={`${j.bg} flex flex-col justify-between rounded-[22px] p-6 transition-transform hover:-translate-y-0.5`}>
               <div>
@@ -815,6 +804,14 @@ const HERO_SLIDES = 3;
         </section>
         </Unroll>
       )}
+
+      {[['Floor play', 'hopscotch'], ['Colour & Create', 'colour-create'], ['Borders', 'mimi-borders'], ['Happy Lines', 'happy-lines'], ['Little Steps, Big Adventures', 'little-steps-big-adventures']].map(([title, handle]) => {
+        const products = reviewFilter('collection', handle).slice(0, 4);
+        return products.length > 0 ? <Unroll key={handle} variant="settle"><section className="container-x py-10">
+          <div className="mb-8 flex items-end justify-between gap-4"><h2 className="text-3xl lg:text-4xl">{title}</h2><Link href={'/collections/' + handle} className="btn btn-ghost text-sm">View all</Link></div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">{products.map(product => <ProductCard key={product.slug} product={reviewCard(product)} />)}</div>
+        </section></Unroll> : null;
+      })}
 
       {/* ---------- shop by (row 5: after the new-arrival rows, before the spotlight) ---------- */}
       <Reveal>
@@ -927,13 +924,11 @@ const HERO_SLIDES = 3;
       <section className="container-x">
         <div className="pastel-section grid items-center gap-10 bg-lavender/50 md:grid-cols-2">
           <div>
-            <span className="caps text-slate">The Zyvorah way</span>
-            <h2 className="mt-3 text-3xl lg:text-4xl">Any size. Your wall. Made to fit it.</h2>
+            <span className="caps text-slate">The Mimi Pip way</span>
+            <h2 className="mt-3 text-3xl lg:text-4xl">Choose a design. Make room for a story.</h2>
             <p className="mt-4 max-w-md text-slate">
               Tell us your wall&apos;s width and height and we price it by the square
-              foot. The design is sized to your wall; the smallest order is 20 sq ft
-              (at least 4 ft wide). Each design has its own smooth matte surface
-              or linen feel.
+              foot. The design is sized to your wall; the smallest order is 20 sq ft. The finish and price are shown on each design.
             </p>
             {/* H2 (30 Sep 2026 walkthrough): the per-sq-ft rate looks random
                 design to design unless it's said in words. Real tier names
@@ -941,11 +936,7 @@ const HERO_SLIDES = 3;
                 tier; "New season / collaborations" covers Saanjha (TAASH) and
                 Atelier, which set their own rate rather than inheriting one. */}
             <p className="mt-3 max-w-md text-sm text-slate">
-              Prices vary by design, not by size: mural wallpaper starts
-              from <MarketMoney inr={CATALOGUE_FLOOR_RATE} />/sq ft; our Autograph
-              designs have a linen feel and are exclusive to {brand.name}, with the price
-              shown on each design; and new-season collaborations
-              like TAASH carry the collaborating artist&apos;s own rate.
+              <MimiWallpaperRate />
             </p>
             <div className="mt-8 flex flex-wrap gap-5">
               {[
@@ -985,8 +976,7 @@ const HERO_SLIDES = 3;
           <p className="caps text-mist">Surface and feel</p>
           <h2 className="mt-2 text-3xl lg:text-4xl">Feel the difference in every design.</h2>
           <p className="mt-2 text-sm text-slate">
-            Every wallpaper design has its own surface and its own price. Explore
-            the feel here, then see the exact rate on the design page.
+            Each design has an assigned finish. Explore the surfaces, then see your wall’s price on the design page.
           </p>
         </div>
         {/* One card per live finish, on a grid that fits however many there
@@ -1093,12 +1083,12 @@ const HERO_SLIDES = 3;
       <section className="container-x pt-8 pb-20">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <p className="caps text-mist">Loved right now</p>
+            <p className="caps text-mist">Wallpaper worlds</p>
             {/* Titled from what the row is actually made of: only orders earn
                 "Best sellers". Anything else says what it really is. */}
-            <h2 className="mt-2 text-3xl">{gridIsSales ? "Best sellers" : "Most loved this month"}</h2>
+            <h2 className="mt-2 text-3xl">{gridIsSales ? "Best sellers" : "Explore the collection"}</h2>
           </div>
-          <Link href="/collections/wall-art" className="btn btn-ghost text-sm">View all</Link>
+          <Link href="/browse/collection?value=wallpaper-worlds" className="btn btn-ghost text-sm">View all</Link>
         </div>
         <div {...rowAttrs("best-sellers", grid)} className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">
           {grid.map((p) => (
@@ -1140,11 +1130,9 @@ const HERO_SLIDES = 3;
       <section className="container-x pb-16">
         <div className="pastel-section bg-wash text-center md:text-left">
           <div className="mx-auto max-w-2xl md:mx-0">
-            <span className="caps text-slate">About Zyvorah</span>
+            <span className="caps text-slate">About Mimi Pip</span>
             <p className="mt-4 text-[1.05rem] leading-relaxed text-charcoal">
-              We build wallpaper around the wall&mdash;not around a standard roll. Zyvorah combines
-              considered design, exact-size production and digital tools that make choosing and
-              ordering wallpaper easier.
+              Mimi Pip brings gentle colours, curious characters and playful landscapes to children’s rooms. Explore wallpaper worlds for quiet beginnings and growing imaginations.
             </p>
             <Link href="/our-story" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline">
               Our Story <span aria-hidden>&rarr;</span>
@@ -1156,7 +1144,7 @@ const HERO_SLIDES = 3;
 
       {/* ---------- a note from our founder ---------- */}
       <Reveal>
-      <FounderNote />
+      <InRealHomesSection />
       </Reveal>
 
       {/* ---------- commercial discovery ---------- */}
@@ -1183,5 +1171,5 @@ const HERO_SLIDES = 3;
   return inMarket(landingCountryCode, page);
 }
 
-export default process.env.MIMIPIP_LOCAL_REVIEW === "1" ? Home : withBrandEditorial("/", Home);
-export function generateMetadata() { return process.env.MIMIPIP_LOCAL_REVIEW==="1" ? {title:"MimiPip · Little spaces, big possibilities"} : editorialMetadata("/"); }
+export default Home;
+export function generateMetadata(): Metadata { return { title: { absolute: "Mimi Pip · Little spaces, big possibilities" }, description: "Discover playful mural wallpapers, borders and floor games for nurseries and children’s rooms.", alternates: { canonical: brand.origin + "/" } }; }

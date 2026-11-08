@@ -1,5 +1,5 @@
 // Server-only: qualify the exact stored media before asking for a decision.
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { PERSONAL_PLAN_PREFIX } from "./profiles";
 import { serviceClient } from "./db";
 import { designSequenceCheck } from "./plan";

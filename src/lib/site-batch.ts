@@ -1,7 +1,7 @@
 import "server-only";
 import { legacyPartnerWorkflowAllowed } from "./partner-legacy-policy";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { safeEqual } from "@/lib/corporate-auth";
 // TYPE-ONLY at module scope. corporate-band-compose pulls in `sharp`, a native
 // binary workerd cannot run, and every route that merely reads a batch imports

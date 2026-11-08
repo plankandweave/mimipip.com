@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "@/components/SiteImage";
 
 /**
@@ -24,6 +24,7 @@ import Image from "@/components/SiteImage";
 
 export type HeroSlide = {
   image: string;
+  framing?: { mobilePosition: string; desktopPosition: string; desktopFit: "cover" | "contain" };
   alt: string;
   /** Server-rendered copy for this campaign; omitted slides keep the shared copy. */
   content?: React.ReactNode;
@@ -240,7 +241,7 @@ export default function HeroSlider({
           // motion they fall back to the plain 1.2s crossfade.
           className={`hero-slide absolute inset-0 ${i === index ? "is-active" : ""} ${
             i === index && prev !== null ? "is-arriving" : ""
-          } ${i === prev && i !== index ? "is-prev" : ""} ${!reduced && i === index && !s.video ? "is-moving" : ""}`}
+          } ${i === prev && i !== index ? "is-prev" : ""} ${!reduced && i === index && !s.video && !s.framing ? "is-moving" : ""}`}
           // Hidden slides are not announced: a screen reader should hear one
           // hero, not three descriptions of walls stacked on top of each other.
           aria-hidden={i !== index}
@@ -283,7 +284,12 @@ export default function HeroSlider({
               loading={i === 0 ? undefined : "lazy"}
               sizes="100vw"
               // Keep the floor: crop the ceiling before the furniture.
-              className="object-cover object-bottom"
+              className={s.framing ? "hero-reviewed-image" : "object-cover object-bottom"}
+              style={s.framing ? {
+                "--hero-mobile-position": s.framing.mobilePosition,
+                "--hero-desktop-position": s.framing.desktopPosition,
+                "--hero-desktop-fit": s.framing.desktopFit,
+              } as CSSProperties : undefined}
             />
           )}
         </div>

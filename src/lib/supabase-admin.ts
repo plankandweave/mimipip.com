@@ -1,7 +1,10 @@
+import { isolatedStorageClient } from "@/brand/storage";
+import { backendUrl, MIMIPIP_SCHEMA } from "@/brand/backend";
 import "server-only";
 import { serviceAvailable } from "../brand/services";
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 // Server-ONLY Supabase client (service role). Bypasses RLS, so it must never be
 // imported into a Client Component or any browser bundle.
@@ -25,12 +28,12 @@ let cached: SupabaseClient | null = null;
 export function supabaseAdmin(): SupabaseClient | null {
   if (!serviceAvailable("database")) return null;
   if (cached) return cached;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
     console.warn("[supabase-admin] SUPABASE_SERVICE_ROLE_KEY not set — corporate portal disabled");
     return null;
   }
-  cached = createClient(url, key, { auth: { persistSession: false } });
+  cached = isolatedStorageClient(createClient(url, key, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } }));
   return cached;
 }

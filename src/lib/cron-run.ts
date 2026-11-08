@@ -1,3 +1,4 @@
+import { backendUrl, MIMIPIP_SCHEMA } from "@/brand/backend";
 import { serviceAvailable } from "../brand/services";
 // S1.10 heartbeat — wraps a cron route handler so every tick writes a run row
 // (start, finish, ok/status/error). The lesson behind it: this repo's marketing
@@ -9,15 +10,16 @@ import { serviceAvailable } from "../brand/services";
 //    if the service role is absent or an insert fails, the job still runs.
 //  - A throw inside the handler is recorded (ok=false, the message) and
 //    surfaced as a 500, so Vercel's own log shows it too.
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 let cached: SupabaseClient | null = null;
 function db(): SupabaseClient | null {
   if (!serviceAvailable("database")) return null;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
-  cached ??= createClient(url, key, { auth: { persistSession: false } });
+  cached ??= createClient(url, key, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } });
   return cached;
 }
 

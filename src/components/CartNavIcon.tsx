@@ -9,14 +9,13 @@ export function CartNavIcon() {
   const cart = useCart();
   const [localCount,setCount]=useState(0);
   useEffect(()=>{
-    if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW!=="1")return;
     const refresh=()=>{try{setCount(readLines().reduce((sum,item)=>sum+item.qty,0))}catch{setCount(0)}};
     refresh();
     const events=["storage","mimipip-cart","pageshow"];
     events.forEach(e=>window.addEventListener(e,refresh));
     return ()=>events.forEach(e=>window.removeEventListener(e,refresh));
   },[]);
-  const count=process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1"?localCount:cart.count;
+  const count=cart.count + localCount;
   return (
     <Link
       href="/cart"

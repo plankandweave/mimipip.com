@@ -51,7 +51,7 @@ export async function uploadBoardImage(customerId: string, imageDataUrl: string)
  *  everything up to the bucket segment to get the storage path back. Handles
  *  the signed form too, so a row is still addressable once signed. */
 export function pathFromPublicUrl(imageUrl: string): string | null {
-  const marker = "/board-images/";
+  const marker = "/mimipip-board-images/";
   const i = imageUrl.indexOf(marker);
   if (i === -1) return null;
   return decodeURIComponent(imageUrl.slice(i + marker.length).split("?")[0]);

@@ -1,3 +1,4 @@
+import { MIMIPIP_PRICING } from '@/brand/pricing-policy';
 export type CurrencyCode = "INR" | "USD";
 export type MarketTier = "india" | "value" | "standard" | "core" | "premium";
 
@@ -31,18 +32,9 @@ const EUROPE = new Set("AD AL AT BA BE BG BY CH CY CZ DE DK EE ES FI FO FR GB GG
 const NORTH_AMERICA = new Set("CA MX US".split(" "));
 const OCEANIA = new Set("AU FJ NC NZ PG".split(" "));
 
-const PRICE_FACTORS: Record<MarketTier, number> = {
-  india: 1,
-  value: 0.72,
-  standard: 0.88,
-  core: 1,
-  premium: 1.12,
-};
-
-// This is deliberately a market price basis, not today's FX rate. Zyvorah's
-// ₹200/sq-ft reference finish maps to a globally competitive $3.50/sq-ft, then
-// the country tier and the delivery allowance are applied independently.
-const INR_PER_GLOBAL_PRICING_UNIT = 200 / 3.5;
+const PRICE_FACTORS: Record<MarketTier, number> = { india: 1, value: 1, standard: 1, core: 1, premium: 1 };
+// Native totals are GST-inclusive INR. This is a retail price mapping, not FX.
+const INR_PER_GLOBAL_PRICING_UNIT = MIMIPIP_PRICING.sellingInrPerSqFt * (1 + (MIMIPIP_PRICING.gstRate ?? 0.18)) / MIMIPIP_PRICING.sellingUsdPerSqFt;
 
 export type Market = {
   countryCode: string;
@@ -199,7 +191,7 @@ export function quoteMarketOrder(input: {
   const tubeCount = Math.max(1, Math.ceil(input.tubeCount ?? 1));
   const areaSqFt = Math.max(0, input.areaSqFt ?? 0);
   const goods = marketGoodsFromInr(input.amountInr, market.countryCode);
-  const delivery = market.currency === "USD" && !input.waiveDelivery ? internationalDeliveryUsd(market.countryCode, areaSqFt, tubeCount) : 0;
+  const delivery = 0; // Mimi Pip wallpaper retail includes shipping.
   return {
     countryCode: market.countryCode,
     currency: market.currency,

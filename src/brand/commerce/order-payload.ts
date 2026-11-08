@@ -1,13 +1,24 @@
+import {checkedBillingIdentity,type BillingIdentity} from './billing-identity';
+import {pricedLettering} from './lettering';
+import {pricedInstallation,installationAddressAllowed} from './installation';
+import { priceSample, sampleDesign, SAMPLE_REFERENCE_CM } from './samples';
+import { approvedLayout } from './approved-layout';
 /** The paid order as the OS takes it: POST /api/zyvorah/web-order, brand "lorange". */
 import printMap from './print-map.json';
+import type { CropData } from '@/lib/visualizer';
 
 export type StoredLine = {
+  kind?: 'sample';
+  installationMinor?:number;
+  personalisationMinor?:number;
   slug: string; name: string; qty: number; lineMinor: number;
   widthCm: number | null; heightCm: number | null;
   ratePerSqft: number | null; billedSqft: number | null;
+  crop?: CropData;
   placement?: { zoom: number; cropX: number; cropY: number; flipH?: boolean; flipV?: boolean };
 };
 export type StoredCustomer = {
+  billingIdentity?:BillingIdentity;
   name: string; email: string; phone: string; address: string; city: string;
   state: string; postcode: string; countryCode: string; country: string;
 };
@@ -30,8 +41,10 @@ export function linesInr(lines: Pick<StoredLine, 'lineMinor'>[], totalInr: numbe
 export function webOrderBody(o: { id: string; paymentId: string; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
   const inr = linesInr(o.lines, o.amountInr);
   const c = o.customer;
+  const billingIdentity=checkedBillingIdentity(c.billingIdentity,c.countryCode);
   return {
     brand: 'lorange',
+    ...(billingIdentity?{billingIdentity}:{}),
     orderRef: o.id,
     amountInr: o.amountInr,
     shippingInr: 0,
@@ -41,6 +54,21 @@ export function webOrderBody(o: { id: string; paymentId: string; amountInr: numb
       const a = artFor(l.slug);
       if (!a) throw new Error('No print artwork for ' + l.slug);
       if (l.widthCm === null || l.heightCm === null) throw new Error('No size for ' + l.slug);
+      if (l.kind === 'sample') {
+        const checked = priceSample(l as unknown as Record<string,unknown>, c.countryCode);
+        if ('refused' in checked || l.lineMinor !== checked.lineMinor) throw new Error('Invalid durable sample specification for '+l.slug);
+        return {lineRef:String(i+1),brand:'lorange',designUrl:a.art,designName:sampleDesign(l.slug)!.title,orderedTitle:l.name,productHandle:l.slug,
+          widthMm:210,heightMm:297,material:'paste' as const,materialSlug:'smooth-matt',qty:1,lineTotalInr:inr[i],
+          sample:{designHandle:l.slug,materialSlug:'smooth-matt',materialLabel:'Soft Matte',muralWidthCm:SAMPLE_REFERENCE_CM,muralHeightCm:SAMPLE_REFERENCE_CM,sourceUrl:a.art}};
+      }
+      // Revalidate durable records too: an older pending order must not lose
+      // unsupported instructions when a later payment reconciliation sends it.
+      const crop=approvedLayout(l.crop,l.widthCm,l.heightCm,a.art,l.slug);
+      const installation=crop?.installation?pricedInstallation(crop.installation,l.widthCm,l.heightCm,l.qty,c.countryCode):undefined;
+      if(installation && (!installationAddressAllowed(c.countryCode,c.postcode) || installation.total*100!==l.installationMinor))throw new Error('Installation price or delivery coverage needs review.');
+      const lettering=pricedLettering(crop,l.widthCm,l.heightCm,c.countryCode);
+      if(lettering && lettering.fee*100!==l.personalisationMinor)throw new Error('Lettering price needs review.');
+      const placement=crop?{zoom:crop.zoom,cropX:crop.offsetX,cropY:crop.offsetY,flipH:!!crop.flipH,flipV:!!crop.flipV}:l.placement;
       return {
         lineRef: String(i + 1), brand: 'lorange',
         designUrl: a.art, designName: l.name, orderedTitle: l.name, productHandle: l.slug,
@@ -48,9 +76,11 @@ export function webOrderBody(o: { id: string; paymentId: string; amountInr: numb
         widthMm: Math.round((a.printWidthCm ?? l.widthCm) * 10), heightMm: Math.round((a.printHeightCm ?? l.heightCm) * 10),
         material: a.material, ...(a.materialSlug ? { materialSlug: a.materialSlug } : {}),
         qty: l.qty, lineTotalInr: inr[i],
+        ...(lettering?{textOverlay:lettering.overlay,...(lettering.personalisation?{personalisationTotalInr:lettering.fee}:{})}:{}),
+        ...(installation?{installByUs:true,installationTotalInr:installation.total}:{}),
         ...(l.ratePerSqft !== null && c.countryCode === 'IN' ? { catalogueRatePerSqft: l.ratePerSqft } : {}),
         ...(l.billedSqft !== null ? { chargeableSqft: l.billedSqft } : {}),
-        ...(l.placement ? { placement: l.placement } : {}),
+        ...(placement ? { placement } : {}),
       };
     }),
   };

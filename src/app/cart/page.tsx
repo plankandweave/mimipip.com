@@ -1,6 +1,7 @@
 "use client";
 
 import { DesignCart } from "@/components/DesignCart";
+import { linePayload, type Line, readLines } from "@/components/design-cart-store";
 import { PendingOrderRecovery } from "@/components/PendingOrderRecovery";
 
 import { useEffect, useRef, useState } from "react";
@@ -28,11 +29,24 @@ import {
 } from "@/lib/homecoming-offer";
 
 export default function CartPage(){
- if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1")return <DesignCart/>;
- return <ConnectedCartPage/>;
+ const cart=useCart();
+ const [legacy,setLegacy]=useState<Line[]>([]);
+ useEffect(()=>{const update=()=>{try{setLegacy(readLines());}catch{}};update();window.addEventListener('mimipip-cart',update);window.addEventListener('storage',update);return()=>{window.removeEventListener('mimipip-cart',update);window.removeEventListener('storage',update);};},[]);
+ const mixed=cart.items.length>0&&legacy.length>0;
+ if(!cart.loading && !cart.readError && !cart.items.length && legacy.length)return <DesignCart/>;
+ return <><ConnectedCartPage mixed={mixed}/>{legacy.length>0 && <DesignCart embedded/>}{mixed&&<CombinedCartTotal legacy={legacy}/>}</>;
 }
-function ConnectedCartPage() {
+function CombinedCartTotal({legacy}:{legacy:Line[]}) {
+ const cart=useCart();const {market}=useMarket();
+ const requestKey=JSON.stringify({countryCode:market.countryCode,lines:[...cart.items.map(item=>({slug:item.handle,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data})),...legacy.map(linePayload)]});
+ const [result,setResult]=useState<{key:string;totalMinor?:number;currency?:string;error?:string}|null>(null);
+ useEffect(()=>{let active=true;setResult(null);fetch('/api/checkout/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:requestKey}).then(async r=>({ok:r.ok,data:await r.json()})).then(({ok,data})=>{if(active)setResult({key:requestKey,...(ok?data:{error:data.error||'Please check your cart.'})});}).catch(()=>{if(active)setResult({key:requestKey,error:'We could not check your total. Please reload.'});});return()=>{active=false;};},[requestKey]);
+ const ready=result?.key===requestKey&&result.totalMinor!=null&&!cart.loading&&!cart.readError&&!cart.mutating;
+ return <section className="container-x pb-12" aria-label="Combined order total"><div className="rounded-2xl border border-edge bg-surface p-6"><h2 className="text-2xl">Your complete order</h2>{ready?<><p className="my-4 text-xl font-semibold">{new Intl.NumberFormat('en-IN',{style:'currency',currency:result.currency!}).format(result.totalMinor!/100)}</p><p>Delivery included{market.countryCode==='IN'?' · including GST':''}</p><Link className="btn mt-4" href="/checkout">Checkout</Link></>:<p role="status" className="mt-4">{cart.readError?'Reload your cart before checkout.':result?.error||'Checking your complete total…'}</p>}</div></section>;
+}
+function ConnectedCartPage({mixed=false}:{mixed?:boolean}) {
   const campaignActive = homecomingOfferActive();
+  const checkoutSupportsDiscounts = false;
   const { items, subtotal, loading, readError, mutationError, mutating, refresh, updateQty, remove } = useCart();
   const { market, money, quote } = useMarket();
   const stalePrices = items.filter((item) => item.price_changed);
@@ -83,7 +97,7 @@ function ConnectedCartPage() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   useEffect(() => {
-    if (campaignActive) return;
+    if (!checkoutSupportsDiscounts || campaignActive) return;
     const saved = readSavedDiscount();
     if (saved) { setCode(saved); setDiscountOpen(true); void applyCode(saved); }
   }, [campaignActive]);
@@ -287,6 +301,7 @@ function ConnectedCartPage() {
                         {it.text_overlay && <p className="mt-1 whitespace-pre-line text-sm text-charcoal">
                           {it.text_overlay.kind === "cloud" ? "Name cloud" : "Your quote"}: “{it.text_overlay.text}”
                           <span className="mt-1 block text-xs text-slate">Approved position: {Math.round(it.text_overlay.x*it.width_cm)} cm from left, {Math.round(it.text_overlay.y*it.height_cm)} cm from top.</span>
+                          {it.text_overlay.companion && <span className="mt-2 block">Your quote: “{it.text_overlay.companion.text}”<span className="mt-1 block text-xs text-slate">Approved position: {Math.round(it.text_overlay.companion.x*it.width_cm)} cm from left, {Math.round(it.text_overlay.companion.y*it.height_cm)} cm from top.</span></span>}
                         </p>}
                         {(it.personalisation ?? 0) > 0 && (
                           <p className="mt-0.5 text-xs text-mist">
@@ -323,7 +338,7 @@ function ConnectedCartPage() {
           </div>
 
           <div className="h-fit rounded-[22px] bg-wash p-6 lg:sticky lg:top-32">
-            <p className="caps mb-3 text-slate">Order summary</p>
+            <p className="caps mb-3 text-slate">{mixed ? "Wallpaper subtotal" : "Order summary"}</p>
             <MarketInvoiceBreakdown
               lines={invoiceLines}
               freightToPay={freightToPay}
@@ -335,9 +350,9 @@ function ConnectedCartPage() {
                 ? "All prices are GST-inclusive · this bill shows the tax breakup."
                 : "Country-adjusted USD pricing includes international delivery. Duties, customs and destination taxes are not included."}
             </p>
-            {market.countryCode === "IN" && wallpaperQty > 0 && <DeliverySpeeds freightToPay={freightToPay} />}
+            {market.countryCode === "IN" && wallpaperQty > 0 && <DeliverySpeeds freightToPay={freightToPay} showExpress={false} />}
 
-            <div className="mt-4 border-t border-edge pt-4">
+            <div className="mt-4 border-t border-edge pt-4" hidden={!checkoutSupportsDiscounts}>
               {campaignActive ? (
                 <div className="rounded-[14px] bg-[#134f57] px-4 py-3 text-[#fff9ef]">
                   <p className="text-sm font-bold">Homecoming offers applied automatically</p>
@@ -388,7 +403,7 @@ function ConnectedCartPage() {
               )}
             </div>
 
-            {stalePrices.length === 0 && <Link href="/checkout" className="btn mt-5 hidden h-12 w-full items-center justify-center text-[0.82rem] lg:flex">
+            {!mixed && !readError && !mutating && stalePrices.length === 0 && <Link href="/checkout" className="btn mt-5 hidden h-12 w-full items-center justify-center text-[0.82rem] lg:flex">
               Checkout
             </Link>}
             <p className="mt-3 text-center text-xs text-mist">
@@ -407,7 +422,7 @@ function ConnectedCartPage() {
           scrolls with the page and the button can end up below the fold, so a
           fixed bar repeats it with the running total, clear of the home
           indicator / gesture area via env(safe-area-inset-bottom). */}
-      {!loading && items.length > 0 && stalePrices.length === 0 && (
+      {!mixed && !readError && !mutating && !loading && items.length > 0 && stalePrices.length === 0 && (
         <div
           ref={stickyBarRef}
           className="fixed inset-x-0 bottom-0 z-40 border-t border-edge bg-cloud/95 px-4 pt-3 backdrop-blur-md lg:hidden"

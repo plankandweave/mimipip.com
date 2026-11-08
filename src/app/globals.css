@@ -493,4 +493,22 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
 }
 .vault-handwriting { font-family: 'Vault Handwriting', cursive; font-weight: 600; }
 
-@font-face{font-family:MimiDisplay;src:url('/fonts/fredoka-variable.ttf') format('truetype');font-weight:300 700;font-display:swap}@font-face{font-family:MimiText;src:url('/fonts/nunito-variable.ttf') format('truetype');font-weight:200 900;font-display:swap}:root{--font-jakarta:MimiDisplay;--font-inter:MimiText;--color-charcoal:#714414;--color-orange:#ff542b;--color-surface:#fff9ed}
+@font-face{font-family:MimiDisplay;src:url('/fonts/fredoka-variable.ttf') format('truetype');font-weight:300 700;font-display:swap}@font-face{font-family:MimiText;src:url('/fonts/nunito-variable.ttf') format('truetype');font-weight:200 900;font-display:swap}:root{--font-jakarta:MimiText;--font-inter:MimiText;--color-charcoal:#714414;--color-orange:#ff542b;--color-surface:#fff9ed}
+
+/* Original Zyvorah hero framing, shared by the restored storefront. */
+.hero-reviewed-image {
+  object-fit: cover !important;
+  object-position: var(--hero-mobile-position, 50% 100%);
+  background: #292724;
+}
+@media (min-width: 1024px) {
+  .hero-reviewed-image {
+    object-fit: var(--hero-desktop-fit, cover) !important;
+    object-position: var(--hero-desktop-position, 50% 100%);
+  }
+}
+
+/* Ultra-wide windows must not crop farther than the reviewed desktop frame. */
+@media (min-width: 1024px) and (min-aspect-ratio: 2/1) {
+  .hero-reviewed-image { object-fit: contain !important; }
+}

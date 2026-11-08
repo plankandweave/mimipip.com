@@ -2,7 +2,7 @@ import { serviceFetch } from "../brand/service-transport";
 const fetch: typeof globalThis.fetch = (input,init) => serviceFetch("messaging",input,init);
 import "server-only";
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import {
   allRows,

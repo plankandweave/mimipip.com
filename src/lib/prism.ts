@@ -1,6 +1,6 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { anthropicKeyFor } from "@/lib/ai-keys";
 import { caDownload } from "@/lib/corporate-art-store";
 import { signArt, DAY } from "@/lib/corporate-files";

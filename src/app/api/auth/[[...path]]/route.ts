@@ -1,3 +1,4 @@
+import { backendUrl, backendPublicKey, MIMIPIP_SCHEMA } from "@/brand/backend";
 import { serviceAvailable } from "@/brand/services";
 import { eventContext } from "@/lib/concierge-events";
 import { recordConciergeEvent } from "@/lib/concierge-store";
@@ -232,9 +233,9 @@ async function requestSms(req: Request) {
   // disturb a session that already exists. Supabase stores the OTP and fires the
   // send_sms hook, which is what actually reaches 2Factor.
   const sender = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } },
+    backendUrl(),
+    backendPublicKey(),
+    { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } },
   );
   const { error } = await sender.auth.signInWithOtp({ phone: `+91${digits}` });
   if (error) {

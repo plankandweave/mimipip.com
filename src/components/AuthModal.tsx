@@ -376,7 +376,7 @@ export function AuthModal({
 
         {!emailOnly && (isEmailStage || stage === "sms") && (
           <div className="mt-3 space-y-3 text-xs text-slate">
-            <p>Signing in creates your Zyvorah account. Order and account messages are separate from marketing.</p>
+            <p>Signing in creates your Mimi Pip account. Order and account messages are separate from marketing.</p>
             <label className="flex items-start gap-2">
               <input type="checkbox" checked={adsConsent} onChange={(e) => setAdsConsent(e.target.checked)} className="mt-0.5 h-4 w-4" />
               <span>

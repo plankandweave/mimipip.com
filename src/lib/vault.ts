@@ -1,6 +1,6 @@
 import type { ImageNotes } from "./vault-image-notes";
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { signArt, DAY } from "@/lib/corporate-files";
 import type { CorporateAccount } from "@/lib/corporate-auth";
 import type { BlueprintRow, TraceLinkRow, TraceMarkRow, TraceSegmentRow, TraceWalkRow } from "@/lib/trace-link";

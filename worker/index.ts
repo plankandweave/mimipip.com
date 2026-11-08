@@ -1,3 +1,4 @@
+import {handleSampleOrder} from '../src/brand/commerce/sample-order';
 import {publicPage} from "./public-page";
 import {publishedSitemapXml} from "../src/brand/review/published-sitemap";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
@@ -7,7 +8,7 @@ import {handleSignup} from '../src/brand/commerce/signup';
 import {withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
-import {installOfflineFetchBoundary,withOfflineBrowserPolicy} from '../src/brand/network-policy';
+import {withOfflineBrowserPolicy} from '../src/brand/network-policy';
 import records from '../src/brand/review/catalogue.json';
 // Read-only release gate. Retain the original connected application source;
 // service and mutation routes must never be invoked by this browsing release.
@@ -25,11 +26,12 @@ function withVisitorCountry(request:Request,response:Response){
  return out;
 }
 async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
- installOfflineFetchBoundary();
+
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(u.hostname==='www.mimipip.com'){u.hostname='mimipip.com';return Response.redirect(u.href,301);}
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
+ if(p==='/api/sample-order'||p==='/api/sample-order/readiness')return withCheckoutBrowserPolicy(await handleSampleOrder(request,env as CheckoutEnv));
  if(p.startsWith('/api/checkout/')){
   try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
@@ -37,8 +39,10 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/api/signup'||p==='/api/signup/leave')return withOfflineBrowserPolicy(await handleSignup(request,env as Parameters<typeof handleSignup>[1]));
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
- if(!['GET','HEAD'].includes(request.method))return offline();
- if(p.startsWith('/api/')&&!['/api/search','/api/products','/api/brand/icon.svg','/api/brand/icon-180.png'].includes(p))return offline();
+ const nativeApi=/^\/api\/(cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
+ if(p.startsWith('/api/')&&!nativeApi)return offline();
+ if(!['GET','HEAD'].includes(request.method)&&!nativeApi)return offline();
+ if(/^\/(admin|studio|corporate|partners)(?:\/|$)/.test(p))return offline();
  if(Object.hasOwn(floorPlay,p))return publicPage(request,new Response(request.method==='HEAD'?null:floorPlay[p as keyof typeof floorPlay],{headers:{'Content-Type':'text/html; charset=utf-8'}}));
  if (p === '/products/happy-petals' || p === '/design/happy-petals') return Response.redirect(new URL(legacyPetalsDestination(u.searchParams.get('colourway')),u.origin),301);
  const collectionKey = p === '/browse/collection' ? u.searchParams.get('value') : p === '/shop/collection' ? u.searchParams.get('collection') : null;
@@ -50,11 +54,11 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
    '/wall-borders':'/browse/collection?value=mimi-borders',
    '/collections/wall-art':'/browse/collection?value=wallpaper-worlds', '/collections':'/browse/collection',
    '/concepts':'/browse/concept', '/rooms':'/browse/space', '/colours':'/browse/color',
-   '/lookbook':'/browse/collection', '/new':'/browse/collection', '/design-with':'/search'
+   '/lookbook':'/browse/collection', '/new':'/browse/collection'
  };
  if (browseRoutes[p]) return redirect(u,browseRoutes[p]);
  const guideAliases: Record<string,string> = {
-   '/print-your-own':'tools', '/match-a-photo':'tools', '/see-it-in-my-room':'tools', '/samples':'tools',
+   '/print-your-own':'tools',
    '/custom-sizing':'how-to-measure', '/shipping-policy':'shipping-returns', '/refund-policy':'shipping-returns',
    '/where-to-buy':'faq', '/founders-note':'about', '/our-story':'about', '/sustainability':'materials',
    '/bespoke':'tools', '/collaborate':'contact', '/commercial':'contact', '/press':'contact', '/trade':'trade', '/account/trade':'trade', '/account/trade/apply':'trade',
@@ -77,5 +81,5 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
 }
 export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
-async scheduled(_event:unknown,env:unknown){installOfflineFetchBoundary();await sweep(env as CheckoutEnv);}
+async scheduled(_event:unknown,env:unknown){await sweep(env as CheckoutEnv);}
 };

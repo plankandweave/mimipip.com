@@ -16,6 +16,7 @@ import { useMarket } from "@/components/MarketProvider";
  *  to the product with that size already chosen. */
 export function ProductCard({ product, href }: { product: ProductCardData; href?: string }) {
   const format = useCardMoney();
+  const {market}=useMarket();
   const numericPrice = cardPrice(product);
   // Every card says which family it is and prices it in that family's own unit:
   // wallpaper by area, a border by the linear metre, a canvas from its smallest
@@ -27,7 +28,11 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
     isReadySizeWallpaper: product.measurementType !== "fixed" && product.isReadySize,
     format,
   });
-  const price = copy.price;
+  const ownOffer = market.countryCode === "IN" ? product.sale?.india : product.sale?.abroad;
+  const fixedOffer = ownOffer?.fixed;
+  const price = fixedOffer != null ? `${market.countryCode === "IN" ? "₹" : "$"}${fixedOffer.toLocaleString(market.countryCode === "IN" ? "en-IN" : "en-US", { maximumFractionDigits: 2 })}` : numericPrice !== null && (product.measurementType ?? 'area') === 'area'
+    ? (market.countryCode === 'IN' ? '₹200/sq ft + 18% GST' : '$10/sq ft · shipping included')
+    : copy.price;
   // The flat artwork is fetched only when a mouse arrives, so visitors who
   // never hover do not download an extra image for every card.
   const [hoverWanted, setHoverWanted] = useState(false);
@@ -149,5 +154,5 @@ function SalePrice({ sale }: { sale?: ProductCardData["sale"] }) {
   if (!offer) return null;
   const sign = india ? "₹" : "$";
   const figure = offer.fixed ?? offer.rate;
-  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}</>;
+  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}{india && offer.rate ? " + GST" : ""}</>;
 }

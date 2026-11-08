@@ -1,6 +1,6 @@
 import "server-only";
 import { partnerCapabilities } from "./partner-capabilities";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { istDateKey } from "@/lib/ist";
 import { supabaseAdmin } from "./supabase-admin";
 import { can, currentCorporateSession, type CorporateSession } from "./corporate-auth";

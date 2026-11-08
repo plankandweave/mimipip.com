@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { SITE_URL } from "@/lib/seo";
 import { clientIp } from "@/lib/measure-link";

@@ -14,7 +14,7 @@ import {
   WALLPAPER_PRINT_TYPE, WALLPAPER_RULES, type ProductPrintRules,
 } from "@/lib/print-types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 /**
  * A multi-wall partner project: validating it, pricing it, and placing it.

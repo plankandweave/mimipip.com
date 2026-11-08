@@ -3,18 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/brand-setup-required.mjs",
+    "dev": "vinext dev",
     "build": "MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 NEXT_TELEMETRY_DISABLED=1 vinext build",
     "start": "node scripts/brand-setup-required.mjs",
     "lint": "eslint",
-    "test": "node --test scripts/product-page-diagnostics.test.mjs scripts/main-head.test.mjs && tsx --test --test-concurrency=4 \"src/**/*.test.ts\"",
+    "test": "npm run test:restoration",
     "check:migrations": "node scripts/check-migration-names.mjs",
-    "dev:vinext": "node scripts/brand-setup-required.mjs",
-    "build:vinext": "node scripts/gen-public-manifest.mjs && vinext build",
+    "dev:vinext": "vinext dev",
+    "build:vinext": "vinext build",
     "start:vinext": "node scripts/brand-setup-required.mjs",
     "deploy:vinext": "node scripts/brand-setup-required.mjs",
     "review:local": "node scripts/local-review.mjs",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "typecheck:app": "tsc --noEmit --project tsconfig.app.json",
+    "test:restoration": "tsx --test src/brand/commerce/*.test.ts src/brand/pricing-policy.test.ts src/brand/native-pricing.test.ts src/brand/storage.test.ts src/lib/wall-default.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",

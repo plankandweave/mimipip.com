@@ -9,9 +9,9 @@ export const HOMECOMING_DISCOUNT_PCT = 25;
 // browser, Workers and Postgres all close the offer at the same moment.
 export const HOMECOMING_END_AT = "2026-11-08T18:29:59.999Z";
 
-export function homecomingOfferActive(at: Date | number = Date.now()): boolean {
-  const instant = typeof at === "number" ? at : at.getTime();
-  return instant <= Date.parse(HOMECOMING_END_AT);
+export function homecomingOfferActive(_at: Date | number = Date.now()): boolean {
+  // This promotion belongs to Zyvorah; Mimi Pip has no matching checkout offer.
+  return false;
 }
 
 export const HOMECOMING_DISCOUNT: DiscountPreview = {
