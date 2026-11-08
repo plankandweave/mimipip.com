@@ -5,7 +5,7 @@ import { getFlatImageMap, getProductsByHandles, getProductsByTag } from "@/lib/q
 import { SeeInMyRoom } from "@/components/SeeInMyRoom";
 
 export const metadata: Metadata = brandMetadata({
-  title: "See It in My Room — Zyvorah",
+  title: "See It in My Room — Mimi Pip",
   alternates: { canonical: "/see-it-in-my-room" },
 });
 
@@ -19,7 +19,7 @@ export default async function SeeInMyRoomPage({
   // first in the grid and opens on the room as soon as the photo is in.
   const focusHandle = (await searchParams).design?.trim() || null;
   const [tagged, focused] = await Promise.all([
-    getProductsByTag("Wall Art", 24),
+    getProductsByTag("Wallpapers", 24),
     focusHandle ? getProductsByHandles([focusHandle]) : Promise.resolve([]),
   ]);
   const designs = [...focused, ...tagged.filter((d) => d.handle !== focusHandle)];

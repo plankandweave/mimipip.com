@@ -48,7 +48,7 @@ export function priceFor(
 // under-bills a small order (billed wallpaper area under 20 sq ft).
 // These rules are for the e-commerce store only — trade/corporate freight is
 // to-pay and follows its own terms.
-export const MIN_PRINT_WIDTH_FT = 4;       // ft — minimum chargeable print width
+export const MIN_PRINT_WIDTH_FT = 0;       // ft — minimum chargeable print width
 export const MIN_WALLPAPER_SQFT = 20;      // sq ft — minimum billed wallpaper area
 export const SMALL_ORDER_COURIER_FEE = 1000; // ₹ — courier on orders under 20 sq ft
 
@@ -67,7 +67,7 @@ export function billedSqFt(widthCm: number, heightCm: number, chargeableSqFt?: n
   if (!(base > 0) || !(wFt > 0) || !(hFt > 0)) return 0;
   const widthShortfall = Math.max(0, MIN_PRINT_WIDTH_FT - wFt) * hFt;
   const billed = Math.max(base + widthShortfall, MIN_WALLPAPER_SQFT);
-  return Math.round(billed * 1000) / 1000;
+  return billed;
 }
 
 /** priceFor() on the billed (minimums-applied) area — every made-to-measure
@@ -78,7 +78,7 @@ export function billedPriceFor(
   pricePerSqFt: number,
   quantity = 1,
 ): number {
-  return Math.round(billedSqFt(widthCm, heightCm) * pricePerSqFt * quantity);
+  return Math.round(billedSqFt(widthCm, heightCm) * pricePerSqFt * 100) / 100 * quantity;
 }
 
 /**

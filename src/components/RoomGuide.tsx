@@ -55,7 +55,7 @@ export function RoomGuide({ title, content }: { title: string; content: RoomCont
         <div className="mt-12 rounded-[22px] bg-lavender/40 p-8 text-center">
           <h3 className="text-xl lg:text-2xl">Not sure where to start?</h3>
           <p className="mx-auto mt-2 max-w-md text-sm text-slate">
-            Upload a photo of your room and the Zyvorah Curator will find designs that suit it, in true scale.
+            Upload a photo of your room and the Mimi Pip Curator will find designs that suit it, in true scale.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link href="/design-with" className="btn text-sm">Find my wallpaper</Link>

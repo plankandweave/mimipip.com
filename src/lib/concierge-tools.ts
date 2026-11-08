@@ -315,7 +315,7 @@ export async function priceMural(
       // The per-sq-ft make rate is an internal cost for a fixed-size piece —
       // never quoted, on this API or anywhere else. Only the finished price.
       totalINR: fixedSizePrice(wIn * CM_PER_INCH, hIn * CM_PER_INCH, rate),
-      note: `Fixed size, printed edge to edge. GST included in the price. Free standard shipping across ${STANDARD_SHIPPING.coverage} (delivered within ${STANDARD_SHIPPING.deliveryWorkingDays} working days); Express delivery within ${EXPRESS_SHIPPING.deliveryWorkingDays} working days available at checkout.`,
+      note: `Fixed size, printed edge to edge. GST included in the price. Free standard shipping across ${STANDARD_SHIPPING.coverage} (delivered within ${STANDARD_SHIPPING.deliveryWorkingDays} working days).`,
     };
   }
 
@@ -337,7 +337,7 @@ export async function priceMural(
       : {}),
     ratePerSqFt: rate,
     totalINR: billedPriceFor(wCm, hCm, rate),
-    note: `GST included in the price. Free standard shipping across ${STANDARD_SHIPPING.coverage} (delivered within ${STANDARD_SHIPPING.deliveryWorkingDays} working days); Express delivery within ${EXPRESS_SHIPPING.deliveryWorkingDays} working days available at checkout.`,
+    note: `GST included in the price. Free standard shipping across ${STANDARD_SHIPPING.coverage} (delivered within ${STANDARD_SHIPPING.deliveryWorkingDays} working days).`,
   };
 }
 

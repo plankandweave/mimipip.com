@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { istDateKey } from "@/lib/ist";
 import { isInternalOrder } from "@/lib/internal-orders";
 import { leadCompanyName, isTestLead } from "@/lib/lead-rules";

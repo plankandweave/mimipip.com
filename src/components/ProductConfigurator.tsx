@@ -406,7 +406,7 @@ function ConnectedProductConfigurator({
   // off it. Every reader below uses these, never the raw state.
   const placedDoors = placeMarks(doors, runWidthCm, heightCm);
   const textCheck = textOverlay ? textOverlaySchema.safeParse(textOverlay) : null;
-  const textError = textOverlay && textOverlay.text.trim() ? (!textCheck?.success ? textCheck?.error.issues[0]?.message ?? "Enter your text." : overlayPlacementError(textOverlay, runWidthCm, heightCm, placedDoors) || textPreview.error) : null;
+  const textError = nameOn && market.countryCode !== "IN" ? "Please contact Mimi Pip for a name-cloud price for overseas delivery." : textOverlay && textOverlay.text.trim() ? (!textCheck?.success ? textCheck?.error.issues[0]?.message ?? "Enter your text." : overlayPlacementError(textOverlay, runWidthCm, heightCm, placedDoors) || textPreview.error) : null;
   const nameReady = !textOverlay || (!!textPreview.url && !textError && (!textOverlay.companion || (!!companionPreview.url && !companionPreview.error)));
   // Never folded while there is lettering: hiding it would hide the fee and
   // the preview state that can block Add to cart.
@@ -544,7 +544,7 @@ function ConnectedProductConfigurator({
   // second preset, 12 × 9, is gone; a sample is the
   // other thing a shopper on this step actually wants).
   const SIZE_PRESETS: { label: string; w: number; h: number; hint: string }[] = [
-    { label: "10 × 8 ft", w: 10, h: 8, hint: "feature wall" },
+    { label: "8 × 9 ft", w: 8, h: 9, hint: "standard wall" },
   ];
   const [sizePreset, setSizePreset] = useState<string | null>(null);
   const [customSize, setCustomSize] = useState(false);
@@ -694,7 +694,7 @@ function ConnectedProductConfigurator({
   const materialTotal = material
     ? isFixedSize
       ? fixedSizePrice(runWidthCm, heightCm, material.pricePerSqFt, qty)
-      : Math.round(billed * material.pricePerSqFt * qty)
+      : Math.round(billed * material.pricePerSqFt * 100) / 100 * qty
     : 0;
   // On-site installation (Bengaluru, Mumbai & Pune only), ₹35/sq ft + GST (shown
   // as the GST-inclusive rate, see INSTALL_RATE_LABEL) of mural area × qty —
@@ -1079,10 +1079,10 @@ function ConnectedProductConfigurator({
             stops one step short of it. Before a size is given it is labelled
             as the floor it is (see sizeGiven), never as "the price". */}
         {step < STEP_REVIEW && <div className="shrink-0 text-right">
-          <span className="block text-xs text-slate">{sizeGiven ? "Your price" : widthGiven || heightGiven ? "Add both measurements" : "Starts at"}</span>
+          <span className="block text-xs text-slate">{sizeGiven ? "Your price" : widthGiven || heightGiven ? "Add both measurements" : "Standard wall"}</span>
           <span className="block text-sm font-medium tabular-nums">{sizeGiven || (!widthGiven && !heightGiven) ? marketTotalLabel : "—"}</span>
-          {!sizeGiven && !widthGiven && !heightGiven && <span className="block text-[0.68rem] text-mist">smallest size</span>}
-          {market.currency === "USD" && (sizeGiven || (!widthGiven && !heightGiven)) && <span className="block text-[0.68rem] text-mist">{formatMarketMoney(marketTotal.delivery, "USD")} delivery in total</span>}
+          {!sizeGiven && !widthGiven && !heightGiven && <span className="block text-[0.68rem] text-mist">8 × 9 ft · adjust to your wall</span>}
+          {market.currency === "USD" && (sizeGiven || (!widthGiven && !heightGiven)) && <span className="block text-[0.68rem] text-mist">Shipping included</span>}
         </div>}
       </div>
       {stage ? (stage.slot ? createPortal(viewer, stage.slot) : null) : <div className="mt-4">{viewer}</div>}
@@ -1458,7 +1458,7 @@ function ConnectedProductConfigurator({
               cloudAllowed={false} feeLabel={money(NAME_FEE)} error={companionPreview.error || textError || null}
               previewReady={!!companionPreview.url} retry={companionPreview.retry} />
             : <TextOverlayEditor value={textOverlay} onChange={o => { setTextOverlay(o); setRoomComposite(null); }}
-              cloudAllowed={!!nameAudience} feeLabel={money(NAME_FEE)} error={textError ?? null}
+              cloudAllowed={!!nameAudience && market.countryCode === "IN"} feeLabel={money(NAME_FEE)} error={textError ?? null}
               previewReady={!!textPreview.url} retry={textPreview.retry} />}
             {textOverlay?.kind === "cloud" && !textOverlay.companion && <button type="button" className="btn btn-ghost w-full"
               onClick={() => { setTextOverlay({ ...textOverlay, companion: { ...defaultTextOverlay("quote"), y: .65 } }); setActiveLettering("quote"); }}>
@@ -1579,7 +1579,7 @@ function ConnectedProductConfigurator({
       ) : !isCanvas && (
         <div className="rounded-[14px] border border-edge bg-surface px-4 py-3.5 text-sm text-slate">
           <p className="font-semibold text-charcoal">Installation for this wall</p>
-          <p className="mt-1">{market.countryCode !== "IN" ? "Zyvorah installation is currently available only in selected Indian cities." : `Our optional installation service starts at ${INSTALL_MIN_SQFT} sq ft.`} You can continue with your wallpaper order.</p>
+          <p className="mt-1">{market.countryCode !== "IN" ? "Mimi Pip installation is currently available only in selected Indian cities." : `Our optional installation service starts at ${INSTALL_MIN_SQFT} sq ft.`} You can continue with your wallpaper order.</p>
         </div>
       )}
 

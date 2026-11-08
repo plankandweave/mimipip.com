@@ -48,14 +48,14 @@ export function MarketInvoiceBreakdown({
       ))}
       <div className="mt-1 border-t border-edge pt-2">
         <Row label="Goods" value={money(priced.goods)} muted />
-        <Row label="International delivery" value={money(priced.delivery)} muted />
+        <Row label="International delivery" value={priced.delivery === 0 ? "Included" : money(priced.delivery)} muted />
         <Row label="Duties & customs" value="Not included · payable locally if charged" muted />
       </div>
       <div className="mt-1 flex items-center justify-between border-t border-edge pt-2 font-semibold text-charcoal">
         <dt>Total</dt>
         <dd>{money(priced.total)}</dd>
       </div>
-      <div className="text-xs text-slate">Delivery is included in the total above. The per-sq-foot wallpaper rate is before delivery; no further shipping charge is added at payment.</div>
+      <div className="text-xs text-slate">Wallpaper is $10 per square foot including shipping. No additional shipping charge is added at payment.</div>
     </dl>
   );
 }

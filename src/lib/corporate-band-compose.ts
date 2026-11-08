@@ -1,6 +1,6 @@
 import "server-only";
 import sharp from "sharp";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { MAX_RUN_MM, equalSlices } from "@/lib/print-limits";
 import { DAY, artPathOf, canonicalArtUrl, signArt } from "@/lib/corporate-files";
 import { caDownload, caUpload } from "@/lib/corporate-art-store";

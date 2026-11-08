@@ -2,7 +2,7 @@ import "server-only";
 import sharp from "sharp";
 import { DAY, artPathOf, canonicalArtUrl, signArt } from "@/lib/corporate-files";
 import { caDownload, caUpload } from "@/lib/corporate-art-store";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 // The INTERACTIVE band composer — moved verbatim out of
 // /api/corporate/band/route.ts so the media container can run it (workerd

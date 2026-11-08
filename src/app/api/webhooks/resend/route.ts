@@ -1,3 +1,4 @@
+import { backendUrl, MIMIPIP_SCHEMA } from "@/brand/backend";
 import { serviceAvailable } from "@/brand/services";
 import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "node:crypto";
@@ -68,10 +69,10 @@ let cachedSecret: string | null | undefined;
 async function webhookSecret(): Promise<string | null> {
   if (process.env.RESEND_WEBHOOK_SECRET) return process.env.RESEND_WEBHOOK_SECRET;
   if (cachedSecret !== undefined) return cachedSecret;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !serviceKey) return (cachedSecret = null);
-  const sb = createClient(url, serviceKey, { auth: { persistSession: false } });
+  const sb = createClient(url, serviceKey, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } });
   const { data } = await sb.from("admin_config").select("v").eq("k", "resend_webhook_secret").limit(1);
   cachedSecret = (data?.[0]?.v as string | undefined) ?? null;
   return cachedSecret;
@@ -100,10 +101,10 @@ export async function POST(req: Request) {
   const eventType = EVENT_MAP[event.type];
   if (!eventType) return NextResponse.json({ ok: true, ignored: event.type });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !serviceKey) return NextResponse.json({ error: "storage not configured" }, { status: 503 });
-  const sb = createClient(url, serviceKey, { auth: { persistSession: false } });
+  const sb = createClient(url, serviceKey, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } });
 
   const to = Array.isArray(event.data?.to) ? event.data?.to?.[0] : event.data?.to;
   const email = (to ?? "").toLowerCase().trim();

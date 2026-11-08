@@ -1,4 +1,6 @@
 "use client";
+import { isolatedStorage } from "@/brand/storage";
+import { backendUrl, backendPublicKey, MIMIPIP_SCHEMA } from "@/brand/backend";
 
 import { requireService, serviceAvailable } from "../brand/services";
 import { createBrowserClient } from "@supabase/ssr";
@@ -15,12 +17,13 @@ import { createBrowserClient } from "@supabase/ssr";
 // createBrowserClient(process.env...) fails the deploy at global scope.
 const make = () =>
   createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    backendUrl(),
+    backendPublicKey(),
     {
       // Keep returning shoppers signed in and renew short-lived access tokens.
       // Browser data removal, explicit sign-out and revocation still end a session.
       auth: { persistSession: true, autoRefreshToken: true },
+      db: { schema: MIMIPIP_SCHEMA },
       cookieOptions: { path: "/", sameSite: "lax", maxAge: 400 * 24 * 60 * 60 },
     },
   );
@@ -35,6 +38,7 @@ function client(): Browser {
 
 export const supabaseBrowser: Browser = new Proxy({} as Browser, {
   get(_target, prop) {
+    if (prop === "storage") return isolatedStorage(client().storage);
     const c = client() as unknown as Record<PropertyKey, unknown>;
     const value = c[prop];
     return typeof value === "function" ? (value as (...a: unknown[]) => unknown).bind(c) : value;

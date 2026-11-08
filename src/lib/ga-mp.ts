@@ -15,7 +15,7 @@ const fetch: typeof globalThis.fetch = (input, init) => serviceFetch('analytics'
 // without a database or network; the impure sender is at the bottom.
 
 import { isInternalOrder } from "@/lib/internal-orders";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { exGst } from "@/lib/pricing";
 
 export type GaIds = { clientId: string; sessionId: string | null };

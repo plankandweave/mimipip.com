@@ -5,8 +5,6 @@ import { conversionSignUp } from "@/lib/conversions";
 import type { SignUpMethod } from "@/lib/ga";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 import { formatMobile, toE164, toIndianMobile } from "@/lib/phone";
-import { ADS_CONSENT_LABEL, saveAdsConsent } from "@/lib/ads-consent";
-import { SubscribeDisclosure } from "@/components/SubscribeDisclosure";
 import { verifyEmailCode } from "@/lib/email-code";
 
 /**
@@ -54,9 +52,6 @@ export function AuthModal({
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
-  /** Customer Match consent — a separate purpose from email marketing under
-   *  the DPDP Act, so a separate, unticked box. */
-  const [adsConsent, setAdsConsent] = useState(false);
   const [stage, setStage] = useState<Stage>("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -198,9 +193,6 @@ export function AuthModal({
       signUpReported.current = true;
       conversionSignUp({ method, user: { email: email.trim() || null, phone: digits || null } });
     }
-    // Only a YES is recorded here: an unticked box on a sign-in form must not
-    // overwrite a yes the customer gave earlier at checkout or on /account.
-    if (adsConsent) saveAdsConsent(true, "signin");
     onSuccess();
   };
 
@@ -376,14 +368,8 @@ export function AuthModal({
 
         {!emailOnly && (isEmailStage || stage === "sms") && (
           <div className="mt-3 space-y-3 text-xs text-slate">
-            <p>Signing in creates your Zyvorah account. Order and account messages are separate from marketing.</p>
-            <label className="flex items-start gap-2">
-              <input type="checkbox" checked={adsConsent} onChange={(e) => setAdsConsent(e.target.checked)} className="mt-0.5 h-4 w-4" />
-              <span>
-                {ADS_CONSENT_LABEL}{" "}
-                <a href="/privacy#personalised-ads" target="_blank" className="underline">How this works</a>
-              </span>
-            </label>
+            <p>Signing in creates your Mimi Pip account. Order and account messages are separate from marketing.</p>
+
           </div>
         )}
 
@@ -410,9 +396,7 @@ export function AuthModal({
             {busy ? "Please wait…" : cta}
           </button>
         </div>
-        {/* Signing in subscribes you to the newsletter (founder decision,
-            6 Oct 2026) — said plainly, directly under the button. */}
-        {(isEmailStage || stage === "sms") && <SubscribeDisclosure />}
+
 
         {/* Door switch — offered only on the first step, and never once a code is
             already in flight or the customer is signed in. */}

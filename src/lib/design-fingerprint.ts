@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { artPathOf } from "@/lib/corporate-files";
 import { privateBucket } from "@/lib/r2-media";
 import { sha256Hex, toHex } from "@/lib/design-fingerprint-rules";

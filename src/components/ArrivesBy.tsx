@@ -18,7 +18,7 @@ import { useMarket } from "@/components/MarketProvider";
  * pre-order (TAASH) or a bespoke custom-print SKU has no such promise to
  * make, and this component doesn't try to guess one.
  */
-export function ArrivesBy({ expressAvailable = true }: { expressAvailable?: boolean }) {
+export function ArrivesBy(_props: { expressAvailable?: boolean }) {
   const { market } = useMarket();
   const [range, setRange] = useState<{ to: string } | null>(null);
 
@@ -34,7 +34,7 @@ export function ArrivesBy({ expressAvailable = true }: { expressAvailable?: bool
 
   return (
     <p className="mt-2 text-sm text-slate">
-      Arrives by <span className="font-semibold text-charcoal">{range.to}</span> · free delivery{expressAvailable ? " · Express in 4 working days" : ""}
+      Arrives by <span className="font-semibold text-charcoal">{range.to}</span> · free delivery
     </p>
   );
 }

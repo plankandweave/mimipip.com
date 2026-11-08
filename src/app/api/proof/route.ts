@@ -76,7 +76,7 @@ export async function POST(req: Request) {
 
   let y = 800;
   text("ORDER PROOF", M, y, 16, bold);
-  text("zyvorah.com", 595 - M - font.widthOfTextAtSize("zyvorah.com", 10), y + 3, 10, font, soft);
+  text("mimipip.com", 595 - M - font.widthOfTextAtSize("mimipip.com", 10), y + 3, 10, font, soft);
   y -= 24;
   text(`${product.title}${product.code ? `  (${product.code})` : ""}`, M, y, 13, bold);
   y -= 26;
@@ -143,7 +143,7 @@ export async function POST(req: Request) {
   return new Response(Buffer.from(bytes), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="zyvorah-order-proof-${handle}.pdf"`,
+      "Content-Disposition": `attachment; filename="mimipip-order-proof-${handle}.pdf"`,
     },
   });
 }

@@ -1,3 +1,5 @@
+import { isolatedStorageClient } from "@/brand/storage";
+import { backendUrl, backendPublicKey, MIMIPIP_SCHEMA } from "@/brand/backend";
 import "server-only";
 import { serviceAvailable, requireService } from "../brand/services";
 
@@ -15,15 +17,16 @@ import { currentPartnerMode } from "./partner-mode";
 // checks don't survive a terminal, so enforcement lives in the route handlers
 // and reads the session from cookies via these helpers.
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const url = backendUrl;
+const anonKey = backendPublicKey;
 
 /** Supabase client bound to the request cookie jar, for Server Components and
  *  route handlers. Cookie writes are no-ops in contexts that forbid them. */
 export async function supabaseServerAuth() {
   if (!serviceAvailable("database")) requireService("database");
   const store = await cookies();
-  return createServerClient(url, anonKey, {
+  return isolatedStorageClient(createServerClient(url(), anonKey(), {
+    db: { schema: MIMIPIP_SCHEMA },
     cookies: {
       getAll: () => store.getAll(),
       setAll: (list) => {
@@ -34,7 +37,7 @@ export async function supabaseServerAuth() {
         }
       },
     },
-  });
+  }));
 }
 
 export type GatedUser = { id: string; email: string };
@@ -98,7 +101,8 @@ export async function refreshSession(request: NextRequest): Promise<NextResponse
     .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
   if (!hasAuthCookie) return response;
 
-  const supabase = createServerClient(url, anonKey, {
+  const supabase = createServerClient(url(), anonKey(), {
+    db: { schema: MIMIPIP_SCHEMA },
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (list) => {

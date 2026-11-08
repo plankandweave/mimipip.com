@@ -29,9 +29,11 @@ To sell a family that now has masters: price it in `prices.json`, and for a stic
 
 Charged in USD. The OS is told Razorpay's own rupee figure (`base_amount`); no exchange rate of ours is used. With no such figure the order is recorded as paid and waits, with the reason, at `/unsent`. The OS holds an export's invoice until the export tax position is answered in /approvals.
 
-## Secrets on the Worker
+## Keys
 
-`RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `ZYVORAH_WEBHOOK_TOKEN` (the same value as the OS), and `MIMIPIP_CHECKOUT_ENABLED` = `1`. Checkout stays shut until all five exist (`GET /api/checkout/readiness`). Razorpay webhook: `https://mimipip.com/api/checkout/webhook`, event `payment.captured`.
+This site holds no keys. mimipip.com is Magnitude Brands, the same Razorpay account as Zyvorah, so the Worker has a service binding, `STORE_PAY`, to the `MimipipPay` entrypoint of `zyvorah-store`. That entrypoint has no URL. It holds the keys and may create and read orders, read payments, check a signature, and post a `lorange` order to the OS (`src/edge/mimipip-pay-rules.ts` in `plankandweave/Zyvorah.com`). Razorpay's webhook for this account goes to the store, which ignores orders it does not hold; a MimiPip payment is settled by the browser's return and the five-minute sweep.
+
+Checkout opens when `MIMIPIP_CHECKOUT_ENABLED` is `1` and the binding answers ready (`GET /api/checkout/readiness`).
 
 ## Build and deploy
 

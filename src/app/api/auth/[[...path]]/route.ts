@@ -1,3 +1,4 @@
+import { backendUrl, backendPublicKey, MIMIPIP_SCHEMA } from "@/brand/backend";
 import { serviceAvailable } from "@/brand/services";
 import { eventContext } from "@/lib/concierge-events";
 import { recordConciergeEvent } from "@/lib/concierge-store";
@@ -232,9 +233,9 @@ async function requestSms(req: Request) {
   // disturb a session that already exists. Supabase stores the OTP and fires the
   // send_sms hook, which is what actually reaches 2Factor.
   const sender = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } },
+    backendUrl(),
+    backendPublicKey(),
+    { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } },
   );
   const { error } = await sender.auth.signInWithOtp({ phone: `+91${digits}` });
   if (error) {
@@ -263,16 +264,7 @@ async function complete(req: Request) {
   const { data, error } = await supabase.rpc("login_sync");
   if (error) console.error("[auth] login_sync failed:", error.message);
 
-  // Signing in subscribes the address to the newsletter (founder decision,
-  // 6 Oct 2026), disclosed directly under the sign-in button
-  // (SubscribeDisclosure). enrol_verified_email → auto_subscribe never
-  // re-subscribes anyone who unsubscribed, bounced or is in DoNotContact.
-  const body = (await req.json().catch(() => null)) as { source?: string } | null;
-  const source = typeof body?.source === "string" ? body.source.slice(0, 60) : null;
-  if (auth.user.email) {
-    const { error: enrolErr } = await supabase.rpc("enrol_verified_email", { p_source: source });
-    if (enrolErr) console.error("[auth] enrol_verified_email failed:", enrolErr.message);
-  }
+  // Mimi Pip marketing consent is collected separately by the newsletter form.
 
   const token = (await cookies()).get(TASTE_COOKIE)?.value;
   if (token) {
@@ -427,19 +419,9 @@ async function emailVerify(req: Request) {
     return NextResponse.json({ error: "Couldn't save your email." }, { status: 500 });
   }
 
-  // enrol_verified_email reads customers.email, not the JWT — so the address has
-  // to land on the customers row first. (The JWT in this request still predates
-  // the update above; it catches up on the client's next refresh.)
-  // p_marketing: the email step shows the subscribe line under its button;
-  // the database refuses to re-subscribe anyone who unsubscribed.
-  const { error: syncErr } = await supabase.rpc("save_customer_email", { p_email: email, p_marketing: true });
+  // Verifying an address does not grant marketing consent.
+  const { error: syncErr } = await supabase.rpc("save_customer_email", { p_email: email, p_marketing: false });
   if (syncErr) console.error("[auth] save_customer_email failed:", syncErr.message);
-
-  const source = typeof body?.source === "string" ? body.source.slice(0, 60) : null;
-  {
-    const { error: enrolErr } = await supabase.rpc("enrol_verified_email", { p_source: source });
-    if (enrolErr) console.error("[auth] enrol_verified_email failed:", enrolErr.message);
-  }
 
   return NextResponse.json({ ok: true });
 }

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 
 export const CRON_STALE_MS = 30 * 60 * 1000;
 export const CRON_DIED_STATUS = 504;

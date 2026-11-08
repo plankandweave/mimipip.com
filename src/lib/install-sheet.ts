@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { DAY, signArt, signArtRender } from "./corporate-files";
 import { fetchOsStatuses, type OsOrderStatus } from "./corporate-os";
 import { loadBatch } from "./site-batch";

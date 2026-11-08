@@ -16,7 +16,7 @@ import { MarketMoney } from "@/components/MarketMoney";
  * before checkout asks the customer to choose. Dates are computed on mount
  * (not in the cached render), from the same clock checkout reads.
  */
-export function DeliverySpeeds({ freightToPay = false }: { freightToPay?: boolean }) {
+export function DeliverySpeeds({ freightToPay = false, showExpress = true }: { freightToPay?: boolean; showExpress?: boolean }) {
   const [dates, setDates] = useState<{ standard: string; express: string } | null>(null);
 
   useEffect(() => {
@@ -35,14 +35,14 @@ export function DeliverySpeeds({ freightToPay = false }: { freightToPay?: boolea
         <span className="font-semibold text-charcoal">Standard{freightToPay ? "" : " · free"}:</span>{" "}
         delivered by {dates.standard} · within {STANDARD_SHIPPING.deliveryWorkingDays} working days
       </p>
-      <p className="mt-1">
+      {showExpress && <><p className="mt-1">
         <span className="font-semibold text-charcoal">
           Express · <MarketMoney inr={EXPRESS_SHIPPING.perWallpaperCharge} />/wallpaper +{" "}
           <MarketMoney inr={EXPRESS_SHIPPING.perOrderCharge} />/order:
         </span>{" "}
         delivered by {dates.express} · within {EXPRESS_SHIPPING.deliveryWorkingDays} working days
       </p>
-      <p className="mt-2 text-[0.7rem] text-mist">Choose your speed at checkout.</p>
+      <p className="mt-2 text-[0.7rem] text-mist">Choose your speed at checkout.</p></>}
     </div>
   );
 }

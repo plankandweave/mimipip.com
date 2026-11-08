@@ -23,7 +23,7 @@ export function CartOrPartnerIcon() {
   const person = email.split("@")[0].split(/[._-]/)[0];
   const name = person ? person[0].toUpperCase() + person.slice(1) : email;
   if (!partner) return (
-    <Link href="/account" title={`Signed in to Zyvorah as ${email}`} className="header-account-badge flex h-9 shrink-0 items-center gap-2 rounded-full border border-edge bg-surface px-3 text-[0.72rem] font-semibold text-charcoal hover:bg-wash">
+    <Link href="/account" title={`Signed in to Mimi Pip as ${email}`} className="header-account-badge flex h-9 shrink-0 items-center gap-2 rounded-full border border-edge bg-surface px-3 text-[0.72rem] font-semibold text-charcoal hover:bg-wash">
       <span className="grid h-5 w-5 place-items-center rounded-full bg-charcoal text-[0.6rem] text-surface">{name[0]}</span>
       <span className="header-account-label">{name}</span>
     </Link>

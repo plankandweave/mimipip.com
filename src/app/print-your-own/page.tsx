@@ -8,7 +8,7 @@ import { PrintYourOwn } from "@/components/PrintYourOwn";
 
 export const metadata: Metadata = brandMetadata({
   title: "Your Own Image, On Your Wall",
-  description: "Bring your own artwork and we'll make it to measure for your wall.",
+  description: "Bring your own artwork and explore wallpaper sized to your wall.",
   alternates: { canonical: "/print-your-own" },
 });
 

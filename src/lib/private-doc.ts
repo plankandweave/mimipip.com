@@ -1,6 +1,6 @@
 import { serviceFetch, transportAvailable } from '@/brand/service-transport';
 const fetch: typeof globalThis.fetch = (input, init) => serviceFetch('storage', input, init);
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -18,7 +18,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
  *  role. `board-images` is deliberately absent: those are signed in the browser
  *  with the customer's own session against an owner-scoped policy, so the
  *  service role never sees them. */
-const PRIVATE_DOC_BUCKETS = new Set(["order-copies", "order-previews", "print-files"]);
+const PRIVATE_DOC_BUCKETS = new Set(["mimipip-order-copies", "mimipip-order-previews", "mimipip-print-files"]);
 
 /**
  * The client that WRITES into the document buckets.

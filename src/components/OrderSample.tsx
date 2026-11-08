@@ -1,12 +1,13 @@
 "use client";
 
-import { SubscribeDisclosure } from "@/components/SubscribeDisclosure";
+import { loadRazorpay } from "@/lib/load-razorpay";
+import { SAMPLE_INR } from "@/brand/commerce/sample-policy";
 import { isInternalOrder } from "@/lib/internal-orders";
 import { useEffect, useRef, useState } from "react";
 import { exGst, formatINR } from "@/lib/pricing";
 import { useMarket } from "@/components/MarketProvider";
 import { InvoiceBreakdown } from "@/components/InvoiceBreakdown";
-import { isValidGstin } from "@/lib/gst";
+import { gstinChecksumOk } from "@/lib/gst";
 import { SAMPLE_FINISHES, DEFAULT_SAMPLE_FINISH } from "@/lib/sample-finishes";
 import { SAMPLE_SCOPE_NOTE } from "@/lib/sample-designs";
 import { readSavedContact, writeSavedContact } from "@/lib/saved-contact";
@@ -15,23 +16,18 @@ import { normalisePhone } from "@/lib/google-ads";
 import { metaContentId, metaSamplePurchase } from "@/lib/meta-pixel";
 import { openAiIdentify, openAiOrderCreated } from "@/lib/openai-pixel";
 
-const UNIT = 200; // ₹ per sample line (one design × one material)
+const UNIT = SAMPLE_INR; // ₹ per sample line (one design × one material)
 /** The sample invitation quotes this, so the button and the charge cannot drift. */
 export const SAMPLE_UNIT_INR = UNIT;
 
 type Design = { handle: string; title: string; image?: string | null };
 type RazorpayInfo = { razorpayOrderId: string; keyId: string; amount: number };
 
-function loadRazorpay(): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (typeof window === "undefined") return resolve(false);
-    if ((window as unknown as { Razorpay?: unknown }).Razorpay) return resolve(true);
-    const s = document.createElement("script");
-    s.src = "https://checkout.razorpay.com/v1/checkout.js";
-    s.onload = () => resolve(true);
-    s.onerror = () => resolve(false);
-    document.body.appendChild(s);
-  });
+const SAMPLE_SESSION_KEY = 'mimipip-sample-payment';
+function sampleSession(){
+  let token=sessionStorage.getItem(SAMPLE_SESSION_KEY);
+  if(!token){token=Array.from(crypto.getRandomValues(new Uint8Array(32)),n=>n.toString(16).padStart(2,'0')).join('');sessionStorage.setItem(SAMPLE_SESSION_KEY,token);}
+  return token;
 }
 
 /**
@@ -66,7 +62,27 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
   }));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [placed, setPlaced] = useState<{ orderNumber: number; paymentPending: boolean } | null>(null);
+  const [placed, setPlaced] = useState<{ orderNumber: string; paymentPending: boolean } | null>(null);
+
+  const [paymentsOpen,setPaymentsOpen]=useState(false);
+  const [paymentOpen,setPaymentOpen]=useState(false);
+  const [pending,setPending]=useState(false);
+  async function checkPayment(){
+    const token=sessionStorage.getItem(SAMPLE_SESSION_KEY);
+    if(!token)return;
+    setBusy(true);
+    try{
+      const res=await fetch('/api/checkout/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});
+      const data=await res.json();
+      if(res.ok && data.paid){setPlaced({orderNumber:data.orderNumber,paymentPending:false});sessionStorage.removeItem(SAMPLE_SESSION_KEY);sessionStorage.removeItem(SAMPLE_SESSION_KEY+'-started');setPending(false);}
+      else setError(data.message || data.error || 'Payment is not confirmed. Check again before paying.');
+    }catch{setError('We could not check the payment. If charged, please contact hello@mimipip.com before paying again.');}
+    finally{setBusy(false);}
+  }
+  useEffect(()=>{
+    fetch('/api/sample-order/readiness').then(r=>r.json()).then(d=>setPaymentsOpen(d.open===true)).catch(()=>setPaymentsOpen(false));
+    if(sessionStorage.getItem(SAMPLE_SESSION_KEY+'-started')){setPending(true);void checkPayment();}
+  },[]);
 
   const locked = !!initialDesign; // product-page context — design isn't user-changeable
 
@@ -108,7 +124,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
   const lines = design ? [...finishes].map((material) => ({ design: design.title, material, qty: 1, price: UNIT })) : [];
   const total = lines.length * UNIT;
 
-  const gstinOk = !form.gstin.trim() || isValidGstin(form.gstin);
+  const gstinOk = !form.gstin.trim() || gstinChecksumOk(form.gstin);
   // A WhatsApp-reachable Indian mobile is required. The ₹200 swatch is the
   // first step of a ₹25–40k made-to-measure order, and that order closes in a
   // conversation (the April 2025 sample→order SOP: a call within three days).
@@ -124,10 +140,11 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
     form.line1.trim() &&
     form.city.trim() &&
     /^[1-9]\d{5}$/.test(form.pincode.trim()) &&
-    gstinOk;
+    gstinOk && (!form.gstin.trim() || form.billingName.trim().length >= 2);
 
   const order = async () => {
-    if (!valid || busy || !design) return;
+    if (!valid || busy || paymentOpen || !paymentsOpen || !design) return;
+    const paymentToken=sampleSession();
     const finishesAtOrder = [...finishes];
     setBusy(true);
     setError(null);
@@ -137,6 +154,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          token:paymentToken, countryCode:market.countryCode,
           email: form.email.trim(),
           name: form.name.trim(),
           phone: phoneE164,
@@ -155,11 +173,14 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
             ? "We couldn't start the secure payment just now — please try again in a moment."
             : data?.error === "design_not_sampleable"
               ? `${SAMPLE_SCOPE_NOTE} Please pick one of those designs.`
-              : "Something went wrong — please try again.",
+              : data.error || "Something went wrong — please try again.",
         );
         return;
       }
 
+      if(data.paid){await checkPayment();return;}
+      setPending(true);
+      sessionStorage.setItem(SAMPLE_SESSION_KEY+'-started','1');
       // Order accepted with this contact + address — remember it so checkout
       // (or a second sample order) doesn't ask again in this browser.
       writeSavedContact({
@@ -186,7 +207,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
           order_id: rzp.razorpayOrderId,
           amount: rzp.amount,
           currency: "INR",
-          name: "Zyvorah",
+          name: "Mimi Pip",
           description: `${design.title} sample${finishesAtOrder.length > 1 ? "s" : ""} · order #${data.orderNumber}`,
           prefill: { name: form.name, email: form.email, contact: form.phone },
           theme: { color: "#1a1a1a" },
@@ -196,12 +217,13 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
             razorpay_signature: string;
           }) => {
             try {
-              const v = await fetch("/api/razorpay/verify", {
+              const v = await fetch("/api/checkout/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(resp),
+                body: JSON.stringify({token:paymentToken,...resp}),
               });
-              if (v.ok) {
+              const verified = await v.json();
+              if (v.ok && verified.paid) {
                 const paidAmount = Number(data.amount);
                 const transactionId = `sample-${data.orderNumber}`;
                 gaSamplePurchase({
@@ -235,27 +257,30 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
                   });
                 }
                 setPlaced({ orderNumber: data.orderNumber, paymentPending: false });
+                sessionStorage.removeItem(SAMPLE_SESSION_KEY);sessionStorage.removeItem(SAMPLE_SESSION_KEY+'-started');setPending(false);
               } else {
                 gaEvent("sample_payment_error", { stage: "verification_response", item_id: design.handle });
                 setError(
-                  "We couldn't confirm your payment. If money was deducted, email hello@zyvorah.com with order #" +
+                  "We couldn't confirm your payment. If money was deducted, email hello@mimipip.com with order #" +
                     data.orderNumber + ".",
                 );
               }
             } catch {
               gaEvent("sample_payment_error", { stage: "verification_network", item_id: design.handle });
-              setError("We couldn’t confirm payment. If charged, contact hello@zyvorah.com with order #" + data.orderNumber + " before paying again.");
-            }
+              setError("We couldn’t confirm payment. If charged, contact hello@mimipip.com with order #" + data.orderNumber + " before paying again.");
+            } finally {setPaymentOpen(false);}
           },
           modal: {
             ondismiss: () => {
+              setPaymentOpen(false);
               gaEvent("sample_payment_cancel", { item_id: design.handle });
-              setError("Payment wasn't completed — your sample order is saved as pending (#" + data.orderNumber + ").");
+              setError("Payment has not been confirmed — check your sample order (#" + data.orderNumber + ").");
             },
           },
         });
         gaEvent("sample_payment_open", { item_id: design.handle });
-        rp.open();
+        setPaymentOpen(true);
+        try {rp.open();} catch(error){setPaymentOpen(false);throw error;}
         return;
       }
 
@@ -276,8 +301,8 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
         <p className="font-display text-lg font-bold">Sample order #{placed.orderNumber} placed ✦</p>
         <p className="mt-2 text-sm text-slate">
           {placed.paymentPending
-            ? "Your order is saved. We'll email you a secure payment link and dispatch details shortly."
-            : "Payment received — we'll print your sample and post it to you. You'll get tracking by email."}
+            ? "Your order is saved. Please check payment status before paying again."
+            : "Payment received. Your sample order is confirmed."}
         </p>
       </div>
     );
@@ -317,9 +342,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
 
       {/* unambiguous scope of what a sample is */}
       <p className="mt-3 rounded-[12px] bg-wash px-4 py-3 text-xs leading-relaxed text-slate">
-        Your sample is an A4 section of the selected design, shown at full production quality on
-        Soft Matte. It is intended to show colour, detail and that finish; it does not display
-        the complete wall composition.
+        Your A4 sample shows the selected design on Soft Matte, so you can see its colour, detail and finish before choosing your wallpaper.
       </p>
 
       {/* design — locked (product page) or searchable (standalone) */}
@@ -393,22 +416,23 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
       {/* explicit line-item table — exactly what's being bought */}
       {lines.length > 0 && (
         <div className="mt-4 overflow-hidden rounded-[12px] border border-edge">
-          <table className="w-full text-sm">
+          <table className="w-full table-fixed text-xs sm:text-sm">
+            <colgroup><col className="w-[38%]" /><col className="w-[28%]" /><col className="w-[12%]" /><col className="w-[22%]" /></colgroup>
             <thead>
               <tr className="border-b border-edge bg-wash text-left text-[0.68rem] font-semibold uppercase tracking-wide text-mist">
-                <th className="px-3 py-2">Design</th>
-                <th className="px-3 py-2">Material</th>
-                <th className="px-3 py-2 text-center">Qty</th>
-                <th className="px-3 py-2 text-right">Price</th>
+                <th className="break-words px-1.5 py-2 sm:px-3">Design</th>
+                <th className="break-words px-1.5 py-2 sm:px-3">Material</th>
+                <th className="break-words px-1.5 py-2 sm:px-3 text-center">Qty</th>
+                <th className="break-words px-1.5 py-2 sm:px-3 text-right">Price</th>
               </tr>
             </thead>
             <tbody>
               {lines.map((l, i) => (
                 <tr key={i} className={i > 0 ? "border-t border-edge" : ""}>
-                  <td className="px-3 py-2">{l.design}</td>
-                  <td className="px-3 py-2 text-slate">{l.material}</td>
-                  <td className="px-3 py-2 text-center tabular-nums">{l.qty}</td>
-                  <td className="px-3 py-2 text-right font-semibold tabular-nums">{formatINR(l.price)}</td>
+                  <td className="break-words px-1.5 py-2 sm:px-3">{l.design}</td>
+                  <td className="break-words px-1.5 py-2 sm:px-3 text-slate">{l.material}</td>
+                  <td className="break-words px-1.5 py-2 sm:px-3 text-center tabular-nums">{l.qty}</td>
+                  <td className="break-words px-1.5 py-2 sm:px-3 text-right font-semibold tabular-nums">{formatINR(l.price)}</td>
                 </tr>
               ))}
             </tbody>
@@ -418,7 +442,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
 
       {/* contact + address */}
       <div className="mt-4 space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <input className={field} placeholder="Full name" value={form.name} onChange={set("name")} />
           <input className={field} type="tel" inputMode="tel" autoComplete="tel" placeholder="WhatsApp number" aria-label="WhatsApp number, for delivery updates" value={form.phone} onChange={set("phone")} />
         </div>
@@ -426,11 +450,11 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
             where the number is given, before it is given. */}
         <p className="text-xs text-charcoal/70">We may call or WhatsApp you about your order. Our assistant may be an AI; reply STOP anytime.</p>
         {form.phone.trim() && !phoneOk && (
-          <p className="rounded-[12px] bg-blush/50 px-3 py-2 text-xs text-charcoal">Enter a 10-digit Indian mobile number — we send delivery updates on WhatsApp.</p>
+          <p className="rounded-[12px] bg-blush/50 px-3 py-2 text-xs text-charcoal">Enter a 10-digit Indian mobile number for delivery enquiries.</p>
         )}
         <input className={field} type="email" placeholder="Email" value={form.email} onChange={set("email")} />
         <input className={field} placeholder="Address" value={form.line1} onChange={set("line1")} />
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid gap-3 sm:grid-cols-3">
           <input className={field} placeholder="City" value={form.city} onChange={set("city")} />
           <input className={field} placeholder="State" value={form.state} onChange={set("state")} />
           <input className={field} placeholder="PIN code" inputMode="numeric" maxLength={6} value={form.pincode} onChange={(e) => setForm((f) => ({ ...f, pincode: e.target.value.replace(/\D/g, "") }))} />
@@ -443,6 +467,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
           autoCapitalize="characters"
           onChange={(e) => setForm((f) => ({ ...f, gstin: e.target.value.toUpperCase().slice(0, 15) }))}
         />
+        {form.gstin.trim() && <input className={field} aria-label="Registered business name" placeholder="Registered business name" value={form.billingName} maxLength={200} onChange={set("billingName")} />}
         {form.gstin.trim() && !gstinOk && (
           <p className="text-xs text-charcoal/80">Please enter a valid 15-character GSTIN.</p>
         )}
@@ -459,10 +484,11 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
 
       {error && <p className="mt-3 rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{error}</p>}
 
-      <button onClick={order} disabled={!valid || busy} className="btn mt-5 h-12 w-full text-[0.82rem] disabled:opacity-40">
+      <button onClick={order} disabled={!valid || busy || paymentOpen || !paymentsOpen} className="btn mt-5 h-12 w-full text-[0.82rem] disabled:opacity-40">
         {busy ? "Processing…" : lines.length ? `Pay ${formatINR(total)} · order ${lines.length} sample${lines.length > 1 ? "s" : ""}` : "Select a design and finish"}
       </button>
-      <SubscribeDisclosure className="text-center" />
+      {!paymentsOpen && <p role="status" className="mt-3 text-sm text-slate">Sample ordering is not available yet. <a href="/contact" className="underline">Ask us for a close-up of your design.</a></p>}
+      {pending && <button type="button" onClick={()=>void checkPayment()} disabled={busy||paymentOpen} className="mt-3 w-full text-sm underline">Check payment status</button>}
       <p className="mt-2 text-center text-xs text-mist">Free delivery across India · secure payment via Razorpay</p>
     </div>
   );

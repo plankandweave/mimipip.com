@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { mediaKeyFromUrl } from "@/lib/media-url";
 import { mediaBucket } from "@/lib/r2-media";
 

@@ -9,7 +9,7 @@ export function wallpaperPrice(d:Dimensions, rate:number){return Math.round(Math
 export const linePayload=(l:Line)=>({
  slug:l.slug,qty:l.qty,
  ...(l.dimensions?{widthCm:l.dimensions.width,heightCm:l.dimensions.height}:{}),
- ...(l.crop?{placement:{zoom:l.crop.zoom,cropX:l.crop.offsetX,cropY:l.crop.offsetY,flipH:l.crop.flipH,flipV:l.crop.flipV}}:{}),
+ ...(l.crop?{crop:l.crop,placement:{zoom:l.crop.zoom,cropX:l.crop.offsetX,cropY:l.crop.offsetY,flipH:l.crop.flipH,flipV:l.crop.flipV}}:{}),
 });
 export function clearCart(){localStorage.removeItem(key);window.dispatchEvent(new Event("mimipip-cart"));}
 function validLine(l:Line){

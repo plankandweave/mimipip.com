@@ -49,6 +49,7 @@ export const card=(p:RecordData):ProductCardData=>({
       : (p as RecordData & {imageLayout?:string}).imageLayout==='quad'
         ? {x:1,y:0,columns:2,rows:2}
         : undefined,
+  measurementType: p.type.includes("wallpaper") ? "area" : "fixed",
   fromPricePerSqft:null,
   cardLabel:label(p.type[0]),
   sale:saleOf(p.slug),

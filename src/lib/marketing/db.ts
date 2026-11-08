@@ -1,3 +1,5 @@
+import { isolatedStorageClient } from "@/brand/storage";
+import { backendUrl, MIMIPIP_SCHEMA } from "@/brand/backend";
 import { serviceAvailable, requireService } from "../../brand/services";
 // Server-only Supabase access for the marketing engine: the service-role client
 // that writes the ledger and uploads composed media. NEVER import this into a
@@ -6,7 +8,8 @@ import { serviceAvailable, requireService } from "../../brand/services";
 // Catalogue reads still go through the anon client (src/lib/supabase.ts); only
 // writes/uploads need this.
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { toUploadBody } from "@/lib/storage-body";
 import { mediaBucket } from "@/lib/r2-media";
 import { R2_DOMAIN_BASE } from "@/lib/media-url";
@@ -20,14 +23,14 @@ let cached: SupabaseClient | null = null;
 export function serviceClient(): SupabaseClient {
   if (!serviceAvailable("database")) requireService("database");
   if (cached) return cached;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = backendUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
     throw new Error(
       "SUPABASE_SERVICE_ROLE_KEY (and NEXT_PUBLIC_SUPABASE_URL) required for marketing writes/uploads.",
     );
   }
-  cached = createClient(url, key, { auth: { persistSession: false } });
+  cached = isolatedStorageClient(createClient(url, key, { auth: { persistSession: false }, db: { schema: MIMIPIP_SCHEMA } }));
   return cached;
 }
 

@@ -66,7 +66,7 @@ type Analysis = {
 };
 
 const READ_SYSTEM =
-  "You are Zyvorah's wallpaper curator, warmly and honestly reading a photo a customer uploaded. " +
+  "You are Mimi Pip's wallpaper curator, warmly and honestly reading a photo a customer uploaded. " +
   "Reply with ONLY a JSON object: { \"roomType\": string, \"summary\": one or two warm first-person sentences reflecting what you see, " +
   "\"palette\": array of 3-5 hex colours actually present, \"moodWords\": array of 3-6 lowercase adjectives for how it currently feels, " +
   "\"suggestedPurpose\": a short guess at what the room is for (e.g. 'living room', 'nursery', 'an empty room'), " +
@@ -178,7 +178,7 @@ export type CuratorPick = {
 
 function templateRationale(c: CuratorCandidate): string {
   const style = c.tags.find((t) => /floral|botanical|landscape|geometric|tropical|abstract|chinoiserie/i.test(t));
-  return `A considered Zyvorah design${style ? ` — ${style.toLowerCase()}` : ""} that suits the room you described.`;
+  return `A considered Mimi Pip design${style ? ` — ${style.toLowerCase()}` : ""} that suits the room you described.`;
 }
 
 function toPick(c: CuratorCandidate, rationale: string): CuratorPick {
@@ -230,7 +230,7 @@ async function curate(body: { answers?: Record<string, string>; summary?: string
       `What they told me: ${JSON.stringify(answers)}\n` +
       (avoid.length ? `Steer clear of: ${avoid.join(", ")}.\n` : "") +
       (unmet ? `(My own check suggests the collection may lack a true ${unmet} — verify against the tags.)\n` : "") +
-      `\nHere are real Zyvorah wallpapers to choose from:\n${list}\n\n` +
+      `\nHere are real Mimi Pip wallpapers to choose from:\n${list}\n\n` +
       `Choose the 8-12 that genuinely suit THIS room and their wishes, best first (fewer only if the collection truly doesn't have that many good fits). Their words are the brief: if they named a colour or asked for bright/bold, the picks must visibly deliver it — never substitute. ` +
       `For a prayer/puja room, honour their stated tradition and think laterally (serenity, symmetry, lotus, gardens can all feel devotional) — never assume a religion. ` +
       `Write ONE warm sentence per pick on why you chose it, referencing their words. ` +
@@ -240,7 +240,7 @@ async function curate(body: { answers?: Record<string, string>; summary?: string
     const res = await client.messages.create({
       model: CHAT_MODEL,
       max_tokens: 1500,
-      system: "You are Zyvorah's wallpaper curator. You recommend only from the real designs given to you, and you are honest when the collection falls short.",
+      system: "You are Mimi Pip's wallpaper curator. You recommend only from the real designs given to you, and you are honest when the collection falls short.",
       messages: [{ role: "user", content: prompt }],
     });
     const text = res.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("");

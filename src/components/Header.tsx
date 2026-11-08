@@ -264,7 +264,7 @@ export async function Header() {
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
               <ShipToCountry className="min-w-0" />
             </div>
-            <div className="hidden shrink-0 md:block">{process.env.MIMIPIP_LOCAL_REVIEW === "1" ? <Link href="/faq">Shopping FAQs</Link> : <Concierge />}</div>
+            <div className="hidden shrink-0 md:block">{<Concierge />}</div>
           </div>
         </div>
       </StorefrontOnly>
@@ -304,7 +304,7 @@ export async function Header() {
               <MegaMenu families={shopFamilies} columns={process.env.MIMIPIP_LOCAL_REVIEW === "1"} />
             </div>
             <nav className="header-left-journeys hidden items-center gap-4 min-[1200px]:flex xl:gap-5">
-              {(process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [{label:"Find a design",href:"/search"},{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : DESKTOP_JOURNEYS).map((journey) => (
+              {DESKTOP_JOURNEYS.map((journey) => (
                 <JourneyLink
                   key={journey.href}
                   href={journey.href}
@@ -367,7 +367,7 @@ export async function Header() {
                   way there — both are in the phone drawer — leaving search,
                   saved and cart clear of it down to a 360px screen. */}
               <NavSearch />
-              {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <VisualSearch triggerClassName="hidden sm:grid" />}
+              {<VisualSearch triggerClassName="hidden sm:grid" />}
               <span className="header-saved-icon"><WishlistNavIcon /></span>
               <Link
                 href="/account"
@@ -383,7 +383,7 @@ export async function Header() {
         </div>
       </div>
       <StorefrontOnly>
-        {process.env.MIMIPIP_LOCAL_REVIEW !== "1" && <MobileBrowseRail links={browseLinks} lead={<Concierge />} />}
+        <MobileBrowseRail links={browseLinks} lead={<Concierge />} />
       </StorefrontOnly>
     </ScrollHeader>
   );

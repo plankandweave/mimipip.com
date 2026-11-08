@@ -1,5 +1,5 @@
 import "server-only";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { partnerWorkflow } from "@/lib/ai-keys";
 import { draftWallsFromWalkthrough } from "@/lib/walkthrough-draft";
 import type { TranscriptSegment } from "@/lib/transcribe";

@@ -29,10 +29,10 @@ export function SampleOrderModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] grid place-items-center overflow-y-auto bg-charcoal/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] grid items-start justify-items-center overflow-y-auto bg-charcoal/40 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
-      <div onClick={(e) => e.stopPropagation()} className="my-8 w-[min(480px,100%)]">
+      <div role="dialog" aria-modal="true" aria-label="Order a design sample" onClick={(e) => e.stopPropagation()} className="my-8 w-[min(480px,100%)]">
         <div className="mb-2 flex justify-end">
           <button
             onClick={onClose}

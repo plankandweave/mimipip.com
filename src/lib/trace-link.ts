@@ -1,6 +1,6 @@
 import "server-only";
 import { randomBytes, randomInt } from "node:crypto";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/brand/database-types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { sha256, type CorporateAccount } from "@/lib/corporate-auth";
 import { SITE_URL } from "@/lib/seo";

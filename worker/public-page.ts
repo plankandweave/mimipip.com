@@ -1,6 +1,6 @@
 import {publishedUrls} from '../src/brand/review/published-sitemap';
 import catalogue from '../src/brand/review/catalogue.json';
-import {offlineContentSecurityPolicy,withOfflineBrowserPolicy} from '../src/brand/network-policy';
+import {offlineContentSecurityPolicy,withOfflineBrowserPolicy,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 
 const publicPaths = new Set([
   ...publishedUrls.map(url => new URL(url).pathname.replace(/\/$/, '') || '/'),
@@ -20,7 +20,10 @@ export function publicPage(request:Request, response:Response) {
   const headers = new Headers(response.headers);
   headers.set('X-Robots-Tag',robots);
   headers.set('Content-Security-Policy',publish ? analyticsPolicy : offlineContentSecurityPolicy);
-  const html = new Response(response.body,{status:response.status,headers});
+  // Client navigation retains the first document's CSP. A shopper may start
+  // anywhere, then open the original sample modal or navigate to checkout.
+  // Permit the same existing payment provider on that initial document too.
+  const html = withCheckoutBrowserPolicy(new Response(response.body,{status:response.status,headers}));
   return new HTMLRewriter()
     .on('meta[name="robots"],meta[name="googlebot"]',{element(el){el.remove()}})
     .on('head',{element(el){
