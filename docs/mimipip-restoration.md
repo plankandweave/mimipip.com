@@ -79,3 +79,5 @@ The wall-price estimator still passed a before-tax amount into the native tax-in
 Storefront draft: https://github.com/plankandweave/mimipip.com/pull/9. OS #1015 merged at e4c7930c7132f5d945f16372bc819f093b7ad653 and #1016 at 9c77bf4ea4a9f4080d7f82b78da7eb9c1fd52581 after review and cloud test/typecheck evidence. Railway verification remains in progress; do not read merged as deployed. OS #1018 and engine #175 remain under correction/review. Storefront checkout gates remain off. No storefront deployment.
 
 Latest repeated public crawl: 218 baseline routes returned200. This is HTTP availability evidence only, not interactive feature acceptance.
+
+Backend deployment confirmation: Railway deployment edc1d729-9ea7-4d2b-bf66-79d94a92526a reached SUCCESS for commit9c77bf4ea4a9f4080d7f82b78da7eb9c1fd52581, including OS #1015 and #1016. The print engine still does not advertise sample_brands pending #175. No production order was created to test ingestion. The public OS /api/health path returns404; no health claim is inferred from that path.

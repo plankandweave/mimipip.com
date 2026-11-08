@@ -549,14 +549,14 @@ const HERO_SLIDES = 3;
               Three walls now rather than one; the copy in front does not move
               when the picture behind it changes. */}
           <HeroSlider
-            label={mixedCampaign ? "Featured wallpaper collections" : launchHero ? `${launchHero.title} — the collection` : "Featured designs"}
+            label={mixedCampaign ? "Featured Mimi Pip designs" : launchHero ? `${launchHero.title} — the collection` : "Featured designs"}
             slides={heroDesigns
               .filter((d) => d.image)
               .map((d) => ({
                 image: d.image as string,
                 framing: { mobilePosition: "50% 100%", desktopPosition: "50% 100%", desktopFit: "contain" as const },
                 alt: d.imageAlt,
-                label: mixedCampaign ? campaignCopy[d.handle]?.kicker : undefined,
+                label: mixedCampaign ? campaignCopy[d.handle]?.title : undefined,
                 ...(mixedCampaign && campaignCopy[d.handle] ? { content: (
                   <div className="container-x relative flex h-full flex-col items-start justify-end pb-14">
                     <span className="rounded-full bg-surface/20 px-4 py-1.5 text-[0.72rem] font-semibold tracking-wide text-surface backdrop-blur-sm">{campaignCopy[d.handle].kicker}</span>
