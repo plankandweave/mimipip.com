@@ -97,3 +97,11 @@ Current Cloudflare storefront was read-only reverified: deployment109d0529-8a20-
 - All58 restoration tests, application typecheck, v21 build and native cart checks passed. Latest text/display build follows. Production storefront remains unreleased pending functional acceptance; sender verification does not prove login delivery.
 
 Final v22 verification: build and application typecheck passed. Rebuilt browser checks covered11 pages at390px and1440px (22 measured layouts), all with no document overflow or failed loaded images. Native product review and Hopscotch India/US retail displays were inspected; price selection survived reload. This is layout/price evidence, not whole-site functional acceptance. Fixed-product pages with a known price but no print mapping show the price and truthful unavailability.
+
+### 8 November: authenticated flow and release verification
+- Verified normal email-code sign-in with Resend's labelled test recipient (simulated delivery, no human recipient). QA customer has marketing opt-in false; sign-in no longer subscribes customers or requests advertising consent.
+- Confirmed saved-design persistence and an empty authenticated order history. Applied isolated migration 008 for bounded site-event logging.
+- Restored original room-preview demo SVG omitted from the clone; fixed board JPEG conversion to avoid CSP-blocked fetch(data:).
+- Configured the existing production sender, Supabase and print-backend runtime secrets without creating new credentials/services. Enabled supported sample, lettering and business-invoice gates after existing backend capabilities were deployed; unsupported advanced layouts remain blocked before payment.
+- v25: 58 restoration tests, application typecheck and production build pass. No real payment, print release or customer email was performed. Full inherited test suite is not certified.
+- Remaining: valid shopper-AI/media connection, advanced layout backend contract, 65 artwork mappings, five stair prices/dimensions and unsupported fixed-product fulfilment. These are not represented as completed parity.

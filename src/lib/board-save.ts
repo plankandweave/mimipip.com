@@ -36,7 +36,12 @@ export async function ensureBoard(customerId: string, name: string): Promise<str
 }
 
 export async function uploadBoardImage(customerId: string, imageDataUrl: string): Promise<string> {
-  const blob = await (await fetch(imageDataUrl)).blob();
+  // Decode the on-device composite directly; CSP deliberately excludes data:
+  // from network connections and fetch(data:) would therefore fail.
+  const match = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(imageDataUrl);
+  if (!match) throw new Error("Invalid room preview image");
+  const bytes = Uint8Array.from(atob(match[1]), char => char.charCodeAt(0));
+  const blob = new Blob([bytes], { type: "image/jpeg" });
   // Random suffix as well as the timestamp — auto-save can fire twice inside
   // the same millisecond when a customer tries designs quickly.
   const path = `${customerId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Illustrated living room for wallpaper preview">
+  <rect width="1600" height="1000" fill="#eee9e1"/>
+  <rect y="790" width="1600" height="210" fill="#d9cbbd"/>
+  <rect y="775" width="1600" height="15" fill="#faf7f2"/>
+  <rect x="1195" y="55" width="330" height="625" fill="#faf8f3"/>
+  <path d="M1360 55v625M1195 370h330" stroke="#e9e4db" stroke-width="12"/>
+  <rect x="300" y="615" width="720" height="125" rx="28" fill="#c8d8c4"/>
+  <rect x="330" y="535" width="315" height="125" rx="28" fill="#d3e0d0"/>
+  <rect x="665" y="535" width="315" height="125" rx="28" fill="#d3e0d0"/>
+  <rect x="375" y="745" width="22" height="75" rx="8" fill="#817b71"/>
+  <rect x="925" y="745" width="22" height="75" rx="8" fill="#817b71"/>
+  <ellipse cx="1120" cy="840" rx="235" ry="48" fill="#b8afa4" opacity=".5"/>
+</svg>
