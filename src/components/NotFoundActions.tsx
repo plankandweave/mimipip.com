@@ -12,7 +12,7 @@ export function FindSimilarButton() {
       onClick={() => {
         // The case-study hostname has no storefront visual-search dialog.
         if (window.location.hostname === "casestudy.mimi-pip.invalid") {
-          window.location.assign("https://zyvorah.com/match-a-photo");
+          window.location.assign("https://mimipip.com/match-a-photo");
           return;
         }
         window.dispatchEvent(new Event("zyvorah:open-visual-search"));

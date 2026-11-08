@@ -16,7 +16,7 @@ export function WallpaperShortlist({ products }: { products: ProductCardData[] }
   const rates = products.map(p => p.fromPricePerSqft ?? 0).filter(r => r > 0);
   const startingRate = rates.length ? Math.min(...rates) : null;
   const india = market.countryCode === "IN";
-  const whatsapp = storeWhatsappHref("Hi Zyvorah, I'd like help choosing and ordering wallpaper from https://zyvorah.com/shop-wallpaper. My city and approximate wall size are: ");
+  const whatsapp = storeWhatsappHref("Hi Mimi Pip, I'd like help choosing and ordering wallpaper from https://mimipip.com/shop-wallpaper. My city and approximate wall size are: ");
   return <div className="container-x py-6 md:py-12">
     <header className="max-w-3xl">
       <p className="caps text-slate">Wallpaper for your home</p>

@@ -20,15 +20,14 @@ try:
  status,other=req('/api/cart',use_cookie=False);assert status==200 and other['items']==[],(status,other)
  status,q=req('/api/checkout/quote',{'lines':[{'slug':'almond-blossom','qty':2,'widthCm':243.84,'heightCm':274.32,'lineMinor':1}],'countryCode':'US'});assert status==200 and q['totalMinor']==144000,(status,q)
  status,q=req('/api/cart',{**data,'quantity':101});assert status==400,(status,q)
- for cc,total in [('IN',2099100),('US',None)]:
+ for cc,total in [('IN',2194555),('US',92990)]:
   status,q=req('/api/checkout/quote',{'lines':[{'slug':'almond-blossom','qty':1,'widthCm':243.84,'heightCm':274.32},{'slug':'hopscotch-peach-pop','qty':1}],'countryCode':cc})
-  if cc=='IN': assert status==200 and q['totalMinor']==total,(status,q)
-  else: assert status==400,(status,q)
+  assert status==200 and q['totalMinor']==total,(status,q)
  crop={'imageUrl':'/review/hover-art/almond-blossom.webp','wallWidthCm':243.84,'wallHeightCm':274.32,'offsetX':.5,'offsetY':.5,'zoom':1,'doors':[{'offsetCm':20,'widthCm':80,'heightCm':200}]}
  status,q=req('/api/checkout/quote',{'lines':[{'slug':'almond-blossom','qty':1,'widthCm':243.84,'heightCm':274.32,'crop':crop}],'countryCode':'IN'})
  assert status==400,(status,q)
  status,q=req('/api/cart',{**data,'crop':crop});assert status==400,(status,q)
- print('PASS mixed India cart total, unsupported US fixed-pack refusal and advanced-layout refusal')
+ print('PASS mixed India and US selling-list cart totals and advanced-layout refusal')
  print('PASS native cart authoritative price, quantity, anonymous isolation and existing US checkout quote; no payment attempted')
 finally:
  status,cart=req('/api/cart',{'itemId':item},'DELETE');assert status==200 and cart['items']==[],(status,cart)

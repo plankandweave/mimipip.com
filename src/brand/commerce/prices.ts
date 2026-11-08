@@ -2,7 +2,7 @@
  * MimiPip's prices: the only place a figure lives. The browser shows these and
  * the server re-works them at checkout, so a price cannot be typed in a request.
  *
- * Every figure below is Roheena's or Zyvorah's rule; none is an estimate. A
+ * Fixed retail figures come from the owner-selected Simple Price List (8 November). A
  * design with no figure here is not on sale: the shop leaves it out, and the
  * checkout refuses it. There is no "price to confirm" state.
  */
@@ -72,7 +72,7 @@ export function priceLine(input: { slug: string; qty: number; widthCm?: number; 
   }
   const price = fixedPrice(r.slug, market);
   if (price === null) return { refused: `${r.name} is not on sale in this country.` };
-  const unitMinor = price * 100;
+  const unitMinor = Math.round(price * 100);
   return { slug: r.slug, name: r.name, qty: input.qty, currency, unitMinor, lineMinor: unitMinor * input.qty, widthCm: r.widthCm ?? null, heightCm: r.heightCm ?? null, ratePerSqft: null, billedSqft: null };
 }
 

@@ -33,10 +33,7 @@ export async function sendEmailWithId(
 ): Promise<{ ok: boolean; id: string | null }> {
   if (!serviceAvailable("email")) return { ok: false, id: null };
   const key = process.env.RESEND_API_KEY;
-  // We send from mail.zyvorah.com (its own verified Resend domain) so link
-  // tracking never needs a CNAME on www — that record belongs to the store.
-  // mail.zyvorah.com has no inbox, so every send falls back to a reply-to on
-  // zyvorah.com; a reply must always reach a mailbox someone actually reads.
+  // Use the verified Mimi Pip sender and its customer-facing reply mailbox.
   const from = input.from || process.env.EMAIL_FROM || "Mimi Pip <hello@mimipip.com>";
   const replyTo = input.replyTo || process.env.EMAIL_REPLY_TO || "hello@mimipip.com";
   if (!key) {

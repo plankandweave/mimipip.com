@@ -145,8 +145,8 @@ function isSafeExternal(href: string): boolean {
       host === "shiprocket.co" ||
       host.endsWith(".shiprocket.co") ||
       host.endsWith(".supabase.co") ||
-      host === "zyvorah.com" ||
-      host.endsWith(".zyvorah.com")
+      host === "mimipip.com" ||
+      host.endsWith(".mimipip.com")
     );
   } catch {
     return false;
@@ -447,7 +447,7 @@ export function Concierge({disconnected=false}:{disconnected?:boolean}={}) {
     setStatusMsg("Understanding your room…");
     const friendlyError = (err: string) =>
       err === "not_configured"
-        ? "I'm still being set up — please check back very soon, or email hello@zyvorah.com."
+        ? "I'm still being set up — please check back very soon, or email hello@mimipip.com."
         : err === "busy"
           ? "I'm helping a lot of people right now — give me a few seconds and try again."
           : "Something went wrong on my side — please try that again.";
