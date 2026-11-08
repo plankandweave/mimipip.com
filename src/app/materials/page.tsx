@@ -52,9 +52,8 @@ const descriptions: Record<string, string> = {
                   india="Order an A4 Soft Matte design sample for ₹200."
                   international="Design samples are posted within India only."
                 />{" "}
-                Samples are available across eligible verified wallpaper
-                designs. Other finishes are not included in this sample
-                service.
+                Choose your wallpaper design from the sample search below.
+                Samples are offered on Soft Matte.
               </p>
               <OrderSample />
             </div>

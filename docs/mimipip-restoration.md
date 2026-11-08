@@ -26,7 +26,7 @@ The active checkout is the Cloudflare site, based on commit `1b785886b4d375e364a
 
 ## Verification
 
-`npm run test:restoration` runs 57 focused restoration tests, including payment-provider mocks, authoritative pricing, account ownership, crop preservation, storage scoping and wall defaults. These pass. The inherited Zyvorah catalogue/marketing fixture tests are not a claim of Mimi acceptance and are not part of this command.
+`npm run test:restoration` runs 58 focused restoration tests, including payment-provider mocks, authoritative pricing, account ownership, crop preservation, storage scoping and wall defaults. These pass. The inherited Zyvorah catalogue/marketing fixture tests are not a claim of Mimi acceptance and are not part of this command.
 
 `npm run typecheck:app` checks production application code separately from those inherited test fixtures. It passes. `npm run build:vinext` passes.
 
@@ -72,3 +72,10 @@ Local preview secrets must be placed in ignored `dist/server/.dev.vars` beside t
 The original sample form and main checkout collect optional GSTIN plus registered business name. Syntax/checksum/state-code validation happens before payment; it does not claim a live registration or verify ownership. The durable payment record binds the normalized identity to the payment session, and changing it requires a new session. OS receives a separate order-level billingIdentity with no corporate channel. The feature remains gated until OS #1018 handles invalid declared details as an invoice hold and preserves the buyer-declared name. Focused mock-payment regression passes; no real business identifier or payment was submitted.
 
 The latest build and application typecheck pass. The latest browser viewport override did not change the measured viewport, so no new narrow-screen acceptance claim is made for the final sample/billing edits. The offline engine sample-card preview was visually inspected with clearly labelled synthetic artwork: original Mimi wordmark, own domain and QR are present; this proves layout only, not a physical sample.
+
+## Wall-price review and backend release
+The wall-price estimator still passed a before-tax amount into the native tax-inclusive market mapper. It now uses the approved retail rates and 20 sq ft minimum directly, with regression comparison to authoritative checkout. Browser verified 8 x 9 ft at ₹16,992 in India and $720 in the US. Removed stale collection-rate and zero-foot minimum-width copy. Sample discovery copy no longer exposes internal verification terminology, and border hero links no longer call borders wallpaper.
+
+Storefront draft: https://github.com/plankandweave/mimipip.com/pull/9. OS #1015 merged at e4c7930c7132f5d945f16372bc819f093b7ad653 and #1016 at 9c77bf4ea4a9f4080d7f82b78da7eb9c1fd52581 after review and cloud test/typecheck evidence. Railway verification remains in progress; do not read merged as deployed. OS #1018 and engine #175 remain under correction/review. Storefront checkout gates remain off. No storefront deployment.
+
+Latest repeated public crawl: 218 baseline routes returned200. This is HTTP availability evidence only, not interactive feature acceptance.

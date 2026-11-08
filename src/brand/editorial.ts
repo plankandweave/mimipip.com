@@ -17,7 +17,7 @@ export const homeCampaign: HomeCampaign = {
  copy: Object.fromEntries(heroProducts.map(product => [product.slug, {
   title: product.name, kicker: 'Little spaces, big possibilities',
   description: product.description.split(/(?<=[.!?])\s/)[0],
-  href: '/products/' + product.slug, cta: 'Explore this wallpaper',
+  href: '/products/' + product.slug, cta: product.type.includes('wallpaper') ? 'Explore this wallpaper' : 'Explore this design',
  }])),
  overrides: heroProducts.map(product => ({ ...card(product), imageWidth: 1374, imageHeight: 1145, imageIsFlat: false })),
  seasonal: [],
