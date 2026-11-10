@@ -1,4 +1,4 @@
-/** Mimi Pip commercial policy. All INR inputs are BEFORE tax.
+/** MimiPip commercial policy. All INR inputs are BEFORE tax.
  * Source: owner's 7 November costing instruction. FX is a review basis,
  * not a live exchange-rate claim. Unknown charges are never treated as zero.
  */

@@ -15,7 +15,7 @@ export async function readAccountOrders(db:NonNullable<Env['DB']>,verifiedEmail:
  const rows=await db.prepare("SELECT id,status,created_at,amount,currency,lines FROM mimipip_orders WHERE status='paid' AND lower(trim(json_extract(customer,'$.email')))=?"+(id?' AND id=?':'')+' ORDER BY created_at DESC LIMIT 100').bind(...(id?[email,id]:[email])).all<Row>();
  return rows.results.map(row=>{
   const lines=JSON.parse(row.lines) as StoredLine[];
-  return {id:row.id,status:row.status,created_at:new Date(row.created_at).toISOString(),amountMinor:row.amount,currency:row.currency,title:lines[0]?.name??'Mimi Pip order',image:records.find(r=>r.slug===lines[0]?.slug)?.image??null,item_count:lines.length,
+  return {id:row.id,status:row.status,created_at:new Date(row.created_at).toISOString(),amountMinor:row.amount,currency:row.currency,title:lines[0]?.name??'MimiPip order',image:records.find(r=>r.slug===lines[0]?.slug)?.image??null,item_count:lines.length,
    lines:lines.map(({name,qty,lineMinor,widthCm,heightCm})=>({name,qty,lineMinor,widthCm,heightCm}))};
  });
 }

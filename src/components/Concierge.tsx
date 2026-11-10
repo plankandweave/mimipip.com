@@ -107,7 +107,7 @@ function ChatCartCard({ cart }: { cart: ChatCart }) {
 const GREETING: Msg = {
   role: "assistant",
   content:
-    "Hi! I'm the Mimi Pip concierge. Tell me about your room — the style you love, the mood you want, or your wall size — and I'll find the right mural and price it for you. You can also attach a photo of your room or a look you like.",
+    "Hi! I'm the MimiPip concierge. Tell me about your room — the style you love, the mood you want, or your wall size — and I'll find the right mural and price it for you. You can also attach a photo of your room or a look you like.",
 };
 
 // H8 (30 Sep 2026 first-buyer walkthrough): a first-time visitor facing a
@@ -570,10 +570,10 @@ export function Concierge({disconnected=false}:{disconnected?:boolean}={}) {
       {/* panel */}
       {open && disconnected && <div id="zyvorah-concierge" role="region" aria-label="MimiPip concierge" className="absolute right-3 z-50 max-w-sm rounded-2xl bg-surface p-6 shadow-xl"><h2>MimiPip concierge</h2><p>Chat and voice are unavailable in local review.</p><button onClick={()=>setOpen(false)}>Close concierge</button></div>}
       {open && !disconnected && (
-        <div id="zyvorah-concierge" role="region" aria-label="Mimi Pip Concierge" className="absolute top-[calc(100%+0.5rem)] right-3 z-50 flex h-[min(600px,72dvh)] max-h-[calc(100dvh-9rem-var(--sticky-cta-h,0px))] w-[min(400px,calc(100%-1.5rem))] flex-col overflow-hidden rounded-[24px] bg-cloud text-left shadow-2xl ring-1 ring-edge sm:right-5">
+        <div id="zyvorah-concierge" role="region" aria-label="MimiPip Concierge" className="absolute top-[calc(100%+0.5rem)] right-3 z-50 flex h-[min(600px,72dvh)] max-h-[calc(100dvh-9rem-var(--sticky-cta-h,0px))] w-[min(400px,calc(100%-1.5rem))] flex-col overflow-hidden rounded-[24px] bg-cloud text-left shadow-2xl ring-1 ring-edge sm:right-5">
           <div className="flex items-start justify-between gap-2 bg-gradient-to-r from-lavender via-blush to-peach px-5 py-4">
             <div>
-              <p className="font-display text-base font-bold text-charcoal">Mimi Pip Concierge</p>
+              <p className="font-display text-base font-bold text-charcoal">MimiPip Concierge</p>
               <p className="text-xs text-charcoal/70">Your personal wallpaper stylist</p>
             </div>
             <div className="flex shrink-0 flex-col items-end gap-1.5">

@@ -38,7 +38,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       <h1 className="text-2xl font-semibold text-charcoal">Something went wrong on our end.</h1>
       <p className="max-w-md text-slate">
         Sorry about that — please try again. If it keeps happening, email{" "}
-        <a href="mailto:hello@zyvorah.com" className="underline underline-offset-2 hover:text-charcoal">hello@zyvorah.com</a>.
+        <a href="mailto:hello@mimipip.com" className="underline underline-offset-2 hover:text-charcoal">hello@mimipip.com</a>.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <button onClick={reset} className="btn">Try again</button>

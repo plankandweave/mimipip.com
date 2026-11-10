@@ -1,5 +1,5 @@
 import { MIMIPIP_PRICING } from '@/brand/pricing-policy';
-/** Mimi Pip's standard preview wall. Explicit customer dimensions take priority. */
+/** MimiPip's standard preview wall. Explicit customer dimensions take priority. */
 export const DEFAULT_WALL_FT = MIMIPIP_PRICING.standardWidthFt;
 export const DEFAULT_WALL_HEIGHT_FT = MIMIPIP_PRICING.standardHeightFt;
 export type WallStart = { w: number; h: number };

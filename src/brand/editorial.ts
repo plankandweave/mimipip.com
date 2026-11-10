@@ -9,7 +9,8 @@ export type HomeCampaign = {
   seasonal: {enabled: boolean; cards: ProductCardData[]}[];
 };
 /** Brand-owned merchandising inputs, separate from carousel/selection algorithms. */
-const heroHandles = ['cloud-parade', 'sage-meadow', 'buttercup-morning', 'little-rooftops'];
+// Only designs that can be bought lead the home page (catalogue is the sellable list).
+const heroHandles = ['safari-celebration', 'balloon-dreams', 'treehouse-enchantment', 'cosmic-outpost'];
 const heroProducts = heroHandles.map(handle => catalogue.find(product => product.slug === handle)).filter(product => product !== undefined);
 export const homeCampaign: HomeCampaign = {
  enabled: true,
@@ -19,7 +20,7 @@ export const homeCampaign: HomeCampaign = {
   description: product.description.split(/(?<=[.!?])\s/)[0],
   href: '/products/' + product.slug, cta: product.type.includes('wallpaper') ? 'Explore this wallpaper' : 'Explore this design',
  }])),
- overrides: heroProducts.map(product => ({ ...card(product), imageWidth: 1374, imageHeight: 1145, imageIsFlat: false })),
+ overrides: heroProducts.map(product => ({ ...card(product), imageWidth: 1440, imageHeight: 960, imageIsFlat: false })),
  seasonal: [],
 };
 export function campaignInputs(campaign: HomeCampaign) {

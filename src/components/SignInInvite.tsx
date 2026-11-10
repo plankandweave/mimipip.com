@@ -122,7 +122,7 @@ export function SignInInvite() {
         <div className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
             <p className="font-display text-sm font-bold text-charcoal">
-              Sign in to Mimi Pip
+              Sign in to MimiPip
             </p>
             <p className="mt-0.5 text-xs text-slate">
               Sign in to save your favourite designs and pick up where you left off. Your email is private and is never shown to other visitors.

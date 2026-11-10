@@ -33,8 +33,8 @@ export async function sendEmailWithId(
 ): Promise<{ ok: boolean; id: string | null }> {
   if (!serviceAvailable("email")) return { ok: false, id: null };
   const key = process.env.RESEND_API_KEY;
-  // Use the verified Mimi Pip sender and its customer-facing reply mailbox.
-  const from = input.from || process.env.EMAIL_FROM || "Mimi Pip <hello@mimipip.com>";
+  // Use the verified MimiPip sender and its customer-facing reply mailbox.
+  const from = input.from || process.env.EMAIL_FROM || "MimiPip <hello@mimipip.com>";
   const replyTo = input.replyTo || process.env.EMAIL_REPLY_TO || "hello@mimipip.com";
   if (!key) {
     console.warn(`[email] RESEND_API_KEY not set — skipped "${input.subject}" → ${input.to}`);

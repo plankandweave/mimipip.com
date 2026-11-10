@@ -207,7 +207,7 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
           order_id: rzp.razorpayOrderId,
           amount: rzp.amount,
           currency: "INR",
-          name: "Mimi Pip",
+          name: "MimiPip",
           description: `${design.title} sample${finishesAtOrder.length > 1 ? "s" : ""} · order #${data.orderNumber}`,
           prefill: { name: form.name, email: form.email, contact: form.phone },
           theme: { color: "#1a1a1a" },

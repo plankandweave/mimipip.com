@@ -264,7 +264,7 @@ async function complete(req: Request) {
   const { data, error } = await supabase.rpc("login_sync");
   if (error) console.error("[auth] login_sync failed:", error.message);
 
-  // Mimi Pip marketing consent is collected separately by the newsletter form.
+  // MimiPip marketing consent is collected separately by the newsletter form.
 
   const token = (await cookies()).get(TASTE_COOKIE)?.value;
   if (token) {

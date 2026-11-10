@@ -10,7 +10,7 @@ export const HOMECOMING_DISCOUNT_PCT = 25;
 export const HOMECOMING_END_AT = "2026-11-08T18:29:59.999Z";
 
 export function homecomingOfferActive(_at: Date | number = Date.now()): boolean {
-  // This promotion belongs to Zyvorah; Mimi Pip has no matching checkout offer.
+  // This promotion belongs to Zyvorah; MimiPip has no matching checkout offer.
   return false;
 }
 

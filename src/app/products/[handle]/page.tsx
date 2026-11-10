@@ -2,6 +2,7 @@ import { MimiWallpaperRate } from "@/components/MimiWallpaperRate";
 import {legacyPetalsDestination} from "@/brand/review/petals-legacy";
 import {find as findReview} from "@/brand/review/data";
 import {ReviewDetail} from "@/brand/review/pages";
+import {headFor} from "@/brand/seo/head";
 
 import { brandMetadata, withBrandMetadata } from "@/brand/metadata";
 import { JAIN_DESIGNS, JAIN_SHORT_RESPECT } from "@/content/jain-temples";
@@ -203,7 +204,7 @@ function fixedSizeTitle(p: FixedMetaProduct, webMaterialSlug: string | null): st
   const shown = [...sizes].reverse().slice(0, 2).reverse();
   const head = `${p.title} ${noun}`;
   const withSizes = shown.length ? `${head} — ${shown.join(" & ")}` : head;
-  return `${withSizes.length <= 62 ? withSizes : head} | Mimi Pip`;
+  return `${withSizes.length <= 62 ? withSizes : head} | MimiPip`;
 }
 
 /** The <head> description for a fixed-size piece. Both the medium and the
@@ -247,7 +248,7 @@ const SQUARE_TOLERANCE = 0.1;
  *  descriptive searches, clicks only on the brand. So the title carries the
  *  design's first subject and first room from its own attributes, falling
  *  back step by step to keep inside what Google displays (~60 characters
- *  before " | Mimi Pip"). A subject already in the name is not repeated. */
+ *  before " | MimiPip"). A subject already in the name is not repeated. */
 function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAttributes> | null): string {
   const has = (word: string) => title.toLowerCase().includes(word.toLowerCase());
   const subject = attributes?.subjects.find((s) => s.length <= 20 && !has(s));
@@ -260,7 +261,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
     `${title} ${noun} — Custom Size`.replace(/\s+/g, " "),
   ].filter((c): c is string => !!c);
   const fit = candidates.find((c) => c.length <= 60) ?? candidates[candidates.length - 1];
-  return `${fit} | Mimi Pip`;
+  return `${fit} | MimiPip`;
 }
 
  async function buildPageMetadata({
@@ -271,7 +272,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
   searchParams: Promise<{ market?: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const p=findReview(handle);return {title:p?.name??'Design not found',description:p?.description,...(p ? {alternates:{canonical:'https://mimipip.com/products/'+p.slug}} : {})};}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const head=headFor('/products/'+handle);return head?{title:{absolute:head.title},description:head.description,alternates:{canonical:head.canonical}}:{title:'Design not found',robots:{index:false,follow:true}};}
   const p = await getProductByHandle(handle, true);
   if (!p) return { title: "Product" };
 
@@ -295,20 +296,20 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
     ? roomForIdeasWalls.find((wall) => wall.number === officeWallNumber)
     : undefined;
   const title = service
-    ? `${p.title} — a Mimi Pip service | Mimi Pip`
+    ? `${p.title} — a MimiPip service | MimiPip`
     : family === "length"
-      ? `${p.title} — ${category.title}, Sold Per Linear Metre | Mimi Pip`
+      ? `${p.title} — ${category.title}, Sold Per Linear Metre | MimiPip`
       : family === "fixed"
         ? // "Canvas Art" is the family's name, not a promise about the medium —
           // a piece sold only as peel & stick must not be titled canvas.
           fixedSizeTitle(p, category.webMaterialSlug)
         : officeWall
-          ? `${officeWall.title} — ${officeWall.space} Wall Mural | Mimi Pip`
+          ? `${officeWall.title} — ${officeWall.space} Wall Mural | MimiPip`
         : p.handle.startsWith("piano-")
-          ? `${p.title} Piano Wall Mural | Mimi Pip`
+          ? `${p.title} Piano Wall Mural | MimiPip`
         : muralTitle(p.title, attributes);
   const description = service
-    ? truncate(stripHtml(p.description) || `${p.title}, a Mimi Pip studio service.`, 155)
+    ? truncate(stripHtml(p.description) || `${p.title}, a MimiPip studio service.`, 155)
     : family === "length"
       ? `${p.title}, priced at ${marketPriceLabel(Number(p.price_per_metre ?? 0), marketCode)} per linear metre and supplied as ${supplyLabel(
           Math.max(category.minOrderQty, category.fixedLengthM ?? 1),
@@ -318,7 +319,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
       : family === "fixed"
         ? fixedSizeDescription(p, category.webMaterialSlug, marketCode)
         : officeWall
-          ? truncate(`${officeWall.title} for the ${officeWall.space.toLowerCase()} — a mural wallpaper design from Mimi Pip's Room for Ideas office collection. Room image is a visualisation.`, 155)
+          ? truncate(`${officeWall.title} for the ${officeWall.space.toLowerCase()} — a mural wallpaper design from MimiPip's Room for Ideas office collection. Room image is a visualisation.`, 155)
         : productDescription(p.title, p.description, family, fromRateFor(p, category), marketCode, attributes);
   const path = `/products/${handle}`;
   const url = `${SITE_URL}${marketUrl(path, marketCode)}`;
@@ -333,7 +334,7 @@ function muralTitle(title: string, attributes: ReturnType<typeof cleanProductAtt
       title,
       description,
       url,
-      siteName: "Mimi Pip",
+      siteName: "MimiPip",
       ...(ogImage ? { images: [{ url: ogImage, alt: ogImageRow.alt || productImageAlt(p.title, ogImageRow, attributes) }] } : {}),
     },
     twitter: {
@@ -637,7 +638,7 @@ export default async function ProductPage({
     ? videoObjectJsonLd(siteFilm, {
         path: `/products/${product.handle}`,
         name: `${product.title} — the film`,
-        description: truncate(stripHtml(product.description ?? ""), 300) || `${product.title} by Mimi Pip, on the wall.`,
+        description: truncate(stripHtml(product.description ?? ""), 300) || `${product.title} by MimiPip, on the wall.`,
       })
     : null;
   const structuredData = [
@@ -692,7 +693,7 @@ export default async function ProductPage({
 
   const page = (
     <div>
-      <JsonLd data={structuredData} />
+      {/* Product structured data is written once, by the Worker, from prices.json (src/brand/seo/head.ts). */}
       <ShoppingJourney canvas={isFixedSize} />
       {/* invisible taste signal — feeds the "Picked for you" personalisation */}
       <TasteSignal handle={product.handle} title={product.title} />
@@ -1122,7 +1123,7 @@ export default async function ProductPage({
 
           {/* discreet founder link — below materials; must not crowd configuration */}
           <p className="mt-6 text-xs leading-relaxed text-mist">
-            Chosen for walls, not merely catalogues. Discover the thinking behind Mimi Pip —{" "}
+            Chosen for walls, not merely catalogues. Discover the thinking behind MimiPip —{" "}
             <Link href="/founders-note" className="font-medium text-slate underline underline-offset-2 hover:text-charcoal">A Note from Our Founder</Link>.
           </p>
         </div>

@@ -406,7 +406,7 @@ function ConnectedProductConfigurator({
   // off it. Every reader below uses these, never the raw state.
   const placedDoors = placeMarks(doors, runWidthCm, heightCm);
   const textCheck = textOverlay ? textOverlaySchema.safeParse(textOverlay) : null;
-  const textError = nameOn && market.countryCode !== "IN" ? "Please contact Mimi Pip for a name-cloud price for overseas delivery." : textOverlay && textOverlay.text.trim() ? (!textCheck?.success ? textCheck?.error.issues[0]?.message ?? "Enter your text." : overlayPlacementError(textOverlay, runWidthCm, heightCm, placedDoors) || textPreview.error) : null;
+  const textError = nameOn && market.countryCode !== "IN" ? "Please contact MimiPip for a name-cloud price for overseas delivery." : textOverlay && textOverlay.text.trim() ? (!textCheck?.success ? textCheck?.error.issues[0]?.message ?? "Enter your text." : overlayPlacementError(textOverlay, runWidthCm, heightCm, placedDoors) || textPreview.error) : null;
   const nameReady = !textOverlay || (!!textPreview.url && !textError && (!textOverlay.companion || (!!companionPreview.url && !companionPreview.error)));
   // Never folded while there is lettering: hiding it would hide the fee and
   // the preview state that can block Add to cart.
@@ -1579,7 +1579,7 @@ function ConnectedProductConfigurator({
       ) : !isCanvas && (
         <div className="rounded-[14px] border border-edge bg-surface px-4 py-3.5 text-sm text-slate">
           <p className="font-semibold text-charcoal">Installation for this wall</p>
-          <p className="mt-1">{market.countryCode !== "IN" ? "Mimi Pip installation is currently available only in selected Indian cities." : `Our optional installation service starts at ${INSTALL_MIN_SQFT} sq ft.`} You can continue with your wallpaper order.</p>
+          <p className="mt-1">{market.countryCode !== "IN" ? "MimiPip installation is currently available only in selected Indian cities." : `Our optional installation service starts at ${INSTALL_MIN_SQFT} sq ft.`} You can continue with your wallpaper order.</p>
         </div>
       )}
 

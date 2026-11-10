@@ -191,7 +191,7 @@ export function quoteMarketOrder(input: {
   const tubeCount = Math.max(1, Math.ceil(input.tubeCount ?? 1));
   const areaSqFt = Math.max(0, input.areaSqFt ?? 0);
   const goods = marketGoodsFromInr(input.amountInr, market.countryCode);
-  const delivery = 0; // Mimi Pip wallpaper retail includes shipping.
+  const delivery = 0; // MimiPip wallpaper retail includes shipping.
   return {
     countryCode: market.countryCode,
     currency: market.currency,

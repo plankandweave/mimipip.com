@@ -18,6 +18,7 @@ import { priceSample } from './samples';
 import { approvedLayout } from './approved-layout';
 import { marketOf, currencyOf, nameOf, priceLine, refused, onSale, type Priced } from './prices';
 import { artFor, webOrderBody, type StoredCustomer, type StoredLine } from './order-payload';
+import { count, readFunnel } from '../seo/funnel';
 
 type Statement = {
   bind(...values: unknown[]): Statement;
@@ -147,6 +148,10 @@ async function confirm(o: Order, p: any, pay: Pay, db: NonNullable<Env['DB']>, c
   const ro = await call('orders/' + o.razorpay_order_id);
   if (ro.status !== 'paid' || ro.amount !== o.amount || ro.currency !== o.currency || ro.amount_paid !== o.amount) return false;
   await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, capturedInr(p, o), Date.now(), o.id).run();
+  // Counted once, on the first confirmation: the browser's return and the sweep can both arrive here.
+  if (o.status === 'pending') {
+    try { await count(db, 'paid', (JSON.parse(o.lines) as StoredLine[]).map(l => l.slug), (JSON.parse(o.customer) as StoredCustomer).countryCode); } catch { /* a counter never holds a paid order */ }
+  }
   const fresh = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
   await sendToOs(fresh, pay, db);
   return true;
@@ -163,6 +168,10 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     if (!env.STORE_PAY || !await env.STORE_PAY.osTokenMatches(request.headers.get('x-zyvorah-token') ?? '')) return json({ error: 'Not authorised' }, 401);
     const rows = await db.prepare("SELECT id,amount,currency,os_error,os_tries,created_at,updated_at FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 50").bind().all();
     return json({ unsent: rows.results });
+  }
+  if (path === '/api/checkout/funnel' && request.method === 'GET') {
+    if (!env.STORE_PAY || !await env.STORE_PAY.osTokenMatches(request.headers.get('x-zyvorah-token') ?? '')) return json({ error: 'Not authorised' }, 401);
+    return json(await readFunnel(db, Number(new URL(request.url).searchParams.get('days') ?? 30)));
   }
   // A price is the site's own arithmetic: showing one needs no payment keys.
   if (path === '/api/checkout/quote' && request.method === 'POST') {
@@ -195,7 +204,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       let billingIdentity;
       try{billingIdentity=checkedBillingIdentity(b.customer.billingIdentity,b.customer.countryCode);}
       catch(error){return json({error:error instanceof Error?error.message:'Check business invoice details.'},400);}
-      if(billingIdentity && env.MIMIPIP_BUSINESS_INVOICE_ENABLED!=='1')return json({error:'Please contact Mimi Pip for a business invoice before ordering.'},503);
+      if(billingIdentity && env.MIMIPIP_BUSINESS_INVOICE_ENABLED!=='1')return json({error:'Please contact MimiPip for a business invoice before ordering.'},503);
       const priced = priceCart(b.lines, b.customer.countryCode);
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       if (priced.lines.some(l=>l.kind==='sample') && env.MIMIPIP_SAMPLE_CHECKOUT_ENABLED !== '1')
@@ -227,6 +236,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
         }
         await db.prepare("UPDATE mimipip_orders SET razorpay_order_id=?,status='pending',updated_at=? WHERE id=?").bind(ro.id, Date.now(), id).run();
         o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
+        await count(db, 'checkout_started', priced.lines.map(l => l.slug), customer.countryCode);
       }
       if (o.status === 'creating') return json({ error: 'Your payment session is being checked. Please do not pay again.' }, 409);
       if (o.status === 'paid') return json({ paid: true, orderNumber: o.id });

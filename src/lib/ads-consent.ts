@@ -12,7 +12,7 @@ export const ADS_CONSENT_POLICY_VERSION = "2026-11-08";
 /** The words beside every ads-consent checkbox. One string, so every surface
  *  asks the identical question the policy version refers to. */
 export const ADS_CONSENT_LABEL =
-  "Show me Mimi Pip designs in ads on Google and Meta (optional). We share a scrambled copy of my email and phone with them for this only; I can withdraw any time.";
+  "Show me MimiPip designs in ads on Google and Meta (optional). We share a scrambled copy of my email and phone with them for this only; I can withdraw any time.";
 
 /** Record the signed-in customer's answer. Fire-and-forget: a failed write
  *  leaves them NOT consented, which is the safe default. */

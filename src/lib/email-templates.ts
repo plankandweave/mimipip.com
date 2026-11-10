@@ -214,7 +214,7 @@ function selfInstallJourney(stage: "placed" | "dispatched"): string {
  * the counterpart to installationBlock. Renders nothing on fitted orders, where
  * installationBlock is doing this job instead.
  *
- * This exists because for most of our orders nobody from Mimi Pip ever reaches
+ * This exists because for most of our orders nobody from MimiPip ever reaches
  * the customer's door: they get a parcel and a silence. Telling them the shape
  * of it in advance is the whole difference between a made-to-measure product
  * and a roll bought off a shelf.
@@ -299,7 +299,7 @@ function heroImage(d: OrderEmailData): string {
     ? `<div style="padding:12px 36px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:${MIST};font-weight:700;">${d.productTitle}</div>`
     : "";
   return `<tr><td style="padding:0;">
-      <img src="${d.imageUrl}" alt="${d.productTitle || "Your Mimi Pip design"}" width="820" style="display:block;width:100%;max-width:820px;height:auto;" />
+      <img src="${d.imageUrl}" alt="${d.productTitle || "Your MimiPip design"}" width="820" style="display:block;width:100%;max-width:820px;height:auto;" />
     </td></tr>${caption ? `<tr><td>${caption}</td></tr>` : ""}`;
 }
 
@@ -364,13 +364,13 @@ export function founderNoteEmail(
       <p style="margin:0 0 14px;">${greeting}</p>
       ${opts.letterHtml}
       <p style="margin:20px 0 0;">With warmth,</p>
-      <p style="margin:2px 0 0;"><strong style="color:${CHARCOAL};">Roheena</strong><br><span style="color:${MIST};font-size:13px;">Founder, Mimi Pip</span></p>
+      <p style="margin:2px 0 0;"><strong style="color:${CHARCOAL};">Roheena</strong><br><span style="color:${MIST};font-size:13px;">Founder, MimiPip</span></p>
       ${orderLine}
     </div>`;
 
   const subject = opts.firstName
-    ? `${opts.firstName}, a personal note from Roheena at Mimi Pip ✦`
-    : `A personal note from Roheena at Mimi Pip ✦`;
+    ? `${opts.firstName}, a personal note from Roheena at MimiPip ✦`
+    : `A personal note from Roheena at MimiPip ✦`;
 
   const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
@@ -531,10 +531,10 @@ export function giftCardRecipientEmail(input: {
   const from = input.purchaserName?.trim() || null;
 
   const intro = input.isSelfPurchase
-    ? `Your Mimi Pip gift card is ready to use.`
+    ? `Your MimiPip gift card is ready to use.`
     : from
-      ? `<strong>${from}</strong> has sent you a Mimi Pip gift card ✦`
-      : `You've been sent a Mimi Pip gift card ✦`;
+      ? `<strong>${from}</strong> has sent you a MimiPip gift card ✦`
+      : `You've been sent a MimiPip gift card ✦`;
 
   const messageBlock = input.message?.trim()
     ? `<div style="margin-top:18px;padding:16px 18px;border-left:3px solid ${CYAN};background:#f7fbfc;border-radius:4px;font-style:italic;color:${SLATE};">
@@ -560,15 +560,15 @@ export function giftCardRecipientEmail(input: {
     (input.recipientName?.trim() ? `&to=${encodeURIComponent(input.recipientName.trim())}` : "") +
     `&v=2`; // bump when the card design changes — busts the CDN cache on the image route
   const cardBlock = `<tr><td class="zy-pad" style="padding:18px 40px 0;">
-          <img src="${cardImgUrl}" alt="Mimi Pip gift card — ${input.amountLabel}" width="520" style="width:100%;max-width:520px;height:auto;display:block;border-radius:16px;" />
+          <img src="${cardImgUrl}" alt="MimiPip gift card — ${input.amountLabel}" width="520" style="width:100%;max-width:520px;height:auto;display:block;border-radius:16px;" />
         </td></tr>`;
 
   return {
     subject: input.isSelfPurchase
-      ? `Your Mimi Pip gift card (${input.amountLabel})`
+      ? `Your MimiPip gift card (${input.amountLabel})`
       : from
-        ? `${from} sent you a Mimi Pip gift card ✦`
-        : `You've received a Mimi Pip gift card ✦`,
+        ? `${from} sent you a MimiPip gift card ✦`
+        : `You've received a MimiPip gift card ✦`,
     html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
     <tr><td align="center">
@@ -680,7 +680,7 @@ export function installCompleteEmail(input: {
   const discountChip = input.discountCode && input.discountPct
     ? `
     <div style="margin-top:22px;text-align:center;padding:20px;border:1.5px dashed #d8d8d8;border-radius:16px;">
-      <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${MIST};font-weight:700;">Your Mimi Pip code</div>
+      <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${MIST};font-weight:700;">Your MimiPip code</div>
       <div style="font-size:26px;font-weight:800;letter-spacing:0.05em;color:${CHARCOAL};margin-top:8px;font-family:monospace;">${input.discountCode}</div>
       <div style="font-size:13px;color:${SLATE};margin-top:8px;line-height:1.55;">The same ${input.discountPct}% code from your install guide, in case you haven't used it yet — keep it for your next wall, or pass it to a friend who's been eyeing theirs.</div>
     </div>`
@@ -746,7 +746,7 @@ export function tradeWelcomeEmail(input: {
   dashboardUrl: string;
 }): { subject: string; html: string } {
   return {
-    subject: `You're in — welcome to the Mimi Pip Trade Partner Program ✦`,
+    subject: `You're in — welcome to the MimiPip Trade Partner Program ✦`,
     html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
     <tr><td align="center">
@@ -760,8 +760,8 @@ export function tradeWelcomeEmail(input: {
           <div style="font-size:24px;line-height:1.28;font-weight:800;color:${CHARCOAL};margin-top:8px;">Welcome, ${input.legalName} ✦</div>
           <div style="font-size:15px;line-height:1.7;color:${SLATE};margin-top:16px;">
             Every check passed — PAN, GST status and your bank account are verified, and your account is live.
-            You can now place orders for your clients from the full Mimi Pip catalogue, plus your own uploaded designs.
-            Commission and payouts follow the terms you agreed to at sign-up; every order is invoiced by Mimi Pip at
+            You can now place orders for your clients from the full MimiPip catalogue, plus your own uploaded designs.
+            Commission and payouts follow the terms you agreed to at sign-up; every order is invoiced by MimiPip at
             the time of dispatch, so your clients never see the trade pricing behind the scenes.
           </div>
           <div style="margin-top:26px;">${button("Go to your trade dashboard", input.dashboardUrl)}</div>
@@ -798,7 +798,7 @@ export function resellerWelcomeEmail(input: {
   const term = (k: string, v: string) =>
     `<tr><td style="padding:7px 14px 7px 0;font-size:13px;color:${MIST};white-space:nowrap;vertical-align:top;">${k}</td><td style="padding:7px 0;font-size:13px;color:${CHARCOAL};">${v}</td></tr>`;
   return {
-    subject: `Welcome to Mimi Pip — ${input.businessName} is now an authorised reseller`,
+    subject: `Welcome to MimiPip — ${input.businessName} is now an authorised reseller`,
     html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
     <tr><td align="center">
@@ -811,7 +811,7 @@ export function resellerWelcomeEmail(input: {
           <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:${MIST};font-weight:700;">Authorised reseller</div>
           <div style="font-size:24px;line-height:1.28;font-weight:800;color:${CHARCOAL};margin-top:8px;">Welcome, ${input.name} ✦</div>
           <div style="font-size:15px;line-height:1.7;color:${SLATE};margin-top:16px;">
-            <strong>${input.businessName}</strong> is now an authorised Mimi Pip reseller, with its own
+            <strong>${input.businessName}</strong> is now an authorised MimiPip reseller, with its own
             portal for ordering made-to-order wallpaper — from our full catalogue or your own uploaded
             artwork — at your reseller rate. Quote freely, commit when your client does, and every
             order is invoiced to your business, never your customer.
@@ -825,7 +825,7 @@ export function resellerWelcomeEmail(input: {
           </table>
           <div style="font-size:15px;line-height:1.7;color:${SLATE};margin-top:18px;">
             One thing before your first order: when you first sign in, the portal will present the
-            Mimi Pip Reseller Agreement — the standard terms above, in full — to review and sign
+            MimiPip Reseller Agreement — the standard terms above, in full — to review and sign
             online. It takes a couple of minutes and unlocks the portal for your whole team.
           </div>
           <div style="margin-top:26px;">${button("Open your reseller portal", input.portalUrl)}</div>
@@ -852,7 +852,7 @@ export function tradeRejectedEmail(input: {
   applyUrl: string;
 }): { subject: string; html: string } {
   return {
-    subject: `Your Mimi Pip trade partner application`,
+    subject: `Your MimiPip trade partner application`,
     html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
     <tr><td align="center">
@@ -865,7 +865,7 @@ export function tradeRejectedEmail(input: {
           <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:${MIST};font-weight:700;">Trade partner program</div>
           <div style="font-size:24px;line-height:1.28;font-weight:800;color:${CHARCOAL};margin-top:8px;">We couldn't verify your application</div>
           <div style="font-size:15px;line-height:1.7;color:${SLATE};margin-top:16px;">
-            Hi ${input.legalName}, thanks for applying to the Mimi Pip Trade Partner Program. One of our automated checks
+            Hi ${input.legalName}, thanks for applying to the MimiPip Trade Partner Program. One of our automated checks
             didn't clear:
           </div>
           <div style="margin-top:16px;padding:14px 18px;border-left:3px solid #e6a8a8;border-radius:4px;background:#fdf7f7;font-size:14px;color:${CHARCOAL};">
@@ -894,7 +894,7 @@ export function tradeRejectedEmail(input: {
  * OrderEmailData to hang this off (the order isn't the recipient's own
  * account). Co-branded with the partner's logo/name (spec: "partner logo may
  * appear on the invoice and payment experience; seller of record is always
- * Mimi Pip") — Mimi Pip is named as the seller throughout, the partner is
+ * MimiPip") — MimiPip is named as the seller throughout, the partner is
  * framed as "your designer/architect", never as the merchant.
  */
 export function tradePaymentLinkEmail(input: {
@@ -910,7 +910,7 @@ export function tradePaymentLinkEmail(input: {
     ? `<img src="${input.partnerLogoUrl}" alt="${input.partnerName}" height="28" style="display:block;height:28px;width:auto;margin-bottom:6px;" />`
     : "";
   return {
-    subject: `Payment link for your Mimi Pip order ${input.zvy ?? `#${input.orderNumber}`} — placed via ${input.partnerName}`,
+    subject: `Payment link for your MimiPip order ${input.zvy ?? `#${input.orderNumber}`} — placed via ${input.partnerName}`,
     html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MOBILE_CSS}</style></head><body style="margin:0;padding:0;background:${CLOUD};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CLOUD};padding:32px 16px;">
     <tr><td align="center">
@@ -924,8 +924,8 @@ export function tradePaymentLinkEmail(input: {
           <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:${MIST};font-weight:700;">In partnership with ${input.partnerName}</div>
           <div style="font-size:24px;line-height:1.28;font-weight:800;color:${CHARCOAL};margin-top:8px;">Your order is ready for payment ✦</div>
           <div style="font-size:15px;line-height:1.7;color:${SLATE};margin-top:16px;">
-            ${input.partnerName} has placed ${orderChip({ zvy: input.zvy, order_number: input.orderNumber })} for you on Mimi Pip — original mural wallpaper designs.
-            Mimi Pip is the seller for this order; ${input.partnerName} designed it with you. Complete payment below to confirm it —
+            ${input.partnerName} has placed ${orderChip({ zvy: input.zvy, order_number: input.orderNumber })} for you on MimiPip — original mural wallpaper designs.
+            MimiPip is the seller for this order; ${input.partnerName} designed it with you. Complete payment below to confirm it —
             full payment starts production.
           </div>
           <div style="margin-top:24px;padding:16px 18px;border:1px solid #ececec;border-radius:14px;">
@@ -984,7 +984,7 @@ export function tradePayoutEmail(input: {
           </div>
           ${input.invoiceUrl ? `<div style="margin-top:26px;">${button("View self-billed invoice", input.invoiceUrl)}</div>` : ""}
           <div style="font-size:12px;color:${MIST};margin-top:16px;line-height:1.5;">
-            This invoice is issued by Mimi Pip on your behalf under GST self-invoicing provisions, with your consent from onboarding —
+            This invoice is issued by MimiPip on your behalf under GST self-invoicing provisions, with your consent from onboarding —
             you don't need to raise anything separately.
           </div>
         </td></tr>
@@ -1010,7 +1010,7 @@ export function loginCodeEmail(code: string) {
     // and Android look for to offer a one-tap "Copy Code" suggestion themselves
     // — the closest thing to a real copy button an email can have, since email
     // clients strip the scripts a JS clipboard button would need to work at all.
-    subject: `${code} is your Mimi Pip sign-in code`,
+    subject: `${code} is your MimiPip sign-in code`,
     html: wrap({ order_number: 0 }, {
       accent: SAGE,
       kicker: "Sign in",
@@ -1031,7 +1031,7 @@ export function loginCodeEmail(code: string) {
  * conversation, so the email returns the exact wall they priced (a link that
  * rebuilds it on the design page — a cart lives in one browser's cookie and
  * cannot be opened from an inbox) and offers the conversation. Sent once,
- * Mon–Sat 09:00–19:00 IST, from Team Mimi Pip.
+ * Mon–Sat 09:00–19:00 IST, from Team MimiPip.
  */
 export function cartSavedEmail(input: {
   name?: string | null;
@@ -1070,7 +1070,7 @@ export function cartSavedEmail(input: {
         </td></tr>
         <tr><td class="zy-pad" style="padding:28px 40px 32px;font-family:Arial,Helvetica,sans-serif;">
           <div style="border-top:1px solid #ececec;padding-top:18px;font-size:12px;color:${MIST};line-height:1.6;">
-            With warm regards, Team Mimi Pip<br>
+            With warm regards, Team MimiPip<br>
             Mural wallpaper &amp; hand-designed murals, prepared for your order in India.<br>
             Questions? <a href="mailto:hello@mimipip.com" style="color:${SLATE};">hello@mimipip.com</a> &middot; <a href="${SITE_URL}" style="color:${SLATE};">mimipip.com</a>
           </div>
