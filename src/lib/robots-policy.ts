@@ -20,8 +20,6 @@ const PRIVATE_PATHS = [
   "/admin",
   "/studio",
   "/decide", // internal ops decision links, tokenised and private
-  "/projects/blue-tokai-", // unlisted founder proposals
-  "/private/blue-tokai-", // proposal images and PDFs
   "/order/", // customer order-status links, tokenised and private
   // Partner portals. Every page behind the sign-in already redirects, and the
   // sign-in itself is noindex — but the page still names the partner and shows
@@ -58,6 +56,7 @@ const PUBLIC_MACHINE_PATHS = ["/api/brand/", "/api/agent"];
 const ANSWER_ENGINE_AGENTS = [
   "OAI-SearchBot",   // ChatGPT search index
   "ChatGPT-User",    // ChatGPT fetching a page on a user's behalf
+  "OAI-AdsBot",      // OpenAI's check of landing pages submitted as ChatGPT ads; not training
   "PerplexityBot",   // Perplexity index
   "Perplexity-User", // Perplexity fetching a page on a user's behalf
   "Claude-SearchBot",
