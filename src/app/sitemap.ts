@@ -45,6 +45,7 @@ const STATIC_PATHS: { path: string; priority: number; freq: MetadataRoute.Sitema
   { path: "/series", priority: 0.7, freq: "weekly" },
   { path: "/new", priority: 0.8, freq: "daily" },
   { path: "/lookbook", priority: 0.7, freq: "weekly" },
+  { path: "/playroom-stories", priority: 0.6, freq: "monthly" },
   { path: "/design-with", priority: 0.7, freq: "monthly" },
   { path: "/match-a-photo", priority: 0.7, freq: "monthly" },
   { path: "/see-it-in-my-room", priority: 0.7, freq: "monthly" },

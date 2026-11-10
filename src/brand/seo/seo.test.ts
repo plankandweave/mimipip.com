@@ -63,7 +63,7 @@ test('every published page has its own title and description, a canonical addres
   const titles = new Map<string, string>(), descriptions = new Map<string, string>();
   for (const path of paths) {
     const head = headFor(path);
-    if (path.startsWith('/guides/') || path === '/in-real-homes') continue; // these keep the page's own head
+    if (path.startsWith('/guides/') || path === '/in-real-homes' || path === '/playroom-stories') continue; // these keep the page's own head
     assert.ok(head, 'no head for ' + path);
     assert.equal(head.canonical, 'https://mimipip.com' + path);
     assert.ok(head.title.length >= 20 && head.title.length <= 75, `${path} title length ${head.title.length}: ${head.title}`);

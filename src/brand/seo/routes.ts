@@ -29,6 +29,6 @@ export function hiddenDestination(path: string): string | null {
 
 /** Published pages beyond products, collections, browse and landing pages. */
 export const extraIndexable: string[] = [
-  '/floor-games', '/floor-games/hopscotch-peach-pop', '/play/hopscotch-peach-pop', '/in-real-homes',
+  '/floor-games', '/floor-games/hopscotch-peach-pop', '/play/hopscotch-peach-pop', '/in-real-homes', '/playroom-stories',
   ...Object.keys(guides).map(key => '/guides/' + key),
 ].filter(path => { const game = /^\/(?:floor-games|play)\/([^/]+)$/.exec(path)?.[1]; return !game || isSellable(game); });

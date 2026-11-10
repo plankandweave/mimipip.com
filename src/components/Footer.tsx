@@ -54,6 +54,7 @@ const COLS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Office & Workspace", href: "/office" },
       { label: "Hospitality", href: "/hospitality" },
       { label: "Real Estate & Clubhouse", href: "/real-estate" },
+      { label: "Playroom Stories", href: "/playroom-stories" },
       { label: "Retail & Showrooms", href: "/retail" },
       { label: "Hospitals & Clinics", href: "/hospitals" },
       { label: "Commercial Projects", href: "/commercial" },
@@ -120,6 +121,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
     { title: "Shop", links: ["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })) },
     { title: "Plan your room", links: [
       { label: "In real homes", href: "/in-real-homes/" },
+      { label: "Playroom stories", href: "/playroom-stories" },
       { label: "Nursery worlds", href: "/nursery-worlds/" },
       { label: "Wallpaper buying guide", href: "/wallpaper-buying-guide" }, { label: "How to measure", href: "/how-to-measure" },
       { label: "Surfaces and materials", href: "/materials" }, { label: "Installation and removal", href: "/installation" }, { label: "Saved designs", href: "/wishlist" }
