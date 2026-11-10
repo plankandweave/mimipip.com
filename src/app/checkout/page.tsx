@@ -153,7 +153,7 @@ export default function Checkout() {
   if (lines && !lines.length) return <main className="container-x py-10"><h1 className="text-3xl">Your cart is empty</h1><p className="my-4">{problem}</p><Link className="underline" href="/browse/collection">Shop designs</Link></main>;
 
   // Layout and field treatment from the actual Zyvorah checkout. Payment and
-  // totals remain connected to Mimi Pip's server-authoritative order adapter.
+  // totals remain connected to MimiPip's server-authoritative order adapter.
   const fieldClass = 'h-12 w-full min-w-0 rounded-[14px] border border-edge bg-surface px-4 outline-none transition-colors focus:border-charcoal';
   const field = (key: keyof typeof form, label: string, auto: string, type = 'text') => (
     <label className="grid min-w-0 gap-1.5 text-xs text-slate" key={key}>{label}

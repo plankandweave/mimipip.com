@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-/** Mimi Pip's payment session belongs to the existing Cloudflare checkout. */
+/** MimiPip's payment session belongs to the existing Cloudflare checkout. */
 export function PendingOrderRecovery() {
   const [pending, setPending] = useState(false);
   useEffect(() => {

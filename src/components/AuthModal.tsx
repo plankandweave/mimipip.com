@@ -368,7 +368,7 @@ export function AuthModal({
 
         {!emailOnly && (isEmailStage || stage === "sms") && (
           <div className="mt-3 space-y-3 text-xs text-slate">
-            <p>Signing in creates your Mimi Pip account. Order and account messages are separate from marketing.</p>
+            <p>Signing in creates your MimiPip account. Order and account messages are separate from marketing.</p>
 
           </div>
         )}

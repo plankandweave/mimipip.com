@@ -34,17 +34,17 @@ export const revalidate = 3600;
   const { countryCode, alternates } = marketLanding("/", (await searchParams)?.market);
   const home = countryCode === HOME_MARKET;
   const title = home
-    ? "Mimi Pip | Designer Wallpapers for Homes & Workspaces"
-    : `Mimi Pip | Wallpaper & Murals Delivered to ${countryPhrase(countryCode)}`;
+    ? "MimiPip | Designer Wallpapers for Homes & Workspaces"
+    : `MimiPip | Wallpaper & Murals Delivered to ${countryPhrase(countryCode)}`;
   const description = home
     ? "Discover designer wallpapers and bespoke wall murals for homes, offices and corporate spaces. Explore designs, preview your walls and create a space with character."
-    : `Explore Mimi Pip mural wallpaper designs and canvas art from ${marketPriceLabel(CATALOGUE_FLOOR_RATE, countryCode)}/sq ft. ${deliveryPitch(countryCode)}`;
+    : `Explore MimiPip mural wallpaper designs and canvas art from ${marketPriceLabel(CATALOGUE_FLOOR_RATE, countryCode)}/sq ft. ${deliveryPitch(countryCode)}`;
   return {
     title: { absolute: title },
     description,
     openGraph: {
       type: "website",
-      siteName: "Mimi Pip",
+      siteName: "MimiPip",
       locale: home ? "en_IN" : `en_${countryCode}`,
       url: alternates.canonical,
       title,
@@ -79,6 +79,7 @@ import { getLaunches, getLaunchCollection, getTeaserImages } from "@/lib/launch-
 import { resolveHomepageLaunch, sliderHandles, teaserKicker } from "@/lib/launch";
 import { launchCopyFor } from "@/lib/launch-copy";
 import { HearFromUsFirst } from "@/components/HearFromUsFirst";
+import { headFor } from "@/brand/seo/head";
 import { filter as reviewFilter, discoveryAxes as reviewAxes, label as reviewLabel, card as reviewCard } from "@/brand/review/data";
 import { istMidnight } from "@/lib/ist";
 import { MarketMoney, MarketPricingNote } from "@/components/MarketMoney";
@@ -538,7 +539,7 @@ const HERO_SLIDES = 3;
           // has its title burned into the left of the picture, and `object-cover`
           // keeps the whole picture only when the frame is at least as wide as
           // the film — at the old 80vh-tall frame (~1.5:1 on a laptop) the title
-          // read "AASH" / "i × Mimi Pip". Wider-than-16:9 only trims the ceiling,
+          // read "AASH" / "i × MimiPip". Wider-than-16:9 only trims the ceiling,
           // which the floor rule (#8) already allows. Below lg the 9:16 film is
           // used and a taller frame crops only top and bottom.
           className="relative h-[80vh] min-h-[540px] w-full lg:aspect-video lg:h-auto lg:max-h-[80vh] lg:min-h-0"
@@ -549,7 +550,7 @@ const HERO_SLIDES = 3;
               Three walls now rather than one; the copy in front does not move
               when the picture behind it changes. */}
           <HeroSlider
-            label={mixedCampaign ? "Featured Mimi Pip designs" : launchHero ? `${launchHero.title} — the collection` : "Featured designs"}
+            label={mixedCampaign ? "Featured MimiPip designs" : launchHero ? `${launchHero.title} — the collection` : "Featured designs"}
             slides={heroDesigns
               .filter((d) => d.image)
               .map((d) => ({
@@ -924,7 +925,7 @@ const HERO_SLIDES = 3;
       <section className="container-x">
         <div className="pastel-section grid items-center gap-10 bg-lavender/50 md:grid-cols-2">
           <div>
-            <span className="caps text-slate">The Mimi Pip way</span>
+            <span className="caps text-slate">The MimiPip way</span>
             <h2 className="mt-3 text-3xl lg:text-4xl">Choose a design. Make room for a story.</h2>
             <p className="mt-4 max-w-md text-slate">
               Tell us your wall&apos;s width and height and we price it by the square
@@ -1130,9 +1131,9 @@ const HERO_SLIDES = 3;
       <section className="container-x pb-16">
         <div className="pastel-section bg-wash text-center md:text-left">
           <div className="mx-auto max-w-2xl md:mx-0">
-            <span className="caps text-slate">About Mimi Pip</span>
+            <span className="caps text-slate">About MimiPip</span>
             <p className="mt-4 text-[1.05rem] leading-relaxed text-charcoal">
-              Mimi Pip brings gentle colours, curious characters and playful landscapes to children’s rooms. Explore wallpaper worlds for quiet beginnings and growing imaginations.
+              MimiPip brings gentle colours, curious characters and playful landscapes to children’s rooms. Explore wallpaper worlds for quiet beginnings and growing imaginations.
             </p>
             <Link href="/our-story" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline">
               Our Story <span aria-hidden>&rarr;</span>
@@ -1172,4 +1173,4 @@ const HERO_SLIDES = 3;
 }
 
 export default Home;
-export function generateMetadata(): Metadata { return { title: { absolute: "Mimi Pip · Little spaces, big possibilities" }, description: "Discover playful mural wallpapers, borders and floor games for nurseries and children’s rooms.", alternates: { canonical: brand.origin + "/" } }; }
+export function generateMetadata(): Metadata { const head = headFor('/')!; return { title: { absolute: head.title }, description: head.description, alternates: { canonical: head.canonical } }; }

@@ -9,7 +9,11 @@ export const shopAxes=['collection','color','age','size'] as const;
 export const axes=[...discoveryAxes,'size'] as const;
 export type Axis=typeof axes[number];
 export type RecordData=typeof records[number];
-export const catalogue=records;
+/** The shop's catalogue is what can be bought: a design with no price or no print
+ *  file is not listed, searched, linked or featured anywhere (owner rule, 10 Nov 2026). */
+export const catalogue=records.filter(p=>sellableAnywhere(p.slug));
+/** Every record, sellable or not. Only for telling a hidden design apart from an unknown one. */
+export const everyRecord=records;
 function sizeGroup(p:RecordData) {
   if (p.measurementType === 'made-to-measure') return 'made-to-measure';
   if (p.widthCm && p.heightCm) return 'fixed-dimensions';
@@ -20,9 +24,9 @@ export const options=(axis:Axis) => {
   if(axis==='age') return ['baby','toddler','preschool','school-age'];
   return [...new Set(shop.flatMap(p=>p[axis]??[]))].sort();
 };
-const shop=records.filter(p=>sellableAnywhere(p.slug));
-/** A collection page keeps all its designs; the shop lists only what can be bought. */
-export const collectionDesigns=(handle:string)=>records.filter(p=>p.collection.includes(handle));
+const shop=catalogue;
+/** A collection page lists only what can be bought, like the rest of the shop. */
+export const collectionDesigns=(handle:string)=>shop.filter(p=>p.collection.includes(handle));
 export const filter=(axis:Axis,value:string)=>shop.filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
 export const browseHref=(axis:Axis,value:string)=>axis==='collection'?'/collections/'+encodeURIComponent(value)+'/':'/browse/'+axis+'?value='+encodeURIComponent(value);
 export const card=(p:RecordData):ProductCardData=>({
@@ -55,5 +59,5 @@ export const card=(p:RecordData):ProductCardData=>({
   sale:saleOf(p.slug),
   sampleable:false,
 });
-export const find=(slug:string)=>records.find(p=>p.slug===slug);
+export const find=(slug:string)=>shop.find(p=>p.slug===slug);
 export const label=(s:string)=>s==='happy-petals'?'Happy Petals':s==='dotty-days'?'Dotty Days':s==='colour-create'?'Colour & Create':s.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());

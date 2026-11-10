@@ -40,8 +40,8 @@ function useWhatsappMessage() {
   const pathname = usePathname() ?? "/";
   const onDesign = pathname.startsWith("/products/");
   const message = onDesign
-    ? `Hi Mimi Pip, I'd like to know more about this design: https://mimipip.com${pathname}`
-    : canvas ? "Hi Mimi Pip, I'm looking for canvas artwork." : "Hi Mimi Pip, I'm looking for wallpaper for my wall.";
+    ? `Hi MimiPip, I'd like to know more about this design: https://mimipip.com${pathname}`
+    : canvas ? "Hi MimiPip, I'm looking for canvas artwork." : "Hi MimiPip, I'm looking for wallpaper for my wall.";
   return { onDesign, message };
 }
 

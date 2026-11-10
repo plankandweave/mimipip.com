@@ -198,7 +198,7 @@ export function MatchPhoto() {
           See something you love? Find a wallpaper to match.
         </h1>
         <p className="mt-4 text-slate">
-          Photograph a fabric, artwork, rug, curtain, hotel wall, tile or colour combination. Mimi Pip
+          Photograph a fabric, artwork, rug, curtain, hotel wall, tile or colour combination. MimiPip
           will find designs that share its colours, mood, pattern or visual character.
         </p>
       </div>

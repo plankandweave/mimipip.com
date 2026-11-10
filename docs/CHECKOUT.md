@@ -15,8 +15,8 @@ One file: `src/brand/commerce/prices.json`. A design with no figure there is not
 | What | Figure | Source |
 |---|---|---|
 | Wallpaper abroad | US$10 per sq ft, delivery included | Roheena, 5 Nov 2026 (replaces US$60), at ₹50 per sq ft cost |
-| Wallpaper India | ₹200, ₹300 or ₹400 per sq ft by design | `sourceIndiaPricePerSqft`, the Zyvorah rate of each design; "retain India INR prices", Roheena, 2 Nov 2026 |
-| Hopscotch India | ₹3,999 including GST | product record |
+| Wallpaper India | ₹200 per sq ft plus GST | `MIMIPIP_PRICING.sellingInrPerSqFt` |
+| Fixed pieces | `fixedInr` / `fixedUsd` in `prices.json` (Hopscotch ₹4,953.55 / US$209.90) | Simple Price List, 8 Nov 2026 |
 | Minimum | 20 sq ft billed; delivery free in India | Zyvorah's rule, carried over |
 
 To price a family: add it to `fixedInr` / `fixedUsd`, or set `indiaRateUnlisted` for the wallpapers with no India rate.
@@ -49,3 +49,15 @@ npx wrangler deploy --config dist/server/wrangler.json
 `node --import tsx --test src/brand/commerce/checkout.test.ts` simulates Razorpay and the OS: tampering, abroad, OS down, closed browser, webhook, repeats. `scripts/check-site.py <base url>` reads every published page and fails on any line that says the shop is closed. It failed 196 of 226 pages on the Sites version and passes on this one.
 
 A live paid order is not proven by these checks.
+
+## What is on sale, search, feeds and the funnel (10 November 2026)
+
+One answer to "is this on sale": a price and a print file (`src/brand/commerce/sale.ts`). Everything in `src/brand/seo/` reads it.
+
+- **Hidden.** A design that cannot be bought is not listed, searched, linked, in the sitemap or in a feed, and its address goes to the shop (`routes.ts`, `hiddenDestination`). It shows itself the day it gets a price and a print file. The same holds for a landing page with nothing to sell.
+- **Head tags.** The Worker writes each published page's title, description, canonical address, preview picture and Product/Offer data from `head.ts` (`worker/public-page.ts`). Do not add a second source of these.
+- **Landing pages.** `landing.ts`. Words come from the catalogue and prices; `seo.test.ts` refuses a safety or material claim and any other brand's name.
+- **Feeds.** `/feeds/google-merchant.xml` (India), `/feeds/google-merchant-us.xml`, `/feeds/meta-catalogue.xml` (India), `/feeds/meta-catalogue-us.xml`. Pictures are JPEGs in `public/feed-images/`, made by `python3 scripts/gen-feed-images.py`; run it when a design goes on sale.
+- **Funnel.** D1 table `mimipip_funnel` (migration `0004`; the Worker also creates it if missing): product view, add to cart, checkout started, paid, per IST day, design and country. No cookie and nothing about a person. The OS reads `GET /api/checkout/funnel?days=30` with header `x-zyvorah-token`.
+- **Cloudflare Web Analytics** is the zone's own; the page policy now allows its beacon.
+- **Build.** The public backend address and publishable key are in `vite.config.ts`, so a build needs no `.env.local`. Server secrets stay in Cloudflare.

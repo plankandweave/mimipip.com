@@ -5,7 +5,7 @@ import { getFlatImageMap, getProductsByHandles, getProductsByTag } from "@/lib/q
 import { SeeInMyRoom } from "@/components/SeeInMyRoom";
 
 export const metadata: Metadata = brandMetadata({
-  title: "See It in My Room — Mimi Pip",
+  title: "See It in My Room — MimiPip",
   alternates: { canonical: "/see-it-in-my-room" },
 });
 

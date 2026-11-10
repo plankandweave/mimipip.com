@@ -12,7 +12,7 @@ export const editorialApprovals: Readonly<Record<string, EditorialApproval>> = {
   brandId: brand.id,
   title: "Nafas’s Face Parade",
   description: "Meet Nafas Elizabeth Pattrick and explore her colourful wallpapers, pencil animals, flowers, cars and playful scenes for children's spaces.",
-  reviewReference: "Owner approved restoring and deploying the Nafas collection page for Mimi Pip on 1 November 2026.",
+  reviewReference: "Owner approved restoring and deploying the Nafas collection page for MimiPip on 1 November 2026.",
  },
 };
 export function editorialMetadata(route: string): Metadata {

@@ -24,8 +24,8 @@ export default function NotFound() {
             Good rooms are found by following the feeling.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <Link href="https://zyvorah.com/concepts" className="btn">
-              Shop complete looks
+            <Link href="/browse/collection" className="btn">
+              Shop all designs
             </Link>
             <FindSimilarButton />
           </div>
@@ -46,15 +46,15 @@ export default function NotFound() {
         </div>
 
         <div className="relative z-10 mt-12 grid gap-3 border-t border-charcoal/10 pt-6 sm:grid-cols-2 lg:col-span-2 lg:mt-4 lg:grid-cols-3">
-          <Link href="https://zyvorah.com/collections/wall-art" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
+          <Link href="/kids-wallpaper/" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
             <span className="caps text-mist">Start somewhere</span>
             <span className="mt-2 block font-display text-lg font-bold group-hover:underline group-hover:underline-offset-4">Explore all wallpapers →</span>
           </Link>
-          <Link href="https://zyvorah.com/design-with" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
-            <span className="caps text-mist">Make it yours</span>
-            <span className="mt-2 block font-display text-lg font-bold group-hover:underline group-hover:underline-offset-4">Ask the Zyvorah Curator →</span>
+          <Link href="/floor-games/" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
+            <span className="caps text-mist">Make time to play</span>
+            <span className="mt-2 block font-display text-lg font-bold group-hover:underline group-hover:underline-offset-4">Explore floor games →</span>
           </Link>
-          <Link href="https://zyvorah.com/real-estate" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
+          <Link href="/browse/space" className="group rounded-2xl bg-surface/70 p-5 transition-colors hover:bg-surface">
             <span className="caps text-mist">Find a bigger story</span>
             <span className="mt-2 block font-display text-lg font-bold group-hover:underline group-hover:underline-offset-4">Explore spaces →</span>
           </Link>

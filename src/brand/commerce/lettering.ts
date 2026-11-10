@@ -14,6 +14,6 @@ export function pricedLettering(crop:CropData|undefined,widthCm:number,heightCm:
  if(problem)throw new Error(problem);
  if(!crop.approval?.approvedAt)throw new Error('Please approve the lettering on your measured wall.');
  const fee=overlay.kind==='cloud'?NAME_FEE:0;
- if(fee && countryCode!=='IN')throw new Error('Please contact Mimi Pip for a name-cloud price for overseas delivery.');
+ if(fee && countryCode!=='IN')throw new Error('Please contact MimiPip for a name-cloud price for overseas delivery.');
  return {overlay,fee,personalisation:fee?{childName:overlay.text,fee}:null};
 }

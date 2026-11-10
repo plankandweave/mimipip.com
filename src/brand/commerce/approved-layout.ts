@@ -31,11 +31,11 @@ export function approvedLayout(raw:unknown,widthCm:number|null,heightCm:number|n
  const c=result.data;
  const preview=(previewArt as Record<string,string>)[slug];
  const approvedSources=[art,preview,preview?'https://mimipip.com'+preview:undefined].filter(Boolean);
- if(!approvedSources.includes(c.imageUrl))throw new Error('This uploaded artwork needs its own print approval. Please reopen the catalogue design or contact Mimi Pip.');
+ if(!approvedSources.includes(c.imageUrl))throw new Error('This uploaded artwork needs its own print approval. Please reopen the catalogue design or contact MimiPip.');
  if(c.wallWidthCm!==widthCm||c.wallHeightCm!==heightCm)throw new Error('The approved layout must match your wall dimensions.');
  if(c.walls?.length&&Math.abs(c.walls.reduce((a,b)=>a+b,0)-c.wallWidthCm)>.05)throw new Error('Check the widths of your walls.');
  if(c.doors?.some(d=>d.offsetCm+d.widthCm>c.wallWidthCm+.05||(d.sillCm??0)+d.heightCm>c.wallHeightCm+.05)||c.divisions?.some(d=>d>c.wallWidthCm))throw new Error('Keep wall markings inside the wall.');
  if(c.installation && (c.installation.ratePerSqft!==INSTALL_RATE_EX_GST || c.installation.total<=0))throw new Error('Please select installation again to see its current price.');
- if(c.openingsPlan||c.seamless||c.bespoke||c.concept||(c.walls?.length??0)>1||(c.doors?.length??0)>0||(c.divisions?.length??0)>0)throw new Error('This customised layout needs our team to confirm fulfilment before payment. Please contact Mimi Pip.');
+ if(c.openingsPlan||c.seamless||c.bespoke||c.concept||(c.walls?.length??0)>1||(c.doors?.length??0)>0||(c.divisions?.length??0)>0)throw new Error('This customised layout needs our team to confirm fulfilment before payment. Please contact MimiPip.');
  return {...c,imageUrl:art} as CropData;
 }

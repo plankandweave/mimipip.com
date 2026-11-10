@@ -41,7 +41,7 @@ import { fetchMediaAware } from "@/lib/r2-media";
 // card therefore refreshes on deploy, which is also when new designs ship.
 export const size = { width: 1200, height: 520 };
 export const contentType = "image/jpeg";
-export const alt = "A Zyvorah mural, sized to your wall";
+export const alt = "MimiPip wallpaper for children's rooms";
 
 const { width: W, height: H } = size;
 

@@ -2,14 +2,14 @@ import {defineConfig} from 'vite';
 import vinext from 'vinext';
 import {cloudflare} from '@cloudflare/vite-plugin';
 import path from 'node:path';
-import {publishedSitemapXml} from './src/brand/review/published-sitemap';
+// The shop's public backend address and its publishable key. Both are sent to every browser by
+// design (they are in the page's own scripts), so they live here and the build no longer depends
+// on an untracked .env.local on one person's machine. Server secrets stay in Cloudflare, never here.
+process.env.NEXT_PUBLIC_SUPABASE_URL ??= 'https://qrtznwnhuzkpynjetygg.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??= 'sb_publishable_YQNscT0qZnWXCMqTUZPEAQ_i18oiwjV';
 export default defineConfig({
  define:{'process.env.MIMIPIP_LOCAL_REVIEW':JSON.stringify('1'),'process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW':JSON.stringify('1')},
- plugins:[{
-   name:'mimipip-published-sitemap',
-   generateBundle() {
-     if (this.environment.name === 'client') this.emitFile({type:'asset',fileName:'sitemap.xml',source:publishedSitemapXml});
-   }
- },vinext(),cloudflare({viteEnvironment:{name:'rsc',childEnvironments:['ssr']},inspectorPort:false,config:{name:'mimipip-com',main:'./worker/index.ts',compatibility_date:'2026-05-15',compatibility_flags:['nodejs_compat'],workers_dev:true,routes:[{pattern:'mimipip.com',custom_domain:true},{pattern:'www.mimipip.com',custom_domain:true}],triggers:{crons:['*/5 * * * *']},vars:{MIMIPIP_CHECKOUT_ENABLED:'1',MIMIPIP_SAMPLE_CHECKOUT_ENABLED:'1',MIMIPIP_LETTERING_CHECKOUT_ENABLED:'1',MIMIPIP_BUSINESS_INVOICE_ENABLED:'1'},services:[{binding:'STORE_PAY',service:'zyvorah-store',entrypoint:'MimipipPay'}],d1_databases:[{binding:'DB',database_name:'mimipip-orders',database_id:'a7adc803-e604-46ee-a846-62dc21daf7a5',migrations_dir:'drizzle'}]}})],
+ // The sitemap is served by the Worker (worker/index.ts), from the list of what is on sale: no static copy to fall out of date.
+ plugins:[vinext(),cloudflare({viteEnvironment:{name:'rsc',childEnvironments:['ssr']},inspectorPort:false,config:{name:'mimipip-com',main:'./worker/index.ts',compatibility_date:'2026-05-15',compatibility_flags:['nodejs_compat'],workers_dev:true,routes:[{pattern:'mimipip.com',custom_domain:true},{pattern:'www.mimipip.com',custom_domain:true}],triggers:{crons:['*/5 * * * *']},vars:{MIMIPIP_CHECKOUT_ENABLED:'1',MIMIPIP_SAMPLE_CHECKOUT_ENABLED:'1',MIMIPIP_LETTERING_CHECKOUT_ENABLED:'1',MIMIPIP_BUSINESS_INVOICE_ENABLED:'1'},services:[{binding:'STORE_PAY',service:'zyvorah-store',entrypoint:'MimipipPay'}],d1_databases:[{binding:'DB',database_name:'mimipip-orders',database_id:'a7adc803-e604-46ee-a846-62dc21daf7a5',migrations_dir:'drizzle'}]}})],
  resolve:{alias:{'@':path.resolve(import.meta.dirname,'src'),'sharp':path.resolve(import.meta.dirname,'empty-stub.js'),'@xenova/transformers':path.resolve(import.meta.dirname,'empty-stub.js'),'onnxruntime-node':path.resolve(import.meta.dirname,'empty-stub.js')}}
 });
