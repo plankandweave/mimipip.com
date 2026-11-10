@@ -1,0 +1,51 @@
+# The one deploy of mimipip.com: every push to main is tested, built and published to the
+# Cloudflare Worker `mimipip-com`. Nothing deploys from a laptop or a chat session.
+# Needs one repository secret, CLOUDFLARE_API_TOKEN (Cloudflare template "Edit Cloudflare Workers").
+name: Deploy mimipip.com
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: deploy-mimipip
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CLOUDFLARE_ACCOUNT_ID: 13aafd6aa6cfe9043868017f5a1c577f
+      NEXT_TELEMETRY_DISABLED: "1"
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: |
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          node node_modules/esbuild/install.js
+          node node_modules/workerd/install.js
+      - name: Test
+        run: npm test
+      - name: Build
+        run: MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 npx vinext build
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::The repository secret CLOUDFLARE_API_TOKEN is not set, so nothing was deployed."; exit 1; }
+          npx wrangler deploy --config dist/server/wrangler.json --message "main ${GITHUB_SHA::7}"
+      - name: Check the live site
+        run: |
+          sleep 20
+          curl -fsS https://mimipip.com/api/checkout/readiness | grep -q '"open":true'
+          curl -fsS https://mimipip.com/feeds/google-merchant.xml | grep -q '<g:brand>MimiPip</g:brand>'
+          curl -fsS https://mimipip.com/sitemap.xml | grep -q 'https://mimipip.com/hopscotch-floor-sticker'
+          test "$(curl -s -o /dev/null -w '%{http_code}' https://mimipip.com/products/sage-meadow)" = 302
