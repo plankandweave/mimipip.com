@@ -80,13 +80,15 @@ export function usageFromEnds(head: string, tail: string): Json {
   const out: Json = {};
   const id = head.match(/"id"\s*:\s*"([^"]{1,120})"/); if (id) out["id"] = id[1];
   const model = (head.match(/"model"\s*:\s*"([^"]{1,120})"/) ?? tail.match(/"model"\s*:\s*"([^"]{1,120})"/)); if (model) out["model"] = model[1];
-  const at = tail.lastIndexOf('"usage"');
-  if (at >= 0) {
+  // OpenAI and Anthropic call it "usage"; Google calls it "usageMetadata".
+  for (const key of ["usage", "usageMetadata"]) {
+    const at = tail.lastIndexOf(`"${key}"`);
+    if (at < 0) continue;
     const open = tail.indexOf("{", at);
     let depth = 0;
     for (let i = open; open >= 0 && i < tail.length; i++) {
       if (tail[i] === "{") depth++;
-      else if (tail[i] === "}" && --depth === 0) { try { out["usage"] = JSON.parse(tail.slice(open, i + 1)); } catch { /* not a usage block */ } break; }
+      else if (tail[i] === "}" && --depth === 0) { try { out[key] = JSON.parse(tail.slice(open, i + 1)); } catch { /* not a usage block */ } break; }
     }
   }
   return out;
@@ -164,7 +166,8 @@ export function installAiMeter(env: Record<string, string | undefined> = process
   const report = (events: MeterEvent[]): void => {
     const token = env.ZYVORAH_WEBHOOK_TOKEN?.trim();
     if (!token) return;
-    const base = (env.OS_BASE_URL ?? "https://os.magnitudegroup.in").replace(/\/$/, "");
+    // An empty OS_BASE_URL (the media container is handed "" when it is unset) means the default.
+    const base = (env.OS_BASE_URL?.trim() || "https://os.magnitudegroup.in").replace(/\/$/, "");
     const p = real(`${base}/api/ai-meter/events`, {
       method: "POST", headers: { "Content-Type": "application/json", "x-zyvorah-token": token },
       body: JSON.stringify({ system: SYSTEM, events }), signal: AbortSignal.timeout(8000),
@@ -178,6 +181,8 @@ export function installAiMeter(env: Record<string, string | undefined> = process
       const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
       const at = providerOf(url);
       if (!at) return res;
+      // Nowhere to report to: the reply is not cloned, read or buffered at all.
+      if (!env.ZYVORAH_WEBHOOK_TOKEN?.trim()) return res;
       const method = (init?.method ?? (input instanceof Request ? input.method : "GET")).toUpperCase();
       const { req, chars } = trimRequest(init?.body);
       const tail = at.path.replace(/^\/v\d+(beta)?\//, "").replace(/\/[A-Za-z0-9_-]{16,}(?=\/|$)/g, "").slice(0, 60);
