@@ -1,3 +1,4 @@
+import "./ai-meter"; // every model call is reported to the group's meter
 import "server-only";
 
 // ─── Speech to text ─────────────────────────────────────────────────────────

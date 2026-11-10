@@ -1,0 +1,19 @@
+# Every model call is reported to the group's meter in the OS. This reads the
+# source and needs no install, so it costs seconds: it fails when a file calls
+# a model without loading src/lib/ai-meter.ts, or names a model host the meter
+# does not know.
+name: AI meter check
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-ai-meter.mjs

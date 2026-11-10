@@ -1,3 +1,4 @@
+import "./ai-meter"; // every model call is reported to the group's meter
 import { serviceFetch } from "../brand/service-transport";
 const fetch: typeof globalThis.fetch = (input,init) => serviceFetch("messaging",input,init);
 /**
