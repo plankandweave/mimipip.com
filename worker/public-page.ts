@@ -1,5 +1,5 @@
 import {publishedUrls} from '../src/brand/review/published-sitemap';
-import {headFor,type Head} from '../src/brand/seo/head';
+import {headFor,organizationJsonLd,type Head} from '../src/brand/seo/head';
 import {offlineContentSecurityPolicy,withOfflineBrowserPolicy,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 
 /** Pages search may list. Everything else is served noindex. */
@@ -24,7 +24,7 @@ export function headTags(head:Head, robots:string) {
     meta('property','og:image',head.image), meta('property','og:image:alt',head.imageAlt),
     meta('name','twitter:card','summary_large_image'), meta('name','twitter:title',head.title),
     meta('name','twitter:description',head.description), meta('name','twitter:image',head.image),
-    ...head.jsonLd.map(data => '<script type="application/ld+json">'+JSON.stringify(data).replace(/</g,'\\u003c')+'</script>'),
+    ...[organizationJsonLd, ...head.jsonLd].map(data => '<script type="application/ld+json">'+JSON.stringify(data).replace(/</g,'\\u003c')+'</script>'),
   ].join('');
 }
 
@@ -48,6 +48,8 @@ export function publicPage(request:Request, response:Response) {
   if (head) rewriter = rewriter
     // One of each, ours: the inherited tags described another shop's page (the home address as og:url, a broken preview picture).
     .on('meta[name="description"],link[rel="canonical"],link[rel="alternate"][hreflang],meta[property^="og:"],meta[name^="twitter:"]',{element(el){el.remove()}})
+    // Structured data too: the inherited Product carried relative pictures and another shop's ids, and two Products on one page disagree.
+    .on('script[type="application/ld+json"]',{element(el){el.remove()}})
     .on('head > title',{element(el){sawTitle=true;el.setInnerContent(head.title)}})
     // A title streamed late into the body is replaced by ours in the head; an icon's own <title> stays.
     .on('body svg title',{element(){inSvg=true}})

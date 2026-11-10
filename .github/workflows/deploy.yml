@@ -49,3 +49,8 @@ jobs:
           curl -fsS https://mimipip.com/feeds/google-merchant.xml | grep -q '<g:brand>MimiPip</g:brand>'
           curl -fsS https://mimipip.com/sitemap.xml | grep -q 'https://mimipip.com/hopscotch-floor-sticker'
           test "$(curl -s -o /dev/null -w '%{http_code}' https://mimipip.com/products/sage-meadow)" = 302
+      # ChatGPT, Claude, Perplexity, Google and Bing can read the shop: robots
+      # invites them, llms.txt and the OpenAI feed are MimiPip's own, product
+      # pages carry one Product with a real price (docs/ai-assistant-visibility.md).
+      - name: Check assistants can read the shop
+        run: node scripts/verify-ai-visibility.mjs

@@ -10,6 +10,8 @@ import handler from 'vinext/server/fetch-handler';
 import {withOfflineBrowserPolicy} from '../src/brand/network-policy';
 import records from '../src/brand/review/catalogue.json';
 import {FEEDS} from '../src/brand/seo/feeds';
+import {openAiFeedResponse} from '../src/brand/seo/openai-feed';
+import {llmsTxt} from '../src/brand/seo/llms';
 import {isSellable} from '../src/brand/seo/site';
 import {sitemapXml} from '../src/brand/seo/sitemap';
 import {hiddenDestination,extraIndexable} from '../src/brand/seo/routes';
@@ -41,6 +43,9 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
  // Shopping feeds and the sitemap are made here, from the catalogue and prices.json; nothing inherited is served.
+ if(p==='/feeds/openai-products.jsonl')return openAiFeedResponse(u,request.method);
+ // For ChatGPT, Claude, Perplexity and the rest: MimiPip's own facts, never the inherited Zyvorah file.
+ if(p==='/llms.txt'&&u.hostname==='mimipip.com')return new Response(request.method==='HEAD'?null:llmsTxt(),{headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'public, max-age=3600'}});
  if(p.startsWith('/feeds/')){const feed=Object.hasOwn(FEEDS,p)?FEEDS[p]():null;return feed===null?new Response('Not found',{status:404,headers:{'X-Robots-Tag':'noindex'}}):new Response(request.method==='HEAD'?null:feed,{headers:{'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600','X-Robots-Tag':'noindex'}});}
  if(p==='/sitemap.xml'&&u.hostname==='mimipip.com')return new Response(sitemapXml(extraIndexable),{headers:{'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600'}});
  if(p==='/api/funnel')return handleFunnelBeacon(request,(env as {DB?:FunnelDb}).DB);

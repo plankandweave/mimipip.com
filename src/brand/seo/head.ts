@@ -137,6 +137,24 @@ export function headFor(path: string, value?: string | null): Head | null {
   return null;
 }
 
+/**
+ * The shop itself, on every page MimiPip writes the head for: the Offers point
+ * at it (seller @id), and the inherited block it replaces belonged to another
+ * shop's template. Only what the guides say: Magnitude Brands, made to size, no
+ * change-of-mind returns.
+ */
+export const organizationJsonLd = {
+  '@context': 'https://schema.org', '@type': 'OnlineStore', '@id': ORIGIN + '/#organization',
+  name: BRAND, url: ORIGIN + '/', logo: ORIGIN + '/brand/mimi-pip/half-sun-512.png', email: 'hello@mimipip.com',
+  description: "Kids' wallpaper sized to your wall, and floor game stickers, for nurseries, children's bedrooms and playrooms.",
+  parentOrganization: { '@type': 'Organization', name: 'Magnitude Brands Private Limited' },
+  contactPoint: { '@type': 'ContactPoint', email: 'hello@mimipip.com', contactType: 'customer support' },
+  hasMerchantReturnPolicy: {
+    '@type': 'MerchantReturnPolicy', returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+    merchantReturnLink: ORIGIN + '/guides/shipping-returns',
+  },
+};
+
 /** Every address search may list: what the sitemap holds and what is marked index, follow. */
 export const indexablePaths = (extra: string[]): string[] => [
   '/', ...landings.map(l => '/' + l.key), ...extra,
