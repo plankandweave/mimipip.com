@@ -37,12 +37,9 @@ Checkout opens when `MIMIPIP_CHECKOUT_ENABLED` is `1` and the binding answers re
 
 ## Build and deploy
 
-```bash
-pnpm install --frozen-lockfile --ignore-scripts
-MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 NEXT_TELEMETRY_DISABLED=1 npx vinext build
-npx wrangler d1 migrations apply mimipip-orders --remote --config dist/server/wrangler.json
-npx wrangler deploy --config dist/server/wrangler.json
-```
+One path: `.github/workflows/deploy.yml`. Every push to `main` is tested, built, deployed with `wrangler deploy` and checked on the live site. It needs the repository secret `CLOUDFLARE_API_TOKEN`. Do not deploy from a laptop or a session: Cloudflare's file upload step uses its own short-lived pass, which a cloud session's key handling replaces, so a session cannot finish a deploy.
+
+D1 migrations are not run by the workflow. A new table is created by the Worker itself (`CREATE TABLE IF NOT EXISTS`, as `mimipip_funnel` is) and its migration file kept for the record.
 
 ## Checks
 
