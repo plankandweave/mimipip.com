@@ -127,7 +127,7 @@ else {
     ["blockquote summary", /^> \S/m],
     ["where to buy", /where to buy/i],
     ["pricing unit", /per square foot|per sq ft/i],
-    ["minimum order", /minimum/i],
+    ["minimum order", /minimum|smallest[^.\n]*order/i],
     ["delivery", /deliver/i],
     ["OpenAI feed link", /\/feeds\/openai-products\.jsonl/],
   ]) if (!re.test(llms.text)) fail(`llms.txt is missing its ${label}`);
@@ -174,9 +174,13 @@ for (const [i, url] of pick(products, 4).entries()) {
 for (const url of pick(collections, Math.min(2, collections.length))) {
   const r = await get(url, "OAI-SearchBot");
   const links = new Set([...r.text.matchAll(/href="(?:https:\/\/mimipip\.com)?\/products\/([^"?#]+)/g)].map((m) => m[1]));
+  // A collection's own list says how many designs it holds; the HTML must link
+  // at least that many, up to four (a three-design collection is not short).
+  const list = jsonLd(r.text).find((x) => x["@type"] === "CollectionPage" || x["@type"] === "ItemList");
+  const listed = list?.itemListElement?.length ?? list?.mainEntity?.itemListElement?.length ?? 4;
   if (r.status !== 200) fail(`${url}: HTTP ${r.status}`);
-  else if (links.size < 4) fail(`${url}: only ${links.size} product links in server HTML`);
-  else if (!jsonLd(r.text).some((x) => x["@type"] === "CollectionPage" || x["@type"] === "ItemList")) fail(`${url}: no CollectionPage/ItemList data`);
+  else if (!list) fail(`${url}: no CollectionPage/ItemList data`);
+  else if (links.size < Math.min(4, Math.max(1, listed))) fail(`${url}: only ${links.size} product links in server HTML`);
   else ok(`${url.replace(ORIGIN, "")}: ${links.size} product links in HTML`);
 }
 
