@@ -49,3 +49,9 @@ keeps MimiPip out of an answer. It runs after every deploy (`deploy.yml`). On
    sells to the U.S. in USD, so the U.S. feed is eligible.
 2. After approval OpenAI issues SFTP credentials; a daily push of the feed is
    built then. Ask at onboarding about India/INR.
+3. **Deploys are blocked until the repository secret `CLOUDFLARE_API_TOKEN`
+   exists** (every `Deploy mimipip.com` run on 10 November 2026 failed for
+   lack of it). #12–#15 went live once, on 10 November, as version
+   `0b0c5f68` from a clean build of main `578a85c`, by CTO decision; laptop
+   deploys stay closed. Rollback target: `d3cad48f` (8 November). Once the
+   secret is set, re-run the Deploy workflow on main to prove the pipeline.
