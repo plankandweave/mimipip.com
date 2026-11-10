@@ -21,6 +21,10 @@ import { serviceAvailable, requireService } from "../brand/services";
 // A new AI call adds itself to a workflow here; it never reads
 // ANTHROPIC_API_KEY directly. ai-keys.test.ts sweeps src/ for that.
 
+// Every model call is reported to the group's meter in the OS: loading this
+// module puts the observer in place (see ai-meter.ts).
+import "./ai-meter";
+
 export const AI_WORKFLOWS = {
   outreach: {
     env: "ANTHROPIC_KEY_OUTREACH",
