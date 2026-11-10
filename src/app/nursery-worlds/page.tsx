@@ -33,13 +33,13 @@ export default function NurseryWorldsPage() {
       {worlds.map(([slug, title, description], index) => {
         const key = `${String(index + 1).padStart(2, '0')}-${slug}`;
         return <article key={slug} className="overflow-hidden rounded-[28px] bg-white shadow-[0_12px_48px_rgba(86,65,43,0.08)]">
-          <img src={`/nursery-worlds/${key}-room.webp`} alt={`${title} wallpaper shown on a feature wall in an illustrative lived-in baby nursery`} width={1536} height={1024} loading={index < 2 ? 'eager' : 'lazy'} className="aspect-[3/2] w-full object-cover" />
+          <img src={`/nursery-worlds/${key}-room-v2.webp`} alt={`${title} wallpaper shown on a feature wall in an illustrative lived-in baby nursery`} width={1536} height={1024} loading={index < 2 ? 'eager' : 'lazy'} className="aspect-[3/2] w-full object-cover" />
           <div className="p-5 md:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#a28060]">{String(index + 1).padStart(2, '0')} / 11</p>
             <h2 className="mt-2 text-2xl md:text-3xl">{title}</h2>
             <p className="mt-2 text-sm leading-relaxed text-[#6d6257]">{description}</p>
             <figure className="mt-5 overflow-hidden rounded-2xl bg-[#faf4e9]">
-              <img src={`/nursery-worlds/${key}-art.webp`} alt={`${title} flat wallpaper artwork`} width={1672} height={941} loading="lazy" className="aspect-[2/1] w-full object-cover" />
+              <img src={`/nursery-worlds/${key}-art-v2.webp`} alt={`${title} flat wallpaper artwork`} width={1672} height={941} loading="lazy" className="aspect-[2/1] w-full object-cover" />
               <figcaption className="px-4 py-3 text-xs text-[#75695e]">The artwork, before it meets the room</figcaption>
             </figure>
           </div>
