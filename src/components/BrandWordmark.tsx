@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
  * belongs to the page's palette without changing the Zyvorah letterforms.
  */
 export function BrandWordmark({ className }: { className: string }) {
-  const src = "/brand/mimi-pip/email-wordmark.png";
+  const src = "/brand/mimi-pip/full-logo.png";
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt="MimiPip" className={className} />;
 }
