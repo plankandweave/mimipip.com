@@ -16,7 +16,7 @@ export async function handleSampleOrder(request:Request,env:Env):Promise<Respons
   if(!request.headers.get('content-type')?.startsWith('application/json'))return json({error:'JSON required'},415);
   let b:any;
   try{const raw=await request.text();if(raw.length>8192)return json({error:'Payload too large'},413);b=JSON.parse(raw);}catch{return json({error:'Check your sample order.'},400);}
-  if(!b || !sampleDesign(b.design?.handle) || !Array.isArray(b.finishes) || b.finishes.length!==1 || b.finishes[0]!=='Soft Matte')
+  if(!b || !sampleDesign(b.design?.handle) || !Array.isArray(b.finishes) || b.finishes.length!==1 || b.finishes[0]!=='Smooth Self-Adhesive')
     return json({error:'design_not_sampleable'},400);
   if(b.countryCode!=='IN')return json({error:'Samples can only be delivered within India.'},400);
   let billingIdentity;

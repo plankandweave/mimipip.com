@@ -99,7 +99,7 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   const { body } = h.posts[0];
   assert.equal(body.brand, 'lorange'); assert.equal(body.items[0].brand, 'lorange'); assert.equal(body.amountInr, expected / 100); assert.equal(body.payment.razorpayPaymentId, 'pay_test');
   assert.equal(body.customer.pincode, '411008'); assert.equal(body.customer.countryCode, 'IN'); assert.equal(body.orderRef, made.orderNumber);
-  assert.equal(body.items[0].widthMm, 3000); assert.equal(body.items[0].heightMm, 2500); assert.equal(body.items[0].catalogueRatePerSqft, 200); assert.equal(body.items[0].materialSlug, 'smooth-matt');
+  assert.equal(body.items[0].widthMm, 3000); assert.equal(body.items[0].heightMm, 2500); assert.equal(body.items[0].catalogueRatePerSqft, 200); assert.equal(body.items[0].materialSlug, 'self-adhesive-vinyl'); assert.equal(body.items[0].material, 'self_adhesive');
   assert.match(body.items[0].designUrl, /^https:\/\//); assert.deepEqual(body.items[0].placement, { zoom: 1.5, cropX: .2, cropY: .3, flipH: false, flipV: false });
   assert.equal(body.items[1].widthMm, 780); assert.equal(body.items[1].heightMm, 2630); assert.equal(body.items[1].qty, 2); assert.equal(body.items[1].material, 'self_adhesive'); assert.match(body.items[1].designUrl, /^https:\/\/media\.zyvorah\.com\/_print-masters\/mimipip\/hopscotch-peach-pop-[0-9a-f]{10}\.jpg$/);
   await h.pass(); await h.call('status'); assert.equal(h.posts.length, 1, 'a repeat never sends twice');
@@ -204,7 +204,7 @@ test('Hush and Wander wall preview and print source both quote at checkout',()=>
  }
 });
 
-test('sample pricing is exactly one India-only A4 Soft Matte sample, never a discounted wall', () => {
+test('sample pricing is exactly one India-only A4 self-adhesive sample, never a discounted wall', () => {
   const sample={slug:'almond-blossom',kind:'sample',qty:1};
   const q=priceCart([{...sample,amount:1,lineMinor:1}], 'IN');assert.ok(!('refused' in q));
   assert.equal(q.totalMinor,20000);assert.equal(q.lines[0].widthCm,21);assert.equal(q.lines[0].heightCm,29.7);assert.equal(q.lines[0].kind,'sample');
@@ -215,8 +215,8 @@ test('sample capture carries the dedicated two-card sample metadata and survives
   const h=harness({osStatus:503});h.env.MIMIPIP_SAMPLE_CHECKOUT_ENABLED='1';
   const made=await h.call('create',{customer:india,lines:[{slug:'almond-blossom',kind:'sample',qty:1}]});assert.equal(made.status,200);assert.equal(h.total(),20000);
   assert.equal(h.posts.length,0);h.setCaptured();await h.pass();assert.equal(h.posts.length,1);
-  const item=h.posts[0].body.items[0];assert.equal(item.widthMm,210);assert.equal(item.heightMm,297);assert.equal(item.lineTotalInr,200);assert.equal(item.materialSlug,'smooth-matt');
-  assert.deepEqual(item.sample,{designHandle:'almond-blossom',materialSlug:'smooth-matt',materialLabel:'Soft Matte',muralWidthCm:243.84,muralHeightCm:243.84,sourceUrl:artFor('almond-blossom')!.art});
+  const item=h.posts[0].body.items[0];assert.equal(item.widthMm,210);assert.equal(item.heightMm,297);assert.equal(item.lineTotalInr,200);assert.equal(item.materialSlug,'self-adhesive-vinyl');
+  assert.deepEqual(item.sample,{designHandle:'almond-blossom',materialSlug:'self-adhesive-vinyl',materialLabel:'Smooth Self-Adhesive',muralWidthCm:243.84,muralHeightCm:243.84,sourceUrl:artFor('almond-blossom')!.art});
   assert.equal(item.catalogueRatePerSqft,undefined);assert.equal(item.placement,undefined);
   h.setOs(200);await sweep(h.env);assert.equal(h.db.prepare('select os_status from mimipip_orders').get().os_status,'sent');
   const count=h.posts.length;await h.call('status');assert.equal(h.posts.length,count);
@@ -227,7 +227,7 @@ test('sample fulfilment release gate blocks payment even through the general che
 
 test('original sample widget adapter creates the same scoped payment order and reuses its token',async()=>{
  const h=harness();h.env.MIMIPIP_SAMPLE_CHECKOUT_ENABLED='1';
- const b={token:'a'.repeat(64),name:india.name,email:india.email,phone:'+91'+india.phone,countryCode:'IN',design:{handle:'almond-blossom',title:'tampered title'},finishes:['Soft Matte'],address:{line1:india.address,city:india.city,state:india.state,pincode:india.postcode},amount:1};
+ const b={token:'a'.repeat(64),name:india.name,email:india.email,phone:'+91'+india.phone,countryCode:'IN',design:{handle:'almond-blossom',title:'tampered title'},finishes:['Smooth Self-Adhesive'],address:{line1:india.address,city:india.city,state:india.state,pincode:india.postcode},amount:1};
  const request=()=>new Request('https://mimipip.com/api/sample-order',{method:'POST',headers:{origin:'https://mimipip.com','Content-Type':'application/json'},body:JSON.stringify(b)});
  let r=await handleSampleOrder(request(),h.env);assert.equal(r.status,200);const data=await r.json();assert.equal(data.amount,200);assert.equal(data.razorpay.amount,20000);assert.equal(data.razorpay.razorpayOrderId,'order_test');
  r=await handleSampleOrder(request(),h.env);assert.equal((await r.json()).orderNumber,data.orderNumber);assert.equal(h.db.prepare('select count(*) as n from mimipip_orders').get().n,1);

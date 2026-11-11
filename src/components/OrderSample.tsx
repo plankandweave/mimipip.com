@@ -337,12 +337,12 @@ export function OrderSample({ initialDesign = null }: { initialDesign?: Design |
     <div className="rounded-[18px] border border-edge bg-surface p-6">
       <p className="font-display text-lg font-bold">Order a design sample</p>
       <p className="mt-1 text-sm text-slate">
-        {formatINR(UNIT)} per design, on our Soft Matte wallpaper finish. Available for delivery within India.
+        {formatINR(UNIT)} per design, on our self-adhesive wallpaper finish. Available for delivery within India.
       </p>
 
       {/* unambiguous scope of what a sample is */}
       <p className="mt-3 rounded-[12px] bg-wash px-4 py-3 text-xs leading-relaxed text-slate">
-        Your A4 sample shows the selected design on Soft Matte, so you can see its colour, detail and finish before choosing your wallpaper.
+        Your A4 sample shows the selected design on the same self-adhesive material as the wallpaper, so you can see its colour, detail and finish.
       </p>
 
       {/* design — locked (product page) or searchable (standalone) */}
