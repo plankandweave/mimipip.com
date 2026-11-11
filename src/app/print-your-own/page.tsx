@@ -16,7 +16,8 @@ export const metadata: Metadata = brandMetadata({
 // order vehicle — the customer's uploaded design becomes the printed artwork.
 const CUSTOM_HANDLE = "custom-wallpaper";
 
-export default async function PrintYourOwnPage() {
+export default async function PrintYourOwnPage({searchParams}:{searchParams:Promise<{edit?:string}>}) {
+  const editItemId=(await searchParams).edit;
   const [product, printRules] = await Promise.all([getProductByHandle(CUSTOM_HANDLE), fetchPrintRules()]);
   if (!product) notFound();
 
@@ -36,7 +37,7 @@ export default async function PrintYourOwnPage() {
 
   return (
     <div className="container-x py-10">
-      <PrintYourOwn productHandle={product.handle} productId={product.id} materials={materials} printRules={{ maxPanelCm: printRules.maxPanelCm, overlapCm: printRules.overlapCm }} />
+      <PrintYourOwn editItemId={editItemId} productHandle={product.handle} productId={product.id} materials={materials} printRules={{ maxPanelCm: printRules.maxPanelCm, overlapCm: printRules.overlapCm }} />
     </div>
   );
 }

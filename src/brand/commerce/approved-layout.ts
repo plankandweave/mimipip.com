@@ -7,6 +7,7 @@ const cm=z.number().finite().min(0).max(3000);
 const positiveCm=cm.positive();
 const position=z.number().finite().min(0).max(1);
 const layout=z.object({
+ customArtworkId:z.string().uuid().optional(),
  imageUrl:z.string().max(2048),wallWidthCm:positiveCm,wallHeightCm:positiveCm,
  offsetX:position,offsetY:position,zoom:z.number().finite().min(1).max(8),flipH:z.boolean().optional(),flipV:z.boolean().optional(),
  walls:z.array(positiveCm).max(20).optional(),
@@ -31,6 +32,10 @@ export function approvedLayout(raw:unknown,widthCm:number|null,heightCm:number|n
  const c=result.data;
  const preview=(previewArt as Record<string,string>)[slug];
  const approvedSources=[art,preview,preview?'https://mimipip.com'+preview:undefined].filter(Boolean);
+ if(slug==='custom-wallpaper' && c.customArtworkId && /^https:\/\/qrtznwnhuzkpynjetygg\.supabase\.co\/storage\/v1\/object\/(public|sign)\/mimipip-print-files\//.test(c.imageUrl)){
+  const a=new URL(art), b=new URL(c.imageUrl);
+  if(a.pathname.replace('/public/','/sign/')===b.pathname.replace('/public/','/sign/'))c.imageUrl=art;
+ }
  if(!approvedSources.includes(c.imageUrl))throw new Error('This uploaded artwork needs its own print approval. Please reopen the catalogue design or contact MimiPip.');
  if(c.wallWidthCm!==widthCm||c.wallHeightCm!==heightCm)throw new Error('The approved layout must match your wall dimensions.');
  if(c.walls?.length&&Math.abs(c.walls.reduce((a,b)=>a+b,0)-c.wallWidthCm)>.05)throw new Error('Check the widths of your walls.');

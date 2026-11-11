@@ -9,7 +9,8 @@ import legacyPrintMap from './legacy-print-map.json';
 import type { CropData } from '@/lib/visualizer';
 
 export type StoredLine = {
-  kind?: 'sample';
+  kind?: 'sample'|'design-service';
+  brief?: import('./custom-services').DesignBrief;
   fulfilmentArt?: Art;
   installationMinor?:number;
   personalisationMinor?:number;
@@ -24,7 +25,7 @@ export type StoredCustomer = {
   name: string; email: string; phone: string; address: string; city: string;
   state: string; postcode: string; countryCode: string; country: string;
 };
-type Art = { art: string; material: 'paste' | 'self_adhesive'; materialSlug?: string; printWidthCm?: number; printHeightCm?: number };
+export type Art = { art: string; material: 'paste' | 'self_adhesive'; materialSlug?: string; printWidthCm?: number; printHeightCm?: number };
 
 export const artFor = (slug: string) => (printMap as Record<string, Art>)[slug] ?? null;
 
@@ -43,16 +44,18 @@ export function linesInr(lines: Pick<StoredLine, 'lineMinor'>[], totalInr: numbe
 export function webOrderBody(o: { createdAt?: number; id: string; paymentId: string; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
   const inr = linesInr(o.lines, o.amountInr);
   const c = o.customer;
+  const physicalInr=Math.round(o.lines.reduce((sum,l,i)=>sum+(l.kind==='design-service'?0:inr[i]),0)*100)/100;
   const billingIdentity=checkedBillingIdentity(c.billingIdentity,c.countryCode);
   return {
     brand: 'lorange',
     ...(billingIdentity?{billingIdentity}:{}),
     orderRef: o.id,
-    amountInr: o.amountInr,
+    amountInr: physicalInr,
     shippingInr: 0,
     customer: { name: c.name, phone: c.phone, email: c.email, address: c.address, city: c.city, pincode: c.postcode, state: c.state, country: c.country, countryCode: c.countryCode },
-    payment: { razorpayPaymentId: o.paymentId, amountInr: o.amountInr },
-    items: o.lines.map((l, i) => {
+    payment: { razorpayPaymentId: o.paymentId, amountInr: physicalInr },
+    items: o.lines.flatMap((l, i) => {
+      if(l.kind==='design-service')return [];
       // Unversioned orders predate the stock change. Never reinterpret them using today's catalogue.
       if (!l.fulfilmentArt && o.createdAt && o.createdAt >= Date.parse('2026-11-11T01:18:22Z')) throw new Error('Unversioned material needs order review.');
       const a = l.fulfilmentArt ?? (legacyPrintMap as Record<string, Art>)[l.slug];

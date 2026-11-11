@@ -1,3 +1,4 @@
+import {customArtsFor} from '@/brand/commerce/custom-art-server';
 import { priceCart } from "@/brand/commerce/checkout";
 import {pricedLettering} from '@/brand/commerce/lettering';
 import {pricedInstallation} from '@/brand/commerce/installation';
@@ -51,12 +52,13 @@ async function readCart(token: string) {
       const ref=docRef(item.preview_url);
       // RPC callers cannot make this service-role reader sign another cart's file.
       const ownPreview=ref?.bucket==='mimipip-order-previews' && ref.path.startsWith(token+'/');
-      const quote = priceCart([{slug:item.handle,materialSlug:item.material_slug,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data}], 'IN');
+      const itemLines=[{slug:item.handle,materialSlug:item.material_slug,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data}];
+      const quote = priceCart(itemLines, 'IN',await customArtsFor(itemLines,token));
       const repriced = 'refused' in quote ? {price_changed:true} : {
         line_total:quote.totalMinor/100,unit_price:quote.lines[0].ratePerSqft??item.unit_price,
         area_sqft:quote.lines[0].billedSqft??item.area_sqft,price_changed:false,
       };
-      return {...item,...repriced,preview_url:ownPreview?await signDoc(item.preview_url):null};
+      return {...item,...repriced,...(item.handle==='custom-wallpaper' && item.crop_data?{image:await signDoc(item.crop_data.imageUrl)}:{}),preview_url:ownPreview?await signDoc(item.preview_url):null};
     }));
     data.subtotal = data.items.reduce((sum:number,item:{line_total:number})=>sum+item.line_total,0);
   }
@@ -107,9 +109,13 @@ export async function POST(req: Request) {
   }
 
   // Refuse production instructions before saving an unfulfillable cart or rendering paid extras.
-  const printArt=artFor(body.productHandle);
+  let customArts;
+  try{customArts=await customArtsFor([{slug:body.productHandle,crop:body.crop}],token);}
+  catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Upload your artwork again.'},{status:400});}
+  const printArt=body.productHandle==='custom-wallpaper'?customArts[body.crop?.customArtworkId??'']:artFor(body.productHandle);
   if(!printArt)return NextResponse.json({error:'This design is not available to order yet.'},{status:400});
-  try { approvedLayout(body.crop,body.widthCm,body.heightCm,printArt.art,body.productHandle); }
+  if(body.productHandle==='custom-wallpaper' && body.crop){const asset=customArts[body.crop.customArtworkId??''];body.crop={...body.crop,sourceW:asset.width,sourceH:asset.height,imageAspect:asset.width/asset.height};}
+  try { body.crop=approvedLayout(body.crop,body.widthCm,body.heightCm,printArt.art,body.productHandle); }
   catch(error) { return NextResponse.json({error:error instanceof Error?error.message:'Please check your wall layout.'},{status:400}); }
 
   if(body.crop?.installation){

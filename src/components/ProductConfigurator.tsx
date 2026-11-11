@@ -96,6 +96,7 @@ function ConnectedProductConfigurator({
   printRules = null,
   sampleable = true,
   uploadedSource = false,
+  customArtworkId,
   maxQty,
   materialLayout = "wrap",
 }: {
@@ -141,6 +142,7 @@ function ConnectedProductConfigurator({
    *  decides — canvas art has no wallpaper sample). Default true. */
   sampleable?: boolean;
   uploadedSource?: boolean;
+  customArtworkId?: string;
   /** Limited edition: how many pieces of the edition are still available.
    *  Caps the quantity; 0 = sold out (Add to Cart disabled). Undefined = no cap. */
   maxQty?: number;
@@ -793,6 +795,7 @@ function ConnectedProductConfigurator({
   const crop: CropData | null = image
     ? {
         imageUrl: image.url,
+        ...(customArtworkId?{customArtworkId}:{}),
         wallWidthCm: runWidthCm,
         wallHeightCm: heightCm,
         offsetX,

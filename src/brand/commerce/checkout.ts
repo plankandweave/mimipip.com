@@ -1,3 +1,5 @@
+import {handleDesignBriefs} from './design-briefs';
+import {CUSTOM_WALLPAPER,BESPOKE_SERVICE,designBriefSchema,bespokeMinor,artworkId,type CustomArts} from './custom-services';
 import {checkedBillingIdentity} from './billing-identity';
 import {pricedLettering} from './lettering';
 import {z} from 'zod';
@@ -83,8 +85,8 @@ function cleanPlacement(p: unknown): StoredLine['placement'] {
 }
 
 /** Prices a cart for a country, or says why it cannot be sold there. */
-export function priceCart(lines: unknown, countryCode: string):
-  { lines: (Priced & { kind?: 'sample'; fulfilmentArt?: StoredLine['fulfilmentArt']; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
+export function priceCart(lines: unknown, countryCode: string, customArts:CustomArts={}):
+  { lines: (Priced & { kind?: 'sample'|'design-service'; brief?:import('./custom-services').DesignBrief; fulfilmentArt?: StoredLine['fulfilmentArt']; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
   if (!Array.isArray(lines) || !lines.length || lines.length > 50) return { refused: 'Your cart is empty.' };
   const market = marketOf(countryCode);
   const out = [];
@@ -95,13 +97,23 @@ export function priceCart(lines: unknown, countryCode: string):
       if ('refused' in sample) return sample;
       out.push({...sample,fulfilmentArt:{...artFor(slug)!}}); continue;
     }
+    if(slug===BESPOKE_SERVICE){
+      const brief=designBriefSchema.safeParse(raw.crop?.bespoke);
+      if(!brief.success||!Number.isInteger(raw.qty)||raw.qty<1||raw.qty>20)return {refused:'Check the design brief and quantity.'};
+      const unitMinor=bespokeMinor(countryCode);
+      out.push({kind:'design-service' as const,brief:brief.data,slug,name:'Bespoke design service',qty:raw.qty,currency:currencyOf(market),unitMinor,lineMinor:unitMinor*raw.qty,widthCm:null,heightCm:null,ratePerSqft:null,billedSqft:null});continue;
+    }
     if (raw?.kind != null) return {refused:'This order type is not supported.'};
-    if (!artFor(slug) || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
-    if(raw.materialSlug != null && raw.materialSlug !== artFor(slug)?.materialSlug) return {refused:'The wallpaper material has changed. Reopen '+nameOf(slug)+' and confirm the current self-adhesive option before checkout.'};
+    const art=slug===CUSTOM_WALLPAPER?customArts[artworkId(raw.crop)??'']:artFor(slug);
+
+    if (!art || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
+    if(raw.materialSlug != null && raw.materialSlug !== art?.materialSlug) return {refused:'The wallpaper material has changed. Reopen '+nameOf(slug)+' and confirm the current self-adhesive option before checkout.'};
     const priced = priceLine({ slug, qty: raw.qty, widthCm: raw.widthCm, heightCm: raw.heightCm, fixedSize: raw.fixedSize === true }, market);
     if (refused(priced)) return priced;
     try {
-      const crop=approvedLayout(raw.crop,priced.widthCm,priced.heightCm,artFor(slug)!.art,slug);
+      const owned=slug===CUSTOM_WALLPAPER?customArts[artworkId(raw.crop)??'']:null;
+      const source=owned?{...raw.crop,sourceW:owned.width,sourceH:owned.height,imageAspect:owned.width/owned.height}:raw.crop;
+      const crop=approvedLayout(source,priced.widthCm,priced.heightCm,art!.art,slug);
       const placement=crop?{zoom:crop.zoom,cropX:crop.offsetX,cropY:crop.offsetY,flipH:!!crop.flipH,flipV:!!crop.flipV}:cleanPlacement(raw.placement);
       const installation=crop?.installation?pricedInstallation(crop.installation,priced.widthCm!,priced.heightCm!,priced.qty,countryCode):undefined;
       if(installation && priced.ratePerSqft===null)return {refused:'Installation is available for measured wallpaper only.'};
@@ -109,10 +121,16 @@ export function priceCart(lines: unknown, countryCode: string):
       const lettering=pricedLettering(crop,priced.widthCm!,priced.heightCm!,countryCode);
       if(lettering && priced.ratePerSqft===null)return {refused:'Lettering is available for measured wallpaper only.'};
       if(crop && lettering){crop.textOverlay=lettering.overlay;crop.personalisation=lettering.personalisation;}
-      out.push({ ...priced, fulfilmentArt:{...artFor(slug)!}, lineMinor:priced.lineMinor+(installation?.total??0)*100+(lettering?.fee??0)*100, ...(lettering?{personalisationMinor:lettering.fee*100}:{}), ...(installation?{installationMinor:installation.total*100}:{}), placement, ...(crop?{crop}:{}) });
+      out.push({ ...priced, fulfilmentArt:{...art!}, lineMinor:priced.lineMinor+(installation?.total??0)*100+(lettering?.fee??0)*100, ...(lettering?{personalisationMinor:lettering.fee*100}:{}), ...(installation?{installationMinor:installation.total*100}:{}), placement, ...(crop?{crop}:{}) });
     } catch (error) { return {refused:error instanceof Error?error.message:'Check your approved layout.'}; }
   }
   return { lines: out, totalMinor: out.reduce((s, l) => s + l.lineMinor, 0), currency: currencyOf(market) };
+}
+
+async function resolveRequestArt(lines:unknown,request:Request){
+ if(!Array.isArray(lines)||!lines.some(l=>l?.slug===CUSTOM_WALLPAPER))return {};
+ const {customArtsFor,requestCartToken}=await import('./custom-art-server');
+ return customArtsFor(lines,requestCartToken(request));
 }
 
 const countryName = (code: string) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code; } catch { return code; } };
@@ -137,7 +155,12 @@ export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): 
   try { body = webOrderBody({ createdAt:o.created_at, id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
   catch (e) { return fail((e as Error).message); }
   try {
-    const res = await pay.sendOrder(body);
+    // A permanent authenticated source, resolved by the OS into bytes on each
+    // import attempt. No short-lived preview URL becomes a production master.
+    for(const item of body.items){
+      if(item.designUrl.includes('/mimipip-print-files/'))item.designUrl=`https://mimipip.com/api/checkout/artwork?order=${o.id}&line=${item.lineRef}`;
+    }
+    const res = body.items.length ? await pay.sendOrder(body) : {ok:true,status:200,text:''};
     if (!res.ok) return fail(`The OS answered ${res.status}: ${res.text}`);
   } catch (e) { return fail('The OS could not be reached: ' + (e as Error).message); }
   await db.prepare("UPDATE mimipip_orders SET os_status='sent',os_error=NULL,os_sent_at=?,updated_at=? WHERE id=?").bind(Date.now(), Date.now(), o.id).run();
@@ -162,6 +185,9 @@ export const checkoutReady = async (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED
 
 export async function handleCommerce(request: Request, env: Env): Promise<Response> {
   const path = new URL(request.url).pathname.replace(/\/$/, '');
+  if(path==='/api/checkout/design-briefs')return handleDesignBriefs(request,env);
+  if(path==='/api/checkout/enquiries'){const {enquiries}=await import('./custom-art-server');return enquiries(request,env);}
+  if(path==='/api/checkout/artwork'){const {paidArtwork}=await import('./custom-art-server');return paidArtwork(request,env);}
   if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: await checkoutReady(env) });
   if (!env.DB) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
   const db = env.DB;
@@ -181,7 +207,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const raw = await request.text();
       if (raw.length > 32768) return json({ error: 'Payload too large' }, 413);
       const b = JSON.parse(raw);
-      const priced = priceCart(b.lines, String(b.countryCode ?? ''));
+      const priced = priceCart(b.lines, String(b.countryCode ?? ''),await resolveRequestArt(b.lines,request));
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
     } catch { return json({ error: 'Check your cart and try again.' }, 400); }
@@ -206,7 +232,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       try{billingIdentity=checkedBillingIdentity(b.customer.billingIdentity,b.customer.countryCode);}
       catch(error){return json({error:error instanceof Error?error.message:'Check business invoice details.'},400);}
       if(billingIdentity && env.MIMIPIP_BUSINESS_INVOICE_ENABLED!=='1')return json({error:'Please contact MimiPip for a business invoice before ordering.'},503);
-      const priced = priceCart(b.lines, b.customer.countryCode);
+      const priced = priceCart(b.lines, b.customer.countryCode,await resolveRequestArt(b.lines,request));
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       if (priced.lines.some(l=>l.kind==='sample') && env.MIMIPIP_SAMPLE_CHECKOUT_ENABLED !== '1')
         return json({error:'Sample ordering is not available yet. Please ask us for a close-up of your design.'},503);
