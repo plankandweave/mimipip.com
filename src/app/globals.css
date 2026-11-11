@@ -493,7 +493,7 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
 }
 .vault-handwriting { font-family: 'Vault Handwriting', cursive; font-weight: 600; }
 
-@font-face{font-family:MimiDisplay;src:url('/fonts/fredoka-variable.ttf') format('truetype');font-weight:300 700;font-display:swap}@font-face{font-family:MimiText;src:url('/fonts/nunito-variable.ttf') format('truetype');font-weight:200 900;font-display:swap}:root{--font-jakarta:MimiText;--font-inter:MimiText;--color-charcoal:#714414;--color-orange:#ff542b;--color-surface:#fff9ed}
+@font-face{font-family:MimiDisplay;src:url('/fonts/fredoka-variable.ttf') format('truetype');font-weight:300 700;font-display:swap}@font-face{font-family:MimiText;src:url('/fonts/nunito-variable.ttf') format('truetype');font-weight:200 900;font-display:swap}:root{--font-jakarta:"Plus Jakarta Sans";--font-inter:Inter;--color-charcoal:#714414;--color-orange:#ff542b;--color-surface:#fff9ed}
 
 /* Original Zyvorah hero framing, shared by the restored storefront. */
 .hero-reviewed-image {
@@ -508,3 +508,8 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
   }
 }
 
+
+@font-face{font-family:"Plus Jakarta Sans";src:url('/fonts/Jakarta-700.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:"Plus Jakarta Sans";src:url('/fonts/Jakarta-800.ttf') format('truetype');font-weight:800;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/Inter-400.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/Inter-700.ttf') format('truetype');font-weight:700;font-display:swap}
