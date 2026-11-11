@@ -33,3 +33,15 @@ Local mocked tests cover exact captured value, wrong currency/refunds, duplicate
 ## Database
 
 `drizzle/0006_gift_cards.sql` was applied to D1 `mimipip-orders` once on 11 November 2026 and recorded in `d1_migrations` with 0004 and 0005, which were already in place. The deploy workflow does not run D1 migrations: its token has no D1 access, and `docs/CHECKOUT.md` keeps schema changes out of the deploy. Never run 0006 again; its `ALTER TABLE` would fail.
+
+## Live key only (11 November 2026)
+
+A Razorpay test key's payments read as `captured` exactly like real ones, but no money moves. So nothing of value comes of a payment unless the key behind `STORE_PAY` is live (`src/brand/commerce/gateway-mode.ts`, which reads only the key's public id and lets only its mode out):
+- `/api/checkout/readiness` and `/api/gift-card/readiness` report `gateway: live | test | unknown`. Checkout and gift purchasing are open only on `live`.
+- A product payment captured on a test key is set to `review` (`os_error = gateway_not_live`) and never sent to the OS for printing.
+- A gift payment captured on a test key sets the gift to `review` and never creates a card. It stays held if the key later turns live.
+- No gift email leaves while the key is not live.
+- An unreadable key decides nothing: the next pass asks again.
+- The deploy's live check requires both doors open on a live key and both closed otherwise, and warns when not live.
+
+To take real money, the zyvorah-store Worker's `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` must be Magnitude Brands' live pair. That is a credential set in Cloudflare, never in this repository.

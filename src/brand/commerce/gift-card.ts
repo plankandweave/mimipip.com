@@ -3,12 +3,13 @@ import {giftHash,giftCapability,normalizedGiftCode,rateLimitGift,cardForCode,typ
 import {GIFT_POLICY} from './gift-policy';
 import {GIFT_CARD_STYLES,GIFT_CARD_OCCASIONS,renderGiftCardHtml,type GiftCardPresentationData} from './gift-card-presentation';
 import {queueGiftEmails} from './gift-email';
+import {gatewayMode,NOT_LIVE} from './gateway-mode';
 export type GiftEnv=CheckoutEnv&{MIMIPIP_GIFTS_ENABLED?:string;MIMIPIP_GIFT_SECRET?:string;RESEND_API_KEY?:string;ASSETS?:{fetch(r:Request):Promise<Response>};OPENAI_API_KEY?:string;SHOPPER_TOOLS?:{fetch(r:Request):Promise<Response>}};
 export type GiftOrder={id:string;token_hash:string;fingerprint:string;status:string;amount:number;currency:'INR';presentation:string;purchaser_email:string;recipient_email:string;valid_days:number;provider_order_id:string|null;payment_id:string|null;created_at:number;activated_at:number|null;last_error:string|null};
 export const giftJson=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex'}});
 export async function giftReady(env:GiftEnv){
  if(env.MIMIPIP_GIFTS_ENABLED!=='1'||!env.DB||!env.STORE_PAY||!env.RESEND_API_KEY||!env.MIMIPIP_GIFT_SECRET||env.MIMIPIP_GIFT_SECRET.length<32)return false;
- try{return !!(await env.STORE_PAY.ready()&&env.STORE_PAY.giftReady&&await env.STORE_PAY.giftReady()&&await env.DB.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='mimipip_gift_tenders'").bind().first());}catch{return false;}
+ try{return !!(await env.STORE_PAY.ready()&&await gatewayMode(env.STORE_PAY)==='live'&&env.STORE_PAY.giftReady&&await env.STORE_PAY.giftReady()&&await env.DB.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='mimipip_gift_tenders'").bind().first());}catch{return false;}
 }
 const short=(x:unknown,max:number,required=false)=>{if(typeof x!=='string'||x.length>max||(required&&!x.trim())||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(x))throw new Error('Check your gift-card details.');return x.trim();};
 const email=(v:unknown)=>{const s=short(v,254,true);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s))throw new Error('Enter a valid email address.');return s;};
@@ -30,6 +31,10 @@ export async function activateGift(env:GiftEnv,o:GiftOrder,p:any){
  if(o.status==='active')return true;
  if(!env.DB||!env.STORE_PAY||!env.MIMIPIP_GIFT_SECRET)return false;
  if(p?.status!=='captured'||p.captured!==true||p.order_id!==o.provider_order_id||p.amount!==o.amount||p.currency!=='INR'||p.amount_refunded!==0||!/^pay_[A-Za-z0-9]+$/.test(p.id))return false;
+ // No card from a test key's capture, ever: the gift is held for review and stays held if the key later turns live.
+ const mode=await gatewayMode(env.STORE_PAY);
+ if(mode==='test'){await env.DB.prepare("UPDATE mimipip_gift_orders SET status='review',last_error=? WHERE id=? AND status='pending'").bind(NOT_LIVE,o.id).run();return false;}
+ if(mode!=='live')return false;
  const r=await env.STORE_PAY.razorpay('orders/'+o.provider_order_id);const ro=r.data;
  if(!r.ok||ro.status!=='paid'||ro.amount!==o.amount||ro.amount_paid!==o.amount||ro.currency!=='INR')return false;
  // The captured payment identity is unique. Concurrent verification and cron converge on one gift/card/outbox.
@@ -53,7 +58,7 @@ export async function authorizedGift(env:GiftEnv,id:unknown,key:unknown){
 }
 export async function handleGiftCard(request:Request,env:GiftEnv={}):Promise<Response>{
  const u=new URL(request.url),path=u.pathname.replace(/\/$/,'');
- if(path==='/api/gift-card/readiness'&&request.method==='GET'){const ready=await giftReady(env);return giftJson({open:ready,currencies:['INR'],policyText:GIFT_POLICY.text,minAmount:GIFT_POLICY.minMinor/100,maxAmount:GIFT_POLICY.maxMinor/100,message:ready?undefined:'Gift-card purchasing is temporarily unavailable. Your preview is still available.'});}
+ if(path==='/api/gift-card/readiness'&&request.method==='GET'){const ready=await giftReady(env);return giftJson({open:ready,gateway:await gatewayMode(env.STORE_PAY),currencies:['INR'],policyText:GIFT_POLICY.text,minAmount:GIFT_POLICY.minMinor/100,maxAmount:GIFT_POLICY.maxMinor/100,message:ready?undefined:'Gift-card purchasing is temporarily unavailable. Your preview is still available.'});}
  if(path==='/api/gift-card/operations'&&request.method==='GET'){
   if(!env.DB||!env.STORE_PAY||!await env.STORE_PAY.osTokenMatches(request.headers.get('x-zyvorah-token')??''))return giftJson({error:'Not authorised'},401);
   const orders=await env.DB.prepare('SELECT o.id,o.status,o.amount,o.currency,o.payment_id,o.provider_order_id,o.created_at,o.activated_at,o.last_error,c.balance_minor,c.expires_at,e.state AS email_state,e.last_error AS email_error FROM mimipip_gift_orders o LEFT JOIN mimipip_gift_cards c ON c.id=o.id LEFT JOIN mimipip_gift_email e ON e.gift_id=o.id ORDER BY o.created_at DESC LIMIT 100').bind().all();

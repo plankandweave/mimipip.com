@@ -1,4 +1,5 @@
 import {cardForCode,reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
+import {gatewayMode,NOT_LIVE} from './gateway-mode';
 import {handleDesignBriefs} from './design-briefs';
 import {CUSTOM_WALLPAPER,BESPOKE_SERVICE,designBriefSchema,bespokeMinor,artworkId,type CustomArts} from './custom-services';
 import {checkedBillingIdentity} from './billing-identity';
@@ -183,6 +184,10 @@ export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): 
 
 async function confirm(o: Order, p: any, pay: Pay, db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>) {
   if (!paymentMatches(p, o)) return false;
+  const mode = await gatewayMode(pay);
+  // A test key's capture is held for review, never paid and never sent to the OS. An unreadable key decides nothing: the next pass asks again.
+  if (mode === 'test') { await db.prepare("UPDATE mimipip_orders SET status='review',os_error=?,updated_at=? WHERE id=? AND status='pending'").bind(NOT_LIVE, Date.now(), o.id).run(); return false; }
+  if (mode !== 'live') return false;
   const ro = await call('orders/' + o.razorpay_order_id);
   if (ro.status !== 'paid' || ro.amount !== o.amount-(o.gift_minor??0) || ro.currency !== o.currency || ro.amount_paid !== o.amount-(o.gift_minor??0)) return false;
   await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, o.gift_minor&&o.currency==='INR'?p.amount/100+o.gift_minor/100:capturedInr(p, o), Date.now(), o.id).run();
@@ -195,14 +200,15 @@ async function confirm(o: Order, p: any, pay: Pay, db: NonNullable<Env['DB']>, c
   return true;
 }
 
-export const checkoutReady = async (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED === '1' && env.DB && env.STORE_PAY && await env.STORE_PAY.ready());
+// Open only on a live Razorpay key: a test key's "captured" payment is no money at all (gateway-mode.ts).
+export const checkoutReady = async (env: Env) => !!(env.MIMIPIP_CHECKOUT_ENABLED === '1' && env.DB && env.STORE_PAY && await env.STORE_PAY.ready() && await gatewayMode(env.STORE_PAY) === 'live');
 
 export async function handleCommerce(request: Request, env: Env): Promise<Response> {
   const path = new URL(request.url).pathname.replace(/\/$/, '');
   if(path==='/api/checkout/design-briefs')return handleDesignBriefs(request,env);
   if(path==='/api/checkout/enquiries'){const {enquiries}=await import('./custom-art-server');return enquiries(request,env);}
   if(path==='/api/checkout/artwork'){const {paidArtwork}=await import('./custom-art-server');return paidArtwork(request,env);}
-  if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: await checkoutReady(env) });
+  if (path === '/api/checkout/readiness' && request.method === 'GET') return json({ open: await checkoutReady(env), gateway: await gatewayMode(env.STORE_PAY) });
   if (!env.DB) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
   const db = env.DB;
   if (path === '/api/checkout/unsent' && request.method === 'GET') {
