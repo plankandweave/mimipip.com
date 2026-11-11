@@ -159,7 +159,7 @@ function toCard(p: Product, roomKey?: string, mode?: CardImageMode): ProductCard
     title: p.title,
     image: card?.url ?? mimiDesign(p.handle)?.image ?? flat?.url ?? null,
     imageAlt,
-    imageIsFlat: card?.is_flat === true,
+    imageIsFlat: card ? card.is_flat === true : (mimiDesign(p.handle)?.image ?? flat?.url) === flat?.url,
     imageScene: card && !card.is_flat ? card.scene_key ?? null : null,
     fromPricePerSqft,
     isCanvas,

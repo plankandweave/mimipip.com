@@ -97,6 +97,7 @@ export function priceCart(lines: unknown, countryCode: string):
     }
     if (raw?.kind != null) return {refused:'This order type is not supported.'};
     if (!artFor(slug) || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
+    if(raw.materialSlug != null && raw.materialSlug !== artFor(slug)?.materialSlug) return {refused:'The wallpaper material has changed. Reopen '+nameOf(slug)+' and confirm the current self-adhesive option before checkout.'};
     const priced = priceLine({ slug, qty: raw.qty, widthCm: raw.widthCm, heightCm: raw.heightCm, fixedSize: raw.fixedSize === true }, market);
     if (refused(priced)) return priced;
     try {

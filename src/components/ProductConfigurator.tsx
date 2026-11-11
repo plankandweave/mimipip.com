@@ -629,6 +629,7 @@ function ConnectedProductConfigurator({
     const line = cartItems.find((it) => it.item_id === editItemId && it.handle === productHandle);
     if (!line) return;
     restoredEdit.current = true;
+    setQty(line.quantity);
     const c = line.crop_data;
     if (c) {
       setOffsetX(c.offsetX ?? 0.5);
@@ -857,6 +858,7 @@ function ConnectedProductConfigurator({
       // offsetX/offsetY) — what the portal's own editor would have saved.
       setProjectDialog({
         productHandle,
+        editItemId,
         materialSlug: material.slug,
         widthMm: Math.round(runWidthCm * 10),
         heightMm: Math.round(heightCm * 10),
@@ -888,6 +890,7 @@ function ConnectedProductConfigurator({
       };
       const ok = await add({
         productHandle,
+        editItemId,
         materialSlug: material.slug,
         widthCm: runWidthCm,
         heightCm,
@@ -908,19 +911,6 @@ function ConnectedProductConfigurator({
       if (!ok) {
         setOrderError("Couldn't add to cart — please try again.");
         return;
-      }
-      if (editItemId && cartItems.some((it) => it.item_id === editItemId)) {
-        const latest = await fetch("/api/cart").then((r) => r.ok ? r.json() as Promise<{ items?: { item_id: string }[] }> : null);
-        const hasSeparateRevision = latest?.items?.some((it) => it.item_id !== editItemId && !cartItems.some((old) => old.item_id === it.item_id));
-        if (!hasSeparateRevision) {
-          setOrderError("We could not separate this revision from the original cart line. Please review your cart before checkout; your original was kept.");
-          return;
-        }
-        const replaced = await remove(editItemId);
-        if (!replaced) {
-          setOrderError("Your revised design was added, but the original could not be removed. Please remove the original in your cart before checkout.");
-          return;
-        }
       }
       setAdded(true);
       router.push("/cart");

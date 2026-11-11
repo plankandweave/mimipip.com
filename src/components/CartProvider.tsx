@@ -75,6 +75,7 @@ type CartState = {
 };
 
 type AddPayload = {
+  editItemId?: string;
   productHandle: string;
   materialSlug: string;
   widthCm: number;
