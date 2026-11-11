@@ -24,7 +24,7 @@ const firstWall = wallpapers[0], firstGame = hopscotch[0];
 
 const wallSale = firstWall ? saleOf(firstWall) : null;
 const wallPrice = wallSale?.india?.rate && wallSale.abroad?.rate
-  ? `In India wallpaper is ${money({ currency: 'INR', amount: wallSale.india.rate })} per sq ft plus GST, delivery included. Elsewhere it is ${money({ currency: 'USD', amount: wallSale.abroad.rate })} per sq ft, delivery included. The smallest order is billed as 20 sq ft.`
+  ? `In India wallpaper is ${money({ currency: 'INR', amount: wallSale.india.rate })} per sq ft including GST and delivery. Elsewhere it is ${money({ currency: 'USD', amount: wallSale.abroad.rate })} per sq ft, delivery included. The smallest order is billed as 20 sq ft.`
   : '';
 const gamePrice = firstGame
   ? `Each hopscotch is ${money(listPrice(firstGame, 'IN'))} in India, GST and delivery included, and ${money(listPrice(firstGame, 'ABROAD'))} elsewhere, delivery included.`

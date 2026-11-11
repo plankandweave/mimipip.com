@@ -1,3 +1,4 @@
+import { shopperAiFetch } from "@/lib/shopper-service";
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { requireGatedUser } from "@/lib/auth-server";
@@ -71,7 +72,7 @@ async function analyzeImage(buf: Buffer): Promise<Attrs | null> {
     console.error("[visual-search] image prep failed:", (e as Error).message);
     return null;
   }
-  const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers"), maxRetries: 3 });
+  const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers"), maxRetries: 3 });
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
       const res = await client.messages.create({

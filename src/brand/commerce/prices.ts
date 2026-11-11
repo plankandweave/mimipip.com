@@ -16,6 +16,10 @@ export const SQFT_PER_SQCM = 1 / 929.0304;
 export const MIN_BILLED_SQFT = 20;
 export const MAX_QTY = 99;
 export const MAX_WALL_CM = 3000;
+/** Finished self-adhesive wallpaper sizes, in feet. Custom walls retain minimum billing. */
+export const WALLPAPER_FIXED_SIZES = [[2, 3], [3, 4.5], [4, 6]] as const;
+export const isWallpaperFixedSize = (widthCm: number, heightCm: number) =>
+  WALLPAPER_FIXED_SIZES.some(([w, h]) => Math.abs(widthCm - w * 30.48) < 0.01 && Math.abs(heightCm - h * 30.48) < 0.01);
 
 export type Market = 'IN' | 'ABROAD';
 export const marketOf = (countryCode: string): Market => (countryCode.toUpperCase() === 'IN' ? 'IN' : 'ABROAD');
@@ -57,7 +61,7 @@ export const refused = (x: Priced | Refusal): x is Refusal => 'refused' in x;
 
 const validCm = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 10 && n <= MAX_WALL_CM;
 
-export function priceLine(input: { slug: string; qty: number; widthCm?: number; heightCm?: number }, market: Market): Priced | Refusal {
+export function priceLine(input: { slug: string; qty: number; widthCm?: number; heightCm?: number; fixedSize?: boolean }, market: Market): Priced | Refusal {
   const r = bySlug.get(input.slug);
   if (!r) return { refused: 'This design is no longer available.' };
   if (!Number.isInteger(input.qty) || input.qty < 1 || input.qty > MAX_QTY) return { refused: 'Check the quantity.' };
@@ -66,8 +70,10 @@ export function priceLine(input: { slug: string; qty: number; widthCm?: number; 
     if (!validCm(input.widthCm) || !validCm(input.heightCm)) return { refused: `Enter the wall size for ${r.name}.` };
     const rate = ratePerSqft(r.slug, market);
     if (rate === null) return { refused: `${r.name} is not on sale in this country.` };
-    const sqft = billedSqft(input.widthCm, input.heightCm);
-    const unitMinor = Math.round(sqft * rate * (market === 'IN' ? 1 + INDIA_GST_RATE : 1) * 100);
+    if (input.fixedSize && (market !== 'IN' || !isWallpaperFixedSize(input.widthCm, input.heightCm)))
+      return { refused: 'Choose an available fixed size.' };
+    const sqft = input.fixedSize ? input.widthCm * input.heightCm * SQFT_PER_SQCM : billedSqft(input.widthCm, input.heightCm);
+    const unitMinor = Math.round(sqft * rate * 100);
     return { slug: r.slug, name: r.name, qty: input.qty, currency, unitMinor, lineMinor: unitMinor * input.qty, widthCm: input.widthCm, heightCm: input.heightCm, ratePerSqft: rate, billedSqft: Math.round(sqft * 100) / 100 };
   }
   const price = fixedPrice(r.slug, market);

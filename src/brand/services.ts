@@ -14,7 +14,7 @@ export function serviceAvailable(service: ServiceName): boolean {
   switch (service) {
     case 'database': return database;
     case 'storage': return database;
-    case 'ai': return !!process.env.ANTHROPIC_KEY_SHOPPERS;
+    case 'ai': return process.env.MIMIPIP_SHOPPER_SERVICES === "1" || !!process.env.ANTHROPIC_KEY_SHOPPERS;
     case 'email': return !!process.env.RESEND_API_KEY && /@(?:mail\.)?mimipip\.com>?$/.test(process.env.EMAIL_FROM ?? '');
     // Payment and OS access are the existing scoped STORE_PAY service binding.
     // Never grant ambient access to publishing, DNS or messaging merely because

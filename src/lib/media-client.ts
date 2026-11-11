@@ -1,3 +1,4 @@
+import { shopperServiceFetch } from "./shopper-service";
 import { serviceAvailable, requireService } from "../brand/services";
 // Client for the media worker — the container that owns every native-binary
 // operation (sharp, onnxruntime, ffmpeg) now that the app runs on workerd.
@@ -17,6 +18,7 @@ import type { CropData } from "./visualizer";
 const TIMEOUT_MS = 240_000; // band-compose and 200MP print queues take minutes
 
 function base(): { url: string; token: string } {
+  if (process.env.MIMIPIP_SHOPPER_SERVICES === "1") return { url: "https://mimipip-tools.internal/media", token: "private-service-binding" };
   const url = process.env.MEDIA_WORKER_URL;
   const token = process.env.MEDIA_TOKEN;
   if (!url || !token) throw new Error("MEDIA_WORKER_URL / MEDIA_TOKEN not configured");
@@ -29,6 +31,11 @@ function base(): { url: string; token: string } {
  *  the container itself) the import fails and plain fetch is used. */
 export async function mediaFetch(url: string, init: RequestInit): Promise<Response> {
   if (!serviceAvailable("storage")) requireService("storage");
+  if (process.env.MIMIPIP_SHOPPER_SERVICES === "1") {
+    const target = new URL(url);
+    if (target.origin !== "https://mimipip-tools.internal" || !target.pathname.startsWith("/media/")) throw new Error("Unsupported room-image destination");
+    return shopperServiceFetch(target.pathname + target.search, init);
+  }
   try {
     const { env } = (await import(/* @vite-ignore */ "cloudflare:workers")) as {
       env: { MEDIA?: { fetch(req: Request): Promise<Response> } };
@@ -310,7 +317,7 @@ export async function thumbnailRemote(url: string, width: number, quality?: numb
   // R2-migrated objects (the Supabase copy is being retired; a container is an
   // ordinary network client, so our own zone is fetchable from there).
   const { toMediaUrl } = await import("@/lib/media-url");
-  const r = await json("/thumbnail", { url: toMediaUrl(url), width, quality }, 60_000);
+  const r = await json("/thumbnail", { url: new URL(toMediaUrl(url), "https://mimipip.com").href, width, quality }, 60_000);
   return await r.arrayBuffer();
 }
 
@@ -367,7 +374,7 @@ export async function bakeRotationRemote(
 /** Exact wall composition, including the approved lettering. */
 export async function cropPreviewRemote(crop: CropData): Promise<ArrayBuffer> {
   const { toMediaUrl } = await import("@/lib/media-url");
-  const r = await json("/crop-preview", { ...crop, imageUrl: toMediaUrl(crop.imageUrl) }, 120_000);
+  const r = await json("/crop-preview", { ...crop, imageUrl: new URL(toMediaUrl(crop.imageUrl), "https://mimipip.com").href }, 120_000);
   return r.arrayBuffer();
 }
 

@@ -1,4 +1,5 @@
-/** MimiPip commercial policy. All INR inputs are BEFORE tax.
+/** Mimi Pip commercial policy. Customer-facing INR selling prices include GST.
+
  * Source: owner's 7 November costing instruction. FX is a review basis,
  * not a live exchange-rate claim. Unknown charges are never treated as zero.
  */
@@ -63,15 +64,15 @@ export function quoteMimiPipOrder(lines: PricingLine[], market: 'IN' | 'US', opt
   const beforeTax = money(market === 'US'
     ? wallpaperArea * MIMIPIP_PRICING.sellingUsdPerSqFt + ((totalArea - wallpaperArea) * MIMIPIP_PRICING.sellingInrPerSqFt + stockInr) / fx
     : goodsInr);
-  const tax = market === 'IN' && taxRate !== null ? money(beforeTax * taxRate) : null;
+  const tax = market === 'IN' && taxRate !== null ? money(beforeTax - beforeTax / (1 + taxRate)) : null;
   return {
     currency: market === 'IN' ? 'INR' as const : 'USD' as const,
     goodsInr, costInr, totalAreaSqFt: totalArea,
     freightInr,
     freightInrPerWallpaperSqFt: wallpaperArea > 0 ? freightInr / wallpaperArea : 0,
-    beforeTax: pending ? null : beforeTax,
+    beforeTax: pending ? null : market === 'IN' && tax !== null ? money(beforeTax - tax) : beforeTax,
     tax,
-    total: !pending && tax !== null ? money(beforeTax + tax) : null,
+    total: !pending && tax !== null ? beforeTax : null,
     status: pending ? 'fulfilment-required' as const : 'before-tax-estimate' as const,
   };
 }

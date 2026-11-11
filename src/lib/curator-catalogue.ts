@@ -1,3 +1,4 @@
+import { sellableAnywhere } from "../brand/commerce/sale";
 import { supabase } from "./supabase";
 import { pickFlatImage } from "./queries";
 import type { Product } from "./types";
@@ -67,7 +68,7 @@ export async function curatorSearch(query: string, limit = 10): Promise<CuratorC
 
   const seen = new Map<string, CuratorCandidate>();
   for (const row of [...(byText.data ?? []), ...(byTag.data ?? [])] as unknown as Product[]) {
-    if (!seen.has(row.handle)) seen.set(row.handle, toCandidate(row));
+    if (sellableAnywhere(row.handle) && !seen.has(row.handle)) seen.set(row.handle, toCandidate(row));
   }
   return [...seen.values()];
 }

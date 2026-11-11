@@ -1,3 +1,4 @@
+import { sellableAnywhere } from "../brand/commerce/sale";
 import { cache } from "react";
 import { supabase, religionCatalogue } from "./supabase";
 import { cachedCatalogue, CATALOGUE_REVALIDATE } from "./catalogue-cache";
@@ -1574,7 +1575,7 @@ export const getProductsByHandles = cachedCatalogue("products-by-handles", async
     .in("handle", handles)
     .eq("status", "active").eq("is_service", false);
   if (error) throw error;
-  const cards = ((data as unknown as Product[]) ?? []).map((p) => toCard(p));
+  const cards = ((data as unknown as Product[]) ?? []).filter(p => sellableAnywhere(p.handle)).map((p) => toCard(p));
   const order = new Map(handles.map((h, i) => [h, i]));
   return cards.sort((a, b) => (order.get(a.handle) ?? 0) - (order.get(b.handle) ?? 0));
 });

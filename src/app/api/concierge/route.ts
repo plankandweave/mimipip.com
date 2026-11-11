@@ -1,3 +1,4 @@
+import { shopperAiFetch } from "@/lib/shopper-service";
 import { NextResponse } from "next/server";
 import { getGatedUser } from "@/lib/auth-server";
 import { conciergeGate } from "@/lib/concierge-gate";
@@ -44,7 +45,7 @@ const SYSTEM_PROMPT = `You are the MimiPip concierge — the single, warm, knowl
 
 ## What MimiPip sells
 - Wallpapers, wall borders, floor games and stickers for nurseries, bedrooms and play spaces. Product types differ: do not call every product a mural or assume every artwork repeats.
-- Wallpaper is sized to the wall. India is ₹200 per square foot BEFORE 18% GST; US is $10 per square foot including delivery. Fixed packs use their own listed prices. Never apply wallpaper area pricing to a fixed pack or invent a missing price.
+- Wallpaper is sized to the wall. India is ₹200 per square foot including GST; US is $10 per square foot including delivery. Fixed packs use their own listed prices. Never apply wallpaper area pricing to a fixed pack or invent a missing price.
 - Read the selected design's assigned surface and current availability from the catalogue tools. Never infer a price from the surface.
 - Wallpaper has a ${MIN_WALLPAPER_SQFT} sq ft minimum billed area. Always call price_mural, including for small walls; do not calculate prices mentally.
 - For a mural request, favour complete scenic artwork. For borders, stickers or patterns, honour the customer's requested product type and the catalogue evidence.
@@ -298,7 +299,7 @@ export async function POST(req: Request) {
       let cartDirty = false;
 
       try {
-        const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers") });
+        const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers") });
         for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
           cacheNewestMessage(messages);
           const response = await client.messages.create({
