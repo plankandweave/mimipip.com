@@ -1800,7 +1800,7 @@ function ConnectedProductConfigurator({
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-charcoal">More walls (one continuous run)</span>
-                <button type="button" onClick={() => setExtraWalls((w) => [...w, Math.round(widthCm)])} className="text-xs font-semibold text-charcoal underline underline-offset-2 hover:text-slate">
+                <button type="button" onClick={() => setExtraWalls((w) => [...w, widthCm])} className="text-xs font-semibold text-charcoal underline underline-offset-2 hover:text-slate">
                   + Add wall
                 </button>
               </div>
