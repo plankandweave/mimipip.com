@@ -30,7 +30,7 @@ export function ShapeStreetPage() {
       <div className="grid grid-cols-2 gap-5 md:grid-cols-4">{designs.map(p=><ProductCard key={p.id} product={card(p)}/>)}</div>
       <div className="mt-12 rounded-3xl bg-white px-6 py-7 md:flex md:items-center md:justify-between md:gap-8 md:px-10">
         <div><h3 className="font-serif text-2xl">Made for your wall</h3><p className="mt-2 max-w-2xl leading-relaxed">Smooth matte wallpaper, made to your measurements. Enter your wall size on a design page for its exact price.</p></div>
-        <p className="mt-5 shrink-0 text-sm font-semibold md:mt-0">India: ₹200/sq ft + 18% GST</p>
+        <p className="mt-5 shrink-0 text-sm font-semibold md:mt-0">India: ₹200/sq ft including GST</p>
       </div>
       <Link href="/how-to-measure" className="mt-5 inline-block text-sm underline underline-offset-4">How to measure your wall</Link>
     </section>
