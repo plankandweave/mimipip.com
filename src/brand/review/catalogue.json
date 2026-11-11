@@ -11890,13 +11890,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/market-morning.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/market-morning-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/market-morning.png",
     "gallery": [
       {
+        "url": "/review/shape-street/market-morning-room.png",
+        "alt": "Market Morning shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/market-morning.png",
-        "alt": "Market Morning flat wallpaper artwork"
+        "alt": "Market Morning front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -11945,13 +11949,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/tram-trail.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/tram-trail-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/tram-trail.png",
     "gallery": [
       {
+        "url": "/review/shape-street/tram-trail-room.png",
+        "alt": "Tram Trail shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/tram-trail.png",
-        "alt": "Tram Trail flat wallpaper artwork"
+        "alt": "Tram Trail front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12000,13 +12008,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/rooftop-gardens.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/rooftop-gardens-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/rooftop-gardens.png",
     "gallery": [
       {
+        "url": "/review/shape-street/rooftop-gardens-room.png",
+        "alt": "Rooftop Gardens shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/rooftop-gardens.png",
-        "alt": "Rooftop Gardens flat wallpaper artwork"
+        "alt": "Rooftop Gardens front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12055,13 +12067,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/harbour-hop.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/harbour-hop-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/harbour-hop.png",
     "gallery": [
       {
+        "url": "/review/shape-street/harbour-hop-room.png",
+        "alt": "Harbour Hop shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/harbour-hop.png",
-        "alt": "Harbour Hop flat wallpaper artwork"
+        "alt": "Harbour Hop front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12110,13 +12126,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/park-loop.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/park-loop-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/park-loop.png",
     "gallery": [
       {
+        "url": "/review/shape-street/park-loop-room.png",
+        "alt": "Park Loop shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/park-loop.png",
-        "alt": "Park Loop flat wallpaper artwork"
+        "alt": "Park Loop front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12165,13 +12185,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/rainy-crossings.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/rainy-crossings-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/rainy-crossings.png",
     "gallery": [
       {
+        "url": "/review/shape-street/rainy-crossings-room.png",
+        "alt": "Rainy Crossings shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/rainy-crossings.png",
-        "alt": "Rainy Crossings flat wallpaper artwork"
+        "alt": "Rainy Crossings front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12220,13 +12244,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/festival-flags.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/festival-flags-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/festival-flags.png",
     "gallery": [
       {
+        "url": "/review/shape-street/festival-flags-room.png",
+        "alt": "Festival Flags shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/festival-flags.png",
-        "alt": "Festival Flags flat wallpaper artwork"
+        "alt": "Festival Flags front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12275,13 +12303,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/night-lights.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/night-lights-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/night-lights.png",
     "gallery": [
       {
+        "url": "/review/shape-street/night-lights-room.png",
+        "alt": "Night Lights shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/night-lights.png",
-        "alt": "Night Lights flat wallpaper artwork"
+        "alt": "Night Lights front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
@@ -12330,13 +12362,17 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/review/shape-street/building-blocks.png",
-    "imageRole": "Flat wallpaper artwork",
+    "image": "/review/shape-street/building-blocks-room.png",
+    "imageRole": "styled child’s room view",
     "flatImage": "/review/shape-street/building-blocks.png",
     "gallery": [
       {
+        "url": "/review/shape-street/building-blocks-room.png",
+        "alt": "Building Blocks shown on a child’s room wall"
+      },
+      {
         "url": "/review/shape-street/building-blocks.png",
-        "alt": "Building Blocks flat wallpaper artwork"
+        "alt": "Building Blocks front view of the flat wallpaper artwork"
       }
     ],
     "source": "MimiPip · Shape Street",
