@@ -9,10 +9,11 @@ const q=(s:unknown)=>s==null?'NULL':"'"+String(s).replaceAll("'","''")+"'";
 const sql:string[]=['BEGIN;','SET LOCAL search_path = mimipip, mimipip_private, extensions, pg_temp;'];
 sql.push("INSERT INTO mimipip.price_tiers(slug,label) VALUES ('standard','Standard') ON CONFLICT DO NOTHING;");
 sql.push("INSERT INTO mimipip.print_product_types(slug,title) VALUES ('wallpaper','Wallpaper') ON CONFLICT DO NOTHING;");
-sql.push("INSERT INTO mimipip.product_categories(slug,title,pricing_unit,browse_tag,measurement_type,supports_custom_size,supports_fixed_sizes,supports_visualiser,supports_materials,supports_samples,print_type,collection_handle,card_label) VALUES ('wallpaper','Wallpaper','sqft','Wallpapers','area',true,false,true,true,false,'wallpaper','wallpaper-worlds','Sized to your wall') ON CONFLICT DO NOTHING;");
+sql.push("INSERT INTO mimipip.product_categories(slug,title,pricing_unit,browse_tag,measurement_type,supports_custom_size,supports_fixed_sizes,supports_visualiser,supports_materials,supports_samples,print_type,collection_handle,card_label) VALUES ('wallpaper','Wallpaper','sqft','Wallpapers','area',true,false,true,true,true,'wallpaper','wallpaper-worlds','Sized to your wall') ON CONFLICT DO NOTHING;");
 for(const [slug,name,roll] of [['smooth-matt','Smooth matte surface',1360],['linen-touch','Linen feel',1360],['self-adhesive-vinyl','Smooth Self-Adhesive',1194]] as const){
  sql.push(`INSERT INTO mimipip.materials(slug,name,default_price_per_sqft,roll_width_mm,active,coming_soon) VALUES (${q(slug)},${q(name)},${MIMIPIP_PRICING.sellingInrPerSqFt},${roll},true,false) ON CONFLICT (slug) DO NOTHING;`);
 }
+sql.push("UPDATE mimipip.product_categories SET supports_samples=true WHERE slug='wallpaper';");
 const walls=records.filter(p=>p.type.includes('wallpaper'));
 for(const h of new Set(walls.flatMap(p=>p.collection))){sql.push(`INSERT INTO mimipip.collections(handle,title,kind,rule_tag,category_scope) VALUES (${q(h)},${q(label(h))},'curated',${q('Collection:'+h)},'wallpaper') ON CONFLICT(handle) DO NOTHING;`);}
 for(const p of walls){
