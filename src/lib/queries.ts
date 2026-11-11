@@ -1,3 +1,4 @@
+import {find as mimiDesign} from "@/brand/review/data";
 import { sellableAnywhere } from "../brand/commerce/sale";
 import { cache } from "react";
 import { supabase, religionCatalogue } from "./supabase";
@@ -156,7 +157,7 @@ function toCard(p: Product, roomKey?: string, mode?: CardImageMode): ProductCard
     sampleable: p.category === WALLPAPER_CATEGORY && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "self-adhesive-vinyl"),
     handle: p.handle,
     title: p.title,
-    image: card?.url ?? null,
+    image: card?.url ?? mimiDesign(p.handle)?.image ?? flat?.url ?? null,
     imageAlt,
     imageIsFlat: card?.is_flat === true,
     imageScene: card && !card.is_flat ? card.scene_key ?? null : null,
