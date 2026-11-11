@@ -1,4 +1,4 @@
-import {cardForCode,reserveGift,tenderFor,abandonUnpresentedOrder} from './gift-ledger';
+import {cardForCode,reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {handleDesignBriefs} from './design-briefs';
 import {CUSTOM_WALLPAPER,BESPOKE_SERVICE,designBriefSchema,bespokeMinor,artworkId,type CustomArts} from './custom-services';
 import {checkedBillingIdentity} from './billing-identity';
@@ -217,6 +217,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       let giftMinor=0;
       if(b.giftCode){
+        await recoverCreatingGiftOrders(db);
         if(env.MIMIPIP_GIFTS_ENABLED!=='1'||priced.currency!=='INR')return json({error:'INR gift cards are available for India checkout only.'},400);
         const card=await cardForCode(db,b.giftCode);if(!card)return json({error:'Gift card not found, unavailable or expired.'},400);
         giftMinor=Math.min(card.balance_minor,priced.totalMinor);
@@ -241,6 +242,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     const b = JSON.parse(raw);
     if (typeof b.token !== 'string' || !/^\w{64}$/.test(b.token)) return json({ error: 'Invalid checkout session' }, 400);
     const tokenHash = await digest(b.token);
+    if(path==='/api/checkout/create'&&b.giftCode)await recoverCreatingGiftOrders(db);
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
     if (path === '/api/checkout/create') {
       if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
@@ -329,6 +331,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
 /** Every few minutes: pending payments are asked of Razorpay, paid orders are offered to the OS again. */
 export async function sweep(env: Env) {
   if (!env.DB || !env.STORE_PAY) return;
+  await recoverCreatingGiftOrders(env.DB);
   const pay = env.STORE_PAY, db = env.DB, call = provider(pay), cutoff = Date.now() - 5 * 60_000;
   const pending = await db.prepare("SELECT * FROM mimipip_orders WHERE status='pending' AND razorpay_order_id IS NOT NULL AND created_at<? AND created_at>? ORDER BY created_at LIMIT 25").bind(cutoff, Date.now() - 3 * 864e5).all<Order>();
   for (const o of pending.results) {

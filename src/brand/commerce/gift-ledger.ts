@@ -33,3 +33,9 @@ export async function rateLimitGift(db:GiftDb,bucket:string,limit:number,windowM
  const row=await db.prepare('INSERT INTO mimipip_gift_limits(bucket,window,hits) VALUES(?,?,1) ON CONFLICT(bucket,window) DO UPDATE SET hits=hits+1 RETURNING hits').bind(bucket,window).first<{hits:number}>();
  return !!row&&row.hits<=limit;
 }
+/** Creating orders have never exposed a provider order to a browser. A conditional
+ * delete races safely with publication: either pending wins and stays reserved,
+ * or deletion wins and a late worker cannot publish its now-missing checkout. */
+export async function recoverCreatingGiftOrders(db:GiftDb,now=Date.now()){
+ await db.prepare("DELETE FROM mimipip_orders WHERE status='creating' AND razorpay_order_id IS NULL AND created_at<=? AND id IN (SELECT order_id FROM mimipip_gift_tenders WHERE state='reserved')").bind(now-5*60000).run();
+}

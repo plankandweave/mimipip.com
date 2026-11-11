@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {giftInput,activateGift,handleGiftCard,type GiftOrder} from './gift-card';
-import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder} from './gift-ledger';
+import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
@@ -15,7 +15,7 @@ function harness(){
  const o=()=>db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').get(id) as GiftOrder;
  const payment={id:'pay_fixture',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
  const env:any={DB,MIMIPIP_GIFTS_ENABLED:'1',MIMIPIP_GIFT_SECRET:'test-only-secret-'.repeat(3),RESEND_API_KEY:'test-only-no-network',STORE_PAY:{ready:()=>true,razorpay:async()=>({ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}})}};
- const order=(id:string,amount=80000,currency='INR')=>db.prepare("INSERT INTO mimipip_orders(id,token_hash,status,amount,currency,lines,customer,shipping,fulfilment,created_at,updated_at) VALUES(?,?,'creating',?,?,?, ?,0,'{}',?,?)").run(id,id,amount,currency,'[]','{}',now,now);
+ const order=(id:string,amount=100000,currency='INR')=>db.prepare("INSERT INTO mimipip_orders(id,token_hash,status,amount,currency,lines,customer,shipping,fulfilment,created_at,updated_at) VALUES(?,?,'creating',?,?,?, ?,0,'{}',?,?)").run(id,id,amount,currency,'[]','{}',now,now);
  return{db,env,id,o,payment,order,now};
 }
 test('gift values follow approved INR limits and reject unsupported currency',()=>{
@@ -60,4 +60,17 @@ test('an ambiguous email past the idempotency window holds for review instead of
 test('protected card rejects unknown viewing credentials and cross-origin mutation',async()=>{
  const h=harness();const r=await handleGiftCard(new Request('https://mimipip.com/api/gift-card/print?id='+h.id+'&key='+'a'.repeat(64)),h.env);assert.equal(r.status,404);
  const cross=await handleGiftCard(new Request('https://mimipip.com/api/gift-card/check',{method:'POST',headers:{origin:'https://other.example','content-type':'application/json'},body:'{}'}),h.env);assert.equal(cross.status,403);
+});
+
+test('full gift settlement is atomic with the debit even before the request continues',async()=>{const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('atomic',80000);await reserveGift(h.env.DB,'atomic',h.id,80000);const o=h.db.prepare("SELECT status,amount_inr FROM mimipip_orders WHERE id='atomic'").get();assert.equal(o.status,'paid');assert.equal(o.amount_inr,800);assert.equal(h.db.prepare("SELECT state FROM mimipip_gift_tenders WHERE order_id='atomic'").get().state,'redeemed');});
+
+test('an interrupted unpresented mixed checkout restores balance after grace, and late publication cannot revive it',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('abandoned',200000);await reserveGift(h.env.DB,'abandoned',h.id,100100,h.now);
+ await recoverCreatingGiftOrders(h.env.DB,h.now+299999);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+ await recoverCreatingGiftOrders(h.env.DB,h.now+300001);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ assert.equal(Number(h.db.prepare("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_late' WHERE id='abandoned' AND status='creating'").run().changes),0);
+ assert.equal(h.db.prepare("SELECT * FROM mimipip_orders WHERE id='abandoned'").get(),undefined);
+});
+test('cleanup never releases a published provider checkout or a settled full-gift order',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('presented',200000);await reserveGift(h.env.DB,'presented',h.id,100100,h.now);h.db.exec("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_presented' WHERE id='presented'");await recoverCreatingGiftOrders(h.env.DB,h.now+86400000);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);assert.ok(h.db.prepare("SELECT id FROM mimipip_orders WHERE id='presented'").get());
 });

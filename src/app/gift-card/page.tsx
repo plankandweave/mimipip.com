@@ -1,5 +1,6 @@
 "use client";
 
+import {completedGifts,finishGiftSession,type CompletedGift} from '@/brand/commerce/gift-session';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GIFT_CARD_INR_PRESETS, GIFT_CARD_OCCASIONS, GIFT_CARD_STYLES, formatGiftCardAmount, renderGiftCardHtml, type GiftCardPresentationData, type GiftCardStyle } from '@/brand/commerce/gift-card-presentation';
 
@@ -47,10 +48,12 @@ export default function GiftCardPage() {
   const [writing,setWriting]=useState(false);
   const suggest=async()=>{setWriting(true);setError('');try{const r=await fetch('/api/gift-card/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({occasion,...fields})});const d=await r.json();if(!r.ok)throw new Error(d.error);setSuggestions(d.messages);}catch(e){setError(e instanceof Error?e.message:'Please try again.');}finally{setWriting(false);}};
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [history,setHistory]=useState<CompletedGift[]>([]);
   const attempt = useRef<{ token: string; fingerprint: string } | null>(null);
 
   useEffect(() => {
     setOrigin(window.location.origin);
+    setHistory(completedGifts(sessionStorage));
     try{const saved=JSON.parse(sessionStorage.getItem('mimipip-gift-session')||'null');if(saved?.token&&saved?.fingerprint){const d=JSON.parse(saved.fingerprint);attempt.current=saved;setStyle(d.style);setOccasion(d.occasion);setCustom(String(d.amount));setFields({recipientName:d.recipientName,senderName:d.senderName,purchaserEmail:d.purchaserEmail,recipientEmail:d.recipientEmail,message:d.message});setReceipt({status:'pending'});fetch('/api/gift-card/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:saved.token})}).then(async r=>{if(r.ok)setReceipt(await r.json());}).catch(()=>{});}}catch{/* A broken saved preview cannot affect issuance. */}
     const controller = new AbortController();
     fetch('/api/gift-card/readiness', { cache: 'no-store', signal: controller.signal })
@@ -72,6 +75,9 @@ export default function GiftCardPage() {
     const url = URL.createObjectURL(new Blob([renderGiftCardHtml(data, { mode: 'print', assetBaseUrl: origin })], { type: 'text/html;charset=utf-8' }));
     const link = document.createElement('a'); link.href = url; link.download = `mimipip-${data.status === 'active' ? 'gift-card' : 'gift-preview'}.html`; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  const anotherGift=()=>{
+    try{if(receipt?.status!=='active'||!receipt.printUrl)return;setHistory(finishGiftSession(sessionStorage,{recipientName:fields.recipientName,amount:value,printUrl:receipt.printUrl},receipt.status));attempt.current=null;setReceipt(null);setFields({recipientName:'',senderName:'',purchaserEmail:'',recipientEmail:'',message:''});setAmount(2001);setCustom('');setError('');setSuggestions([]);}catch(e){setError(e instanceof Error?e.message:'Save your card before starting another gift.');}
   };
   const checkStatus = async () => {
     if (!attempt.current || busy) return;
@@ -122,7 +128,7 @@ export default function GiftCardPage() {
     <div className="mp-gift-layout">
       <section className="mp-gift-preview" aria-label="Live gift-card preview"><GiftCardPreview data={data} origin={origin} /><p className="mp-gift-preview-caption">{data.status === 'active' ? 'Your activated MimiPip gift card.' : 'Your live preview. The shopping code appears only after activation.'}</p><button type="button" className="mp-gift-button mp-gift-secondary" onClick={download}>Download printable {data.status === 'active' ? 'gift card' : 'preview'}</button><p className="mp-gift-note" style={{ textAlign: 'center' }}>Open the downloaded file to print it or save it as a PDF.</p></section>
       <form className="mp-gift-form" onSubmit={event => { event.preventDefault(); if (salesOpen) void buy(); else download(); }}>
-        {receipt && <section className="mp-gift-state" aria-live="polite"><h2>{data.status === 'active' ? 'Your gift is ready.' : 'Confirmation is pending.'}</h2><p>{data.status === 'active' ? 'Your shopping code is ready, and your gift email is queued for delivery. Keep this page or your printable card safe.' : 'Please check the status before making another payment. No active shopping code is shown yet.'}</p>{data.status === 'active' && <p className="mp-gift-code">{receipt.code}</p>}<button type="button" className="mp-gift-button mp-gift-secondary" onClick={checkStatus} disabled={busy}>Check status</button></section>}
+        {receipt && <section className="mp-gift-state" aria-live="polite"><h2>{data.status === 'active' ? 'Your gift is ready.' : 'Confirmation is pending.'}</h2><p>{data.status === 'active' ? 'Your shopping code is ready, and your gift email is queued for delivery. Keep this page or your printable card safe.' : 'Please check the status before making another payment. No active shopping code is shown yet.'}</p>{data.status === 'active' && <p className="mp-gift-code">{receipt.code}</p>}<button type="button" className="mp-gift-button mp-gift-secondary" onClick={checkStatus} disabled={busy}>Check status</button>{receipt.status==='active'&&<button type="button" className="mp-gift-button mp-gift-secondary" onClick={anotherGift} disabled={busy}>Send another gift</button>}</section>}
         <fieldset disabled={busy || !!receipt}><legend>Choose your card</legend><div className="mp-gift-styles">{GIFT_CARD_STYLES.map(item => <button key={item.id} className="mp-gift-style" type="button" aria-pressed={style === item.id} onClick={() => setStyle(item.id)}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={`/brand/mimi-pip/gift-cards/${item.id}.jpg`} alt={item.description} /><span>{item.label}</span></button>)}</div></fieldset>
         <fieldset disabled={busy || !!receipt}><legend>Make it personal</legend><label className="mp-gift-field">Occasion<select value={occasion} onChange={event => setOccasion(event.target.value)}>{[...GIFT_CARD_OCCASIONS,'Baby shower / डोहाळजेवण'].map(item => <option key={item} value={item}>{item}</option>)}</select></label><div className="mp-gift-two"><label className="mp-gift-field">To<input name="recipientName" autoComplete="off" maxLength={58} value={fields.recipientName} placeholder="Recipient name" onChange={event => setField('recipientName', event.target.value)} required={salesOpen} /></label><label className="mp-gift-field">From<input name="senderName" autoComplete="name" maxLength={58} value={fields.senderName} placeholder="Your name" onChange={event => setField('senderName', event.target.value)} required={salesOpen} /></label></div><label className="mp-gift-field">A little message (optional)<textarea name="message" rows={3} maxLength={400} value={fields.message} placeholder="Something lovely you'd like to say…" onChange={event => setField('message', event.target.value)} /></label><button type="button" className="mp-gift-button mp-gift-secondary" onClick={()=>void suggest()} disabled={writing}>{writing?'Writing a little love…':'Help me write something sweet'}</button><p className="mp-gift-note">AI suggestions use the occasion, names and your note. Pick one and make it yours.</p><div aria-live="polite">{suggestions.map((text,i)=><button type="button" key={i} className="mp-gift-button mp-gift-secondary" style={{borderRadius:12,textAlign:'left',fontWeight:400,lineHeight:1.5}} onClick={()=>{setField('message',text);setSuggestions([]);}}>{text}</button>)}</div></fieldset>
         <fieldset disabled={busy || !!receipt}><legend>Choose the amount</legend><div className="mp-gift-presets">{GIFT_CARD_INR_PRESETS.map(preset => <button type="button" key={preset} aria-pressed={!custom && amount === preset} onClick={() => { setAmount(preset); setCustom(''); }}>{formatGiftCardAmount(preset, 'INR')}</button>)}</div><label className="mp-gift-field">Custom amount (₹)<input name="amount" type="number" inputMode="decimal" min="500" max="50000" step="0.01" value={custom} placeholder="Enter another amount in rupees" onChange={event => setCustom(event.target.value)} /></label>{!validAmount && <p className="mp-gift-error" role="alert">Enter ₹500–₹50,000 with no more than two decimal places.</p>}</fieldset>
@@ -133,6 +139,7 @@ export default function GiftCardPage() {
         {receipt?.status!=='active' && <button className="mp-gift-button" type="submit" disabled={busy || !validAmount || (salesOpen && !validPurchase)}>{busy ? 'One little moment…' : salesOpen ? (receipt?'Resume payment':'Continue to payment') : 'Download printable preview'}</button>}
         {attempt.current && !receipt && <button className="mp-gift-button mp-gift-secondary" type="button" onClick={checkStatus} disabled={busy}>Check payment status</button>}
       </form>
+      {history.length>0&&<section className="mp-gift-state" aria-label="Recent completed gifts"><h2>Your recent gifts</h2>{history.map(g=><p key={g.printUrl}><a href={g.printUrl} target="_blank" rel="noopener noreferrer">{g.recipientName} · {formatGiftCardAmount(g.amount,'INR')} · View printable card</a></p>)}</section>}
     </div>
   </main>;
 }

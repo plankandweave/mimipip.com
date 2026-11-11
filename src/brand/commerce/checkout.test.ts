@@ -329,3 +329,8 @@ test('partial gift charges only the balance and hands OS full invoice plus disti
 test('fully gifted order never creates a provider payment and retains excess gift balance',async()=>{
  const h=harness();const code=await seedGift(h,2000000);const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.equal(made.paid,true);assert.equal(h.total(),0);assert.equal(h.posts.length,1);assert.equal(h.posts[0].body.payment,undefined);assert.equal(h.posts[0].body.giftTender.amountInr,wallMinor(200)/100);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,2000000-wallMinor(200));
 });
+test('late provider response cannot publish a recovered unpresented gift checkout',async()=>{
+ const h=harness();const code=await seedGift(h,100100);const original=h.env.STORE_PAY.razorpay;
+ h.env.STORE_PAY.razorpay=async(path:string,body?:any)=>{const result=await original(path,body);if(body){h.db.exec("UPDATE mimipip_orders SET created_at=1 WHERE status='creating'");const {recoverCreatingGiftOrders}=await import('./gift-ledger');await recoverCreatingGiftOrders(h.env.DB);}return result;};
+ const r=await h.call('create',{lines:[wall],customer:india,giftCode:code});assert.notEqual(r.status,200);assert.equal((await r.json()).orderId,undefined);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_orders').get().n,0);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+});

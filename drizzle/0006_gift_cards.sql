@@ -30,6 +30,8 @@ END;
 CREATE TRIGGER mimipip_gift_reserve AFTER INSERT ON mimipip_gift_tenders BEGIN
  UPDATE mimipip_gift_cards SET balance_minor=balance_minor-NEW.amount_minor WHERE id=NEW.gift_id;
  UPDATE mimipip_orders SET gift_minor=NEW.amount_minor WHERE id=NEW.order_id;
+ -- Full gift settlement commits with its balance debit, even if the request dies.
+ UPDATE mimipip_orders SET status='paid',amount_inr=amount/100.0,updated_at=NEW.created_at WHERE id=NEW.order_id AND amount=NEW.amount_minor AND status='creating';
 END;
 CREATE TRIGGER mimipip_gift_tender_immutable BEFORE UPDATE OF gift_id,amount_minor,order_id ON mimipip_gift_tenders BEGIN
  SELECT RAISE(ABORT,'Gift tender is immutable');
