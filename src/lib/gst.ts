@@ -109,9 +109,11 @@ export function sellerGstConfig(): SellerGst | null {
  */
 export function gstSplit(gstTotal: number, sellerStateCode: string, buyerState: string | null) {
   const intra = buyerState != null && buyerState === sellerStateCode;
+  const minor = Math.round(gstTotal * 100);
+  gstTotal = minor / 100;
   if (intra) {
-    const cgst = Math.floor(gstTotal / 2);
-    return { intra: true, cgst, sgst: gstTotal - cgst, igst: 0, total: gstTotal };
+    const cgstMinor = Math.round(minor / 2);
+    return { intra: true, cgst: cgstMinor / 100, sgst: (minor - cgstMinor) / 100, igst: 0, total: gstTotal };
   }
   return { intra: false, cgst: 0, sgst: 0, igst: gstTotal, total: gstTotal };
 }
