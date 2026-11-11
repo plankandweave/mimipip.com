@@ -1,0 +1,106 @@
+[
+  {
+    "number": "01",
+    "slug": "pastel-stripes-watercolour-daydream",
+    "name": "Watercolour Daydream",
+    "sourceFile": "stripe-01.png",
+    "flat": "/pastel-stripes/watercolour-daydream-flat.png",
+    "room": "/pastel-stripes/watercolour-daydream-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "9faddbfddb0a5833a8bd8642d730aa11fb6486a15d8cdb5bf42742f49e23937a"
+  },
+  {
+    "number": "02",
+    "slug": "pastel-stripes-pastel-paintbox",
+    "name": "Pastel Paintbox",
+    "sourceFile": "stripe-02.png",
+    "flat": "/pastel-stripes/pastel-paintbox-flat.png",
+    "room": "/pastel-stripes/pastel-paintbox-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "db3732224e1c11081ba9e58f4da504881b65040e5cdc2639f491f8f185b4607d"
+  },
+  {
+    "number": "03",
+    "slug": "pastel-stripes-sorbet-parade",
+    "name": "Sorbet Parade",
+    "sourceFile": "stripe-03.png",
+    "flat": "/pastel-stripes/sorbet-parade-flat.png",
+    "room": "/pastel-stripes/sorbet-parade-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "16929d028b9e9666462ec5580a41905856dfc2f57c253b2f7f276a926ae4bddf"
+  },
+  {
+    "number": "04",
+    "slug": "pastel-stripes-ribbon-candy",
+    "name": "Ribbon Candy",
+    "sourceFile": "stripe-04.png",
+    "flat": "/pastel-stripes/ribbon-candy-flat.png",
+    "room": "/pastel-stripes/ribbon-candy-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "45fb8eddb101bdfb7165211f6225729685d82bc14152312081f8a615a79bed9a"
+  },
+  {
+    "number": "05",
+    "slug": "pastel-stripes-gelato-morning",
+    "name": "Gelato Morning",
+    "sourceFile": "stripe-05.png",
+    "flat": "/pastel-stripes/gelato-morning-flat.png",
+    "room": "/pastel-stripes/gelato-morning-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "a5083ccd590e97143c362c77aff9a6cc64d1c211c2b986dfc5becb235e34630e"
+  },
+  {
+    "number": "06",
+    "slug": "pastel-stripes-candy-slant",
+    "name": "Candy Slant",
+    "sourceFile": "stripe-06.png",
+    "flat": "/pastel-stripes/candy-slant-flat.png",
+    "room": "/pastel-stripes/candy-slant-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "33700d48d32354d097789d7ca0354a28f100c2d569c6a24fdc8269ee6008a34f"
+  },
+  {
+    "number": "07",
+    "slug": "pastel-stripes-peach-sundae",
+    "name": "Peach Sundae",
+    "sourceFile": "stripe-07.png",
+    "flat": "/pastel-stripes/peach-sundae-flat.png",
+    "room": "/pastel-stripes/peach-sundae-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "263fdf3100bbcb9c60ce4759d4cb7b7d096107fa1e2d19c8729ea28e95ed5832"
+  },
+  {
+    "number": "08",
+    "slug": "pastel-stripes-meadow-rainbow",
+    "name": "Meadow Rainbow",
+    "sourceFile": "stripe-08.png",
+    "flat": "/pastel-stripes/meadow-rainbow-flat.png",
+    "room": "/pastel-stripes/meadow-rainbow-room.webp",
+    "sourcePixels": [
+      1024,
+      1024
+    ],
+    "sha256": "e643c62b853ac64dab8edb0a1a572595ad27bc33300f27ca8241c3ade028a7e1"
+  }
+]
