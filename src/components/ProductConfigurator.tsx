@@ -632,6 +632,7 @@ function ConnectedProductConfigurator({
     if (!line) return;
     restoredEdit.current = true;
     setQty(line.quantity);
+    setCustomSize(true);
     const c = line.crop_data;
     const firstWidth=c?.walls?.length?c.walls[0]:Number(line.width_cm);
     pickReadySize(firstWidth/CM_PER_INCH,Number(line.height_cm)/CM_PER_INCH);
@@ -1718,13 +1719,13 @@ function ConnectedProductConfigurator({
             {soldOut
               ? "Edition sold out"
               : adding
-                ? "Adding…"
+                ? (editItemId ? "Updating…" : "Adding…")
                 : added
                   ? "Add another"
                   : canAdd
                     ? partner
                       ? `Save to project · ${marketTotalLabel}`
-                      : `Add to Cart · ${marketTotalLabel}`
+                      : `${editItemId ? "Update cart" : "Add to Cart"} · ${marketTotalLabel}`
                     : needsName
                       ? "Finish lettering to continue"
                       : "Tick the box to continue"}

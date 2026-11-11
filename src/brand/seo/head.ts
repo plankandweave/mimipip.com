@@ -103,6 +103,8 @@ export function headFor(path: string, value?: string | null): Head | null {
   if (path === '/') return base(`${BRAND}: kids' wallpaper and floor games, making time for childhood`,
     "Kids' wallpaper made to measure for your wall, and hopscotch floor game stickers for indoor play. Delivered across India and abroad.",
     { jsonLd: [itemList("MimiPip designs", sellable.map(r => r.slug))] });
+  if(path==='/print-your-own')return base('Your own artwork as wallpaper | MimiPip','Upload your artwork, choose its composition and enter your wall size for smooth self-adhesive wallpaper. Preview your wall and see its exact price.');
+  if(path==='/bespoke')return base('Bespoke mural design | MimiPip','A mural designed around your story and palette. Bespoke design starts at ₹1,000 per design in India; wallpaper is ordered separately.');
   const product = /^\/products\/([a-z0-9-]+)$/.exec(path);
   if (product) {
     const r = recordOf(product[1]);

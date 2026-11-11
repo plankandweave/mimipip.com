@@ -46,7 +46,7 @@ export function llmsTxt(): string {
 - Delivery is included in the price, in India and abroad. Every wallpaper is made for the order and delivered within 10 working days in India. Abroad, allow extra time for shipping and customs; any import duty or tax in the buyer's country is paid on delivery.
 - Each piece is made to the customer's size, so it cannot be returned for a change of mind. Damage reported within 48 hours of delivery, or a print fault within 7 days, is replaced or reprinted at no cost, or refunded where that is not possible. Cancellations within 12 hours, before production starts, are refunded in full.
 - Sticker listings include only the stickers; furniture and props in room pictures show placement.
-- ${sellable.length} designs are on sale today: ${walls.length} wallpapers and ${others.length} other pieces. Only these are listed below; nothing else on the site can be bought.
+- ${sellable.length} designs are on sale today: ${walls.length} wallpapers and ${others.length} other pieces. These catalogue designs are listed below; uploaded-art wallpaper and bespoke design services have separate buying pages.
 
 ## Start here
 
@@ -56,6 +56,8 @@ export function llmsTxt(): string {
 - [Shopping questions](${ORIGIN}/guides/faq)
 - [Terms of sale](${ORIGIN}/guides/terms)
 - [Floor games](${ORIGIN}/floor-games)
+- [Your own artwork](${ORIGIN}/print-your-own): upload an image you have the rights to use; India ₹200 per sq ft, abroad US$10 per sq ft, 20 sq ft minimum.
+- [Bespoke design](${ORIGIN}/bespoke): ₹1,000 per design in India; wallpaper is ordered separately.
 - [Contact](${ORIGIN}/contact): hello@mimipip.com
 
 ## Collections
