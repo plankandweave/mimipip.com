@@ -46,17 +46,17 @@ function harness(opts: { base?: number | null; osStatus?: number } = {}) {
 
 test('a wall is priced from the catalogue, billed at 20 sq ft at least', () => {
   const p = priceLine(wall, 'IN'); assert.ok(!refused(p));
-  assert.equal(p.ratePerSqft, 200); assert.equal(p.billedSqft, 80.73); assert.equal(p.unitMinor, wallMinor(236));
-  const small = priceLine({ ...wall, widthCm: 100, heightCm: 100 }, 'IN'); assert.ok(!refused(small)); assert.equal(small.unitMinor, 472000);
+  assert.equal(p.ratePerSqft, 200); assert.equal(p.billedSqft, 80.73); assert.equal(p.unitMinor, wallMinor(200));
+  const small = priceLine({ ...wall, widthCm: 100, heightCm: 100 }, 'IN'); assert.ok(!refused(small)); assert.equal(small.unitMinor, 400000);
   assert.equal(billedSqft(10, 10), 20);
 });
-test('abroad every wall is her US$10 a sq ft; India uses the approved ₹200 before-tax rate', () => {
+test('abroad every wall is her US$10 a sq ft; India uses the approved ₹200 GST-inclusive rate', () => {
   assert.equal(ratePerSqft('almond-blossom', 'ABROAD'), 10);
   assert.equal(ratePerSqft('nafas-spiral-bloom', 'IN'), 200);
   const p = priceLine(wall, 'ABROAD'); assert.ok(!refused(p)); assert.equal(p.currency, 'USD'); assert.equal(p.unitMinor, wallMinor(10));
 });
 test('Hopscotch uses the selling-price sheet in India and the US', () => {
-  const p = priceLine(hop, 'IN'); assert.ok(!refused(p)); assert.equal(p.lineMinor, 990710); assert.equal(p.widthCm, 75);
+  const p = priceLine(hop, 'IN'); assert.ok(!refused(p)); assert.equal(p.lineMinor, 980000); assert.equal(p.widthCm, 75);
   assert.equal(onSale('hopscotch-peach-pop', 'ABROAD'), true); const abroad = priceLine(hop, 'ABROAD'); assert.ok(!refused(abroad)); assert.equal(abroad.lineMinor, 41980);
 });
 test('a design with no price on record is refused, never given one', () => {
@@ -72,7 +72,7 @@ test('a design with no print artwork cannot be bought, even with a price', () =>
   assert.ok('refused' in priceCart([{ slug: noArt.slug, qty: 1, widthCm: 300, heightCm: 250 }], 'US'));
 });
 test('a tampered cart cannot change the money', () => {
-  const a = priceCart([{ ...wall, lineMinor: 1, unitMinor: 1, amount: 1 }], 'IN'); assert.ok(!('refused' in a)); assert.equal(a.totalMinor, wallMinor(236));
+  const a = priceCart([{ ...wall, lineMinor: 1, unitMinor: 1, amount: 1 }], 'IN'); assert.ok(!('refused' in a)); assert.equal(a.totalMinor, wallMinor(200));
   for (const bad of [{ ...wall, qty: 0 }, { ...wall, qty: 100 }, { ...wall, widthCm: 0 }, { ...wall, heightCm: 99999 }, { slug: 'nothing', qty: 1 }]) assert.ok('refused' in priceCart([bad], 'IN'));
   assert.ok('refused' in priceCart([], 'IN'));
 });
@@ -90,7 +90,7 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   const lines = [{ ...wall, placement: { zoom: 1.5, cropX: .2, cropY: .3 } }, hop];
   let r = await h.call('create', { lines, customer: india, amount: 1 }); assert.equal(r.status, 200);
   const made = await r.json();
-  const expected = wallMinor(236) + 990710;
+  const expected = wallMinor(200) + 980000;
   assert.equal(made.amount, expected); assert.equal(made.currency, 'INR'); assert.equal(h.total(), expected);
   assert.equal((await (await h.call('status')).json()).paid, false); assert.equal(h.posts.length, 0);
   assert.equal((await h.call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: '0'.repeat(64) })).status, 400);
@@ -152,7 +152,7 @@ test('a price can be shown with no way to pay, but money cannot be taken', async
   const h = harness();
   delete h.env.STORE_PAY;
   const quote = await h.call('quote', { lines: [hop], countryCode: 'IN' });
-  assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 990710);
+  assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 980000);
   const usQuote = await h.call('quote', { lines: [hop], countryCode: 'US' }); assert.equal(usQuote.status, 200); assert.equal((await usQuote.json()).totalMinor, 41980);
   assert.equal((await h.call('quote', { lines: [hop], countryCode: 'IN' }, 'https://evil.test')).status, 403);
   assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 503);
@@ -231,7 +231,7 @@ test('installation uses the original rate and quantity rounding, never a supplie
  const q=priceCart([{...wall,qty:2,crop}],'IN');assert.ok(!('refused' in q));
  // areaSqFt uses the original native 3-decimal rounding before installation pricing.
  const charge=Math.round(80.729*35*2*1.18)*100;
- assert.equal(q.lines[0].installationMinor,charge);assert.equal(q.totalMinor,wallMinor(236)*2+charge);
+ assert.equal(q.lines[0].installationMinor,charge);assert.equal(q.totalMinor,wallMinor(200)*2+charge);
  assert.ok('refused' in priceCart([{...wall,crop}],'US'));
  assert.ok('refused' in priceCart([{...wall,widthCm:200,crop:{...crop,wallWidthCm:200}}],'IN'));
  let r=await h.call('create',{customer:{...india,postcode:'110001',city:'Pune'},lines:[{...wall,qty:2,crop}]});assert.equal(r.status,400);assert.equal(h.total(),0);
@@ -245,7 +245,7 @@ test('lettering is approved, priced authoritatively and faithfully handed to OS 
   companion:{version:1,kind:'quote',shape:'scalloped',text:'Dream big',font:'inter',color:'#273746',background:'none',align:'center',x:.2,y:.65,width:.4}};
  const crop={imageUrl:'/review/hover-art/almond-blossom.webp',wallWidthCm:300,wallHeightCm:250,offsetX:.5,offsetY:.5,zoom:1,textOverlay:overlay,personalisation:{childName:'tampered',fee:1},approval:{approvedAt:'2026-11-08T10:00:00.000Z',panelArrangement:'Three panels'}};
  const line={...wall,qty:2,crop};
- const q=priceCart([line],'IN');assert.ok(!('refused'in q));assert.equal(q.totalMinor,wallMinor(236)*2+50000);assert.equal(q.lines[0].personalisationMinor,50000);assert.deepEqual(q.lines[0].crop?.personalisation,{childName:'Mira',fee:500});
+ const q=priceCart([line],'IN');assert.ok(!('refused'in q));assert.equal(q.totalMinor,wallMinor(200)*2+50000);assert.equal(q.lines[0].personalisationMinor,50000);assert.deepEqual(q.lines[0].crop?.personalisation,{childName:'Mira',fee:500});
  assert.ok('refused'in priceCart([line],'US'));
  for(const bad of [{...crop,approval:null},{...crop,textOverlay:{...overlay,x:.99}},{...crop,textOverlay:null}])assert.ok('refused'in priceCart([{...wall,crop:bad}],'IN'));
  const h=harness();let r=await h.call('create',{lines:[line],customer:india});assert.equal(r.status,503);assert.equal(h.total(),0);
@@ -256,7 +256,7 @@ test('lettering is approved, priced authoritatively and faithfully handed to OS 
 
 test('an approved quote is included in either country and a naked placement never drops production instructions',()=>{
  const crop={imageUrl:'/review/hover-art/almond-blossom.webp',wallWidthCm:300,wallHeightCm:250,offsetX:.5,offsetY:.5,zoom:1,textOverlay:{version:1,kind:'quote',shape:'scalloped',text:'Dream big',font:'inter',color:'#273746',background:'none',align:'center',x:.2,y:.2,width:.4},approval:{approvedAt:'2026-11-08T10:00:00.000Z',panelArrangement:'Three panels'}};
- for(const country of ['IN','US']){const q=priceCart([{...wall,crop} ],country);assert.ok(!('refused'in q));assert.equal(q.totalMinor,wallMinor(country==='IN'?236:10));assert.equal(q.lines[0].personalisationMinor,0);}
+ for(const country of ['IN','US']){const q=priceCart([{...wall,crop} ],country);assert.ok(!('refused'in q));assert.equal(q.totalMinor,wallMinor(country==='IN'?200:10));assert.equal(q.lines[0].personalisationMinor,0);}
  for(const extra of [{rotation:90},{seamless:{repeatWidthCm:60}},{flipH:'false'},{doors:[{}]}])assert.ok('refused'in priceCart([{...wall,placement:{zoom:1,cropX:.5,cropY:.5,...extra}}],'IN'));
 });
 

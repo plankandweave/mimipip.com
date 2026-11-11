@@ -1,0 +1,10 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { capturedConceptPayment } from "./concept-payment-proof";
+const expected={gatewayId:"order_qa",orderNumber:42};
+const order={id:"order_qa",receipt:"order-42",status:"paid",currency:"INR",amount:2080000,amount_paid:2080000};
+const payment={id:"pay_qa",order_id:"order_qa",status:"captured",currency:"INR",amount:2080000};
+test("exclusive payment recovery accepts a matching fully captured gateway purchase",()=>assert.equal(capturedConceptPayment(expected,order,[payment]),"pay_qa"));
+test("authorised, failed and refunded payments cannot retire a design",()=>{for(const status of ["authorized","failed","refunded"])assert.equal(capturedConceptPayment(expected,order,[{...payment,status}]),null);});
+test("exclusive recovery rejects another receipt or gateway order",()=>{assert.equal(capturedConceptPayment(expected,{...order,receipt:"order-43"},[payment]),null);assert.equal(capturedConceptPayment(expected,order,[{...payment,order_id:"other"}]),null);});
+test("exclusive recovery rejects a short payment or wrong currency",()=>{assert.equal(capturedConceptPayment(expected,{...order,amount_paid:1},[payment]),null);assert.equal(capturedConceptPayment(expected,order,[{...payment,currency:"USD"}]),null);assert.equal(capturedConceptPayment(expected,order,[{...payment,amount:1}]),null);});

@@ -31,7 +31,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
   const ownOffer = market.countryCode === "IN" ? product.sale?.india : product.sale?.abroad;
   const fixedOffer = ownOffer?.fixed;
   const price = fixedOffer != null ? `${market.countryCode === "IN" ? "₹" : "$"}${fixedOffer.toLocaleString(market.countryCode === "IN" ? "en-IN" : "en-US", { maximumFractionDigits: 2 })}` : numericPrice !== null && (product.measurementType ?? 'area') === 'area'
-    ? (market.countryCode === 'IN' ? '₹200/sq ft + 18% GST' : '$10/sq ft · shipping included')
+    ? (market.countryCode === 'IN' ? '₹200/sq ft' : '$10/sq ft · shipping included')
     : copy.price;
   // The flat artwork is fetched only when a mouse arrives, so visitors who
   // never hover do not download an extra image for every card.
@@ -154,5 +154,5 @@ function SalePrice({ sale }: { sale?: ProductCardData["sale"] }) {
   if (!offer) return null;
   const sign = india ? "₹" : "$";
   const figure = offer.fixed ?? offer.rate;
-  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}{india && offer.rate ? " + GST" : ""}</>;
+  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}</>;
 }
