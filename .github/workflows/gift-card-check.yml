@@ -3,7 +3,12 @@ on:
   pull_request:
     paths:
       - 'src/app/gift-card/**'
-      - 'src/brand/commerce/gift-card*'
+      - 'src/brand/commerce/**'
+      - 'src/app/checkout/**'
+      - 'drizzle/**'
+      - 'public/fonts/**'
+      - 'vite.config.ts'
+      - 'wrangler.gift-migrations.jsonc'
       - 'public/brand/mimi-pip/gift-cards/**'
       - 'worker/index.ts'
       - '.github/workflows/gift-card-check.yml'

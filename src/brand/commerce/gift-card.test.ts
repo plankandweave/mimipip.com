@@ -9,7 +9,7 @@ test('readiness offers INR previews without enabling issuance',async()=>{
  assert.equal((await (await handleGiftCard(new Request('https://mimipip.com/api/gift-card/readiness'))).json()).open,false);
 });
 test('all inherited financial and email routes remain unavailable',async()=>{
- for(const path of ['', '/create','/verify','/check','/image','/status']) {
+ for(const path of ['', '/create','/verify','/check','/status']) {
   const r=await handleGiftCard(new Request('https://mimipip.com/api/gift-card'+path,{method:'POST',body:'{}'}));
   assert.equal(r.status,503);assert.equal(r.headers.get('cache-control'),'no-store');
  }

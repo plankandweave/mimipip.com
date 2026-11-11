@@ -1,3 +1,4 @@
+import {cardForCode,reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
 import {handleDesignBriefs} from './design-briefs';
 import {CUSTOM_WALLPAPER,BESPOKE_SERVICE,designBriefSchema,bespokeMinor,artworkId,type CustomArts} from './custom-services';
 import {checkedBillingIdentity} from './billing-identity';
@@ -30,6 +31,7 @@ type Statement = {
 };
 export type Pay = {
   ready(): boolean | Promise<boolean>;
+  giftReady?(): Promise<boolean>;
   keyId(): string | null | Promise<string | null>;
   razorpay(path: string, body?: unknown): Promise<{ ok: boolean; status: number; data: any }>;
   verifySignature(message: string, signature: string): boolean | Promise<boolean>;
@@ -38,6 +40,7 @@ export type Pay = {
 };
 export type Env = {
   MIMIPIP_CHECKOUT_ENABLED?: string;
+  MIMIPIP_GIFTS_ENABLED?: string;
   MIMIPIP_SAMPLE_CHECKOUT_ENABLED?: string;
   MIMIPIP_LETTERING_CHECKOUT_ENABLED?: string;
   MIMIPIP_BUSINESS_INVOICE_ENABLED?: string;
@@ -47,7 +50,7 @@ export type Env = {
 };
 type Order = {
   id: string; token_hash: string; status: string; amount: number; shipping: number;
-  currency: 'INR' | 'USD'; lines: string; lines_hash: string | null; customer: string;
+  currency: 'INR' | 'USD'; gift_minor?:number; lines: string; lines_hash: string | null; customer: string;
   razorpay_order_id: string | null; payment_id: string | null; amount_inr: number | null;
   os_status: string; os_error: string | null; os_tries: number; created_at: number; updated_at: number;
 };
@@ -71,8 +74,8 @@ export function capturedInr(p: any, o: Pick<Order, 'currency'>): number | null {
   if (o.currency === 'INR') return p.amount / 100;
   return p.base_currency === 'INR' && Number.isSafeInteger(p.base_amount) && p.base_amount > 0 ? p.base_amount / 100 : null;
 }
-export function paymentMatches(p: any, o: Pick<Order, 'razorpay_order_id' | 'amount' | 'currency'>) {
-  return p?.status === 'captured' && p.captured === true && p.order_id === o.razorpay_order_id && p.amount === o.amount
+export function paymentMatches(p: any, o: Pick<Order, 'razorpay_order_id' | 'amount' | 'currency' | 'gift_minor'>) {
+  return p?.status === 'captured' && p.captured === true && p.order_id === o.razorpay_order_id && p.amount === o.amount-(o.gift_minor??0)
     && p.currency === o.currency && p.amount_refunded === 0 && /^pay_[A-Za-z0-9]+$/.test(p.id);
 }
 
@@ -145,6 +148,14 @@ function provider(pay: Pay) {
 }
 
 /** Hands one paid order to the OS. The OS is idempotent per order and line, so a repeat is safe. */
+const GIFT_NO_DESIGN_SERVICE='Gift cards cannot be used for a design service yet. Remove it from your cart or pay by card.';
+/** A pending part-gift checkout whose cart or address changed: release it if nobody paid, so the shopper can start again with the balance back on the card. */
+async function changedGiftCheckout(db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>, o: Order, error: string) {
+  if (!o.gift_minor) return { error, renew: true };
+  const outcome = await releaseUnpaidGiftOrder(db, call, o);
+  if (outcome === 'released') return { error: error + ' Your gift balance is back on your card.', renew: true };
+  return { error: 'A payment on this checkout may still be in progress. Check its status before trying again.', renew: false };
+}
 export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): Promise<boolean> {
   if (o.status !== 'paid' || o.os_status === 'sent') return o.os_status === 'sent';
   const fail = async (why: string) => {
@@ -153,7 +164,9 @@ export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): 
   };
   if (o.amount_inr === null) return fail('Razorpay gave no rupee figure for this payment.');
   let body;
-  try { body = webOrderBody({ createdAt:o.created_at, id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
+  const tender=o.gift_minor?await tenderFor(db,o.id):null;
+  if(o.gift_minor&&(!tender||tender.state!=='redeemed'))return fail('Gift settlement requires review.');
+  try { body = webOrderBody({ createdAt:o.created_at, id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer),...(tender?{giftTender:{giftId:tender.gift_id,redemptionRef:tender.order_id,amountInr:tender.amount_minor/100}}:{}) }); }
   catch (e) { return fail((e as Error).message); }
   try {
     // A permanent authenticated source, resolved by the OS into bytes on each
@@ -171,8 +184,8 @@ export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): 
 async function confirm(o: Order, p: any, pay: Pay, db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>) {
   if (!paymentMatches(p, o)) return false;
   const ro = await call('orders/' + o.razorpay_order_id);
-  if (ro.status !== 'paid' || ro.amount !== o.amount || ro.currency !== o.currency || ro.amount_paid !== o.amount) return false;
-  await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, capturedInr(p, o), Date.now(), o.id).run();
+  if (ro.status !== 'paid' || ro.amount !== o.amount-(o.gift_minor??0) || ro.currency !== o.currency || ro.amount_paid !== o.amount-(o.gift_minor??0)) return false;
+  await db.prepare("UPDATE mimipip_orders SET status='paid',payment_id=?,amount_inr=?,updated_at=? WHERE id=? AND status IN ('pending','paid')").bind(p.id, o.gift_minor&&o.currency==='INR'?p.amount/100+o.gift_minor/100:capturedInr(p, o), Date.now(), o.id).run();
   // Counted once, on the first confirmation: the browser's return and the sweep can both arrive here.
   if (o.status === 'pending') {
     try { await count(db, 'paid', (JSON.parse(o.lines) as StoredLine[]).map(l => l.slug), (JSON.parse(o.customer) as StoredCustomer).countryCode); } catch { /* a counter never holds a paid order */ }
@@ -210,7 +223,20 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const b = JSON.parse(raw);
       const priced = priceCart(b.lines, String(b.countryCode ?? ''),await resolveRequestArt(b.lines,request));
       if ('refused' in priced) return json({ error: priced.refused }, 400);
-      return json({ currency: priced.currency, totalMinor: priced.totalMinor, lines: priced.lines });
+      let giftMinor=0;
+      if(b.giftCode){
+        await recoverCreatingGiftOrders(db);
+        if(env.MIMIPIP_GIFTS_ENABLED!=='1'||priced.currency!=='INR')return json({error:'INR gift cards are available for India checkout only.'},400);
+        if(priced.lines.some(l=>l.kind==='design-service'))return json({error:GIFT_NO_DESIGN_SERVICE},400);
+        const card=await cardForCode(db,b.giftCode);if(!card)return json({error:'Gift card not found, unavailable or expired.'},400);
+        giftMinor=Math.min(card.balance_minor,priced.totalMinor);
+        if(typeof b.token==='string'&&/^[a-f0-9]{64}$/.test(b.token)){
+          const existing=await db.prepare("SELECT id,amount,gift_minor,lines_hash,status FROM mimipip_orders WHERE token_hash=?").bind(await digest(b.token)).first<Order>();
+          if(existing?.status==='pending'&&existing.lines_hash===await digest(JSON.stringify(priced.lines))){const held=await tenderFor(db,existing.id);if(held?.gift_id===card.id)giftMinor=held.amount_minor;}
+        }
+        if(!giftMinor)return json({error:'This gift balance is already used or reserved for another checkout.'},400);
+      }
+      return json({ currency: priced.currency, totalMinor: priced.totalMinor, giftMinor, payableMinor:priced.totalMinor-giftMinor, lines: priced.lines });
     } catch { return json({ error: 'Check your cart and try again.' }, 400); }
   }
   const pay = env.STORE_PAY;
@@ -225,6 +251,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     const b = JSON.parse(raw);
     if (typeof b.token !== 'string' || !/^\w{64}$/.test(b.token)) return json({ error: 'Invalid checkout session' }, 400);
     const tokenHash = await digest(b.token);
+    if(path==='/api/checkout/create'&&b.giftCode)await recoverCreatingGiftOrders(db);
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
     if (path === '/api/checkout/create') {
       if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
@@ -242,21 +269,38 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       if(priced.lines.some(l=>l.crop?.installation) && !installationAddressAllowed(b.customer.countryCode,b.customer.postcode))
         return json({error:'Installation is not available at your delivery PIN code. Remove installation or use a serviceable delivery address.'},400);
       const linesHash = await digest(JSON.stringify(priced.lines));
-      if (o && o.status === 'pending' && o.lines_hash !== linesHash) return json({ error: 'Your cart changed. Please try again.', renew: true }, 409);
+      if (o && o.status === 'pending' && o.lines_hash !== linesHash) return json(await changedGiftCheckout(db, call, o, 'Your cart changed. Please try again.'), 409);
       const c = b.customer;
       const customer: StoredCustomer = { name: c.name.trim(), email: c.email.trim(), phone: c.phone.trim(), address: c.address.trim(), city: c.city.trim(), state: c.state.trim(), postcode: c.postcode.trim(), countryCode: c.countryCode, country: countryName(c.countryCode),...(billingIdentity?{billingIdentity}:{}) };
       if (o && o.status === 'pending' && JSON.stringify(JSON.parse(o.customer)) !== JSON.stringify(customer))
-        return json({ error: 'Your delivery details changed. Please try again.', renew: true }, 409);
+        return json(await changedGiftCheckout(db, call, o, 'Your delivery details changed. Please try again.'), 409);
+      let gift= b.giftCode?await cardForCode(db,b.giftCode):null;
+      if(b.giftCode&&(!gift||priced.currency!=='INR'||env.MIMIPIP_GIFTS_ENABLED!=='1'))return json({error:'This gift card cannot be applied to this order.'},400);
+      if(gift&&priced.lines.some(l=>l.kind==='design-service'))return json({error:GIFT_NO_DESIGN_SERVICE},400);
+      if(o?.status==='pending'&&o.gift_minor){const held=await tenderFor(db,o.id);if(!gift||gift.id!==held?.gift_id)return json({error:'Your gift balance is reserved for this checkout. Use the same gift card to resume it.'},409);}
+      if(o?.status==='pending'&&!o.gift_minor&&gift)return json({error:'Start a new checkout to apply your gift card.',renew:true},409);
       if (!o) {
+        if(gift&&!gift.balance_minor)return json({error:'This gift balance is already used or reserved.'},400);
         const id = 'MP-' + crypto.randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase();
         const now = Date.now();
         await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,'{}',?,?)")
           .bind(id, tokenHash, priced.totalMinor, priced.currency, JSON.stringify(priced.lines), linesHash, JSON.stringify(customer), now, now).run();
+        let giftMinor=0;
+        if(gift){
+          giftMinor=Math.min(gift.balance_minor,priced.totalMinor);
+          try{await reserveGift(db,id,gift.id,giftMinor);}catch{await abandonUnpresentedOrder(db,id);return json({error:'The gift balance changed. Refresh your checkout and try again.'},409);}
+        }
+        const payable=priced.totalMinor-giftMinor;
+        if(payable===0){
+          await db.prepare("UPDATE mimipip_orders SET status='paid',amount_inr=?,updated_at=? WHERE id=? AND status='creating'").bind(priced.totalMinor/100,Date.now(),id).run();
+          o=(await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
+          await sendToOs(o,pay,db);return json({paid:true,orderNumber:o.id});
+        }
         let ro;
         try {
           // Capture follows the account's own setting, as the store's orders do.
-          ro = await call('orders', { amount: priced.totalMinor, currency: priced.currency, receipt: id, notes: { brand: 'MimiPip', mimipip_order_id: id } });
-          if (!/^order_[A-Za-z0-9]+$/.test(ro.id) || ro.amount !== priced.totalMinor || ro.currency !== priced.currency) throw new Error('Invalid provider order');
+          ro = await call('orders', { amount: payable, currency: priced.currency, receipt: id, notes: { brand: 'MimiPip', mimipip_order_id: id } });
+          if (!/^order_[A-Za-z0-9]+$/.test(ro.id) || ro.amount !== payable || ro.currency !== priced.currency) throw new Error('Invalid provider order');
         } catch (e) {
           // The shopper never saw a payment window, so nothing can have been paid: let them try again.
           await db.prepare("DELETE FROM mimipip_orders WHERE id=? AND status='creating'").bind(id).run();
@@ -268,8 +312,9 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       }
       if (o.status === 'creating') return json({ error: 'Your payment session is being checked. Please do not pay again.' }, 409);
       if (o.status === 'paid') return json({ paid: true, orderNumber: o.id });
+      if (o.status === 'expired') return json({ error: 'This checkout expired and any gift balance went back to your card. Please try again.', renew: true }, 409);
       if (o.status !== 'pending') return json({ error: 'This order cannot be paid.' }, 409);
-      return json({ keyId: await pay.keyId(), orderId: o.razorpay_order_id, amount: o.amount, currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
+      return json({ keyId: await pay.keyId(), orderId: o.razorpay_order_id, amount: o.amount-(o.gift_minor??0), currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
     }
     if (!o) return json({ error: 'Order not found' }, 404);
     if (path === '/api/checkout/verify') {
@@ -283,10 +328,10 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     } else return json({ error: 'Not found' }, 404);
     o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
     return json({
-      paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, currency: o.currency,
+      paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, giftMinor:o.gift_minor??0, cashMinor:o.amount-(o.gift_minor??0), currency: o.currency,
       lines: JSON.parse(o.lines).map((l: StoredLine) => ({ name: l.name, qty: l.qty, lineMinor: l.lineMinor })),
       customer: JSON.parse(o.customer),
-      message: o.status === 'paid' ? 'Payment received. Your order is confirmed.' : 'Payment has not been confirmed yet. If you were charged, please check again before paying.',
+      message: o.status === 'paid' ? 'Payment received. Your order is confirmed.' : o.status === 'expired' ? 'This checkout expired; any gift balance went back to your card. If you were charged, contact hello@mimipip.com before paying again.' : 'Payment has not been confirmed yet. If you were charged, please check again before paying.',
     });
   } catch (e) {
     console.error('checkout:', (e as Error).message);
@@ -297,7 +342,19 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
 /** Every few minutes: pending payments are asked of Razorpay, paid orders are offered to the OS again. */
 export async function sweep(env: Env) {
   if (!env.DB || !env.STORE_PAY) return;
+  await recoverCreatingGiftOrders(env.DB);
   const pay = env.STORE_PAY, db = env.DB, call = provider(pay), cutoff = Date.now() - 5 * 60_000;
+  // A part-gift checkout nobody paid gives its balance back after the TTL (Razorpay asked first).
+  await releaseStaleGiftOrders(db, call);
+  // Money that lands on a checkout AFTER its gift balance was released is never an order: it is held for review.
+  const expired = await db.prepare("SELECT * FROM mimipip_orders WHERE status='expired' AND gift_minor>0 AND razorpay_order_id IS NOT NULL AND created_at>? ORDER BY created_at LIMIT 25").bind(Date.now() - 3 * 864e5).all<Order>();
+  for (const o of expired.results) {
+    try {
+      const ps = await call('orders/' + o.razorpay_order_id + '/payments');
+      if ((ps.items || []).some((p: any) => p.status === 'captured' || p.status === 'authorized'))
+        await db.prepare("UPDATE mimipip_orders SET status='review',os_error='late_capture_after_gift_release',updated_at=? WHERE id=? AND status='expired'").bind(Date.now(), o.id).run();
+    } catch { /* asked again on the next pass */ }
+  }
   const pending = await db.prepare("SELECT * FROM mimipip_orders WHERE status='pending' AND razorpay_order_id IS NOT NULL AND created_at<? AND created_at>? ORDER BY created_at LIMIT 25").bind(cutoff, Date.now() - 3 * 864e5).all<Order>();
   for (const o of pending.results) {
     try {

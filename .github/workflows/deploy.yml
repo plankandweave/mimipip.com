@@ -38,6 +38,25 @@ jobs:
         run: npm run typecheck:app
       - name: Build
         run: MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 npx vinext build
+      - name: Prepare gift-card database and stable signing key
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          npx wrangler d1 migrations apply mimipip-orders --remote --config wrangler.gift-migrations.jsonc
+          # Every issued code is derived from MIMIPIP_GIFT_SECRET, so it is created ONCE and never rotated here.
+          # "could not read the list" must fail the deploy, never be mistaken for "absent".
+          npx wrangler secret list --config dist/server/wrangler.json --format json > "$RUNNER_TEMP/mimipip-secret-names.json"
+          state=$(node -e '
+            const fs=require("fs"); const raw=fs.readFileSync(process.argv[1],"utf8");
+            const a=raw.indexOf("["), z=raw.lastIndexOf("]"); let rows;
+            try { rows=JSON.parse(raw.slice(a, z+1)); if(!Array.isArray(rows)) throw 0; } catch { console.log("unreadable"); process.exit(0); }
+            console.log(rows.some(x=>x&&x.name==="MIMIPIP_GIFT_SECRET")?"present":"absent");
+          ' "$RUNNER_TEMP/mimipip-secret-names.json")
+          case "$state" in
+            present) echo "MIMIPIP_GIFT_SECRET is set; kept." ;;
+            absent) openssl rand -hex 32 | npx wrangler secret put MIMIPIP_GIFT_SECRET --config dist/server/wrangler.json ;;
+            *) echo "::error::Could not read the Worker's secret list, so the gift signing key was left untouched and nothing was deployed."; cat "$RUNNER_TEMP/mimipip-secret-names.json"; exit 1 ;;
+          esac
       - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -47,6 +66,8 @@ jobs:
       - name: Check the live site
         run: |
           sleep 20
+          curl -fsS https://mimipip.com/api/gift-card/readiness | grep -q '"open":true'
+          test "$(curl -s -o /dev/null -w '%{http_code}' https://mimipip.com/api/gift-card/print)" = 404
           curl -fsS https://mimipip.com/api/checkout/readiness | grep -q '"open":true'
           curl -fsS https://mimipip.com/feeds/google-merchant.xml | grep -q '<g:brand>MimiPip</g:brand>'
           curl -fsS https://mimipip.com/sitemap.xml | grep -q 'https://mimipip.com/hopscotch-floor-sticker'

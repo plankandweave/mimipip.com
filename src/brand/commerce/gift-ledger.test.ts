@@ -1,0 +1,96 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+// @ts-expect-error SQLite is present in the test runtime.
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import {giftInput,activateGift,handleGiftCard,type GiftOrder} from './gift-card';
+import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
+import {queueGiftEmails} from './gift-email';
+function harness(){
+ const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ const DB={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}}};
+ const id='MPG-'+'A'.repeat(24);const now=Date.now();
+ db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100100,'INR',?,?,?,0,'order_fixture',?)").run(id,'x','x',JSON.stringify({style:'blue-daisy',occasion:'Baby shower',recipientName:'Test Recipient',senderName:'Test Sender',amount:1001,currency:'INR',message:'A little love.'}),'buyer@example.test','recipient@example.test',now);
+ const o=()=>db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').get(id) as GiftOrder;
+ const payment={id:'pay_fixture',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ const env:any={DB,MIMIPIP_GIFTS_ENABLED:'1',MIMIPIP_GIFT_SECRET:'test-only-secret-'.repeat(3),RESEND_API_KEY:'test-only-no-network',STORE_PAY:{ready:()=>true,razorpay:async()=>({ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}})}};
+ const order=(id:string,amount=100000,currency='INR')=>db.prepare("INSERT INTO mimipip_orders(id,token_hash,status,amount,currency,lines,customer,shipping,fulfilment,created_at,updated_at) VALUES(?,?,'creating',?,?,?, ?,0,'{}',?,?)").run(id,id,amount,currency,'[]','{}',now,now);
+ return{db,env,id,o,payment,order,now};
+}
+test('gift values follow approved INR limits and reject unsupported currency',()=>{
+ const b={currency:'INR',style:'blue-daisy',occasion:'Baby shower',amount:1001,purchaserEmail:'buyer@example.test',recipientName:'Recipient',senderName:'Sender'};
+ for(const amount of [500,1001,2001,5001,10001,20001,50000])assert.equal(giftInput({...b,amount}).minor,amount*100);
+ for(const amount of [499.99,50000.01,NaN,Infinity,1001.001])assert.throws(()=>giftInput({...b,amount}));
+ assert.throws(()=>giftInput({...b,currency:'USD'}));
+});
+test('only independently confirmed exact captured payment activates; replay mints one balance and email',async()=>{
+ const h=harness();for(const patch of [{amount:1},{currency:'USD'},{captured:false},{amount_refunded:1},{order_id:'order_other'},{status:'authorized'}])assert.equal(await activateGift(h.env,h.o(),{...h.payment,...patch}),false);
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,0);
+ await Promise.all([activateGift(h.env,h.o(),h.payment),activateGift(h.env,h.o(),h.payment)]);
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,1);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_email').get().n,1);
+ const c=h.db.prepare('SELECT * FROM mimipip_gift_cards').get();assert.equal(c.balance_minor,100100);assert.equal(c.expires_at,null);
+ const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.id,h.id);assert.notEqual(c.code_hash,code);assert.equal(c.code_hash,await giftHash(normalizedGiftCode(code)));
+});
+test('competing reservations cannot overspend, completed use is immutable, remainder stays available',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('first');h.order('second');
+ const results=await Promise.allSettled([reserveGift(h.env.DB,'first',h.id,80000),reserveGift(h.env.DB,'second',h.id,80000)]);
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,20100);
+ h.db.prepare("UPDATE mimipip_orders SET status='paid' WHERE id='first'").run();assert.equal(h.db.prepare("SELECT state FROM mimipip_gift_tenders WHERE order_id='first'").get().state,'redeemed');
+ assert.throws(()=>h.db.prepare("DELETE FROM mimipip_orders WHERE id='first'").run());
+ await reserveGift(h.env.DB,'second',h.id,20100);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+});
+test('only an unpresented checkout releases reservation; pending provider order stays held',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('first');await reserveGift(h.env.DB,'first',h.id,80000);await abandonUnpresentedOrder(h.env.DB,'first');assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ h.order('second');await reserveGift(h.env.DB,'second',h.id,80000);h.db.prepare("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_second' WHERE id='second'").run();await abandonUnpresentedOrder(h.env.DB,'second');assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,20100);
+});
+test('USD, suspended and expired cards cannot reserve INR gift balance',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('usd',80000,'USD');await assert.rejects(reserveGift(h.env.DB,'usd',h.id,50000));h.order('inr');h.db.exec("UPDATE mimipip_gift_cards SET status='suspended'");await assert.rejects(reserveGift(h.env.DB,'inr',h.id,50000));h.db.exec("UPDATE mimipip_gift_cards SET status='active',expires_at=1");await assert.rejects(reserveGift(h.env.DB,'inr',h.id,50000));
+});
+test('email lease prevents duplicate send; ambiguous retries preserve exact provider idempotency payload',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);const sent:any[]=[];const send:any=async(_u:any,init:any)=>{sent.push(init);throw new Error('ambiguous network timeout');};
+ await Promise.all([queueGiftEmails(h.env,send,h.now+1000),queueGiftEmails(h.env,send,h.now+1000)]);assert.equal(sent.length,1);
+ await queueGiftEmails(h.env,async(_u,init)=>{sent.push(init);return Response.json({id:'email_fixture'});},h.now+301001);
+ assert.equal(sent.length,2);assert.equal(sent[0].body,sent[1].body);assert.equal(sent[0].headers['Idempotency-Key'],sent[1].headers['Idempotency-Key']);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
+ await queueGiftEmails(h.env,send,h.now+700000);assert.equal(sent.length,2);
+});
+test('an ambiguous email past the idempotency window holds for review instead of resending',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.db.prepare('UPDATE mimipip_gift_email SET first_attempt_at=?').run(h.now-24*3600000);await queueGiftEmails(h.env,async()=>{throw new Error('must not send');},h.now);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'review');
+});
+test('protected card rejects unknown viewing credentials and cross-origin mutation',async()=>{
+ const h=harness();const r=await handleGiftCard(new Request('https://mimipip.com/api/gift-card/print?id='+h.id+'&key='+'a'.repeat(64)),h.env);assert.equal(r.status,404);
+ const cross=await handleGiftCard(new Request('https://mimipip.com/api/gift-card/check',{method:'POST',headers:{origin:'https://other.example','content-type':'application/json'},body:'{}'}),h.env);assert.equal(cross.status,403);
+});
+
+test('full gift settlement is atomic with the debit even before the request continues',async()=>{const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('atomic',80000);await reserveGift(h.env.DB,'atomic',h.id,80000);const o=h.db.prepare("SELECT status,amount_inr FROM mimipip_orders WHERE id='atomic'").get();assert.equal(o.status,'paid');assert.equal(o.amount_inr,800);assert.equal(h.db.prepare("SELECT state FROM mimipip_gift_tenders WHERE order_id='atomic'").get().state,'redeemed');});
+
+test('an interrupted unpresented mixed checkout restores balance after grace, and late publication cannot revive it',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('abandoned',200000);await reserveGift(h.env.DB,'abandoned',h.id,100100,h.now);
+ await recoverCreatingGiftOrders(h.env.DB,h.now+299999);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+ await recoverCreatingGiftOrders(h.env.DB,h.now+300001);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ assert.equal(Number(h.db.prepare("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_late' WHERE id='abandoned' AND status='creating'").run().changes),0);
+ assert.equal(h.db.prepare("SELECT * FROM mimipip_orders WHERE id='abandoned'").get(),undefined);
+});
+test('cleanup never releases a published provider checkout or a settled full-gift order',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('presented',200000);await reserveGift(h.env.DB,'presented',h.id,100100,h.now);h.db.exec("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_presented' WHERE id='presented'");await recoverCreatingGiftOrders(h.env.DB,h.now+86400000);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);assert.ok(h.db.prepare("SELECT id FROM mimipip_orders WHERE id='presented'").get());
+});
+test('an abandoned part-gift checkout returns its balance only when Razorpay shows no payment',async()=>{
+ const {releaseUnpaidGiftOrder,releaseStaleGiftOrders,GIFT_RESERVATION_TTL_MS}=await import('./gift-ledger');
+ const h=harness();await activateGift(h.env,h.o(),h.payment);
+ const present=async(id:string,created=h.now)=>{h.order(id);h.db.prepare('UPDATE mimipip_orders SET created_at=? WHERE id=?').run(created,id);await reserveGift(h.env.DB,id,h.id,20000);h.db.prepare("UPDATE mimipip_orders SET status='pending',razorpay_order_id=? WHERE id=?").run('order_'+id,id);};
+ const row=(id:string)=>h.db.prepare('SELECT * FROM mimipip_orders WHERE id=?').get(id);
+ const balance=()=>h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor;
+ await present('inflight');assert.equal(balance(),80100);
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[{status:'created'}]}),row('inflight')),'paid');
+ assert.equal(balance(),80100);assert.equal(row('inflight').status,'pending');
+ await present('nobody');assert.equal(balance(),60100);
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[]}),row('nobody')),'released');
+ assert.equal(balance(),80100);assert.equal(row('nobody').status,'expired');
+ assert.equal(h.db.prepare("SELECT count(*) n FROM mimipip_gift_tenders WHERE order_id='nobody'").get().n,0);
+ await present('fresh');await present('stale',h.now-GIFT_RESERVATION_TTL_MS-1000);assert.equal(balance(),40100);
+ await releaseStaleGiftOrders(h.env.DB,async()=>({items:[]}),h.now);
+ assert.equal(balance(),60100);assert.equal(row('fresh').status,'pending');assert.equal(row('stale').status,'expired');
+ // A redeemed (paid) order is never released.
+ h.db.prepare("UPDATE mimipip_orders SET status='paid' WHERE id='fresh'").run();
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[]}),row('fresh')),'kept');assert.equal(balance(),60100);
+});
