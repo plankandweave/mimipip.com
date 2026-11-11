@@ -1,3 +1,4 @@
+import { shopperAiFetch } from "@/lib/shopper-service";
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { requireGatedUser } from "@/lib/auth-server";
@@ -80,7 +81,7 @@ async function readRoom(body: { room?: string; wide?: string }) {
   if (!hasAI()) return NextResponse.json({ analysis: fallback });
 
   try {
-    const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers") });
+    const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers") });
     const content: Anthropic.ContentBlockParam[] = [];
     const roomB64 = await downscaleToJpegB64(room.b64);
     content.push({ type: "image", source: { type: "base64", media_type: "image/jpeg", data: roomB64 } });
@@ -137,7 +138,7 @@ async function converse(body: {
 
   if (next && hasAI()) {
     try {
-      const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers") });
+      const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers") });
       const ctx = [
         body?.summary ? `What you already saw in their room: ${body.summary}` : "",
         body?.lastAnswer ? `They just said: "${body.lastAnswer}". Acknowledge it warmly and briefly, then ask.` : "This is the opening of the conversation — a warm hello that shows you've looked at their room, then the question.",
@@ -221,7 +222,7 @@ async function curate(body: { answers?: Record<string, string>; summary?: string
   }
 
   try {
-    const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers") });
+    const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers") });
     const list = candidates
       .map((c, i) => `${i + 1}. ${c.title} [handle: ${c.handle}] — tags: ${c.tags.join(", ") || "—"}`)
       .join("\n");

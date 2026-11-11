@@ -59,7 +59,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/api/signup'||p==='/api/signup/leave')return withOfflineBrowserPolicy(await handleSignup(request,env as Parameters<typeof handleSignup>[1]));
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
- const nativeApi=/^\/api\/(consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
+ const nativeApi=/^\/api\/(proof$|shopper-services$|consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
  if(p==='/api/cart'&&request.method==='POST'){
   // Add to cart, counted where it happens. The body is read from a copy; the cart is untouched.
   const copy=request.clone();const response=await publicPage(request,await handler.fetch(request,env,ctx));
