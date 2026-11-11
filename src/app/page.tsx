@@ -1066,10 +1066,6 @@ const HERO_SLIDES = 3;
               <dd className="mt-1 text-slate">Used every day across bedrooms, living rooms, dining rooms and hallways.</dd>
             </div>
             <div>
-              <dt className="font-semibold text-charcoal">Commercial use</dt>
-              <dd className="mt-1 text-slate">Choose a design to suit the space; each has its own assigned surface.</dd>
-            </div>
-            <div>
               <dt className="font-semibold text-charcoal">Kids &amp; nursery rooms</dt>
               <dd className="mt-1 text-slate">Explore designs made for gentle, lived-in spaces.</dd>
             </div>
