@@ -14,8 +14,11 @@ type Props = ComponentProps<typeof ProductConfigurator> & {
 export function MimiWallpaperPurchase({ native, ...legacy }: Props) {
   const { market } = useMarket();
   if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.isFixedSize && !legacy.editItemId) {
-    return <section id="create-your-wall" className="scroll-mt-28"><ChooseDesign slug={native.slug} name={native.name} width={null} height={null}
-      custom wallpaper art={native.art} sale={native.sale} /></section>;
+    return <section id="create-your-wall" className="scroll-mt-28">
+      <p className="mb-4 text-sm text-slate">Smooth peel-and-stick wallpaper with a removable, self-adhesive backing.</p>
+      <ChooseDesign slug={native.slug} name={native.name} width={null} height={null}
+        custom wallpaper art={native.art} sale={native.sale} />
+    </section>;
   }
   return <ProductConfigurator {...legacy} />;
 }
