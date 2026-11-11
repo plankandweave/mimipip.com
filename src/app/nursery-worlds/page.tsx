@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Hush & Wander nursery wallpaper collection | MimiPip',
-  description: 'Shop eleven softly painted nursery wallpaper murals from the Hush & Wander collection, and explore each design by color.',
+  description: 'Gentle nursery wallpaper worlds for first mornings, sleepy cuddles and stories together. Explore Hush & Wander by colour.',
   alternates: { canonical: '/nursery-worlds/' },
 };
 
@@ -26,7 +26,7 @@ export default function NurseryWorldsPage() {
     <section className="container-x pb-10 pt-12 text-center md:pb-16 md:pt-20">
       <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#aa7c57]">MimiPip · Hush & Wander collection</p>
       <h1 className="mx-auto max-w-4xl text-4xl leading-tight md:text-6xl">A little world to come home to</h1>
-      <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#6d6257]">Eleven softly painted stories for the nursery wall. Explore each scene in a warm room, look closely at its artwork, then choose the one that feels like home.</p>
+      <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#6d6257]">For first good mornings, sleepy cuddles and stories told one more time. Find the little world that feels like home to you and your child.</p>
       <p className="mx-auto mt-4 max-w-2xl text-xs text-[#81776d]">Illustrative room renders. Furniture and accessories are shown for inspiration.</p>
     </section>
     <section className="container-x grid gap-12 pb-20 md:grid-cols-2 md:gap-x-8 md:gap-y-16" aria-label="Hush and Wander nursery wallpapers">

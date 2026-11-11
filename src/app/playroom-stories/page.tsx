@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Playroom stories",
-  description: "Shop 11 illustrated wallpaper stories for shared toddler playrooms and residential play areas, made to your wall measurements.",
+  description: "Stories to discover together, from puddle races to lantern walks. Shop playroom wallpaper made to your wall measurements.",
   alternates: { canonical: "/playroom-stories" },
 };
 
@@ -30,10 +30,9 @@ export default function PlayroomStoriesPage() {
           <p className="caps text-slate">MimiPip playroom ideas</p>
           <h1 className="mt-3 text-4xl md:text-6xl">A wall full of stories to share</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-slate">
-            Illustrated wallpaper worlds for community playrooms, clubhouses and shared children’s spaces.
-            Each scene gives little ones something to notice, talk about and make their own.
+            One child spots a paper boat. Another imagines a whole voyage. Give little ones a place to find each other, make up stories and return to them tomorrow.
           </p>
-          <p className="mt-4 text-sm text-slate">Choose your story, enter your wall measurements and see its price before ordering.</p>
+          <p className="mt-4 text-sm text-slate">Find the story that feels right for your playroom. Each wallpaper is made to your wall measurements.</p>
           <Link href="/collections/playroom-stories" className="btn mt-6 inline-flex px-6 py-3">Shop all 11 designs</Link>
         </div>
       </section>
