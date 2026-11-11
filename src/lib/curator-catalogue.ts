@@ -35,7 +35,7 @@ function toCandidate(p: Product): CuratorCandidate {
     .map((m) => Number(m.price_per_sqft))
     .filter((n) => n > 0);
   return {
-    sampleable: p.category === "wallpaper" && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "smooth-matt"),
+    sampleable: p.category === "wallpaper" && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "self-adhesive-vinyl"),
     handle: p.handle,
     title: p.title,
     flatUrl: flat?.url ?? null,

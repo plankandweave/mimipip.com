@@ -254,7 +254,7 @@ export function Curator() {
     return (
       <>
         {startOver("max-w-2xl")}
-        <CuratorChat analysis={session.analysis ?? null} transcript={session.transcript} busy={busy} onSend={onSend} />
+        <CuratorChat analysis={session.analysis ?? null} transcript={session.transcript} busy={busy} onSend={onSend} onRecommend={()=>void runCurate()} />
       </>
     );
   }

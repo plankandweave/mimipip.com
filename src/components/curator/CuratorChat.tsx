@@ -29,11 +29,13 @@ export function CuratorChat({
   transcript,
   busy,
   onSend,
+  onRecommend,
 }: {
   analysis: ZAnalysis | null;
   transcript: ZTurn[];
   busy: boolean;
   onSend: (text: string) => void;
+  onRecommend: () => void;
 }) {
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
@@ -75,6 +77,7 @@ export function CuratorChat({
         )}
         <div ref={endRef} />
       </div>
+      <button type="button" className="btn btn-ghost mt-6" disabled={busy} onClick={onRecommend}>Show my matches now</button>
       <div className="mt-6 flex items-end gap-3 border-t border-edge pt-5">
         <textarea
           className="min-h-[52px] flex-1 resize-none rounded-2xl border border-edge bg-surface px-4 py-3 text-[0.95rem] text-charcoal outline-none focus:border-charcoal"

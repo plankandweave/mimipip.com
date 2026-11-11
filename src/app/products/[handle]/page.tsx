@@ -359,10 +359,8 @@ export default async function ProductPage({
   if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));
   const mimiProduct=findReview(handle);
   if(!mimiProduct)notFound();
-  // Playroom Stories are sold from MimiPip's own catalogue and print map.
-  // The inherited product renderer reads a separate database; these new
-  // designs must use the same review storefront as the collection listing.
-  if(mimiProduct.collection.includes("happy-petals") || mimiProduct.collection.includes("playroom-stories") || mimiProduct.collection.includes("hush-and-wander") || mimiProduct.collection.includes("dotty-days") || mimiProduct.collection.includes("colour-create") || mimiProduct.collection.includes("dotty-days") || mimiProduct.collection.includes("colour-create") || mimiProduct.collection.includes("shape-street") || !mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
+  // Wallpaper uses the original product tools now that the isolated catalogue is synchronized.
+  if(!mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.

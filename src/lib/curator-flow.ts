@@ -62,7 +62,7 @@ export function parseDimensions(text: string): { widthFt: number; heightFt: numb
 export const CLOSING = "That's everything I need — let me pull your wallpapers together now.";
 
 export const PERSONA =
-  "You are Zyvorah's wallpaper curator, talking with a customer about their room on zyvorah.com (an Indian brand of " +
+  "You are MimiPip's wallpaper curator, talking with a customer about their room on mimipip.com (an Indian brand of " +
   "mural wallpaper designs). You are warm, curious and unhurried — never a form. You ask ONE question at a " +
   "time, in one or two sentences, always first acknowledging what they just said in a natural, human way. You NEVER " +
   "reuse a phrasing you've used before in this conversation. You only curate wallpaper. When the room is a prayer or " +
