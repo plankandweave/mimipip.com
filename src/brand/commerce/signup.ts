@@ -1,6 +1,6 @@
 /**
  * "Hear from us first": an email list, kept in D1. Email only, never a child's
- * details. Nothing sends from this yet. The answer is the same whether or not an
+ * details. First-time opt-ins queue one welcome email. The answer is the same whether or not an
  * address is already known, so the form cannot be used to test who has signed up.
  */
 export const CONSENT_TEXT = 'I agree to emails from MimiPip about new designs and launches. I can leave at any time.';

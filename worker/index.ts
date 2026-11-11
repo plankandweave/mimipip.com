@@ -4,6 +4,7 @@ import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {handleCommerce,sweep,type Env as CheckoutEnv} from '../src/brand/commerce/checkout';
 import {handleSignup} from '../src/brand/commerce/signup';
+import {sendWelcomeEmails,type WelcomeEnv} from '../src/brand/commerce/welcome-email';
 import {withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 import { guides } from '../src/brand/review/guides';
 import handler from 'vinext/server/fetch-handler';
@@ -56,7 +57,12 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
   try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
  }
- if(p==='/api/signup'||p==='/api/signup/leave')return withOfflineBrowserPolicy(await handleSignup(request,env as Parameters<typeof handleSignup>[1]));
+ if(p==='/api/signup'||p==='/api/signup/leave'){
+  const response=await handleSignup(request,env as Parameters<typeof handleSignup>[1]);
+  // Durable queue is created in the same D1 transaction as the opt-in; cron retries failures.
+  if(response.ok && p==='/api/signup') (ctx as {waitUntil(p:Promise<unknown>):void}).waitUntil(sendWelcomeEmails(env as WelcomeEnv).catch(()=>console.error('mimipip_welcome_queue')));
+  return withOfflineBrowserPolicy(response);
+ }
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  const nativeApi=/^\/api\/(forms$|custom-upload$|proof$|shopper-services$|consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
@@ -103,5 +109,5 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
 }
 export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
-async scheduled(_event:unknown,env:unknown){await sweep(env as CheckoutEnv);}
+async scheduled(_event:unknown,env:unknown){await Promise.all([sweep(env as CheckoutEnv),sendWelcomeEmails(env as WelcomeEnv)]);}
 };
