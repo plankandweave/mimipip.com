@@ -776,5 +776,110 @@
     "art": "https://media.zyvorah.com/_print-masters/mimipip/polka-dots-tiny-confetti-1e1d7b4968.png",
     "material": "paste",
     "materialSlug": "smooth-matt"
+  },
+  "happy-petals-sunny-yellow": {
+    "art": "https://mimipip.com/happy-petals/print-art/01.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pink-and-yellow": {
+    "art": "https://mimipip.com/happy-petals/print-art/02.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-peach-and-sage": {
+    "art": "https://mimipip.com/happy-petals/print-art/03.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-baby-pink": {
+    "art": "https://mimipip.com/happy-petals/print-art/04.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-soft-sage": {
+    "art": "https://mimipip.com/happy-petals/print-art/05.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-blush-and-butter": {
+    "art": "https://mimipip.com/happy-petals/print-art/06.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pink-on-yellow": {
+    "art": "https://mimipip.com/happy-petals/print-art/07.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-lavender": {
+    "art": "https://mimipip.com/happy-petals/print-art/08.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-apricot": {
+    "art": "https://mimipip.com/happy-petals/print-art/09.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-golden-butter": {
+    "art": "https://mimipip.com/happy-petals/print-art/10.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-coral": {
+    "art": "https://mimipip.com/happy-petals/print-art/11.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pink-and-lavender": {
+    "art": "https://mimipip.com/happy-petals/print-art/12.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-sunshine-hearts": {
+    "art": "https://mimipip.com/happy-petals/print-art/13.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pink-posies": {
+    "art": "https://mimipip.com/happy-petals/print-art/14.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-peach-and-lilac": {
+    "art": "https://mimipip.com/happy-petals/print-art/15.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pastel-mix": {
+    "art": "https://mimipip.com/happy-petals/print-art/16.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-golden-garden": {
+    "art": "https://mimipip.com/happy-petals/print-art/17.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-blush-garden": {
+    "art": "https://mimipip.com/happy-petals/print-art/18.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-pink-and-gold": {
+    "art": "https://mimipip.com/happy-petals/print-art/19.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-lavender-meadow": {
+    "art": "https://mimipip.com/happy-petals/print-art/20.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "happy-petals-blue": {
+    "art": "https://mimipip.com/happy-petals/print-art/21.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
   }
 }
