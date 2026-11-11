@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "@/components/SiteImage";
 import type { ProductCardData } from "@/lib/types";
-import { cardCopy, familyChip, cardPrice } from "@/lib/card-copy";
+import { cardCopy, cardPrice } from "@/lib/card-copy";
 import { useCardMoney } from "@/lib/use-card-money";
 import { productBadges } from "@/lib/badges";
 import { BadgeIcon } from "@/components/BadgeIcon";
@@ -28,9 +28,6 @@ export function CollectionProductCard({ product, buyingActions = false }: { prod
     isNew: product.isNew,
     isShowroom: product.isShowroom,
   })[0];
-
-  const chip =
-    "pointer-events-auto rounded-full bg-surface/95 px-2.5 py-1 text-[0.62rem] font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:bg-charcoal hover:text-surface";
 
   const family = product.measurementType ?? "area";
   // The quick actions are wallpaper actions. A border has no room visualiser,
@@ -110,24 +107,7 @@ export function CollectionProductCard({ product, buyingActions = false }: { prod
             <span className="truncate sm:hidden">{badge.short}</span>
             <span className="hidden truncate sm:inline">{badge.label}</span>
           </span>
-        ) : (
-          <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-surface/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-slate opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            {familyChip(product)}
-          </span>
-        )}
-
-        {/* quick actions — revealed on hover (desktop); the whole card also links
-            through to the product page, where every tool lives, on tap/mobile. */}
-        {showQuickActions && !buyingActions && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap justify-center gap-1.5 p-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            <Link href={href} className={chip}>See in room</Link>
-            {sampleable && (
-              <button type="button" onClick={() => setSampleOpen(true)} className={chip}>Order sample</button>
-            )}
-            {!sampleable && <Link href="/contact" className={chip} title="Design sample unavailable for this design; ask for a close-up photograph">Ask for print close-up</Link>}
-            <Link href={href} className={chip}>Customise</Link>
-          </div>
-        )}
+        ) : null}
       </div>
 
       <Link href={href} className="block pt-3">

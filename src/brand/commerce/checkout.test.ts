@@ -68,7 +68,7 @@ test('a design with no price on record is refused, never given one', () => {
   assert.equal(onSale(unlisted.slug, 'IN'), true);
 });
 test('a design with no print artwork cannot be bought, even with a price', () => {
-  const noArt = (catalogue as any[]).find(r => r.collection[0] === 'dotty-days' && !artFor(r.slug)); assert.ok(noArt);
+  const noArt = (catalogue as any[]).find(r => r.collection[0] === 'happy-lines' && !artFor(r.slug)); assert.ok(noArt);
   assert.ok('refused' in priceCart([{ slug: noArt.slug, qty: 1, widthCm: 300, heightCm: 250 }], 'US'));
 });
 test('a tampered cart cannot change the money', () => {

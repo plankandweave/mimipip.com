@@ -165,13 +165,13 @@ export function useMarket(): MarketContextValue {
 export function ShipToCountry({ className = "" }: { className?: string }) {
   const { market, setCountry } = useMarket();
   return (
-    <label className={`inline-flex items-center gap-1.5 ${className}`}>
+    <label className={`inline-flex items-center gap-1 ${className}`}>
       <span className="text-[0.68rem] font-medium text-charcoal/80">Delivering to</span>
       <select
         aria-label="Shipping country"
         value={market.countryCode}
         onChange={(event) => void setCountry(event.target.value)}
-        className="max-w-[8rem] cursor-pointer appearance-none bg-transparent pr-4 text-[0.68rem] font-semibold text-charcoal/80 outline-none"
+        className="max-w-[8rem] cursor-pointer appearance-none bg-transparent pr-2 text-[0.68rem] font-semibold text-charcoal/80 outline-none"
       >
         {countryOptions().map((option) => (
           <option key={option.code} value={option.code}>
@@ -179,7 +179,7 @@ export function ShipToCountry({ className = "" }: { className?: string }) {
           </option>
         ))}
       </select>
-      <span aria-hidden className="-ml-4 text-[0.6rem] text-charcoal/60">⌄</span>
+      <span aria-hidden className="-ml-2 text-[0.6rem] text-charcoal/60">⌄</span>
     </label>
   );
 }

@@ -70,11 +70,7 @@ export function BorderStripCard({ product }: { product: ProductCardData }) {
             <BadgeIcon badgeKey={badge.key} className="h-3 w-3" />
             {badge.label}
           </span>
-        ) : (
-          <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-surface/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-slate opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            Sold per metre
-          </span>
-        )}
+        ) : null}
       </div>
 
       <Link href={href} className="flex items-baseline justify-between gap-4 pt-3">

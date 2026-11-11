@@ -8,7 +8,7 @@ import type { ProductCardData } from "@/lib/types";
 import { productBadges } from "@/lib/badges";
 import { BadgeIcon } from "@/components/BadgeIcon";
 import { WishlistButton } from "@/components/WishlistButton";
-import { cardCopy, familyChip, cardPrice } from "@/lib/card-copy";
+import { cardCopy, cardPrice } from "@/lib/card-copy";
 import { useCardMoney } from "@/lib/use-card-money";
 import { useMarket } from "@/components/MarketProvider";
 
@@ -129,11 +129,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
             <span className="truncate sm:hidden">{badge.short}</span>
             <span className="hidden truncate sm:inline">{badge.label}</span>
           </span>
-        ) : (
-          <span className="absolute left-3 top-3 rounded-full bg-surface/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-slate opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            {process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW === "1" ? <>{product.cardLabel}<SalePrice sale={product.sale}/></> : familyChip(product)}
-          </span>
-        )}
+        ) : null}
       </div>
       <div className="pt-3">
         <h3 className="font-display text-[0.95rem] font-semibold leading-snug">{product.title}</h3>
@@ -144,15 +140,4 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       </div>
     </Link>
   );
-}
-
-/** The price on a shop card, in the visitor's own currency. */
-function SalePrice({ sale }: { sale?: ProductCardData["sale"] }) {
-  const { market } = useMarket();
-  const india = market.countryCode === "IN";
-  const offer = india ? sale?.india : sale?.abroad;
-  if (!offer) return null;
-  const sign = india ? "₹" : "$";
-  const figure = offer.fixed ?? offer.rate;
-  return <> · {sign}{figure?.toLocaleString(india ? "en-IN" : "en-US")}{offer.rate ? "/sq ft" : ""}{india && offer.rate ? " + GST" : ""}</>;
 }

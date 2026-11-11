@@ -93,7 +93,7 @@ export function feedProblems(items: FeedItem[]): string[] {
     if (!/\.(jpe?g|png)$/.test(i.imageLink)) say('image is not a JPEG or PNG');
     if (!/^\d+\.\d{2} (INR|USD)$/.test(i.price) || parseFloat(i.price) <= 0) say('price is not "0.00 CUR" above zero');
     if (!/^0\.00 (INR|USD)$/.test(i.shipPrice) || i.shipPrice.slice(-3) !== i.price.slice(-3)) say('shipping price or currency is wrong');
-    if (/zyvorah|l'orange|lorange/i.test(i.title + i.description + i.link + i.imageLink)) say('names another brand');
+    if (/zyvorah|l'orange|lorange/i.test([i.title, i.description, i.link, i.imageLink].join(' '))) say('names another brand');
   }
   return out;
 }

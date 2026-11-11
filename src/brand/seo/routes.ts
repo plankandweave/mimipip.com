@@ -7,7 +7,6 @@ import { isSellable, recordOf, sellable } from './site';
 const SHOP = '/browse/collection';
 const knownCollections = new Set(records.flatMap(r => r.collection));
 const liveCollections = new Set(sellable.flatMap(r => r.collection));
-liveCollections.add('happy-petals');
 /** Floor games that have pages of their own (worker/floor-play.json, src/app/choose-floor). */
 const FLOOR_GAMES = ['hopscotch-peach-pop', 'wiggleway', 'jump-jamboree', 'fork-and-friends'];
 
@@ -18,7 +17,7 @@ const FLOOR_GAMES = ['hopscotch-peach-pop', 'wiggleway', 'jump-jamboree', 'fork-
  */
 export function hiddenDestination(path: string): string | null {
   const product = /^\/(?:products|design)\/([^/]+)$/.exec(path);
-  if (product) { const r = recordOf(decodeURIComponent(product[1])); return r && !isSellable(r.slug) && !r.collection.includes('happy-petals') ? SHOP : null; }
+  if (product) { const r = recordOf(decodeURIComponent(product[1])); return r && !isSellable(r.slug) ? SHOP : null; }
   const collection = /^\/collections\/([^/]+)(?:\/[^/]+)?$/.exec(path);
   if (collection && knownCollections.has(collection[1]) && !liveCollections.has(collection[1])) return SHOP;
   const floor = /^\/(?:floor-games|choose-floor)\/([^/]+)$/.exec(path);

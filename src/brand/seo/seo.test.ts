@@ -44,13 +44,12 @@ test('a fixed piece on sale prints from a master on record, at the master\'s siz
 
 test('a hidden design is not shown anywhere: its address goes to the shop', () => {
   for (const r of hidden) {
-    if (r.collection.includes('happy-petals')) { assert.equal(hiddenDestination('/products/' + r.slug), null); assert.ok(paths.includes('/products/' + r.slug)); continue; }
     assert.equal(hiddenDestination('/products/' + r.slug), '/browse/collection');
     assert.ok(!paths.includes('/products/' + r.slug));
   }
   for (const r of sellable) assert.equal(hiddenDestination('/products/' + r.slug), null);
   assert.equal(hiddenDestination('/products/not-a-design'), null);
-  const hiddenOnly = [...new Set(hidden.flatMap(r => r.collection))].filter(c => c !== 'happy-petals' && !sellable.some(r => r.collection.includes(c)));
+  const hiddenOnly = [...new Set(hidden.flatMap(r => r.collection))].filter(c => !sellable.some(r => r.collection.includes(c)));
   for (const c of hiddenOnly) assert.equal(hiddenDestination('/collections/' + c), '/browse/collection');
   for (const game of ['wiggleway', 'jump-jamboree', 'fork-and-friends']) {
     assert.equal(hiddenDestination('/floor-games/' + game), '/floor-games');
@@ -72,7 +71,7 @@ test('every published page has its own title and description, a canonical addres
     assert.ok(!titles.has(head.title), `${path} shares its title with ${titles.get(head.title)}`);
     assert.ok(!descriptions.has(head.description), `${path} shares its description with ${descriptions.get(head.description)}`);
     titles.set(head.title, path); descriptions.set(head.description, path);
-    assert.match(head.image, path.includes('happy-petals') ? /^https:\/\/mimipip\.com\/review\/happy-petals\/room-\d+\.png$/ : /^https:\/\/mimipip\.com\/feed-images\/[a-z0-9-]+\.jpg$/);
+    assert.match(head.image, /^https:\/\/mimipip\.com\/feed-images\/[a-z0-9-]+\.jpg$/);
     assert.ok(existsSync('public' + new URL(head.image).pathname), path + ' picture is missing: ' + head.image);
     assert.doesNotMatch(JSON.stringify(head), /zyvorah|l'orange/i, path + ' names another brand');
   }
@@ -101,7 +100,7 @@ test('the landing pages she named exist, sell something, and make no claim we ca
   for (const key of ['kids-wallpaper', 'kids-room-wallpaper', 'nursery-wallpaper', 'floor-game-stickers', 'hopscotch-floor-sticker', 'birthday-gifts-for-kids', 'return-gifts-for-kids'])
     assert.ok(keys.includes(key), key + ' is not published');
   // No wall sticker and no colour-in wallpaper can be bought today, so neither page is published.
-  assert.deepEqual(unpublishedLandings.sort(), ['colourable-wallpaper', 'kids-wall-stickers']);
+  assert.deepEqual(unpublishedLandings.sort(), ['kids-wall-stickers']);
   for (const l of landings) {
     assert.ok(l.products.length > 0 && l.products.every(s => sellable.some(r => r.slug === s)), l.key);
     const words = [l.h1, l.metaTitle, l.description, l.intro, ...l.sections.flatMap(s => [s.heading, s.text])].join(' ');
@@ -117,7 +116,7 @@ test('the sitemap lists exactly the published addresses, with no trailing slash 
   assert.deepEqual(locs, paths.map(p => 'https://mimipip.com' + p));
   assert.equal(new Set(locs).size, locs.length);
   for (const u of locs) assert.ok(u === 'https://mimipip.com/' || !u.endsWith('/'), u);
-  assert.equal(locs.filter(u => u.includes('/products/')).length, sellable.length + records.filter(r => r.collection.includes('happy-petals')).length);
+  assert.equal(locs.filter(u => u.includes('/products/')).length, sellable.length);
 });
 
 test('shopping feeds: only designs on sale, sound against the feed rules, the price the checkout charges', () => {
