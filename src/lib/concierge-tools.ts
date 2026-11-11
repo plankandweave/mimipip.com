@@ -1,3 +1,4 @@
+import { sellableAnywhere } from "../brand/commerce/sale";
 import type Anthropic from "@anthropic-ai/sdk";
 import { supabase } from "./supabase";
 import { signDoc } from "./private-doc";
@@ -162,7 +163,7 @@ export async function searchProducts(
   const candidates = new Map<string, Product>();
   for (const res of [textRes, namedRes, ...tagRes]) {
     for (const row of (res.data ?? []) as unknown as Product[]) {
-      if (!candidates.has(row.handle)) candidates.set(row.handle, row);
+      if (sellableAnywhere(row.handle) && !candidates.has(row.handle)) candidates.set(row.handle, row);
     }
   }
 
@@ -228,7 +229,7 @@ export async function getProductDetails(handle: string) {
     .eq("handle", handle)
     .eq("status", "active")
     .maybeSingle();
-  if (!data) return null;
+  if (!data || !sellableAnywhere(handle)) return null;
   const p = data as unknown as Product;
   return {
     card: toConciergeProduct(p),
@@ -265,7 +266,7 @@ export async function priceMural(
     .eq("handle", handle)
     .eq("status", "active")
     .maybeSingle();
-  if (!data) return { error: `No product with handle "${handle}"` };
+  if (!data || !sellableAnywhere(handle)) return { error: `No product with handle "${handle}"` };
 
   type Row = {
     handle: string;
@@ -639,7 +640,7 @@ export async function addWallsToCart(
     .eq("handle", handle)
     .eq("status", "active")
     .maybeSingle();
-  if (!data) return { error: `No active product with handle "${handle}"` };
+  if (!data || !sellableAnywhere(handle)) return { error: `No active product with handle "${handle}"` };
   type Row = {
     title: string;
     price_per_metre: number | null;
@@ -812,7 +813,7 @@ export async function whatsNew(limit = 8): Promise<(ConciergeProduct & { tags: s
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return ((data as unknown as Product[]) ?? []).map((p) => ({
+  return ((data as unknown as Product[]) ?? []).filter(p => sellableAnywhere(p.handle)).map((p) => ({
     ...toConciergeProduct(p),
     tags: (p.product_tags ?? []).map((t) => t.tag),
   }));
@@ -842,6 +843,7 @@ async function loadConciergeCards(handles: string[]): Promise<(ConciergeProduct 
   if (error) throw error;
   const order = new Map(handles.map((h, i) => [h, i]));
   return ((data as unknown as Product[]) ?? [])
+    .filter(p => sellableAnywhere(p.handle))
     .map((p) => ({ ...toConciergeProduct(p), tags: (p.product_tags ?? []).map((t) => t.tag) }))
     .sort((a, b) => (order.get(a.handle) ?? 0) - (order.get(b.handle) ?? 0));
 }
@@ -851,7 +853,7 @@ export const CONCIERGE_TOOLS: Anthropic.Tool[] = [
   {
     name: "search_products",
     description:
-      "Search Zyvorah's wallpaper catalogue by keyword. Results come back RELEVANCE-RANKED (best first) with each design's style tags and a short description — use those to judge fit. Call this before recommending any design — never recommend from memory. Try 2-3 different keywords if the first search returns few results.",
+      "Search MimiPip's wallpaper catalogue by keyword. Results come back RELEVANCE-RANKED (best first) with each design's style tags and a short description — use those to judge fit. Call this before recommending any design — never recommend from memory. Try 2-3 different keywords if the first search returns few results.",
     input_schema: {
       type: "object" as const,
       properties: {
