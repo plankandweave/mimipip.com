@@ -74,7 +74,7 @@ export async function issueFundedGift(env:GiftEnv,b:any,mailer:typeof fetch=fetc
  const db=env.DB,paymentId=fundedPaymentId(by,id);
  const state=async():Promise<Issued>=>{
   const e=await db.prepare('SELECT state,provider_id FROM mimipip_gift_email WHERE gift_id=?').bind(id).first<{state:string;provider_id:string|null}>();
-  return {status:200,body:{giftId:id,status:'active',fundedBy:by,email:e?.state??null,emailId:e?.provider_id??null}};
+  return {status:200,body:{giftId:id,status:'active',fundedBy:by,faceMinor:face,email:e?.state??null,emailId:e?.provider_id??null}};
  };
  let o=await db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').bind(id).first<GiftOrder>();
  if(!o||o.provider_order_id!==order)return issueFail(409,'mismatch');
@@ -100,6 +100,8 @@ export async function issueFundedGift(env:GiftEnv,b:any,mailer:typeof fetch=fetc
  ]);
  o=await db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').bind(id).first<GiftOrder>();
  if(o?.status!=='active'||o.payment_id!==paymentId)return issueFail(409,'not_issued');
+ // A concurrent call with another face value may have issued the card: success is only for the value it holds.
+ if(o.amount!==face)return issueFail(409,'mismatch');
  await queueGiftEmails(env,mailer);
  return state();
 }
@@ -122,8 +124,12 @@ export async function watchFundedOrders(env:GiftEnv,now=Date.now()){
   let settles=capturedFor(taken,f.provider_order_id,f.amount_minor);
   if(settles){const ro=await env.STORE_PAY.razorpay('orders/'+f.provider_order_id);settles=!!ro.ok&&ro.data?.status==='paid'&&ro.data?.amount_paid===f.amount_minor&&ro.data?.currency==='INR';}
   const note=settles?`settled_by_payment:${taken.id}`:`late_payment_review:${taken.id}:${Number(taken.amount)}:${String(taken.currency)}:refunded=${Number(taken.amount_refunded??0)}`;
-  await env.DB.prepare('UPDATE mimipip_gift_funding SET late_payment_id=? WHERE gift_id=? AND late_payment_id IS NULL').bind(String(taken.id),f.gift_id).run();
-  await env.DB.prepare('UPDATE mimipip_gift_orders SET last_error=? WHERE id=?').bind(note,f.gift_id).run();
+  // The payment and its note go together: an interruption leaves neither, so the next pass records both.
+  if(!env.DB.batch)continue;
+  await env.DB.batch([
+   env.DB.prepare('UPDATE mimipip_gift_orders SET last_error=? WHERE id=? AND EXISTS(SELECT 1 FROM mimipip_gift_funding WHERE gift_id=? AND late_payment_id IS NULL)').bind(note,f.gift_id,f.gift_id),
+   env.DB.prepare('UPDATE mimipip_gift_funding SET late_payment_id=? WHERE gift_id=? AND late_payment_id IS NULL').bind(String(taken.id),f.gift_id),
+  ]);
  }
 }
 /** A pending gift holding a funded claim has no card (the claim and card are one transaction now; an older

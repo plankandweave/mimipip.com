@@ -227,3 +227,23 @@ test('a capture of the original amount on a funded gift with a different face va
  assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
  assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
 });
+
+test('two funded calls racing with different face values: exactly one succeeds, and only for the value the card holds',async()=>{
+ const h=fundedHarness();
+ const [a,b]=await Promise.all([h.issue({...h.body,faceMinor:90001}),h.issue({...h.body,faceMinor:80001})]);
+ const ok=[a,b].filter(r=>r.status===200);assert.equal(ok.length,1);
+ const held=h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor;
+ assert.equal(ok[0].body.faceMinor,held);assert.equal(h.o().amount,held);assert.equal(count(h,'mimipip_gift_cards'),1);
+ const loser=[a,b].find(r=>r.status!==200)!;assert.equal(loser.status,409);
+ // Sequential repeats agree too: the same value returns the gift, any other value is refused.
+ assert.equal((await h.issue({...h.body,faceMinor:held})).status,200);assert.equal((await h.issue({...h.body,faceMinor:held===90001?80001:90001})).status,409);
+});
+test('the late payment and its review note are written together: an interruption leaves neither, and the next pass records both',async()=>{
+ const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
+ const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ h.env.DB.failBatchAt=1;await assert.rejects(watchFundedOrders(h.env,h.now+3600001));h.env.DB.failBatchAt=-1;
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,null);assert.equal(h.o().last_error,null);
+ h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
+});
