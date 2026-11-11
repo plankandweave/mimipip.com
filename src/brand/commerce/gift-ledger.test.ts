@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 // @ts-expect-error SQLite is present in the test runtime.
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,type GiftOrder} from './gift-card';
+import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,releaseStrandedFundedClaim,type GiftOrder} from './gift-card';
 import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
@@ -246,4 +246,12 @@ test('the late payment and its review note are written together: an interruption
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,null);assert.equal(h.o().last_error,null);
  h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
+});
+test('giving back a stranded funded claim is one transaction: interrupted, the claim and its funding row both stay for the next pass',async()=>{
+ const h=fundedHarness();
+ h.db.prepare('UPDATE mimipip_gift_orders SET payment_id=? WHERE id=?').run(fundedPaymentId('director:roheena',h.id),h.id);
+ h.db.prepare("INSERT INTO mimipip_gift_funding(gift_id,funded_by,reference,amount_minor,provider_order_id,issued_at) VALUES(?,'director:roheena','x',100100,'order_fixture',1)").run(h.id);
+ h.env.DB.failBatchAt=1;await assert.rejects(releaseStrandedFundedClaim(h.env,h.o()));h.env.DB.failBatchAt=-1;
+ assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));assert.equal(count(h,'mimipip_gift_funding'),1);
+ await releaseStrandedFundedClaim(h.env,h.o());assert.equal(h.o().payment_id,null);assert.equal(count(h,'mimipip_gift_funding'),0);
 });

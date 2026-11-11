@@ -136,8 +136,12 @@ export async function watchFundedOrders(env:GiftEnv,now=Date.now()){
  *  interrupted run could leave one). Give the claim back so a real payment can activate the gift. */
 export async function releaseStrandedFundedClaim(env:GiftEnv,o:GiftOrder):Promise<GiftOrder>{
  if(o.status!=='pending'||!o.payment_id?.startsWith('funded:'))return o;
- await env.DB!.prepare("UPDATE mimipip_gift_orders SET payment_id=NULL WHERE id=? AND status='pending' AND payment_id=? AND NOT EXISTS(SELECT 1 FROM mimipip_gift_cards WHERE id=?)").bind(o.id,o.payment_id,o.id).run();
- await env.DB!.prepare("DELETE FROM mimipip_gift_funding WHERE gift_id=? AND NOT EXISTS(SELECT 1 FROM mimipip_gift_cards WHERE id=?)").bind(o.id,o.id).run();
+ // One transaction: a funded issue cannot slip in between and keep a stale funding row.
+ if(!env.DB!.batch)return o;
+ await env.DB!.batch([
+  env.DB!.prepare("DELETE FROM mimipip_gift_funding WHERE gift_id=? AND NOT EXISTS(SELECT 1 FROM mimipip_gift_cards WHERE id=?)").bind(o.id,o.id),
+  env.DB!.prepare("UPDATE mimipip_gift_orders SET payment_id=NULL WHERE id=? AND status='pending' AND payment_id=? AND NOT EXISTS(SELECT 1 FROM mimipip_gift_cards WHERE id=?)").bind(o.id,o.payment_id,o.id),
+ ]);
  return (await env.DB!.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').bind(o.id).first<GiftOrder>())!;
 }
 async function reconcile(env:GiftEnv,o:GiftOrder){
