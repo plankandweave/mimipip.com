@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 // @ts-expect-error SQLite is present in the test runtime.
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,type GiftOrder} from './gift-card';
-import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
+import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,releaseStrandedFundedClaim,type GiftOrder} from './gift-card';
+import {giftCapability,giftReference,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
- for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
- const DB={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}}};
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ const DB:any={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{sql,first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}},
+  failBatchAt:-1,
+  async batch(stmts:any[]){db.exec('BEGIN');try{for(let i=0;i<stmts.length;i++){if(i===DB.failBatchAt)throw new Error('interrupted');await stmts[i].run();}db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}};
  const id='MPG-'+'A'.repeat(24);const now=Date.now();
  db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100100,'INR',?,?,?,0,'order_fixture',?)").run(id,'x','x',JSON.stringify({style:'blue-daisy',occasion:'Baby shower',recipientName:'Test Recipient',senderName:'Test Sender',amount:1001,currency:'INR',message:'A little love.'}),'buyer@example.test','recipient@example.test',now);
  const o=()=>db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').get(id) as GiftOrder;
@@ -30,7 +32,7 @@ test('only independently confirmed exact captured payment activates; replay mint
  await Promise.all([activateGift(h.env,h.o(),h.payment),activateGift(h.env,h.o(),h.payment)]);
  assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,1);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_email').get().n,1);
  const c=h.db.prepare('SELECT * FROM mimipip_gift_cards').get();assert.equal(c.balance_minor,100100);assert.equal(c.expires_at,null);
- const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.id,h.id);assert.notEqual(c.code_hash,code);assert.equal(c.code_hash,await giftHash(normalizedGiftCode(code)));
+ const code=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);assert.equal((await cardForCode(h.env.DB,code))?.id,h.id);assert.notEqual(c.code_hash,code);assert.equal(c.code_hash,await giftHash(normalizedGiftCode(code)));
 });
 test('competing reservations cannot overspend, completed use is immutable, remainder stays available',async()=>{
  const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('first');h.order('second');
@@ -139,10 +141,21 @@ test('a director-funded gift mints exactly one card and one email, and a repeat 
  assert.equal(a.status,200);assert.equal(b.status,200);
  assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);assert.equal(count(h,'mimipip_gift_funding'),1);
  assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
- const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
+ const code=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
  assert.equal((await h.issue()).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
  assert.equal(h.mails.length,1);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
- const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Shopping code: /);assert.equal(m.to[0],'recipient@example.test');
+ const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Card reference: MIMI-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}\n/);assert.match(m.text,/added to your MimiPip wallet\. Sign in at https:\/\/mimipip\.com\/account with recipient@example\.test/);assert.equal(m.to[0],'recipient@example.test');
+ // Gmail turns bare words like mimipip.com into its own http link with a redirect warning: every mention is an explicit https link.
+ const visible=m.html.replace(/<style[\s\S]*?<\/style>/g,'').replace(/<a [^>]*>[\s\S]*?<\/a>/g,'').replace(/<[^>]+>/g,' ');assert.ok(!/mimipip\.com/i.test(visible.replace(/hello@mimipip\.com/g,'')),visible);
+ assert.ok(!/href="http:\/\//.test(m.html));assert.match(m.html,/has been added to your MimiPip wallet/);
+ // Gmail warns ("Redirect Notice") when a link's visible text is a web address that is not exactly where it goes:
+ // no link in the email reads as a web address except an email address that is its own mailto target.
+ for(const [,href,text] of m.html.matchAll(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)){
+  const label=text.replace(/<[^>]+>/g,'').trim();
+  if(/^mailto:/.test(href))assert.equal('mailto:'+label,href);
+  else assert.ok(!/\b[a-z0-9-]+\.(com|in|net|org)\b|https?:/i.test(label),`link text reads as an address: ${label} -> ${href}`);
+ }
+ assert.match(m.html,/href="https:\/\/mimipip\.com\/account">Open my MimiPip wallet</);
 });
 test('a gift with any live payment attempt, or a paid order, is never also funded',async()=>{
  for(const status of ['created','authorized','captured','refunded']){const h=fundedHarness([{id:'pay_x',status}]);assert.equal((await h.issue()).status,409);assert.equal(count(h,'mimipip_gift_cards'),0);assert.equal(h.o().payment_id,null);}
@@ -159,8 +172,9 @@ test('a payment that lands later on a funded gift mints nothing and is recorded 
  const h=fundedHarness();await h.issue();
  assert.equal(await activateGift(h.env,h.o(),h.payment),true);assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);
  assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
- h.env.STORE_PAY.razorpay=async()=>({ok:true,data:{items:[{id:'pay_late',status:'captured'}]}});
- await watchFundedOrders(h.env,h.now+3600001);
+ const capture={id:'pay_late',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_late');assert.equal(h.o().last_error,'settled_by_payment:pay_late');
 });
 test('only the OS token may fund a gift',async()=>{
@@ -168,4 +182,99 @@ test('only the OS token may fund a gift',async()=>{
  const call=(token?:string)=>handleGiftCard(new Request('https://mimipip.com/api/gift-card/issue-funded',{method:'POST',headers:{'content-type':'application/json',...(token?{'x-zyvorah-token':token}:{})},body:JSON.stringify(h.body)}),h.env);
  assert.equal((await call()).status,401);assert.equal((await call('wrong')).status,401);assert.equal(count(h,'mimipip_gift_cards'),0);
  const r=await call('os-token');assert.equal(r.status,200);assert.equal((await r.json()).status,'active');
+});
+
+test('review #58 (1): an authorised payment does not settle a funding, and the watch keeps watching until a verified capture',async()=>{
+ const h=fundedHarness();await h.issue();
+ let items:any[]=[{id:'pay_auth',status:'authorized',captured:false,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];let order:any={status:'attempted',amount_paid:0,currency:'INR'};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items}}:{ok:true,data:order};
+ const late=()=>h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id;
+ await watchFundedOrders(h.env,Date.now()+7_200_000);assert.equal(late(),null);assert.equal(h.o().last_error,null);
+ // A capture of a different amount or order, or a refunded one, settles nothing either.
+ for(const bad of [{order_id:'order_other'},{captured:false}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);assert.equal(late(),null);}
+ // A capture whose order does not read paid is money taken that cannot settle: it is recorded for review, not ignored.
+ items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);
+ assert.equal(late(),'pay_ok');assert.equal(h.o().last_error,'late_payment_review:pay_ok:100100:INR:refunded=0');assert.equal(count(h,'mimipip_gift_cards'),1);
+});
+test('review #58 (2): an interrupted funded issue leaves the gift untouched, and a later real payment still activates it once',async()=>{
+ const h=fundedHarness();
+ for(const at of [1,2]){h.env.DB.failBatchAt=at;await assert.rejects(h.issue());
+  assert.equal(h.o().status,'pending');assert.equal(h.o().payment_id,null);assert.equal(count(h,'mimipip_gift_funding'),0);assert.equal(count(h,'mimipip_gift_cards'),0);}
+ h.env.DB.failBatchAt=-1;
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[h.payment]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ assert.equal((await h.issue()).status,409);
+ await sweepGifts({...h.env,RESEND_API_KEY:undefined});
+ assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,'pay_fixture');assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+test('review #58 (2): a funded claim stranded by an older build is given back, so the real payment activates the gift',async()=>{
+ const h=fundedHarness();
+ h.db.prepare('UPDATE mimipip_gift_orders SET payment_id=? WHERE id=?').run(fundedPaymentId('director:roheena',h.id),h.id);
+ h.db.prepare("INSERT INTO mimipip_gift_funding(gift_id,funded_by,reference,amount_minor,provider_order_id,issued_at) VALUES(?,'director:roheena','x',100100,'order_fixture',1)").run(h.id);
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[h.payment]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ await sweepGifts({...h.env,RESEND_API_KEY:undefined});
+ assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,'pay_fixture');assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+
+test('a funded face value is written with the card in one step; until then a card payment of the original still activates it as bought',async()=>{
+ const h=fundedHarness();const body={...h.body,faceMinor:90001};
+ // Interrupted: the amount is unchanged and nothing is claimed.
+ h.env.DB.failBatchAt=2;await assert.rejects(h.issue(body));h.env.DB.failBatchAt=-1;
+ assert.equal(h.o().amount,100100);assert.equal(JSON.parse(h.o().presentation).amount,1001);assert.equal(h.o().payment_id,null);
+ const r=await h.issue(body);assert.equal(r.status,200);
+ assert.equal(h.o().amount,90001);assert.equal(JSON.parse(h.o().presentation).amount,900.01);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
+ assert.equal(h.db.prepare('SELECT amount_minor FROM mimipip_gift_funding').get().amount_minor,90001);
+ assert.match(JSON.parse(h.mails[0].body).text,/Value: ₹900\.01/);
+ assert.equal((await h.issue(body)).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
+ assert.equal((await h.issue({...body,faceMinor:90002})).status,409);
+ for(const faceMinor of [100,5_000_001,1.5])assert.equal((await fundedHarness().issue({...h.body,faceMinor})).status,400);
+});
+test('a capture of the original amount on a funded gift with a different face value is recorded for review, never ignored',async()=>{
+ const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
+ const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ await watchFundedOrders(h.env,Date.now()+7_200_000);
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');
+ assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
+ assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
+});
+
+test('two funded calls racing with different face values: exactly one succeeds, and only for the value the card holds',async()=>{
+ const h=fundedHarness();
+ const [a,b]=await Promise.all([h.issue({...h.body,faceMinor:90001}),h.issue({...h.body,faceMinor:80001})]);
+ const ok=[a,b].filter(r=>r.status===200);assert.equal(ok.length,1);
+ const held=h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor;
+ assert.equal(ok[0].body.faceMinor,held);assert.equal(h.o().amount,held);assert.equal(count(h,'mimipip_gift_cards'),1);
+ const loser=[a,b].find(r=>r.status!==200)!;assert.equal(loser.status,409);
+ // Sequential repeats agree too: the same value returns the gift, any other value is refused.
+ assert.equal((await h.issue({...h.body,faceMinor:held})).status,200);assert.equal((await h.issue({...h.body,faceMinor:held===90001?80001:90001})).status,409);
+});
+test('the late payment and its review note are written together: an interruption leaves neither, and the next pass records both',async()=>{
+ const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
+ const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ h.env.DB.failBatchAt=1;await assert.rejects(watchFundedOrders(h.env,Date.now()+7_200_000));h.env.DB.failBatchAt=-1;
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,null);assert.equal(h.o().last_error,null);
+ h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
+});
+test('giving back a stranded funded claim is one transaction: interrupted, the claim and its funding row both stay for the next pass',async()=>{
+ const h=fundedHarness();
+ h.db.prepare('UPDATE mimipip_gift_orders SET payment_id=? WHERE id=?').run(fundedPaymentId('director:roheena',h.id),h.id);
+ h.db.prepare("INSERT INTO mimipip_gift_funding(gift_id,funded_by,reference,amount_minor,provider_order_id,issued_at) VALUES(?,'director:roheena','x',100100,'order_fixture',1)").run(h.id);
+ h.env.DB.failBatchAt=1;await assert.rejects(releaseStrandedFundedClaim(h.env,h.o()));h.env.DB.failBatchAt=-1;
+ assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));assert.equal(count(h,'mimipip_gift_funding'),1);
+ await releaseStrandedFundedClaim(h.env,h.o());assert.equal(h.o().payment_id,null);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+
+test('a card reference is short, unambiguous and forgiving to type; a reference already taken moves the card to the next one',async()=>{
+ const h=harness();const ref=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);
+ assert.match(ref,/^MIMI-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/);assert.equal(ref.length,14);
+ assert.equal(normalizedGiftCode(ref.toLowerCase().replace(/0/g,'o').replace(/1/g,'l')),normalizedGiftCode(ref));
+ const other='MPG-'+'C'.repeat(24);
+ h.db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100,'INR','{}','b@example.test','r@example.test',0,'order_other',1)").run(other,other,other);
+ h.db.prepare("INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at) VALUES(?,?,100,100,'INR','active',1)").run(other,await giftHash(normalizedGiftCode(ref)));
+ assert.equal(await activateGift(h.env,h.o(),h.payment),true);
+ assert.equal(h.db.prepare('SELECT code_n FROM mimipip_gift_cards WHERE id=?').get(h.id).code_n,1);
+ const mine=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,1);assert.equal((await cardForCode(h.env.DB,mine))?.id,h.id);assert.equal((await cardForCode(h.env.DB,ref))?.id,other);
 });

@@ -1,4 +1,5 @@
-import {cardForCode,reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
+import {reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
+import {cardForTicket,walletEmail} from './gift-wallet';
 import {gatewayMode,NOT_LIVE} from './gateway-mode';
 import {handleDesignBriefs} from './design-briefs';
 import {CUSTOM_WALLPAPER,BESPOKE_SERVICE,designBriefSchema,bespokeMinor,artworkId,type CustomArts} from './custom-services';
@@ -42,10 +43,13 @@ export type Pay = {
 export type Env = {
   MIMIPIP_CHECKOUT_ENABLED?: string;
   MIMIPIP_GIFTS_ENABLED?: string;
+  /** Signs gift references and wallet tickets (owned by the gift module). */
+  MIMIPIP_GIFT_SECRET?: string;
   MIMIPIP_SAMPLE_CHECKOUT_ENABLED?: string;
   MIMIPIP_LETTERING_CHECKOUT_ENABLED?: string;
   MIMIPIP_BUSINESS_INVOICE_ENABLED?: string;
-  DB?: { prepare(sql: string): Statement };
+  /** batch() is D1's transaction: every statement or none. */
+  DB?: { prepare(sql: string): Statement; batch?(statements: Statement[]): Promise<unknown> };
   /** The store Worker's private door to Razorpay and the OS. The keys stay there; this site holds none. */
   STORE_PAY?: Pay;
 };
@@ -149,6 +153,7 @@ function provider(pay: Pay) {
 }
 
 /** Hands one paid order to the OS. The OS is idempotent per order and line, so a repeat is safe. */
+const GIFT_SIGN_IN='Sign in with the email your gift was sent to, then choose “Use my gift balance”.';
 const GIFT_NO_DESIGN_SERVICE='Gift cards cannot be used for a design service yet. Remove it from your cart or pay by card.';
 /** A pending part-gift checkout whose cart or address changed: release it if nobody paid, so the shopper can start again with the balance back on the card. */
 async function changedGiftCheckout(db: NonNullable<Env['DB']>, call: ReturnType<typeof provider>, o: Order, error: string) {
@@ -230,11 +235,11 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const priced = priceCart(b.lines, String(b.countryCode ?? ''),await resolveRequestArt(b.lines,request));
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       let giftMinor=0;
-      if(b.giftCode){
+      if(b.giftTicket){
         await recoverCreatingGiftOrders(db);
         if(env.MIMIPIP_GIFTS_ENABLED!=='1'||priced.currency!=='INR')return json({error:'INR gift cards are available for India checkout only.'},400);
         if(priced.lines.some(l=>l.kind==='design-service'))return json({error:GIFT_NO_DESIGN_SERVICE},400);
-        const card=await cardForCode(db,b.giftCode);if(!card)return json({error:'Gift card not found, unavailable or expired.'},400);
+        const card=env.MIMIPIP_GIFT_SECRET?(await cardForTicket(db,env.MIMIPIP_GIFT_SECRET,b.giftTicket))?.card:null;if(!card)return json({error:GIFT_SIGN_IN},400);
         giftMinor=Math.min(card.balance_minor,priced.totalMinor);
         if(typeof b.token==='string'&&/^[a-f0-9]{64}$/.test(b.token)){
           const existing=await db.prepare("SELECT id,amount,gift_minor,lines_hash,status FROM mimipip_orders WHERE token_hash=?").bind(await digest(b.token)).first<Order>();
@@ -257,7 +262,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     const b = JSON.parse(raw);
     if (typeof b.token !== 'string' || !/^\w{64}$/.test(b.token)) return json({ error: 'Invalid checkout session' }, 400);
     const tokenHash = await digest(b.token);
-    if(path==='/api/checkout/create'&&b.giftCode)await recoverCreatingGiftOrders(db);
+    if(path==='/api/checkout/create'&&b.giftTicket)await recoverCreatingGiftOrders(db);
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
     if (path === '/api/checkout/create') {
       if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
@@ -280,8 +285,12 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const customer: StoredCustomer = { name: c.name.trim(), email: c.email.trim(), phone: c.phone.trim(), address: c.address.trim(), city: c.city.trim(), state: c.state.trim(), postcode: c.postcode.trim(), countryCode: c.countryCode, country: countryName(c.countryCode),...(billingIdentity?{billingIdentity}:{}) };
       if (o && o.status === 'pending' && JSON.stringify(JSON.parse(o.customer)) !== JSON.stringify(customer))
         return json(await changedGiftCheckout(db, call, o, 'Your delivery details changed. Please try again.'), 409);
-      let gift= b.giftCode?await cardForCode(db,b.giftCode):null;
-      if(b.giftCode&&(!gift||priced.currency!=='INR'||env.MIMIPIP_GIFTS_ENABLED!=='1'))return json({error:'This gift card cannot be applied to this order.'},400);
+      // A gift balance is spent only by its signed-in recipient, on an order in that same email.
+      const ticketed=b.giftTicket&&env.MIMIPIP_GIFT_SECRET?await cardForTicket(db,env.MIMIPIP_GIFT_SECRET,b.giftTicket):null;
+      let gift=ticketed?.card??null;
+      if(b.giftTicket&&!gift)return json({error:GIFT_SIGN_IN},400);
+      if(ticketed&&walletEmail(customer.email)!==ticketed.email)return json({error:"Use the email your gift was sent to as this order's contact email."},400);
+      if(b.giftTicket&&(priced.currency!=='INR'||env.MIMIPIP_GIFTS_ENABLED!=='1'))return json({error:'This gift card cannot be applied to this order.'},400);
       if(gift&&priced.lines.some(l=>l.kind==='design-service'))return json({error:GIFT_NO_DESIGN_SERVICE},400);
       if(o?.status==='pending'&&o.gift_minor){const held=await tenderFor(db,o.id);if(!gift||gift.id!==held?.gift_id)return json({error:'Your gift balance is reserved for this checkout. Use the same gift card to resume it.'},409);}
       if(o?.status==='pending'&&!o.gift_minor&&gift)return json({error:'Start a new checkout to apply your gift card.',renew:true},409);

@@ -21,6 +21,7 @@ export default function AccountPage() {
   const { partner, loading: partnerLoading } = usePartner();
   const [authOpen, setAuthOpen] = useState(false);
   const [orders, setOrders] = useState<OrderLite[] | null>(null);
+  const [gift, setGift] = useState<{ balanceMinor: number; cards: { id: string; balanceMinor: number; from: string; occasion: string }[] } | null>(null);
   const email = session?.user?.email ?? null;
 
   useEffect(() => {
@@ -30,6 +31,14 @@ export default function AccountPage() {
     setOrders(null);
     fetch('/api/account/orders',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Orders unavailable');return r.json();}).then(d=>{if(active)setOrders(d.orders);}).catch(()=>{if(active)setOrders(null);});
     return()=>{active=false};
+  }, [session, loading]);
+
+  // The gift wallet: cards sent to this account's confirmed email.
+  useEffect(() => {
+    if (loading || !session) { setGift(null); return; }
+    let active = true;
+    fetch('/api/account/gift-wallet', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => { if (active) setGift(d); }).catch(() => { if (active) setGift(null); });
+    return () => { active = false; };
   }, [session, loading]);
 
   // Orders come back newest-first from the RPC.
@@ -80,6 +89,17 @@ export default function AccountPage() {
             </div>
             <span className="text-sm font-semibold underline underline-offset-2">View →</span>
           </Link>
+        )}
+
+        {gift && gift.balanceMinor > 0 && (
+          <section className="mt-6 rounded-[18px] border border-edge p-5" aria-label="Gift balance">
+            <p className="text-[0.72rem] font-semibold uppercase tracking-wide text-slate">Gift balance</p>
+            <p className="mt-1 font-display text-2xl font-semibold">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(gift.balanceMinor / 100)}</p>
+            <ul className="mt-2 grid gap-1 text-xs text-slate">
+              {gift.cards.map(c => <li key={c.id}>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(c.balanceMinor / 100)}{c.from ? ` from ${c.from}` : ''}{c.occasion ? ` · ${c.occasion}` : ''}</li>)}
+            </ul>
+            <p className="mt-2 text-xs text-slate">No expiry. It is applied at checkout when you choose “Use my gift balance”; anything you don’t spend stays here.</p>
+          </section>
         )}
 
         {email && <div className="mt-6 grid gap-4 sm:grid-cols-3">
