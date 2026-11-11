@@ -35,7 +35,7 @@ export function HushWanderCollection() {
         <p className={styles.heroAside}>Eleven painted stories · made for your wall</p>
       </div>
       <figure className={styles.heroImage}>
-        <img src="/nursery-worlds/01-little-fox-orchard-room-v2.webp" alt="Little Fox Orchard mural in a warm nursery with a wooden cot, books and soft afternoon light" width={1536} height={1024} fetchPriority="high" />
+        <img src="/collection-headers/hush-and-wander.webp" alt="A child reading in a warm nursery with Little Fox Orchard wallpaper" width={2172} height={724} fetchPriority="high" />
         <figcaption>Little Fox Orchard · one of eleven gentle worlds</figcaption>
       </figure>
     </section>

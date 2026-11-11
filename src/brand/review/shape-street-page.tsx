@@ -13,7 +13,7 @@ export function ShapeStreetPage() {
         <a href="#explore-shape-street" className="mt-8 inline-block rounded-full bg-[#704832] px-7 py-3 text-sm font-semibold text-white hover:bg-[#573522]">Explore the designs</a>
       </div>
       <div className="overflow-hidden rounded-[2rem] shadow-[0_24px_70px_rgba(78,49,30,.15)]">
-        <img src="/review/shape-street/rooftop-gardens-room.png" alt="Rooftop Gardens wallpaper in a warm, sunlit child's room" className="aspect-[4/3] h-full w-full object-cover" />
+        <img src="/collection-headers/shape-street.webp" alt="A child playing in a Shape Street wallpaper room" className="aspect-[4/3] h-full w-full object-cover" />
       </div>
     </section>
     <section className="border-y border-[#e9ddcd] bg-[#f2e8d7] py-10 md:py-14">
