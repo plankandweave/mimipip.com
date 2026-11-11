@@ -554,7 +554,7 @@ const HERO_SLIDES = 3;
               .filter((d) => d.image)
               .map((d) => ({
                 image: d.image as string,
-                framing: { mobilePosition: "50% 100%", desktopPosition: "50% 100%", desktopFit: "contain" as const },
+                framing: { mobilePosition: "50% 100%", desktopPosition: "50% 100%", desktopFit: "cover" as const },
                 alt: d.imageAlt,
                 label: mixedCampaign ? campaignCopy[d.handle]?.title : undefined,
                 ...(mixedCampaign && campaignCopy[d.handle] ? { content: (
