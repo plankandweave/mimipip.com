@@ -1,3 +1,4 @@
+import {StorefrontReady} from '@/components/StorefrontReady';
 import { brand } from "@/brand/current";
 import { serviceAvailable } from "@/brand/services";
 import type { Metadata, Viewport } from "next";
@@ -94,6 +95,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-mimipip-react="true"
       className="h-full"
       // MARKET_PENDING_SCRIPT may add a class before React hydrates.
       suppressHydrationWarning
@@ -143,6 +145,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <ChromeGate>
                 <Footer disconnected={process.env.MIMIPIP_LOCAL_REVIEW==="1"} />
+                <StorefrontReady />
                 {process.env.MIMIPIP_LOCAL_REVIEW!=="1" && <AppInstall />}
                 {serviceAvailable("database") && <SignInInvite />}
                 {serviceAvailable("messaging") && <WhatsAppButton />}
