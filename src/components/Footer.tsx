@@ -127,6 +127,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
       { label: "Surfaces and materials", href: "/materials" }, { label: "Installation and removal", href: "/installation" }, { label: "Saved designs", href: "/wishlist" }
     ] },
     { title: "Help", links: [
+      { label: "About Us", href: "/guides/about" },
       { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
       { label: "United States", href: "/us" }, { label: "India", href: "/in" },
       { label: "Retail buyer guide", href: "/trade" }
