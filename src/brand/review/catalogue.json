@@ -10434,5 +10434,592 @@
         "alt": "Happy Petals · Blue flat artwork"
       }
     ]
+  },
+  {
+    "id": "MP-WP-PL-01",
+    "slug": "great-puddle-race",
+    "name": "The Great Puddle Race",
+    "description": "Paper boats set off through puddles while little friends cheer them on. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "neutral",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/01-great-puddle-race.webp",
+    "flatImage": "/playroom-stories/01-great-puddle-race.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/01-great-puddle-race.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, neutral, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-02",
+    "slug": "kite-catchers",
+    "name": "The Kite Catchers",
+    "description": "A breezy afternoon becomes a little adventure when friends work together to rescue a kite. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "sky"
+    ],
+    "color": [
+      "green",
+      "neutral",
+      "blue"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/02-kite-catchers.webp",
+    "flatImage": "/playroom-stories/02-kite-catchers.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/02-kite-catchers.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, neutral, blue",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-03",
+    "slug": "lantern-walk",
+    "name": "The Lantern Walk",
+    "description": "Handmade lanterns light a garden path at dusk. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "purple",
+      "yellow"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/03-lantern-walk.webp",
+    "flatImage": "/playroom-stories/03-lantern-walk.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/03-lantern-walk.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, purple, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-04",
+    "slug": "giant-sandcastle",
+    "name": "The Giant Sandcastle",
+    "description": "Many hands build one magnificent sandcastle beside the sea. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "ocean"
+    ],
+    "color": [
+      "blue",
+      "neutral",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/04-giant-sandcastle.webp",
+    "flatImage": "/playroom-stories/04-giant-sandcastle.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/04-giant-sandcastle.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, neutral, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-05",
+    "slug": "backyard-campout",
+    "name": "The Backyard Campout",
+    "description": "Blankets and bunting turn a familiar garden into a place to explore. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "blue",
+      "neutral"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/05-backyard-campout.webp",
+    "flatImage": "/playroom-stories/05-backyard-campout.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/05-backyard-campout.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, blue, neutral",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-06",
+    "slug": "apple-orchard-picnic",
+    "name": "The Apple Orchard Picnic",
+    "description": "Friends gather apples and settle down for a picnic beneath the branches. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "yellow",
+      "orange"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/06-apple-orchard-picnic.webp",
+    "flatImage": "/playroom-stories/06-apple-orchard-picnic.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/06-apple-orchard-picnic.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, yellow, orange",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-07",
+    "slug": "snow-day",
+    "name": "The Snow Day",
+    "description": "A winter hillside fills with snow angels, laughter and a new snowman. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "white",
+      "neutral"
+    ],
+    "age": [
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/07-snow-day.webp",
+    "flatImage": "/playroom-stories/07-snow-day.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/07-snow-day.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, white, neutral",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-08",
+    "slug": "little-gardeners",
+    "name": "The Little Gardeners",
+    "description": "Seeds, watering cans and sunflowers bring a little garden to life. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "yellow",
+      "neutral"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/08-little-gardeners.webp",
+    "flatImage": "/playroom-stories/08-little-gardeners.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/08-little-gardeners.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, yellow, neutral",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-09",
+    "slug": "moonlight-sleepover",
+    "name": "The Moonlight Sleepover",
+    "description": "A blanket fort becomes the perfect place for one more story. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "sky"
+    ],
+    "color": [
+      "blue",
+      "neutral",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/09-moonlight-sleepover.webp",
+    "flatImage": "/playroom-stories/09-moonlight-sleepover.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/09-moonlight-sleepover.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, neutral, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-10",
+    "slug": "rainbow-chalk-street",
+    "name": "The Rainbow Chalk Street",
+    "description": "Colourful chalk drawings grow across a courtyard as friends play together. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "rainbows"
+    ],
+    "color": [
+      "multicolor",
+      "blue",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/10-rainbow-chalk-street.webp",
+    "flatImage": "/playroom-stories/10-rainbow-chalk-street.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/10-rainbow-chalk-street.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "multicolor, blue, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-PL-11",
+    "slug": "birthday-banner",
+    "name": "The Birthday Banner",
+    "description": "Everyone lends a hand to make a garden celebration feel special. An illustrated made-to-measure mural for shared playrooms and children’s activity spaces.",
+    "collection": [
+      "playroom-stories"
+    ],
+    "concept": [
+      "creative-play",
+      "balloons"
+    ],
+    "color": [
+      "multicolor",
+      "blue",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "playroom",
+      "shared"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/playroom-stories/11-birthday-banner.webp",
+    "flatImage": "/playroom-stories/11-birthday-banner.webp",
+    "imageRole": "Flat illustrated wallpaper artwork",
+    "source": "Original MimiPip playroom story artwork",
+    "sourceImages": [
+      "https://mimipip.com/playroom-stories/print-art/11-birthday-banner.png"
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "multicolor, blue, yellow",
+      "Style": "Watercolour illustration",
+      "Suitable rooms": "Community playroom, clubhouse play area, shared children’s space",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
   }
 ]

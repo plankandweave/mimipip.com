@@ -107,7 +107,7 @@ export function headFor(path: string, value?: string | null): Head | null {
   if (product) {
     const r = recordOf(product[1]);
     if (!r || !isSellable(r.slug)) return null;
-    return base(productTitle(r), productDescription(r), { image: abs(feedImage(r.slug)), imageAlt: `${r.name} ${typeLabel(r)} shown in a child's room`, type: 'product', jsonLd: productJsonLd(r) });
+    return base(productTitle(r), productDescription(r), { image: abs(feedImage(r.slug)), imageAlt: r.collection.includes('playroom-stories') ? `${r.name} flat wallpaper artwork` : `${r.name} ${typeLabel(r)} shown in a child's room`, type: 'product', jsonLd: productJsonLd(r) });
   }
   const landing = landingOf(path.slice(1));
   if (landing) return base(landing.metaTitle, landing.description, {

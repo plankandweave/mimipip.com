@@ -1,450 +1,505 @@
 {
-"almond-blossom": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/7cbafe169112a8f054496208.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"alpine-sentries": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-f49873b5-5005-4a58-90c0-52dd00358dc6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"alpine-slopes": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-d30147e2-b033-487a-b26e-8def38d55a61.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"backyard-games": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-754de869-f874-42f2-9351-94ccd500f7f6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"balloon-dreams": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7a1c90c1-f52e-4b66-8f22-e77a19347fb6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"bicycle-valley": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-b39b898c-a98b-4895-ae2e-c387dda023a6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"birch-meadow-whisper": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-4ad7b657-fbd6-4c53-8bf1-74efff28f8c9.png",
-"material": "paste",
-"materialSlug": "linen-touch"
-},
-"blossom-cascade-ii": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/2f791dd642db8fa810580c62.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-drift": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/7d794a3ec441fa914bca4698.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-reverie-ii": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/7427310453b507f01b56a328.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-reverie-iii": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/4320dd479264c901e39abaef.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-sky": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/c3f8f5f9d08e854588e958c7.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-whisper": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/4168aa51621ebb19acf9e1c5.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"blossom-whisper-ii": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/d15457ae8317c99935c07118.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"carnation-drift": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/b064829b0168a21b108daa69.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"celestial-meadow": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-4c9de8fd-316b-4188-9b1d-1628b46583a4.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"celestial-whispers": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-439ab2f7-1fbd-4339-8dc2-0998c4825f0f.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"coastal-dunes": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-6aed88d3-0d82-4bc9-83b6-bc360e21890a.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"construction-dreams": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-7e55a10c-7ba9-4309-9d82-744b115cc971.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"coral-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/794db2ce45888ef79be1a5bc.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"coral-reverie-bloom": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/6900463ce3030853591cee2a.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"cosmic-outpost": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-70ab0dde-3609-4f46-8134-eb2cc752e47e.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"cottage-bouquet": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/a0847ecfab4d4b4095c0f112.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"court-dreams": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-66729424-2c26-4285-a58d-6b19c8e83091.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"daisy-drift": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/f77badee6ae8b2a22c2e5e0d.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"dawn-meadow": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-b4c43ae3-d986-46ec-956d-2db6fbdea0c5.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"deep-ocean-wonder": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-223b78f9-59ef-42f7-b8a7-a167c9d9a1c8.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"dreamhill-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-c1c69f42-03aa-479c-b401-19a6651a6614.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"elephant-s-orchard": {
-"art": "https://zyvorah.com/media/product-images/volumes/db2c19ecc06a8eac.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"floating-horizons": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-423b2d08-6850-48ea-bf92-427cb5c73aa9.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"forest-meadow": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7d172d2a-884a-44a2-a38d-f7c175ccacb6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"hawthorn-whisper": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/eff4146a330495412f366385.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"hello-sunshine": {
-"art": "https://zyvorah.com/media/product-images/hello-sunshine/flat-hd-8c341de6.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"hillside-soccer-dream": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-606cdb85-e62b-428e-9de2-7301e617c85b.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"hopscotch-bold-adventure": {
-"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-bold-adventure-afe7f14f08.jpg",
-"material": "self_adhesive",
-"printHeightCm": 263.0,
-"printWidthCm": 78.0
-},
-"hopscotch-pastel-play": {
-"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-pastel-play-9fd3e8fefd.jpg",
-"material": "self_adhesive",
-"printHeightCm": 263.0,
-"printWidthCm": 78.0
-},
-"hopscotch-peach-pop": {
-"art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-peach-pop-f17342ce47.jpg",
-"material": "self_adhesive",
-"printHeightCm": 263.0,
-"printWidthCm": 78.0
-},
-"iris-lagoon": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99281663-7907-4cd2-87e0-f79973f57969.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0010": {
-"art": "https://zyvorah.com/media/product-images/kd-0010/26f3aa3e-2ca4-47d8-a929-cda20494ba0d.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0011": {
-"art": "https://zyvorah.com/media/product-images/kd-0011/ce98de9d-bd6b-49c6-b357-b3849b7f3393.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0013": {
-"art": "https://zyvorah.com/media/product-images/kd-0013/6e09e605-d345-4d80-907c-919d207a2c8e.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0014": {
-"art": "https://zyvorah.com/media/product-images/kd-0014/92dd811a-b4c6-419d-9941-9dbc9fa739b4.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0015": {
-"art": "https://zyvorah.com/media/product-images/kd-0015/3159b036-fd09-4957-86c0-cd710dd646bc.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0016": {
-"art": "https://zyvorah.com/media/product-images/kd-0016/856f7cbd-d9db-4679-8857-f332105c30be.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0017": {
-"art": "https://zyvorah.com/media/product-images/kd-0017/9d19dc66-85c0-4894-a029-67eddb004fab.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0018": {
-"art": "https://zyvorah.com/media/product-images/kd-0018/0725e36f-b110-40ce-a20d-40db40d1cee7.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-002": {
-"art": "https://zyvorah.com/media/product-images/kd-002/f4fe0b65-473f-4943-b6f0-7a87a19c0541.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0020": {
-"art": "https://zyvorah.com/media/product-images/kd-0020/a07f3917-7c43-4900-a5ab-6c1e35db11f2.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0022": {
-"art": "https://zyvorah.com/media/product-images/kd-0022/4bac290f-342b-4c2d-a4af-ba6bb5e8427f.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0024": {
-"art": "https://zyvorah.com/media/product-images/kd-0024/f8a31ec4-6c06-430c-a2ea-165261124ff3.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0026": {
-"art": "https://zyvorah.com/media/product-images/kd-0026/3a8495f0-8b72-42e9-931e-2f729701d584.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-0027": {
-"art": "https://zyvorah.com/media/product-images/kd-0027/90f6de1c-9fd1-42ec-9eb0-a9cd7e87066d.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-003": {
-"art": "https://zyvorah.com/media/product-images/kd-003/0b57511c-aea7-4e0e-8ff7-585ae472e165.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-004": {
-"art": "https://zyvorah.com/media/product-images/kd-004/96b81d79-7435-453a-8329-9f3682c35456.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-005": {
-"art": "https://zyvorah.com/media/product-images/kd-005/9f902771-fcde-42ce-a376-bbde2930f698.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-006": {
-"art": "https://zyvorah.com/media/product-images/kd-006/c2eeecd4-6341-451a-a271-e1c83cc9f90b.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-008": {
-"art": "https://zyvorah.com/media/product-images/kd-008/fdbd22cc-d431-4e22-9020-a7814a41f66f.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kd-009": {
-"art": "https://zyvorah.com/media/product-images/kd-009/d3e2697a-7e8d-4292-b3d0-f7d337bf5353.jpg",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"kite-dreams": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-cff22f5b-b201-466e-9bf1-9b220fc289ca.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"magnolia-whisper": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-c379d9d6-d717-47e3-86f2-a1baab64146b.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"melody-garden": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-05df1430-04fe-45b9-ac65-789f745fe9c8.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"mesozoic-valley": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-8f9f49be-48f9-4438-b248-c0020df322c1.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"misty-valley": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-dafdd61a-2337-4d5b-8d17-cd2498585315.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"nafas-bubbles-the-fish": {
-"art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-bubbles-the-fish/flat.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"nafas-panda-and-tweet": {
-"art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-panda-and-tweet/flat.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"nafas-patch-the-puppy": {
-"art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-patch-the-puppy/flat.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"nafas-spiral-bloom": {
-"art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-spiral-bloom/flat.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"nafas-wheels-and-goals": {
-"art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-wheels-and-goals/flat.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"olive-pastoral": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-fba58165-d2d2-4632-8bd6-783f1abb44eb.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"orchard-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99cd0c8a-eea6-4da5-947c-b1242a071270.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"paper-boats-at-dusk": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-299d836f-6838-4b71-a3ec-821737e5ef34.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"pastel-dream-sky": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-a83aa523-e9a0-4f73-be53-f13f9036760e.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"pastel-sky-dreams": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-0319b2e2-1639-47a7-9786-9b98c5c9d12c.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"prehistoric-valley": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7d81fcb9-7e25-442d-9091-0b3300ba2cab.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"safari-celebration": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-8fda1a88-ed89-4e84-ab6c-18fad9962f4f.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"seashore-whisper": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7732fdba-6da7-496a-a01a-147336cc0d38.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"serengeti-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-e7e394da-525b-46e7-b9de-906a079b6ff1.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"sky-wanderers": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-1bbd0dcf-9fae-4e8a-b4f1-42880c510a3c.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"starlight-meadow": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-2657d3cd-6183-443a-820d-e6e67e981d00.png",
-"material": "paste",
-"materialSlug": "linen-touch"
-},
-"steam-valley-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-0742813a-0312-4daf-8491-b97ee28b96b7.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"summer-adventure": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-140fa472-efd2-4e0f-a40e-6b8b667cd0be.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"swallow-song": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-aec7820c-5607-439f-9c8a-7173fb796538.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"track-bloom": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-52941528-c64a-41be-8a94-795fba177061.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"treehouse-enchantment": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-6a0bff41-746a-4a00-bfb4-862a582f77be.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"village-reverie": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-f44d8c30-57e2-461a-972f-4e26238e3a16.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"vintage-sky-expedition": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-ec0cc489-c1a5-4ccf-9e06-2455dd4ed293.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"watercolor-botanica": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-147cf1e7-f16d-4a44-9185-58b05443a71a.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"willow-meadow": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-0dcf904e-d9f9-4119-b292-e54c704f94d7.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-},
-"willow-reflection": {
-"art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-58b2449e-dde3-4e09-aee7-b8cb9f6cd2a6.png",
-"material": "paste",
-"materialSlug": "smooth-matt"
-}
+  "almond-blossom": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/7cbafe169112a8f054496208.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "alpine-sentries": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-f49873b5-5005-4a58-90c0-52dd00358dc6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "alpine-slopes": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-d30147e2-b033-487a-b26e-8def38d55a61.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "backyard-games": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-754de869-f874-42f2-9351-94ccd500f7f6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "balloon-dreams": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7a1c90c1-f52e-4b66-8f22-e77a19347fb6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "bicycle-valley": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-b39b898c-a98b-4895-ae2e-c387dda023a6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "birch-meadow-whisper": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-4ad7b657-fbd6-4c53-8bf1-74efff28f8c9.png",
+    "material": "paste",
+    "materialSlug": "linen-touch"
+  },
+  "blossom-cascade-ii": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/2f791dd642db8fa810580c62.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-drift": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/7d794a3ec441fa914bca4698.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-reverie-ii": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/7427310453b507f01b56a328.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-reverie-iii": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/4320dd479264c901e39abaef.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-sky": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/c3f8f5f9d08e854588e958c7.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-whisper": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/4168aa51621ebb19acf9e1c5.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "blossom-whisper-ii": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/d15457ae8317c99935c07118.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "carnation-drift": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/b064829b0168a21b108daa69.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "celestial-meadow": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-4c9de8fd-316b-4188-9b1d-1628b46583a4.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "celestial-whispers": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-439ab2f7-1fbd-4339-8dc2-0998c4825f0f.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "coastal-dunes": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-6aed88d3-0d82-4bc9-83b6-bc360e21890a.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "construction-dreams": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-7e55a10c-7ba9-4309-9d82-744b115cc971.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "coral-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/794db2ce45888ef79be1a5bc.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "coral-reverie-bloom": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/6900463ce3030853591cee2a.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "cosmic-outpost": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-70ab0dde-3609-4f46-8134-eb2cc752e47e.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "cottage-bouquet": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/a0847ecfab4d4b4095c0f112.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "court-dreams": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-66729424-2c26-4285-a58d-6b19c8e83091.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "daisy-drift": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/f77badee6ae8b2a22c2e5e0d.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "dawn-meadow": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-b4c43ae3-d986-46ec-956d-2db6fbdea0c5.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "deep-ocean-wonder": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-223b78f9-59ef-42f7-b8a7-a167c9d9a1c8.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "dreamhill-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-c1c69f42-03aa-479c-b401-19a6651a6614.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "elephant-s-orchard": {
+    "art": "https://zyvorah.com/media/product-images/volumes/db2c19ecc06a8eac.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "floating-horizons": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-423b2d08-6850-48ea-bf92-427cb5c73aa9.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "forest-meadow": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7d172d2a-884a-44a2-a38d-f7c175ccacb6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hawthorn-whisper": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/eff4146a330495412f366385.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hello-sunshine": {
+    "art": "https://zyvorah.com/media/product-images/hello-sunshine/flat-hd-8c341de6.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hillside-soccer-dream": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-606cdb85-e62b-428e-9de2-7301e617c85b.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hopscotch-bold-adventure": {
+    "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-bold-adventure-afe7f14f08.jpg",
+    "material": "self_adhesive",
+    "printHeightCm": 263.0,
+    "printWidthCm": 78.0
+  },
+  "hopscotch-pastel-play": {
+    "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-pastel-play-9fd3e8fefd.jpg",
+    "material": "self_adhesive",
+    "printHeightCm": 263.0,
+    "printWidthCm": 78.0
+  },
+  "hopscotch-peach-pop": {
+    "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-peach-pop-f17342ce47.jpg",
+    "material": "self_adhesive",
+    "printHeightCm": 263.0,
+    "printWidthCm": 78.0
+  },
+  "iris-lagoon": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99281663-7907-4cd2-87e0-f79973f57969.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0010": {
+    "art": "https://zyvorah.com/media/product-images/kd-0010/26f3aa3e-2ca4-47d8-a929-cda20494ba0d.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0011": {
+    "art": "https://zyvorah.com/media/product-images/kd-0011/ce98de9d-bd6b-49c6-b357-b3849b7f3393.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0013": {
+    "art": "https://zyvorah.com/media/product-images/kd-0013/6e09e605-d345-4d80-907c-919d207a2c8e.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0014": {
+    "art": "https://zyvorah.com/media/product-images/kd-0014/92dd811a-b4c6-419d-9941-9dbc9fa739b4.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0015": {
+    "art": "https://zyvorah.com/media/product-images/kd-0015/3159b036-fd09-4957-86c0-cd710dd646bc.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0016": {
+    "art": "https://zyvorah.com/media/product-images/kd-0016/856f7cbd-d9db-4679-8857-f332105c30be.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0017": {
+    "art": "https://zyvorah.com/media/product-images/kd-0017/9d19dc66-85c0-4894-a029-67eddb004fab.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0018": {
+    "art": "https://zyvorah.com/media/product-images/kd-0018/0725e36f-b110-40ce-a20d-40db40d1cee7.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-002": {
+    "art": "https://zyvorah.com/media/product-images/kd-002/f4fe0b65-473f-4943-b6f0-7a87a19c0541.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0020": {
+    "art": "https://zyvorah.com/media/product-images/kd-0020/a07f3917-7c43-4900-a5ab-6c1e35db11f2.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0022": {
+    "art": "https://zyvorah.com/media/product-images/kd-0022/4bac290f-342b-4c2d-a4af-ba6bb5e8427f.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0024": {
+    "art": "https://zyvorah.com/media/product-images/kd-0024/f8a31ec4-6c06-430c-a2ea-165261124ff3.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0026": {
+    "art": "https://zyvorah.com/media/product-images/kd-0026/3a8495f0-8b72-42e9-931e-2f729701d584.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-0027": {
+    "art": "https://zyvorah.com/media/product-images/kd-0027/90f6de1c-9fd1-42ec-9eb0-a9cd7e87066d.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-003": {
+    "art": "https://zyvorah.com/media/product-images/kd-003/0b57511c-aea7-4e0e-8ff7-585ae472e165.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-004": {
+    "art": "https://zyvorah.com/media/product-images/kd-004/96b81d79-7435-453a-8329-9f3682c35456.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-005": {
+    "art": "https://zyvorah.com/media/product-images/kd-005/9f902771-fcde-42ce-a376-bbde2930f698.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-006": {
+    "art": "https://zyvorah.com/media/product-images/kd-006/c2eeecd4-6341-451a-a271-e1c83cc9f90b.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-008": {
+    "art": "https://zyvorah.com/media/product-images/kd-008/fdbd22cc-d431-4e22-9020-a7814a41f66f.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kd-009": {
+    "art": "https://zyvorah.com/media/product-images/kd-009/d3e2697a-7e8d-4292-b3d0-f7d337bf5353.jpg",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kite-dreams": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-cff22f5b-b201-466e-9bf1-9b220fc289ca.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "magnolia-whisper": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-c379d9d6-d717-47e3-86f2-a1baab64146b.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "melody-garden": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-05df1430-04fe-45b9-ac65-789f745fe9c8.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "mesozoic-valley": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-8f9f49be-48f9-4438-b248-c0020df322c1.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "misty-valley": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-dafdd61a-2337-4d5b-8d17-cd2498585315.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "nafas-bubbles-the-fish": {
+    "art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-bubbles-the-fish/flat.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "nafas-panda-and-tweet": {
+    "art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-panda-and-tweet/flat.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "nafas-patch-the-puppy": {
+    "art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-patch-the-puppy/flat.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "nafas-spiral-bloom": {
+    "art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-spiral-bloom/flat.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "nafas-wheels-and-goals": {
+    "art": "https://zyvorah.com/media/product-images/collections/nafas-face-parade/nafas-wheels-and-goals/flat.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "olive-pastoral": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-fba58165-d2d2-4632-8bd6-783f1abb44eb.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "orchard-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99cd0c8a-eea6-4da5-947c-b1242a071270.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "paper-boats-at-dusk": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-299d836f-6838-4b71-a3ec-821737e5ef34.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "pastel-dream-sky": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-a83aa523-e9a0-4f73-be53-f13f9036760e.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "pastel-sky-dreams": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-0319b2e2-1639-47a7-9786-9b98c5c9d12c.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "prehistoric-valley": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7d81fcb9-7e25-442d-9091-0b3300ba2cab.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "safari-celebration": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-8fda1a88-ed89-4e84-ab6c-18fad9962f4f.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "seashore-whisper": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-7732fdba-6da7-496a-a01a-147336cc0d38.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "serengeti-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-e7e394da-525b-46e7-b9de-906a079b6ff1.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "sky-wanderers": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-1bbd0dcf-9fae-4e8a-b4f1-42880c510a3c.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "starlight-meadow": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-2657d3cd-6183-443a-820d-e6e67e981d00.png",
+    "material": "paste",
+    "materialSlug": "linen-touch"
+  },
+  "steam-valley-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-0742813a-0312-4daf-8491-b97ee28b96b7.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "summer-adventure": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-140fa472-efd2-4e0f-a40e-6b8b667cd0be.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "swallow-song": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-aec7820c-5607-439f-9c8a-7173fb796538.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "track-bloom": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-52941528-c64a-41be-8a94-795fba177061.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "treehouse-enchantment": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-6a0bff41-746a-4a00-bfb4-862a582f77be.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "village-reverie": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-toddler-f44d8c30-57e2-461a-972f-4e26238e3a16.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "vintage-sky-expedition": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-ec0cc489-c1a5-4ccf-9e06-2455dd4ed293.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "watercolor-botanica": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-147cf1e7-f16d-4a44-9185-58b05443a71a.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "willow-meadow": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-0dcf904e-d9f9-4119-b292-e54c704f94d7.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "willow-reflection": {
+    "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-58b2449e-dde3-4e09-aee7-b8cb9f6cd2a6.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "great-puddle-race": {
+    "art": "https://mimipip.com/playroom-stories/print-art/01-great-puddle-race.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "kite-catchers": {
+    "art": "https://mimipip.com/playroom-stories/print-art/02-kite-catchers.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "lantern-walk": {
+    "art": "https://mimipip.com/playroom-stories/print-art/03-lantern-walk.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "giant-sandcastle": {
+    "art": "https://mimipip.com/playroom-stories/print-art/04-giant-sandcastle.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "backyard-campout": {
+    "art": "https://mimipip.com/playroom-stories/print-art/05-backyard-campout.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "apple-orchard-picnic": {
+    "art": "https://mimipip.com/playroom-stories/print-art/06-apple-orchard-picnic.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "snow-day": {
+    "art": "https://mimipip.com/playroom-stories/print-art/07-snow-day.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "little-gardeners": {
+    "art": "https://mimipip.com/playroom-stories/print-art/08-little-gardeners.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "moonlight-sleepover": {
+    "art": "https://mimipip.com/playroom-stories/print-art/09-moonlight-sleepover.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "rainbow-chalk-street": {
+    "art": "https://mimipip.com/playroom-stories/print-art/10-rainbow-chalk-street.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "birthday-banner": {
+    "art": "https://mimipip.com/playroom-stories/print-art/11-birthday-banner.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  }
 }

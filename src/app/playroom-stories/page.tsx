@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Playroom stories",
-  description: "Illustrated story worlds imagined for shared toddler playrooms and residential play areas.",
+  description: "Shop 11 illustrated wallpaper stories for shared toddler playrooms and residential play areas, made to your wall measurements.",
   alternates: { canonical: "/playroom-stories" },
 };
 
@@ -30,10 +30,11 @@ export default function PlayroomStoriesPage() {
           <p className="caps text-slate">MimiPip playroom ideas</p>
           <h1 className="mt-3 text-4xl md:text-6xl">A wall full of stories to share</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-slate">
-            Illustrated worlds imagined for community playrooms, clubhouses and shared children’s spaces.
+            Illustrated wallpaper worlds for community playrooms, clubhouses and shared children’s spaces.
             Each scene gives little ones something to notice, talk about and make their own.
           </p>
-          <p className="mt-4 text-sm text-slate">Illustrative concepts. Final artwork is adapted to your wall and approved before production.</p>
+          <p className="mt-4 text-sm text-slate">Choose your story, enter your wall measurements and see its price before ordering.</p>
+          <Link href="/collections/playroom-stories" className="btn mt-6 inline-flex px-6 py-3">Shop all 11 designs</Link>
         </div>
       </section>
 
@@ -54,6 +55,7 @@ export default function PlayroomStoriesPage() {
               </div>
               <h2 className="mt-4 text-2xl">{story.title}</h2>
               <p className="mt-2 text-slate">{story.scene}</p>
+              <Link href={`/products/${story.file.slice(3)}`} className="mt-3 inline-flex font-semibold underline underline-offset-4">Shop this wallpaper →</Link>
             </article>
           ))}
         </div>
@@ -63,7 +65,7 @@ export default function PlayroomStoriesPage() {
         <div className="rounded-[28px] bg-sage/40 px-6 py-10 text-center md:px-12">
           <h2 className="text-3xl">Bring a story into your playroom</h2>
           <p className="mx-auto mt-3 max-w-xl text-slate">
-            Tell us about your space and the stories you like. We can plan the composition around its walls, furniture and age group.
+            Have several walls or an unusual space? Tell us about your play area and the stories you like.
           </p>
           <Link href="/contact?question=playroom%20story%20wallpaper" className="btn mt-6 inline-flex px-6 py-3">
             Enquire about a playroom wall

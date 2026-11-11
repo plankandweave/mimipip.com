@@ -34,7 +34,7 @@ export const card=(p:RecordData):ProductCardData=>({
   handle:p.slug,
   title:p.name,
   image:p.image,
-  imageAlt:p.name+' · '+(p.roomPresentation==='stairs'?'single room preview':'nursery room preview'),
+  imageAlt:p.collection.includes('playroom-stories')?p.name+' · flat wallpaper artwork':p.name+' · '+(p.roomPresentation==='stairs'?'single room preview':'nursery room preview'),
   flatHoverImage: (() => {
     const record = p as RecordData & { flatImage?: string; sourceImages?: string[] };
     const candidate=p.type.includes("wallpaper")?pickFlatSource(record.sourceImages??[]):undefined;
