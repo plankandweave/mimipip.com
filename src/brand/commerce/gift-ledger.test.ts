@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 // @ts-expect-error SQLite is present in the test runtime.
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,type GiftOrder} from './gift-card';
+import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,type GiftOrder} from './gift-card';
 import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
  for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
- const DB={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}}};
+ const DB:any={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{sql,first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}},
+  failBatchAt:-1,
+  async batch(stmts:any[]){db.exec('BEGIN');try{for(let i=0;i<stmts.length;i++){if(i===DB.failBatchAt)throw new Error('interrupted');await stmts[i].run();}db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}};
  const id='MPG-'+'A'.repeat(24);const now=Date.now();
  db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100100,'INR',?,?,?,0,'order_fixture',?)").run(id,'x','x',JSON.stringify({style:'blue-daisy',occasion:'Baby shower',recipientName:'Test Recipient',senderName:'Test Sender',amount:1001,currency:'INR',message:'A little love.'}),'buyer@example.test','recipient@example.test',now);
  const o=()=>db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').get(id) as GiftOrder;
@@ -159,7 +161,8 @@ test('a payment that lands later on a funded gift mints nothing and is recorded 
  const h=fundedHarness();await h.issue();
  assert.equal(await activateGift(h.env,h.o(),h.payment),true);assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);
  assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
- h.env.STORE_PAY.razorpay=async()=>({ok:true,data:{items:[{id:'pay_late',status:'captured'}]}});
+ const capture={id:'pay_late',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
  await watchFundedOrders(h.env,h.now+3600001);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_late');assert.equal(h.o().last_error,'settled_by_payment:pay_late');
 });
@@ -168,4 +171,36 @@ test('only the OS token may fund a gift',async()=>{
  const call=(token?:string)=>handleGiftCard(new Request('https://mimipip.com/api/gift-card/issue-funded',{method:'POST',headers:{'content-type':'application/json',...(token?{'x-zyvorah-token':token}:{})},body:JSON.stringify(h.body)}),h.env);
  assert.equal((await call()).status,401);assert.equal((await call('wrong')).status,401);assert.equal(count(h,'mimipip_gift_cards'),0);
  const r=await call('os-token');assert.equal(r.status,200);assert.equal((await r.json()).status,'active');
+});
+
+test('review #58 (1): an authorised payment does not settle a funding, and the watch keeps watching until a verified capture',async()=>{
+ const h=fundedHarness();await h.issue();
+ let items:any[]=[{id:'pay_auth',status:'authorized',captured:false,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];let order:any={status:'attempted',amount_paid:0,currency:'INR'};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items}}:{ok:true,data:order};
+ const late=()=>h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id;
+ await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);assert.equal(h.o().last_error,null);
+ // A capture of a different amount or order, or a refunded one, settles nothing either.
+ for(const bad of [{amount:100},{order_id:'order_other'},{amount_refunded:100100},{currency:'USD'}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);}
+ // The order itself must read paid for that amount.
+ items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);
+ order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
+ assert.equal(late(),'pay_ok');assert.equal(h.o().last_error,'settled_by_payment:pay_ok');assert.equal(count(h,'mimipip_gift_cards'),1);
+});
+test('review #58 (2): an interrupted funded issue leaves the gift untouched, and a later real payment still activates it once',async()=>{
+ const h=fundedHarness();
+ for(const at of [1,2]){h.env.DB.failBatchAt=at;await assert.rejects(h.issue());
+  assert.equal(h.o().status,'pending');assert.equal(h.o().payment_id,null);assert.equal(count(h,'mimipip_gift_funding'),0);assert.equal(count(h,'mimipip_gift_cards'),0);}
+ h.env.DB.failBatchAt=-1;
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[h.payment]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ assert.equal((await h.issue()).status,409);
+ await sweepGifts({...h.env,RESEND_API_KEY:undefined});
+ assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,'pay_fixture');assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+test('review #58 (2): a funded claim stranded by an older build is given back, so the real payment activates the gift',async()=>{
+ const h=fundedHarness();
+ h.db.prepare('UPDATE mimipip_gift_orders SET payment_id=? WHERE id=?').run(fundedPaymentId('director:roheena',h.id),h.id);
+ h.db.prepare("INSERT INTO mimipip_gift_funding(gift_id,funded_by,reference,amount_minor,provider_order_id,issued_at) VALUES(?,'director:roheena','x',100100,'order_fixture',1)").run(h.id);
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[h.payment]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ await sweepGifts({...h.env,RESEND_API_KEY:undefined});
+ assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,'pay_fixture');assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_funding'),0);
 });

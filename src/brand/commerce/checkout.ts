@@ -45,7 +45,8 @@ export type Env = {
   MIMIPIP_SAMPLE_CHECKOUT_ENABLED?: string;
   MIMIPIP_LETTERING_CHECKOUT_ENABLED?: string;
   MIMIPIP_BUSINESS_INVOICE_ENABLED?: string;
-  DB?: { prepare(sql: string): Statement };
+  /** batch() is D1's transaction: every statement or none. */
+  DB?: { prepare(sql: string): Statement; batch?(statements: Statement[]): Promise<unknown> };
   /** The store Worker's private door to Razorpay and the OS. The keys stay there; this site holds none. */
   STORE_PAY?: Pay;
 };
