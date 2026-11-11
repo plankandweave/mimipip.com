@@ -3,8 +3,10 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { card, label, type RecordData } from "./data";
 
+// Keep clothing globally familiar and solid-coloured. The children's faces,
+// not regional dress or costume, carry the diversity of the campaign.
 const children = [
-  { src: "/collection-kids/jump-coral.webp", action: "jumping with delight" },
+  { src: "/collection-kids/jump-coral-v2.webp", action: "jumping with delight" },
   { src: "/collection-kids/leap-cobalt.webp", action: "leaping with a smile" },
   { src: "/collection-kids/dance-yellow.webp", action: "dancing joyfully" },
   { src: "/collection-kids/fly-pink.webp", action: "playing airplane" },
