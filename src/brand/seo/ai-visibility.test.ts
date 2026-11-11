@@ -47,7 +47,7 @@ test('llms.txt names MimiPip, its prices and policies, every design on sale and 
   assert.match(text, /on mimipip\.com only/);
   assert.match(text, /₹200 per sq ft including GST/);
   assert.match(text, /US\$10 per sq ft including delivery/);
-  assert.match(text, /smallest wallpaper order is 20 sq ft/);
+  assert.match(text, /Custom wallpaper has a 20 sq ft minimum/);
   assert.match(text, /\/feeds\/openai-products\.jsonl/);
   assert.doesNotMatch(text, /zyvorah/i);
   // No safety or material claim the site does not make.

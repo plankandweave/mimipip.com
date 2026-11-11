@@ -6,7 +6,7 @@
  * (no safety or material claims: the site makes none). Pure; served by the Worker.
  */
 import { abs, BRAND, isWallpaper, minPrice, listPrice, ORIGIN, productPath, sellable, typeLabel, type Rec } from './site';
-import { MIN_BILLED_SQFT } from '../commerce/prices';
+import { MIN_BILLED_SQFT, ratePerSqft } from '../commerce/prices';
 
 const money = (m: { currency: string; amount: number } | null) =>
   !m ? null : m.currency === 'INR' ? `₹${m.amount.toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : `US$${m.amount.toFixed(2)}`;
@@ -27,8 +27,7 @@ export function llmsTxt(): string {
   const collections = [...new Set(sellable.flatMap(r => r.collection))].sort();
   // The rates as the checkout charges them, read back from the smallest order, never typed here.
   const rates = (market: 'IN' | 'ABROAD') => [...new Set(walls.map(r => {
-    const m = minPrice(r.slug, market);
-    return m ? Math.round((m.amount / MIN_BILLED_SQFT) * 100) / 100 : null;
+    return ratePerSqft(r.slug, market);
   }).filter((n): n is number => n !== null))].sort((a, b) => a - b);
   const span = (list: number[], fmt: (n: number) => string) => (list.length === 1 ? fmt(list[0]) : `from ${fmt(list[0])}`);
   const inr = span(rates('IN'), n => `₹${n.toLocaleString('en-IN')}`);
@@ -42,7 +41,7 @@ export function llmsTxt(): string {
 - Where to buy: on mimipip.com only. Open a design's product page, enter your wall's width and height for the exact price, and check out on the site. Payments are handled by Razorpay.
 - Who it is for: parents and families choosing walls and floor play for children's rooms. Age labels (nursery, toddler, kids) organise decorating ideas; they do not certify a product for an age.
 - Wallpaper is priced per square foot of your wall, not per roll. In India it is ${inr} per sq ft including GST; cart and checkout totals include GST. Outside India it is ${usd} per sq ft including delivery.
-- The smallest wallpaper order is ${MIN_BILLED_SQFT} sq ft, so a quoted per-sq-ft rate is not the price of a wallpaper.
+- Custom wallpaper has a ${MIN_BILLED_SQFT} sq ft minimum. In India, finished sizes start at 2 × 3 ft; a quoted per-sq-ft rate is not the price of a wallpaper.
 - Floor game stickers and other fixed pieces are sold at a fixed size and price, stated on each product page.
 - Delivery is included in the price, in India and abroad. Every wallpaper is made for the order and delivered within 10 working days in India. Abroad, allow extra time for shipping and customs; any import duty or tax in the buyer's country is paid on delivery.
 - Each piece is made to the customer's size, so it cannot be returned for a change of mind. Damage reported within 48 hours of delivery, or a print fault within 7 days, is replaced or reprinted at no cost, or refunded where that is not possible. Cancellations within 12 hours, before production starts, are refunded in full.
