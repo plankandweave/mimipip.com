@@ -27,9 +27,11 @@ export const metadata: Metadata = brandMetadata({
  */
 export default async function CollectionsIndexPage() {
   if(process.env.MIMIPIP_LOCAL_REVIEW==="1"){
-    const {options,filter,label}=await import('@/brand/review/data');
+    const {options,filter,label,collectionDesigns}=await import('@/brand/review/data');
+    const {CollectionPhotoHeader}=await import('@/brand/review/CollectionPhotoHeader');
     const tiles=options('collection').map(handle=>{const items=filter('collection',handle);return {handle,title:label(handle),kind:'collection',description:null,image:items[0].image,count:items.length,attrs:{}};});
-    return <div className="container-x py-12"><h1 className="mb-8 text-4xl">Collections</h1><CollectionIndexGrid tiles={tiles}/></div>;
+    const headerDesigns=['happy-petals','hush-and-wander','playroom-stories','hopscotch'].map(handle=>collectionDesigns(handle)[0]).filter((design):design is NonNullable<typeof design>=>Boolean(design));
+    return <div className="container-x py-12"><CollectionPhotoHeader handle="collection-directory" title="Collections" designs={headerDesigns}/><CollectionIndexGrid tiles={tiles}/></div>;
   }
   const tiles = await getIndexTiles(["curated"], true);
 

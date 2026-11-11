@@ -4,12 +4,24 @@ import { saleOf } from "@/brand/commerce/sale";
 import { WishlistButton } from "@/components/WishlistButton";
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
+import { CollectionPhotoHeader } from './CollectionPhotoHeader';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductGallery } from '@/components/ProductGallery';
 import { WallBuilderProvider, WallBuilderStage } from '@/components/WallBuilderStage';
 import { axes, browseHref, catalogue, card, collectionDesigns, filter, label, options, type Axis, type RecordData } from './data';
 const grid=(products:RecordData[])=><div className="grid grid-cols-2 gap-5 md:grid-cols-4">{products.map(p=><ProductCard key={p.id} product={card(p)}/>)}</div>;
-export function Browse({axis,value}:{axis:Axis;value:string}){const hits=axis==='collection'&&value?collectionDesigns(value):filter(axis,value);return <section className="container-x py-12"><h1>{axis==='collection'&&value==='happy-petals'?'Happy Petals collection':axis==='collection'&&value==='dotty-days'?'Dotty Days':axis==='collection'&&value==='playroom-stories'?'Playroom Stories':axis==='collection'&&value==='hush-and-wander'?'Hush & Wander':<>Shop by {label(axis)}</>}</h1>{axis==='collection'&&value==='happy-petals'&&<p className="mt-3 max-w-2xl text-lg">Soft florals for nurseries, bedrooms and playrooms. Explore each artwork and its styled room view. For availability, contact <a href="mailto:hello@mimipip.com" className="underline">hello@mimipip.com</a>.</p>}{axis==='collection'&&value==='dotty-days'&&<p className="mt-3 max-w-2xl text-lg">Perfect little polka dots and wonderfully scattered spots. Playful patterns for bright beginnings and growing imaginations.</p>}{axis==='collection'&&value==='playroom-stories'&&<p className="mt-3 max-w-2xl text-lg">Eleven illustrated wallpaper stories for community playrooms and shared children’s areas. Choose a design and enter your wall measurements to see its price.</p>}{axis==='collection'&&value==='hush-and-wander'&&<p className="mt-3 max-w-2xl text-lg">Eleven softly painted nursery murals. Choose a story, enter your wall measurements, and see your price.</p>}<details className="my-4"><summary className="cursor-pointer">Browse by {label(axis)}</summary><nav aria-label="Filter designs" className="flex flex-col items-start gap-2 py-3"><Link href={'/browse/'+axis}>All</Link>{options(axis).map(v=><Link key={v} href={browseHref(axis,v)}>{label(v)}</Link>)}</nav></details><p>{hits.length} designs</p>{grid(hits)}</section>}
+export function Browse({axis,value}:{axis:Axis;value:string}){
+ const hits=axis==='collection'&&value?collectionDesigns(value):filter(axis,value);
+ const collection=axis==='collection';
+ const headerHits=collection&&!value?['happy-petals','hush-and-wander','playroom-stories','hopscotch'].map(handle=>collectionDesigns(handle)[0]).filter((design):design is RecordData=>Boolean(design)):hits;
+ const title=!value?'Shop by Collection':value==='happy-petals'?'Happy Petals collection':value==='dotty-days'?'Dotty Days':value==='playroom-stories'?'Playroom Stories':value==='hush-and-wander'?'Hush & Wander':label(value);
+ const description=value==='happy-petals'?<>Soft florals for nurseries, bedrooms and playrooms. Explore each artwork and its styled room view. For availability, contact <a href="mailto:hello@mimipip.com" className="underline">hello@mimipip.com</a>.</>:value==='dotty-days'?'Perfect little polka dots and wonderfully scattered spots. Playful patterns for bright beginnings and growing imaginations.':value==='playroom-stories'?'Eleven illustrated wallpaper stories for community playrooms and shared children’s areas. Choose a design and enter your wall measurements to see its price.':value==='hush-and-wander'?'Eleven softly painted nursery murals. Choose a story, enter your wall measurements, and see your price.':undefined;
+ return <section className="container-x py-12">
+  {collection?<CollectionPhotoHeader handle={value || 'all-collections'} title={title} description={description} designs={headerHits}/>:<h1>Shop by {label(axis)}</h1>}
+  <details className="my-4"><summary className="cursor-pointer">Browse by {label(axis)}</summary><nav aria-label="Filter designs" className="flex flex-col items-start gap-2 py-3"><Link href={'/browse/'+axis}>All</Link>{options(axis).map(v=><Link key={v} href={browseHref(axis,v)}>{label(v)}</Link>)}</nav></details>
+  <p className="mb-5" id="collection-designs">{hits.length} designs</p>{grid(hits)}
+ </section>;
+}
 export function ReviewDetail({p}:{p:RecordData}) {
  const happyPetals = p.collection.includes("happy-petals");
  const panel=(p as RecordData & {roomPanel?:RoomPanelBounds}).roomPanel;
