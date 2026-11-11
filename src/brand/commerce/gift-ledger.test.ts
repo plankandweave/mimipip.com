@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 // @ts-expect-error SQLite is present in the test runtime.
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {giftInput,activateGift,handleGiftCard,type GiftOrder} from './gift-card';
+import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,type GiftOrder} from './gift-card';
 import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
- for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
  const DB={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}}};
  const id='MPG-'+'A'.repeat(24);const now=Date.now();
  db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100100,'INR',?,?,?,0,'order_fixture',?)").run(id,'x','x',JSON.stringify({style:'blue-daisy',occasion:'Baby shower',recipientName:'Test Recipient',senderName:'Test Sender',amount:1001,currency:'INR',message:'A little love.'}),'buyer@example.test','recipient@example.test',now);
@@ -122,4 +122,50 @@ test('gift purchasing and email delivery stay closed unless the gateway is live'
  h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture'};let sent=0;
  await queueGiftEmails(h.env,(async()=>{sent++;return Response.json({id:'x'});}) as any,h.now+1000);
  assert.equal(sent,0);assert.equal(h.db.prepare('SELECT state,first_attempt_at FROM mimipip_gift_email').get().state,'pending');
+});
+
+function fundedHarness(payments:any[]=[],order:any={status:'attempted',amount_paid:0}){
+ const h=harness();const calls:string[]=[];
+ h.env.STORE_PAY={...h.env.STORE_PAY,osTokenMatches:async(t:string)=>t==='os-token',razorpay:async(path:string)=>{calls.push(path);return path.endsWith('/payments')?{ok:true,data:{items:payments}}:{ok:true,data:{amount:100100,currency:'INR',...order}};}};
+ const body={giftId:h.id,providerOrderId:'order_fixture',amountMinor:100100,fundedBy:'director:roheena',reference:'Receivable from Roheena Nagpal'};
+ const mails:any[]=[];const mailer:any=async(_u:any,init:any)=>{mails.push(init);return Response.json({id:'email_fixture'});};
+ const issue=(b:any=body)=>issueFundedGift(h.env,b,mailer);
+ return {...h,calls,body,mails,issue};
+}
+const count=(h:any,t:string)=>h.db.prepare(`SELECT count(*) n FROM ${t}`).get().n;
+test('a director-funded gift mints exactly one card and one email, and a repeat returns the same gift',async()=>{
+ const h=fundedHarness();
+ const [a,b]=await Promise.all([h.issue(),h.issue()]);
+ assert.equal(a.status,200);assert.equal(b.status,200);
+ assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);assert.equal(count(h,'mimipip_gift_funding'),1);
+ assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
+ const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
+ assert.equal((await h.issue()).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
+ assert.equal(h.mails.length,1);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
+ const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Shopping code: /);assert.equal(m.to[0],'recipient@example.test');
+});
+test('a gift with any live payment attempt, or a paid order, is never also funded',async()=>{
+ for(const status of ['created','authorized','captured','refunded']){const h=fundedHarness([{id:'pay_x',status}]);assert.equal((await h.issue()).status,409);assert.equal(count(h,'mimipip_gift_cards'),0);assert.equal(h.o().payment_id,null);}
+ const paid=fundedHarness([],{status:'paid',amount_paid:100100});assert.equal((await paid.issue()).status,409);assert.equal(count(paid,'mimipip_gift_cards'),0);
+ const failed=fundedHarness([{id:'pay_f',status:'failed'}]);assert.equal((await failed.issue()).status,200);
+});
+test('funding must match the pending gift exactly and come from a named director on a live key',async()=>{
+ const h=fundedHarness();
+ for(const patch of [{amountMinor:100000},{providerOrderId:'order_other'},{fundedBy:'staff:savita'},{giftId:'MPG-'+'B'.repeat(24)},{reference:''}]){const r=await h.issue({...h.body,...patch});assert.ok(r.status===400||r.status===409);}
+ const test=fundedHarness();test.env.STORE_PAY.keyId=()=>'rzp_test_fixture';assert.equal((await test.issue()).status,409);
+ assert.equal(count(h,'mimipip_gift_cards')+count(test,'mimipip_gift_cards'),0);
+});
+test('a payment that lands later on a funded gift mints nothing and is recorded against the funding',async()=>{
+ const h=fundedHarness();await h.issue();
+ assert.equal(await activateGift(h.env,h.o(),h.payment),true);assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);
+ assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
+ h.env.STORE_PAY.razorpay=async()=>({ok:true,data:{items:[{id:'pay_late',status:'captured'}]}});
+ await watchFundedOrders(h.env,h.now+3600001);
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_late');assert.equal(h.o().last_error,'settled_by_payment:pay_late');
+});
+test('only the OS token may fund a gift',async()=>{
+ const h=fundedHarness();delete h.env.RESEND_API_KEY; // no mail leaves a test: the queue waits without a key
+ const call=(token?:string)=>handleGiftCard(new Request('https://mimipip.com/api/gift-card/issue-funded',{method:'POST',headers:{'content-type':'application/json',...(token?{'x-zyvorah-token':token}:{})},body:JSON.stringify(h.body)}),h.env);
+ assert.equal((await call()).status,401);assert.equal((await call('wrong')).status,401);assert.equal(count(h,'mimipip_gift_cards'),0);
+ const r=await call('os-token');assert.equal(r.status,200);assert.equal((await r.json()).status,'active');
 });
