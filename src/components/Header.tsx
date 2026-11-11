@@ -255,7 +255,7 @@ export async function Header() {
             Parade) left this strip on 4 October 2026 (Roheena) — they live in
             the Shop menu's Collections column and the phone drawer instead. */}
         {/* Worldwide reach stays visible on phones; the destination picker also lives in the mobile menu. */}
-        <div className="bg-gradient-to-r from-lavender via-blush to-peach">
+        <div className="bg-[#99CFE5]">
           <div className="container-x flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-[0.68rem] font-semibold text-charcoal/80">
               <span className="min-w-0">
@@ -321,7 +321,7 @@ export async function Header() {
           {/* The centre column reserves the wordmark's space even when either
               navigation rail grows after sign-in. */}
           <BrandHomeLink className="col-start-2 row-start-1 shrink-0">
-            <BrandWordmark className="h-7 w-auto" />
+            <BrandWordmark className="h-10 w-auto sm:h-12" />
           </BrandHomeLink>
 
           <StorefrontOnly>
