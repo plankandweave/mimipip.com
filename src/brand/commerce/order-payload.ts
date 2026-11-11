@@ -5,10 +5,12 @@ import { priceSample, sampleDesign, SAMPLE_REFERENCE_CM } from './samples';
 import { approvedLayout } from './approved-layout';
 /** The paid order as the OS takes it: POST /api/zyvorah/web-order, brand "lorange". */
 import printMap from './print-map.json';
+import legacyPrintMap from './legacy-print-map.json';
 import type { CropData } from '@/lib/visualizer';
 
 export type StoredLine = {
   kind?: 'sample';
+  fulfilmentArt?: Art;
   installationMinor?:number;
   personalisationMinor?:number;
   slug: string; name: string; qty: number; lineMinor: number;
@@ -38,7 +40,7 @@ export function linesInr(lines: Pick<StoredLine, 'lineMinor'>[], totalInr: numbe
   });
 }
 
-export function webOrderBody(o: { id: string; paymentId: string; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
+export function webOrderBody(o: { createdAt?: number; id: string; paymentId: string; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
   const inr = linesInr(o.lines, o.amountInr);
   const c = o.customer;
   const billingIdentity=checkedBillingIdentity(c.billingIdentity,c.countryCode);
@@ -51,15 +53,17 @@ export function webOrderBody(o: { id: string; paymentId: string; amountInr: numb
     customer: { name: c.name, phone: c.phone, email: c.email, address: c.address, city: c.city, pincode: c.postcode, state: c.state, country: c.country, countryCode: c.countryCode },
     payment: { razorpayPaymentId: o.paymentId, amountInr: o.amountInr },
     items: o.lines.map((l, i) => {
-      const a = artFor(l.slug);
+      // Unversioned orders predate the stock change. Never reinterpret them using today's catalogue.
+      if (!l.fulfilmentArt && o.createdAt && o.createdAt >= Date.parse('2026-11-11T01:18:22Z')) throw new Error('Unversioned material needs order review.');
+      const a = l.fulfilmentArt ?? (legacyPrintMap as Record<string, Art>)[l.slug];
       if (!a) throw new Error('No print artwork for ' + l.slug);
       if (l.widthCm === null || l.heightCm === null) throw new Error('No size for ' + l.slug);
       if (l.kind === 'sample') {
         const checked = priceSample(l as unknown as Record<string,unknown>, c.countryCode);
         if ('refused' in checked || l.lineMinor !== checked.lineMinor) throw new Error('Invalid durable sample specification for '+l.slug);
         return {lineRef:String(i+1),brand:'lorange',designUrl:a.art,designName:sampleDesign(l.slug)!.title,orderedTitle:l.name,productHandle:l.slug,
-          widthMm:210,heightMm:297,material:'self_adhesive' as const,materialSlug:'self-adhesive-vinyl',qty:1,lineTotalInr:inr[i],
-          sample:{designHandle:l.slug,materialSlug:'self-adhesive-vinyl',materialLabel:'Smooth Self-Adhesive',muralWidthCm:SAMPLE_REFERENCE_CM,muralHeightCm:SAMPLE_REFERENCE_CM,sourceUrl:a.art}};
+          widthMm:210,heightMm:297,material:a.material,materialSlug:a.materialSlug,qty:1,lineTotalInr:inr[i],
+          sample:{designHandle:l.slug,materialSlug:a.materialSlug,materialLabel:a.material==='self_adhesive'?'Smooth Self-Adhesive':'Soft Matte',muralWidthCm:SAMPLE_REFERENCE_CM,muralHeightCm:SAMPLE_REFERENCE_CM,sourceUrl:a.art}};
       }
       // Revalidate durable records too: an older pending order must not lose
       // unsupported instructions when a later payment reconciliation sends it.

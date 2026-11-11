@@ -153,7 +153,7 @@ function toCard(p: Product, roomKey?: string, mode?: CardImageMode): ProductCard
   const imageAlt = room ? `${named} in ${room}` : named;
   return {
     flatHoverImage: flat?.url ?? null,
-    sampleable: p.category === WALLPAPER_CATEGORY && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "smooth-matt"),
+    sampleable: p.category === WALLPAPER_CATEGORY && p.flat_verified === true && p.is_service === false && p.product_materials.some(m => m.available && m.materials?.slug === "self-adhesive-vinyl"),
     handle: p.handle,
     title: p.title,
     image: card?.url ?? null,
@@ -1476,7 +1476,7 @@ export async function searchSampleDesigns(q: string, limit = 6): Promise<Product
     .eq("category", WALLPAPER_CATEGORY)
     .eq("flat_verified", true)
     .eq("sample_material.available", true)
-    .eq("sample_material.materials.slug", "smooth-matt")
+    .eq("sample_material.materials.slug", "self-adhesive-vinyl")
     .eq("sample_material.materials.active", true)
     .ilike("title", `%${term}%`)
     .order("aesthetic_rank", { ascending: true, nullsFirst: false })
@@ -1495,7 +1495,7 @@ export async function getSampleDesigns(limit = 24): Promise<ProductCardData[]> {
     .eq("category", WALLPAPER_CATEGORY)
     .eq("flat_verified", true)
     .eq("sample_material.available", true)
-    .eq("sample_material.materials.slug", "smooth-matt")
+    .eq("sample_material.materials.slug", "self-adhesive-vinyl")
     .eq("sample_material.materials.active", true)
     .order("aesthetic_rank", { ascending: true, nullsFirst: false })
     .limit(limit);
@@ -1518,7 +1518,7 @@ export async function isSampleableHandle(handle: string): Promise<boolean> {
     .eq("category", WALLPAPER_CATEGORY)
     .eq("flat_verified", true)
     .eq("sample_material.available", true)
-    .eq("sample_material.materials.slug", "smooth-matt")
+    .eq("sample_material.materials.slug", "self-adhesive-vinyl")
     .eq("sample_material.materials.active", true)
     .limit(1);
   if (error) throw error;

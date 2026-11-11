@@ -26,6 +26,7 @@ export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,f
  const selectedFixed=WALLPAPER_FIXED_SIZES[fixedIndex];
  const wallWidth=fixedSelection?selectedFixed[0]*30.48:toCm(Number(w),unit),wallHeight=fixedSelection?selectedFixed[1]*30.48:toCm(Number(h),unit),ready=wallWidth>0&&wallHeight>0&&wallWidth>=10&&wallHeight>=10&&wallWidth<=3000&&wallHeight<=3000;
  const [selection,select]=useState<"size"|"room"|null>(null);
+ useEffect(()=>{const open=()=>{select("room");if(ready)show("room");else document.getElementById("mimi-wall-width")?.focus();};window.addEventListener("zyv:open-visualizer",open);return()=>window.removeEventListener("zyv:open-visualizer",open);},[ready]);
  const payload=art&&ready?{...crop,imageUrl:art,wallWidthCm:wallWidth,wallHeightCm:wallHeight}:undefined;
  const game=games.find(g=>g.slug===slug);
  const colors=games.filter(g=>g.slug.startsWith("hopscotch-"));

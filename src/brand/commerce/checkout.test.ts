@@ -290,3 +290,21 @@ test('business identity is validated before payment and preserved without a corp
  assert.equal(h.posts[0].body.corporate,undefined);
  assert.equal(h.posts[0].body.brand,'lorange');
 });
+
+test('new orders snapshot server artwork and material, ignoring caller substitutions', () => {
+ const q=priceCart([{...wall,fulfilmentArt:{art:'https://evil.test/a',material:'paste'}}],'IN');
+ assert.ok(!('refused' in q));
+ assert.deepEqual(q.lines[0].fulfilmentArt,artFor(wall.slug));
+ const snapshot=structuredClone(q.lines[0]);
+ const body=webOrderBody({id:'test',paymentId:'pay_test',amountInr:q.totalMinor/100,createdAt:Date.now(),customer:{...india,country:'India'},lines:[snapshot]});
+ assert.equal(body.items[0].material,'self_adhesive');
+ assert.equal(body.items[0].materialSlug,'self-adhesive-vinyl');
+});
+
+test('legacy pending wallpaper keeps its purchased pasted stock; ambiguous records stop', () => {
+ const q=priceCart([wall],'IN');assert.ok(!('refused' in q));
+ const {fulfilmentArt,...legacy}=q.lines[0];
+ const order={id:'test',paymentId:'pay_test',amountInr:q.totalMinor/100,customer:{...india,country:'India'},lines:[legacy]};
+ assert.equal(webOrderBody({...order,createdAt:Date.parse('2026-11-10T01:00:00Z')}).items[0].material,'paste');
+ assert.throws(()=>webOrderBody({...order,createdAt:Date.now()}),/Unversioned material/);
+});
