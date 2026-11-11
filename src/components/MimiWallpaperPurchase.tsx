@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMarket } from "./MarketProvider";
 import { ChooseDesign } from "./DesignCart";
 import { ProductConfigurator } from "./ProductConfigurator";
@@ -19,9 +20,10 @@ export function MimiWallpaperPurchase({ native, ...legacy }: Props) {
   if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.isFixedSize && !legacy.editItemId && !legacy.autoStart && !legacy.autoOpenSample && !customTools) {
     return <section id="create-your-wall" className="scroll-mt-28">
       <p className="mb-4 text-sm text-slate">Smooth peel-and-stick wallpaper with a removable, self-adhesive backing.</p>
+      <Link className="mb-4 inline-block text-sm underline" href="/guides/materials#real-print-closeups">See real wallpaper close-ups</Link>
       <ChooseDesign slug={native.slug} name={native.name} width={null} height={null}
         onCustom={()=>setCustomTools(true)} custom wallpaper art={native.art} sale={native.sale} />
     </section>;
   }
-  return <ProductConfigurator {...legacy} {...(!("unavailable" in legacy)?{autoOpenSample:legacy.autoOpenSample || sampleRequested}:{})} />;
+  return <><Link className="mb-4 inline-block text-sm underline" href="/guides/materials#real-print-closeups">See real wallpaper close-ups</Link><ProductConfigurator {...legacy} {...(!("unavailable" in legacy)?{autoOpenSample:legacy.autoOpenSample || sampleRequested}:{})} /></>;
 }
