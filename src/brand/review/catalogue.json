@@ -11021,5 +11021,698 @@
     "status": "Made to measure",
     "price": null,
     "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-01",
+    "slug": "hush-and-wander-little-fox-orchard",
+    "name": "Little Fox Orchard",
+    "description": "A sleepy fox family beneath blossoming apple trees. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "peach",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/01-little-fox-orchard-room-v2.webp",
+    "flatImage": "/nursery-worlds/01-little-fox-orchard-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/01-little-fox-orchard.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/01-little-fox-orchard-room-v2.webp",
+        "alt": "Little Fox Orchard wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/01-little-fox-orchard-art-v2.webp",
+        "alt": "Little Fox Orchard flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "peach, green",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-02",
+    "slug": "hush-and-wander-duckling-pond",
+    "name": "Duckling Pond",
+    "description": "A small procession across a luminous blue pond. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "peach"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/02-duckling-pond-room-v3.webp",
+    "flatImage": "/nursery-worlds/02-duckling-pond-art-v3.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/02-duckling-pond.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/02-duckling-pond-room-v3.webp",
+        "alt": "Duckling Pond wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/02-duckling-pond-art-v3.webp",
+        "alt": "Duckling Pond flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, peach",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-03",
+    "slug": "hush-and-wander-bear-and-bee-meadow",
+    "name": "Bear and Bee Meadow",
+    "description": "A curious bear cub in a soft clover meadow. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "yellow",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/03-bear-and-bee-meadow-room-v2.webp",
+    "flatImage": "/nursery-worlds/03-bear-and-bee-meadow-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/03-bear-and-bee-meadow.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/03-bear-and-bee-meadow-room-v2.webp",
+        "alt": "Bear and Bee Meadow wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/03-bear-and-bee-meadow-art-v2.webp",
+        "alt": "Bear and Bee Meadow flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "yellow, green",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-04",
+    "slug": "hush-and-wander-gentle-whale-bay",
+    "name": "Gentle Whale Bay",
+    "description": "Two gentle whales in a calm coastal scene. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/04-gentle-whale-bay-room-v2.webp",
+    "flatImage": "/nursery-worlds/04-gentle-whale-bay-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/04-gentle-whale-bay.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/04-gentle-whale-bay-room-v2.webp",
+        "alt": "Gentle Whale Bay wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/04-gentle-whale-bay-art-v2.webp",
+        "alt": "Gentle Whale Bay flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, neutral",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-05",
+    "slug": "hush-and-wander-little-lamb-pasture",
+    "name": "Little Lamb Pasture",
+    "description": "A pair of lambs resting beside a country wall. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/05-little-lamb-pasture-room-v2.webp",
+    "flatImage": "/nursery-worlds/05-little-lamb-pasture-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/05-little-lamb-pasture.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/05-little-lamb-pasture-room-v2.webp",
+        "alt": "Little Lamb Pasture wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/05-little-lamb-pasture-art-v2.webp",
+        "alt": "Little Lamb Pasture flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, neutral",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-06",
+    "slug": "hush-and-wander-hedgehog-garden",
+    "name": "Hedgehog Garden",
+    "description": "A little woodland walk through ferns and mushrooms. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "peach",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/06-hedgehog-garden-room-v3.webp",
+    "flatImage": "/nursery-worlds/06-hedgehog-garden-art-v3.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/06-hedgehog-garden.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/06-hedgehog-garden-room-v3.webp",
+        "alt": "Hedgehog Garden wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/06-hedgehog-garden-art-v3.webp",
+        "alt": "Hedgehog Garden flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "peach, green",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-07",
+    "slug": "hush-and-wander-fawn-in-ferns",
+    "name": "Fawn in Ferns",
+    "description": "A quiet moment between deer in a leafy glade. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/07-fawn-in-ferns-room-v2.webp",
+    "flatImage": "/nursery-worlds/07-fawn-in-ferns-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/07-fawn-in-ferns.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/07-fawn-in-ferns-room-v2.webp",
+        "alt": "Fawn in Ferns wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/07-fawn-in-ferns-art-v2.webp",
+        "alt": "Fawn in Ferns flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, neutral",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-08",
+    "slug": "hush-and-wander-otter-riverbank",
+    "name": "Otter Riverbank",
+    "description": "A parent and pup floating along a winding stream. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/08-otter-riverbank-room-v3.webp",
+    "flatImage": "/nursery-worlds/08-otter-riverbank-art-v3.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/08-otter-riverbank.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/08-otter-riverbank-room-v3.webp",
+        "alt": "Otter Riverbank wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/08-otter-riverbank-art-v3.webp",
+        "alt": "Otter Riverbank flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, green",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-09",
+    "slug": "hush-and-wander-turtle-garden",
+    "name": "Turtle Garden",
+    "description": "A slow, sunny journey along a flower-lined path. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "peach"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/09-turtle-garden-room-v3.webp",
+    "flatImage": "/nursery-worlds/09-turtle-garden-art-v3.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/09-turtle-garden.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/09-turtle-garden-room-v3.webp",
+        "alt": "Turtle Garden wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/09-turtle-garden-art-v3.webp",
+        "alt": "Turtle Garden flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "green, peach",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-10",
+    "slug": "hush-and-wander-koala-eucalyptus",
+    "name": "Koala Eucalyptus",
+    "description": "A sleepy cuddle in the eucalyptus branches. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "neutral",
+      "green"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/10-koala-eucalyptus-room-v2.webp",
+    "flatImage": "/nursery-worlds/10-koala-eucalyptus-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/10-koala-eucalyptus.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/10-koala-eucalyptus-room-v2.webp",
+        "alt": "Koala Eucalyptus wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/10-koala-eucalyptus-art-v2.webp",
+        "alt": "Koala Eucalyptus flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "neutral, green",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-WP-HW-11",
+    "slug": "hush-and-wander-penguin-snowdrift",
+    "name": "Penguin Snowdrift",
+    "description": "A cozy embrace among soft winter hills. A softly painted made-to-measure nursery mural from Hush & Wander.",
+    "collection": [
+      "hush-and-wander"
+    ],
+    "concept": [
+      "animals",
+      "storybook",
+      "nature"
+    ],
+    "color": [
+      "blue",
+      "neutral"
+    ],
+    "age": [
+      "baby",
+      "toddler"
+    ],
+    "space": [
+      "nursery",
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/nursery-worlds/11-penguin-snowdrift-room-v2.webp",
+    "flatImage": "/nursery-worlds/11-penguin-snowdrift-art-v2.webp",
+    "imageRole": "Illustrative nursery room render",
+    "source": "Original MimiPip Hush & Wander artwork",
+    "sourceImages": [
+      "https://mimipip.com/nursery-worlds/print-art/11-penguin-snowdrift.png"
+    ],
+    "gallery": [
+      {
+        "url": "/nursery-worlds/11-penguin-snowdrift-room-v2.webp",
+        "alt": "Penguin Snowdrift wallpaper in an illustrative nursery"
+      },
+      {
+        "url": "/nursery-worlds/11-penguin-snowdrift-art-v2.webp",
+        "alt": "Penguin Snowdrift flat wallpaper artwork"
+      }
+    ],
+    "sourceDetails": {
+      "Material": "Smooth matte wallpaper",
+      "Dominant colours": "blue, neutral",
+      "Style": "Soft gouache illustration",
+      "Suitable rooms": "Nursery, baby room, children’s bedroom",
+      "Product type": "Made-to-measure mural wallpaper",
+      "Pattern & mural type": "Single continuous mural composed for the wall"
+    },
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null
   }
 ]

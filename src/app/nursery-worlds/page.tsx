@@ -43,7 +43,7 @@ export default function NurseryWorldsPage() {
             <p className="mt-2 text-sm leading-relaxed text-[#6d6257]">{world.description}</p>
             <div className="mt-4 flex flex-wrap items-center gap-2 text-xs" aria-label={`${world.title} color collections`}>
               <span className="mr-1 text-[#75695e]">Colors</span>
-              {world.colors.map(color => <Link key={color} href={`/collections/color-${color.toLowerCase()}`} className="rounded-full border border-[#d9c9b7] px-3 py-1.5 text-[#5c5145] hover:bg-[#f8efe3]">{color}</Link>)}
+              {world.colors.map(color => <Link key={color} href={`/browse/color?value=${color.toLowerCase()}`} className="rounded-full border border-[#d9c9b7] px-3 py-1.5 text-[#5c5145] hover:bg-[#f8efe3]">{color}</Link>)}
             </div>
             <figure className="mt-5 overflow-hidden rounded-2xl bg-[#faf4e9]">
               <img src={`/nursery-worlds/${key}-art-${version}.webp`} alt={`${world.title} flat wallpaper artwork`} width={1672} height={941} loading="lazy" className="aspect-[2/1] w-full object-cover" />

@@ -501,5 +501,60 @@
     "art": "https://mimipip.com/playroom-stories/print-art/11-birthday-banner.png",
     "material": "paste",
     "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-little-fox-orchard": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/01-little-fox-orchard.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-duckling-pond": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/02-duckling-pond.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-bear-and-bee-meadow": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/03-bear-and-bee-meadow.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-gentle-whale-bay": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/04-gentle-whale-bay.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-little-lamb-pasture": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/05-little-lamb-pasture.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-hedgehog-garden": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/06-hedgehog-garden.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-fawn-in-ferns": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/07-fawn-in-ferns.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-otter-riverbank": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/08-otter-riverbank.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-turtle-garden": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/09-turtle-garden.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-koala-eucalyptus": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/10-koala-eucalyptus.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "hush-and-wander-penguin-snowdrift": {
+    "art": "https://mimipip.com/nursery-worlds/print-art/11-penguin-snowdrift.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
   }
 }
