@@ -16,6 +16,8 @@ const FLOOR_GAMES = ['hopscotch-peach-pop', 'wiggleway', 'jump-jamboree', 'fork-
  * sale in it, a floor game not yet made: each goes to the shop, never to a dead button.
  */
 export function hiddenDestination(path: string): string | null {
+  // Mimi Pip has no commercial-services offering; inherited sector routes are not storefront pages.
+  if (/^\/(commercial|office|hospitality|hospitals|retail|real-estate|projects)(?:\/|$)/.test(path)) return SHOP;
   const product = /^\/(?:products|design)\/([^/]+)$/.exec(path);
   if (product) { const r = recordOf(decodeURIComponent(product[1])); return r && !isSellable(r.slug) ? SHOP : null; }
   const collection = /^\/collections\/([^/]+)(?:\/[^/]+)?$/.exec(path);

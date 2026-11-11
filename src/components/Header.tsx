@@ -255,14 +255,14 @@ export async function Header() {
             Parade) left this strip on 4 October 2026 (Roheena) — they live in
             the Shop menu's Collections column and the phone drawer instead. */}
         {/* Worldwide reach stays visible on phones; the destination picker also lives in the mobile menu. */}
-        <div className="bg-[#99CFE5]">
-          <div className="container-x flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-[0.68rem] font-semibold text-charcoal/80">
+        <div className="bg-[#D7EBF3]">
+          <div className="container-x flex min-h-9 flex-wrap items-center justify-between gap-x-3 gap-y-0.5 py-1">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-0.5 text-[0.68rem] font-semibold text-charcoal">
               <span className="min-w-0">
                 {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "Kids’ wallpaper and floor games" : <ShippingBannerText />}
               </span>
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
-              <ShipToCountry className="min-w-0" />
+              <ShipToCountry className="min-w-0 [&_span]:text-charcoal [&_select]:text-charcoal" />
             </div>
             <div className="hidden shrink-0 md:block">{<Concierge />}</div>
           </div>

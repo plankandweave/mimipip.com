@@ -170,3 +170,9 @@ test('no page is left out of search by accident, and the public script is in pla
   assert.match(readFileSync('public/mimipip-funnel.js', 'utf8'), /sendBeacon\('\/api\/funnel'/);
   assert.ok(paths.includes('/') && paths.includes('/floor-games') && paths.includes('/browse/collection'));
 });
+
+test('inherited commercial routes do not advertise a Mimi Pip B2B offering', () => {
+  for (const path of ['/commercial', '/commercial/workplaces', '/office', '/office/meeting-rooms', '/hospitality', '/hospitals/clinics', '/retail/showrooms', '/real-estate', '/projects']) {
+    assert.equal(hiddenDestination(path), '/browse/collection');
+  }
+});
