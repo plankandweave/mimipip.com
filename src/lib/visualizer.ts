@@ -65,6 +65,7 @@ export type CropData = {
   personalisation?: { childName: string; fee: number } | null;
   /** Bespoke-customisation product: the customer's note + which design it's for,
    *  so the studio knows what to customise. */
+  customArtworkId?: string;
   bespoke?: { note: string; forHandle?: string; forTitle?: string } | null;
   /** Customer's explicit sign-off on the composition shown above, captured at
    *  Add to Cart — the audit trail for "I expected a different part of the

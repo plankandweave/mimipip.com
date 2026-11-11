@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {useCart} from "@/components/CartProvider";
 import { ProductConfigurator } from "@/components/ProductConfigurator";
 import { toMediaUrl, isMediaUrl, mediaRendition } from "@/lib/media-url";
 import { useAuthGate } from "@/components/AuthGate";
@@ -16,11 +17,11 @@ type MaterialOpt = {
   rollWidthMm?: number | null;
 };
 
-type Uploaded = { url: string; width: number; height: number; lowRes: boolean };
+type Uploaded = { customArtworkId:string; url: string; width: number; height: number; lowRes: boolean };
 
 /**
  * A resized copy of an uploaded design for on-screen preview only, via Supabase
- * Storage's render CDN. Pulling the full-resolution original (up to 25MB) into
+ * Storage's render CDN. Pulling the full-resolution original (up to 12MB) into
  * an <img> is what made the preview sit blank for seconds on mobile data. The
  * original URL is still what's passed to the configurator and printed.
  */
@@ -35,16 +36,28 @@ function previewSrc(url: string): string {
 export function PrintYourOwn({
   productHandle,
   productId,
+  editItemId,
   materials,
   printRules = null,
 }: {
   productHandle: string;
+  editItemId?:string;
   productId: string;
   materials: MaterialOpt[];
   /** Live production panel rules, fetched server-side (see lib/print-rules.ts). */
   printRules?: { maxPanelCm: number; overlapCm: number } | null;
 }) {
   const [uploaded, setUploaded] = useState<Uploaded | null>(null);
+  const {items}=useCart();
+  const restored=useRef(false);
+  useEffect(()=>{
+   if(!editItemId||restored.current)return;
+   const item=items.find(i=>i.item_id===editItemId&&i.handle==='custom-wallpaper');
+   const crop=item?.crop_data;
+   if(!item?.image||!crop?.customArtworkId)return;
+   setUploaded({url:item.image,customArtworkId:crop.customArtworkId,width:crop.sourceW??1600,height:crop.sourceH??1600,lowRes:Math.max(crop.sourceW??0,crop.sourceH??0)<1600});
+   restored.current=true;
+  },[items,editItemId]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // The preview is a real photo straight off a phone — often many megabytes — so
@@ -81,8 +94,8 @@ export function PrintYourOwn({
       setError("That doesn't look like an image — try a JPG, PNG or WEBP.");
       return;
     }
-    if (file.size > 25 * 1024 * 1024) {
-      setError("That image is over 25MB — please use a smaller file.");
+    if (file.size > 12 * 1024 * 1024) {
+      setError("That image is over 12MB — please use a smaller file.");
       return;
     }
     setBusy(true);
@@ -97,44 +110,14 @@ export function PrintYourOwn({
         setError("We couldn't read that photo format — please try a JPG or PNG.");
         return;
       }
-      // The gate that already protects this route mints a one-path signed URL;
-      // the bytes then go straight to storage without the bucket granting the
-      // public any write access. The KEY IS THE SERVER'S — see the route.
-      const signRes = await fetch("/api/custom-upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "sign", ext: normalized.ext }),
-      });
-      const signed = await signRes.json().catch(() => null);
-      if (!signRes.ok || !signed?.token) {
-        setError("Upload failed — please try again.");
-        return;
-      }
-      const objectKey: string = signed.objectKey;
-      const up = await fetch("/api/media-upload", {
-        method: "PUT",
-        headers: {
-          "x-upload-token": signed.token,
-          "content-type": normalized.blob.type || "image/jpeg",
-        },
-        body: normalized.blob,
-      });
-      if (!up.ok) {
-        setError("Upload failed — please try again.");
-        return;
-      }
-      // Server pass: validate it's a real image, bake in EXIF rotation, and
-      // return the durable URL + true dimensions.
-      const res = await fetch("/api/custom-upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ objectKey }),
-      });
+      const form=new FormData();
+      form.set("image",normalized.blob,`artwork.${normalized.ext}`);
+      const res=await fetch("/api/custom-upload",{method:"POST",body:form});
       const j = await res.json();
       if (!res.ok) {
         setError(
           j.error === "too_large"
-            ? "That image is over 25MB — please use a smaller file."
+            ? "That image is over 12MB — please use a smaller file."
             : j.error === "unreadable_image"
               ? "We couldn't read that image — try a different file."
               : "Upload failed — please try again.",
@@ -143,7 +126,7 @@ export function PrintYourOwn({
       }
       setPreviewLoaded(false);
       setPreviewFailed(false);
-      setUploaded({ url: j.url, width: j.width, height: j.height, lowRes: j.lowRes });
+      setUploaded({ customArtworkId:j.customArtworkId, url: j.url, width: j.width, height: j.height, lowRes: j.lowRes });
     } catch {
       setError("Couldn't reach the server — please try again.");
     } finally {
@@ -177,7 +160,7 @@ export function PrintYourOwn({
                   {busy ? "Uploading…" : "Upload your design"}
                 </p>
                 <p className="mt-2 text-sm text-slate">
-                  JPG, PNG or WEBP · up to 25MB. The higher the resolution, the crisper the print.
+                  JPG, PNG or WEBP · up to 12MB. The higher the resolution, the crisper the print.
                 </p>
               </div>
             </button>
@@ -279,6 +262,8 @@ export function PrintYourOwn({
         ) : (
           <div className="mt-8">
             <ProductConfigurator
+              editItemId={editItemId}
+              autoStart={!!editItemId}
               productHandle={productHandle}
               productTitle="Your custom design"
               productId={productId}
@@ -287,8 +272,9 @@ export function PrintYourOwn({
               printRules={printRules}
               materialLayout="stack"
               uploadedSource
+              customArtworkId={uploaded.customArtworkId}
               sampleable={false}
-              initialMaterialSlug="smooth-matt"
+              initialMaterialSlug="self-adhesive-vinyl"
             />
           </div>
         )}

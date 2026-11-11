@@ -1,145 +1,35 @@
-import { NextResponse } from "next/server";
-import { randomUUID } from "node:crypto";
-import { requireGatedUser } from "@/lib/auth-server";
-import { CACHE_IMMUTABLE } from "@/lib/storage-body";
-import { mintUploadToken } from "@/lib/upload-token";
-import { getProductImage, putProductImage } from "@/lib/product-images-store";
-import { bakeRotationRemote } from "@/lib/media-client";
-
-export const runtime = "nodejs";
-export const maxDuration = 30;
-
-const MAX_BYTES = 25 * 1024 * 1024; // 25MB — customer camera/phone uploads can be large
-// Below this longest-edge, a wall-sized print would look soft; we still allow
-// it (the customer consents to variation) but flag it so the UI can warn.
-const SOFT_PRINT_MAX_EDGE = 1600;
-
-// Persist a customer's own artwork for the "Print Your Own" flow and return a
-// durable public URL. That URL becomes the design in the configurator, so the
-// crop — and therefore the print file — is the customer's image.
-//
-// Two entry modes:
-// - JSON {objectKey}: the browser has ALREADY uploaded the file straight to
-//   storage (bypassing Vercel's ~4.5MB request-body cap, which used to
-//   silently kill any normal phone photo) — we download it server-side,
-//   validate/rotate, and overwrite it in place.
-// - multipart form (legacy): small files posted through this function.
-/** Long enough for a big phone photo on a weak connection, short enough that a
- *  leaked URL is not a standing write hole. */
-const UPLOAD_TTL_S = 60 * 60;
-const EXT_RE = /^[a-z0-9]{1,5}$/;
-
-export async function POST(req: Request) {
-  // Accepts up to 25 MB into our storage bucket — verified customers only.
-  const { blocked } = await requireGatedUser();
-  if (blocked) return blocked;
-
-  let raw: Buffer;
-  let objectKey: string | null = null;
-
-  const isJson = (req.headers.get("content-type") ?? "").includes("application/json");
-  if (isJson) {
-    let body: { objectKey?: string; action?: string; ext?: string };
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: "invalid json" }, { status: 400 });
-    }
-
-    // Step 0: hand back a one-path signed URL so the browser can PUT the file
-    // straight to storage without the bucket granting write access to anon.
-    // The gate above is what authorises this, and the KEY IS OURS TO CHOOSE —
-    // a caller-supplied path is how you would sign a write over a live
-    // catalogue image. Everything below is unchanged: the same objectKey then
-    // comes back for validation and EXIF rotation.
-    if (body.action === "sign") {
-      const ext = typeof body.ext === "string" ? body.ext.toLowerCase() : "";
-      if (!EXT_RE.test(ext)) return NextResponse.json({ error: "bad_ext" }, { status: 400 });
-      const key = `custom-uploads/${randomUUID()}.${ext}`;
-      // upsert:true — this same key is deliberately overwritten below with
-      // the validated, rotation-baked bytes.
-      let token: string;
-      try {
-        token = mintUploadToken(key, { upsert: true, ttlSeconds: UPLOAD_TTL_S });
-      } catch {
-        return NextResponse.json({ error: "sign_failed" }, { status: 500 });
-      }
-      return NextResponse.json({
-        objectKey: key,
-        token,
-        expiresInSeconds: UPLOAD_TTL_S,
-      });
-    }
-    // Only files the browser flow itself placed under custom-uploads/ — never
-    // an arbitrary storage path.
-    if (
-      typeof body.objectKey !== "string" ||
-      !/^custom-uploads\/[A-Za-z0-9-]+\.[a-z0-9]+$/.test(body.objectKey)
-    ) {
-      return NextResponse.json({ error: "bad object key" }, { status: 400 });
-    }
-    objectKey = body.objectKey;
-    const dl = await getProductImage(objectKey);
-    if (!dl) {
-      return NextResponse.json({ error: "not_found" }, { status: 404 });
-    }
-    raw = dl;
-    if (raw.length > MAX_BYTES) {
-      return NextResponse.json({ error: "too_large", maxMB: 25 }, { status: 400 });
-    }
-  } else {
-    let form: FormData;
-    try {
-      form = await req.formData();
-    } catch {
-      return NextResponse.json({ error: "expected multipart/form-data" }, { status: 400 });
-    }
-    const file = form.get("image");
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: "no image" }, { status: 400 });
-    }
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "not_an_image" }, { status: 400 });
-    }
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "too_large", maxMB: 25 }, { status: 400 });
-    }
-    raw = Buffer.from(await file.arrayBuffer());
-  }
-
-  // Read real dimensions (and normalise orientation) in the media container;
-  // a corrupt or non-decodable file is rejected here rather than failing later
-  // at print. The container KEEPS the original format — this is the customer's
-  // print artwork, and a lossy re-encode here would degrade the print.
-  let width = 0, height = 0;
-  let out = raw;
-  let contentType = "image/jpeg";
-  try {
-    const ab = raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength) as ArrayBuffer;
-    const baked = await bakeRotationRemote(ab);
-    if ("error" in baked) throw new Error("unreadable");
-    width = baked.width;
-    height = baked.height;
-    out = Buffer.from(baked.bytes);
-    contentType = baked.contentType;
-  } catch {
-    return NextResponse.json({ error: "unreadable_image" }, { status: 400 });
-  }
-
-  const ext = (contentType.split("/")[1] || "jpg").replace("jpeg", "jpg");
-  const finalKey = objectKey ?? `custom-uploads/${randomUUID()}.${ext}`;
-  let url: string;
-  try {
-    ({ publicUrl: url } = await putProductImage(finalKey, out, { contentType, cacheControl: CACHE_IMMUTABLE }));
-  } catch (e) {
-    console.error("custom-upload storage error:", e instanceof Error ? e.message : e);
-    return NextResponse.json({ error: "upload_failed" }, { status: 502 });
-  }
-
-  return NextResponse.json({
-    url,
-    width,
-    height,
-    lowRes: Math.max(width, height) < SOFT_PRINT_MAX_EDGE,
-  });
+import {NextResponse} from 'next/server';
+import {cookies} from 'next/headers';
+import {requireGatedUser} from '@/lib/auth-server';
+import {supabaseAdmin} from '@/lib/supabase-admin';
+import {bakeRotationRemote} from '@/lib/media-client';
+import {cartOwnerHash} from '@/brand/commerce/custom-art-server';
+export const runtime='nodejs';
+export const maxDuration=60;
+export async function POST(req:Request){
+ if(req.headers.get('origin')!==new URL(req.url).origin)return NextResponse.json({error:'Invalid request origin'},{status:403});
+ const {user,blocked}=await requireGatedUser();if(blocked)return blocked;
+ const admin=supabaseAdmin();if(!admin)return NextResponse.json({error:'Artwork storage is temporarily unavailable.'},{status:503});
+ if(Number(req.headers.get('content-length')??0)>13*1024*1024)return NextResponse.json({error:'Choose an image up to 12 MB.'},{status:413});
+ const form=await req.formData().catch(()=>null),file=form?.get('image');
+ // The shared image service accepts up to 12 MB; do not advertise a larger upload.
+ if(!(file instanceof File)||!file.type.startsWith('image/')||file.size>12*1024*1024)return NextResponse.json({error:'Choose a JPG, PNG or WebP image up to 12 MB.'},{status:400});
+ let baked;
+ try {baked=await bakeRotationRemote(await file.arrayBuffer());}catch{return NextResponse.json({error:'We could not read that image.'},{status:400});}
+ if('error' in baked||!baked.width||!baked.height)return NextResponse.json({error:'We could not read that image.'},{status:400});
+ const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'} as Record<string,string>)[baked.contentType];
+ if(!ext)return NextResponse.json({error:'Use JPG, PNG or WebP artwork.'},{status:400});
+ const jar=await cookies(),token=jar.get('zyv_cart')?.value??crypto.randomUUID();
+ const owner=await cartOwnerHash(token),id=crypto.randomUUID(),path=`custom/${owner}/${id}.${ext}`;
+ const bucket=admin.storage.from('print-files');
+ const {error}=await bucket.upload(path,baked.bytes,{contentType:baked.contentType,upsert:false});
+ if(error)return NextResponse.json({error:'Artwork could not be saved. Please retry.'},{status:503});
+ const imageRef=bucket.getPublicUrl(path).data.publicUrl;
+ const saved=await admin.from('custom_artworks').insert({id,owner_user:user!.id,cart_owner_hash:owner,image_ref:imageRef,width:baked.width,height:baked.height});
+ if(saved.error){await bucket.remove([path]);return NextResponse.json({error:'Artwork could not be confirmed. Please retry.'},{status:503});}
+ const signed=await bucket.createSignedUrl(path,3600);
+ if(!signed.data?.signedUrl)return NextResponse.json({error:'Preview could not be opened. Please retry.'},{status:503});
+ const response=NextResponse.json({url:signed.data.signedUrl,customArtworkId:id,width:baked.width,height:baked.height,lowRes:Math.max(baked.width,baked.height)<1600});
+ response.cookies.set('zyv_cart',token,{httpOnly:true,secure:true,sameSite:'lax',path:'/',maxAge:60*60*24*60});
+ response.headers.set('Cache-Control','no-store');return response;
 }

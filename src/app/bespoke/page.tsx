@@ -21,7 +21,7 @@ import { BESPOKE_PRICE } from "@/lib/pricing";
   const { countryCode, alternates } = marketLanding("/bespoke", (await searchParams)?.market);
   return {
     title: "Bespoke Murals",
-    description: `Original murals designed to your brief — ${marketPriceLabel(BESPOKE_PRICE, countryCode)} per design, whatever the wall size. A design service by Zyvorah; the wallpaper itself is ordered separately.`,
+    description: `Original murals designed to your brief — ${marketPriceLabel(BESPOKE_PRICE, countryCode)} per design, whatever the wall size. A design service by MimiPip; the wallpaper itself is ordered separately.`,
     alternates,
   };
 }
@@ -99,7 +99,7 @@ export default async function BespokePage({
               If you already have the artwork, <Link href="/print-your-own" className="link-underline">Your Own Image</Link>{" "}
               makes your file to your wall size. Bespoke is for when you want us to{" "}
               <em>design</em> the mural for you from a brief. Not sure where to start? The{" "}
-              <Link href="/design-with" className="link-underline">Zyvorah Curator</Link> can help you find a direction.
+              <Link href="/design-with" className="link-underline">MimiPip Curator</Link> can help you find a direction.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -146,7 +146,7 @@ export default async function BespokePage({
           <p className="mt-3 text-slate">
             If your project is large or you&apos;re not sure what you need, tell us what you have in
             mind and we&apos;ll propose a direction and a quote before you pay anything. Prefer email?
-            Write to <a href="mailto:hello@zyvorah.com" className="link-underline">hello@zyvorah.com</a> with
+            Write to <a href="mailto:hello@mimipip.com" className="link-underline">hello@mimipip.com</a> with
             &ldquo;Bespoke&rdquo; in the subject.
           </p>
           <div className="mt-6">

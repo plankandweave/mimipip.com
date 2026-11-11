@@ -1,3 +1,6 @@
+import {cookies} from 'next/headers';
+import {customArtsFor} from '@/brand/commerce/custom-art-server';
+import {signDoc} from '@/lib/private-doc';
 import { requireGatedUser } from "@/lib/auth-server";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { thumbnailRemote, cropPreviewRemote } from "@/lib/media-client";
@@ -35,7 +38,16 @@ export async function POST(req: Request) {
   // machine will actually make.
   const { maxPanelCm, overlapCm } = await fetchPrintRules();
   const panelCm = rollCmFromMm(selMaterial?.roll_width_mm, maxPanelCm);
-  const flat = pickFlatImage(product.product_images ?? []);
+  let flat = pickFlatImage(product.product_images ?? []);
+  if(handle==='custom-wallpaper'){
+    try{
+      const assets=await customArtsFor([{slug:handle,crop:body.crop}],(await cookies()).get('zyv_cart')?.value??'');
+      const asset=assets[body.crop?.customArtworkId];
+      const url=asset?await signDoc(asset.art):null;
+      if(!url)throw new Error('Missing artwork');
+      flat={...(flat??{}),url} as typeof flat;
+    }catch{return Response.json({error:'Please reopen your uploaded artwork.'},{status:400});}
+  }
   if (!flat?.url) return Response.json({ error: "Approved artwork is unavailable." }, { status: 503 });
 
   let composition: ArrayBuffer | null = null;

@@ -27,13 +27,14 @@ export const currencyOf = (market: Market) => (market === 'IN' ? 'INR' : 'USD') 
 
 type Rec = (typeof records)[number] & { sourceIndiaPricePerSqft?: number | null };
 const bySlug = new Map((records as Rec[]).map(r => [r.slug, r]));
-const isWallpaper = (r: Rec) => r.type.includes('wallpaper');
+const isWallpaper = (r: Pick<Rec,'type'>) => r.type.includes('wallpaper');
 /** A wall is measured; a fixed piece has one size. */
-export const measured = (r: Rec) => isWallpaper(r) && r.measurementType === 'made-to-measure';
+export const measured = (r: Pick<Rec,'type'|'measurementType'>) => isWallpaper(r) && r.measurementType === 'made-to-measure';
 
 /** Per sq ft in whole rupees or dollars, or null when she has set none. */
 export function ratePerSqft(slug: string, market: Market): number | null {
   const r = bySlug.get(slug);
+  if (slug==='custom-wallpaper') return market==='IN'?MIMIPIP_PRICING.sellingInrPerSqFt:prices.abroadWallpaperUsdPerSqft;
   if (!r || !isWallpaper(r)) return null;
   if (market === 'ABROAD') return prices.abroadWallpaperUsdPerSqft;
   return MIMIPIP_PRICING.sellingInrPerSqFt;
@@ -62,7 +63,7 @@ export const refused = (x: Priced | Refusal): x is Refusal => 'refused' in x;
 const validCm = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 10 && n <= MAX_WALL_CM;
 
 export function priceLine(input: { slug: string; qty: number; widthCm?: number; heightCm?: number; fixedSize?: boolean }, market: Market): Priced | Refusal {
-  const r = bySlug.get(input.slug);
+  const r = bySlug.get(input.slug) ?? (input.slug==='custom-wallpaper'?{slug:input.slug,name:'Your Own Image',type:['wallpaper'],measurementType:'made-to-measure',widthCm:null,heightCm:null}:undefined);
   if (!r) return { refused: 'This design is no longer available.' };
   if (!Number.isInteger(input.qty) || input.qty < 1 || input.qty > MAX_QTY) return { refused: 'Check the quantity.' };
   const currency = currencyOf(market);
@@ -87,6 +88,7 @@ export const nameOf = (slug: string) => bySlug.get(slug)?.name ?? 'This design';
 /** Is this design for sale in this market? The shop filters on the same answer. */
 export function onSale(slug: string, market: Market): boolean {
   const r = bySlug.get(slug);
+  if (slug==='custom-wallpaper') return true;
   if (!r) return false;
   return measured(r) ? ratePerSqft(slug, market) !== null : fixedPrice(slug, market) !== null;
 }

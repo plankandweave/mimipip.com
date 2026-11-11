@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useCart } from "@/components/CartProvider";
+import {addLine,readLines,saveLines} from "@/components/design-cart-store";
+import {useRouter} from "next/navigation";
 import { BESPOKE_PRICE } from "@/lib/pricing";
 import { useMarket } from "@/components/MarketProvider";
 
@@ -26,8 +27,8 @@ export function BespokeAddOn({
   forTitle: string;
   variant?: "addon" | "standalone";
 }) {
-  const { add } = useCart();
-  const { money } = useMarket();
+  const router=useRouter();
+  const { money,market } = useMarket();
   const standalone = variant === "standalone";
   const [open, setOpen] = useState(standalone); // the landing page has nothing to reveal
   const [note, setNote] = useState("");
@@ -44,29 +45,8 @@ export function BespokeAddOn({
     setBusy(true);
     setError(null);
     try {
-      const ok = await add({
-        productHandle: BESPOKE_HANDLE,
-        materialSlug: "smooth-matt", // required by the cart RPC; price is flat, not per-material
-        widthCm: 0,
-        heightCm: 0,
-        areaSqft: 0,
-        unitPrice: 0,
-        quantity: qty,
-        lineTotal: BESPOKE_PRICE * qty,
-        crop: {
-          imageUrl: "",
-          wallWidthCm: 0,
-          wallHeightCm: 0,
-          offsetX: 0.5,
-          offsetY: 0.5,
-          zoom: 1,
-          bespoke: { note: note.trim(), forHandle, forTitle },
-        },
-      });
-      if (!ok) {
-        setError("Couldn't add it just now — please try again.");
-        return;
-      }
+      saveLines(addLine(readLines(),{slug:BESPOKE_HANDLE,name:"Bespoke design service",size:"Design service",qty,currency:market.currency,amount:null,crop:{imageUrl:"",wallWidthCm:0,wallHeightCm:0,offsetX:.5,offsetY:.5,zoom:1,bespoke:{note:note.trim(),forHandle,forTitle}}}));
+      router.push('/cart');
       setAdded(true);
       setNote("");
       setQty(1);
