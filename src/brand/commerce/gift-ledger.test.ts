@@ -148,6 +148,14 @@ test('a director-funded gift mints exactly one card and one email, and a repeat 
  // Gmail turns bare words like mimipip.com into its own http link with a redirect warning: every mention is an explicit https link.
  const visible=m.html.replace(/<style[\s\S]*?<\/style>/g,'').replace(/<a [^>]*>[\s\S]*?<\/a>/g,'').replace(/<[^>]+>/g,' ');assert.ok(!/mimipip\.com/i.test(visible.replace(/hello@mimipip\.com/g,'')),visible);
  assert.ok(!/href="http:\/\//.test(m.html));assert.match(m.html,/has been added to your MimiPip wallet/);
+ // Gmail warns ("Redirect Notice") when a link's visible text is a web address that is not exactly where it goes:
+ // no link in the email reads as a web address except an email address that is its own mailto target.
+ for(const [,href,text] of m.html.matchAll(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)){
+  const label=text.replace(/<[^>]+>/g,'').trim();
+  if(/^mailto:/.test(href))assert.equal('mailto:'+label,href);
+  else assert.ok(!/\b[a-z0-9-]+\.(com|in|net|org)\b|https?:/i.test(label),`link text reads as an address: ${label} -> ${href}`);
+ }
+ assert.match(m.html,/href="https:\/\/mimipip\.com\/account">Open my MimiPip wallet</);
 });
 test('a gift with any live payment attempt, or a paid order, is never also funded',async()=>{
  for(const status of ['created','authorized','captured','refunded']){const h=fundedHarness([{id:'pay_x',status}]);assert.equal((await h.issue()).status,409);assert.equal(count(h,'mimipip_gift_cards'),0);assert.equal(h.o().payment_id,null);}
