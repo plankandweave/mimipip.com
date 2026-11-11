@@ -28,6 +28,7 @@ import { TaashFilm } from "@/components/TaashFilm";
 import { filmAspect, getSiteFilm, shapeOf, videoObjectJsonLd } from "@/lib/site-films";
 import { MimiWallpaperPurchase } from "@/components/MimiWallpaperPurchase";
 import { saleOf } from "@/brand/commerce/sale";
+import { artFor } from "@/brand/commerce/order-payload";
 import { WallBuilderProvider, WallBuilderStage } from "@/components/WallBuilderStage";
 import { MobileConfigureBar } from "@/components/MobileConfigureBar";
 import { WhatsAppBarButton } from "@/components/WhatsAppButton";
@@ -954,7 +955,7 @@ export default async function ProductPage({
               <BespokeAddOn forHandle="" forTitle="your design" />
             ) : (
             <MimiWallpaperPurchase
-              native={{ slug: product.handle, name: product.title, art: flatImage?.url ?? null, sale: saleOf(product.handle) }}
+              native={{ slug: product.handle, name: product.title, art: flatImage?.url ?? artFor(product.handle)?.art ?? null, sale: saleOf(product.handle) }}
               productHandle={product.handle}
               productTitle={product.title}
               productId={product.id}

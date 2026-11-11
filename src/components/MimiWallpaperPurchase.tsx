@@ -13,9 +13,7 @@ type Props = ComponentProps<typeof ProductConfigurator> & {
 /** The fixed-size wallpaper order is priced by Mimi Pip's native checkout. */
 export function MimiWallpaperPurchase({ native, ...legacy }: Props) {
   const { market } = useMarket();
-  if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.editItemId &&
-      legacy.materials.some((material) => material.slug === "self-adhesive-vinyl" && !material.comingSoon) &&
-      !legacy.isFixedSize && !legacy.readySizes?.length) {
+  if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.isFixedSize && !legacy.editItemId) {
     return <section id="create-your-wall" className="scroll-mt-28"><ChooseDesign slug={native.slug} name={native.name} width={null} height={null}
       custom wallpaper art={native.art} sale={native.sale} /></section>;
   }

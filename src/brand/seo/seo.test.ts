@@ -85,6 +85,8 @@ test('a product page carries Product and Offer with the price a shopper pays', (
     ['INR', '1200.00', 'https://schema.org/InStock'],   // 2 × 3 ft finished size at ₹200 including GST
     ['USD', '200.00', 'https://schema.org/InStock'],    // 20 sq ft × US$10
   ]);
+  assert.match(product.offers[0].description, /2 × 3 ft/);
+  assert.match(product.offers[1].description, /20 sq ft/);
   const [game] = productJsonLd(sellable.find(r => r.slug === 'hopscotch-peach-pop')!) as any[];
   const quote = priceCart([{ slug: 'hopscotch-peach-pop', qty: 1 }], 'IN');
   assert.ok(!('refused' in quote));

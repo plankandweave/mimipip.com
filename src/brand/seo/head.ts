@@ -46,7 +46,7 @@ const offer = (r: Rec, market: 'IN' | 'ABROAD') => {
     itemCondition: 'https://schema.org/NewCondition',
     seller: { '@id': ORIGIN + '/#organization' },
     ...(market === 'IN' ? { eligibleRegion: { '@type': 'Country', name: 'IN' } } : { ineligibleRegion: { '@type': 'Country', name: 'IN' } }),
-    ...(wall ? { description: 'Smallest order, 20 sq ft. The price follows the size of your wall.' } : {}),
+    ...(wall ? { description: market === 'IN' ? '2 × 3 ft finished wallpaper size. Custom wall sizes are priced separately.' : 'Smallest custom order, 20 sq ft. The price follows the size of your wall.' } : {}),
     shippingDetails: {
       '@type': 'OfferShippingDetails',
       shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: price.currency },
