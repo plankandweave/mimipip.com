@@ -289,7 +289,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const ticketed=b.giftTicket&&env.MIMIPIP_GIFT_SECRET?await cardForTicket(db,env.MIMIPIP_GIFT_SECRET,b.giftTicket):null;
       let gift=ticketed?.card??null;
       if(b.giftTicket&&!gift)return json({error:GIFT_SIGN_IN},400);
-      if(ticketed&&walletEmail(customer.email)!==ticketed.email)return json({error:`Use ${ticketed.email}, the email the gift was sent to, for this order's contact email.`},400);
+      if(ticketed&&walletEmail(customer.email)!==ticketed.email)return json({error:"Use the email your gift was sent to as this order's contact email."},400);
       if(b.giftTicket&&(priced.currency!=='INR'||env.MIMIPIP_GIFTS_ENABLED!=='1'))return json({error:'This gift card cannot be applied to this order.'},400);
       if(gift&&priced.lines.some(l=>l.kind==='design-service'))return json({error:GIFT_NO_DESIGN_SERVICE},400);
       if(o?.status==='pending'&&o.gift_minor){const held=await tenderFor(db,o.id);if(!gift||gift.id!==held?.gift_id)return json({error:'Your gift balance is reserved for this checkout. Use the same gift card to resume it.'},409);}

@@ -400,3 +400,13 @@ test('a gift balance is spent only by its signed-in recipient: a typed reference
  assert.equal((await h3.call('create',{lines:[wall],customer:india,giftTicket:stolen})).status,400);
  assert.equal(h3.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
 });
+
+test('a part-gift checkout whose payment window was closed resumes with the same ticket and the same held balance',async()=>{
+ const h=harness();const ticket=await seedGift(h,100100);
+ const first=await(await h.call('create',{lines:[wall],customer:india,giftTicket:ticket})).json();assert.ok(first.orderId);assert.equal(first.amount,wallMinor(200)-100100);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+ const again=await h.call('create',{lines:[wall],customer:india,giftTicket:ticket});assert.equal(again.status,200);
+ const second=await again.json();assert.equal(second.orderId,first.orderId);assert.equal(second.amount,first.amount);
+ const q=await h.call('quote',{lines:[wall],countryCode:'IN',giftTicket:ticket});
+ assert.equal(q.status,200);assert.equal((await q.json()).giftMinor,100100);
+});

@@ -55,11 +55,14 @@ export async function readWalletTicket(secret:string,ticket:unknown,now=Date.now
  if(!cardId||!/^MPG-[A-F0-9]{24}$/.test(cardId)||!email?.includes('@')||!(Number(exp)>now))return null;
  return {cardId,email};
 }
-/** The card a ticket spends, only while it is still this customer's and still holds a balance. */
+/** The card a ticket spends, only while it is still this customer's (addressed to the ticket's email, active, unexpired).
+ *  Its balance may be 0 here: a part-gift checkout holds the whole balance while its payment is open, and the shopper
+ *  must be able to resume it. reserveGift's trigger is what refuses to spend more than the card holds. */
 export async function cardForTicket(db:GiftDb,secret:string,ticket:unknown,now=Date.now()):Promise<{card:GiftCard;email:string}|null>{
  const t=await readWalletTicket(secret,ticket,now);if(!t)return null;
- if(!(await walletCards(db,t.email,now)).some(c=>c.id===t.cardId))return null;
- const card=await db.prepare("SELECT * FROM mimipip_gift_cards WHERE id=? AND status='active'").bind(t.cardId).first<GiftCard>();
+ const card=await db.prepare(`SELECT c.* FROM mimipip_gift_cards c JOIN mimipip_gift_orders o ON o.id=c.id
+  WHERE c.id=? AND c.status='active' AND c.currency='INR' AND o.status='active' AND (c.expires_at IS NULL OR c.expires_at>?)
+  AND lower(trim(o.recipient_email))=?`).bind(t.cardId,now,t.email).first<GiftCard>();
  return card?{card,email:t.email}:null;
 }
 /** Spend from the wallet: the oldest card, or the one whose reference the customer typed. A reference that is

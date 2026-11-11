@@ -39,7 +39,7 @@ export default function Checkout() {
   const [giftsOpen,setGiftsOpen]=useState(false);
   const { session: authSession } = useAuth();
   const [walletMinor,setWalletMinor]=useState(0);
-  useEffect(()=>{if(!authSession){setWalletMinor(0);return;}let active=true;fetch('/api/account/gift-wallet',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(active)setWalletMinor(Number(d?.balanceMinor)||0);}).catch(()=>{});return()=>{active=false};},[authSession]);
+  useEffect(()=>{if(!authSession){setWalletMinor(0);setGiftTicket('');try{sessionStorage.removeItem('mimipip-checkout-gift');}catch{/* private mode */}return;}let active=true;fetch('/api/account/gift-wallet',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(active)setWalletMinor(Number(d?.balanceMinor)||0);}).catch(()=>{});return()=>{active=false};},[authSession]);
   const applyWallet=async()=>{const r=await fetch('/api/account/gift-wallet',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const d=await r.json().catch(()=>({}));if(!r.ok||typeof d.ticket!=='string'){setProblem(d.error||'Your gift balance could not be used.');return;}setGiftTicket(d.ticket);sessionStorage.setItem('mimipip-checkout-gift',d.ticket);};
   const [problem, setProblem] = useState('');
   const [busy, setBusy] = useState(false);

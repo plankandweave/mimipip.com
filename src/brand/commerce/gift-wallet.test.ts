@@ -70,3 +70,14 @@ test('a wallet ticket is signed, short-lived and bound to the card and the email
  assert.equal((await walletSpend(h.env.DB,S,'shardul.test@example.test',{reference:(await giftReference(S,A,0)).toLowerCase()}))?.cardId,A);
  assert.equal(await cardForTicket(h.env.DB,S,await walletTicket(S,B,'shardul.test@example.test',now),now),null);
 });
+
+test('a card whose whole balance is held by an open part-gift checkout still resolves for its owner, so the checkout can be resumed',async()=>{
+ const h=harness();await h.add(A,'order_aaaa');const S=h.env.MIMIPIP_GIFT_SECRET;
+ const t=await walletTicket(S,A,'shardul.test@example.test');
+ h.order('held',200000);await reserveGift(h.env.DB,'held',A,100100);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+ assert.equal((await cardForTicket(h.env.DB,S,t))?.card.id,A);
+ assert.equal((await walletCards(h.env.DB,'shardul.test@example.test')).length,0); // nothing more to spend in the wallet view
+ h.order('second',50000);await assert.rejects(reserveGift(h.env.DB,'second',A,100)); // and the trigger still refuses more
+ assert.equal(await cardForTicket(h.env.DB,S,await walletTicket(S,A,'someone.else@example.test')),null);
+});
