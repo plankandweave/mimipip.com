@@ -13,7 +13,7 @@ type Props = ComponentProps<typeof ProductConfigurator> & {
 /** The fixed-size wallpaper order is priced by Mimi Pip's native checkout. */
 export function MimiWallpaperPurchase({ native, ...legacy }: Props) {
   const { market } = useMarket();
-  if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.isFixedSize) {
+  if (!("unavailable" in legacy) && market.countryCode === "IN" && native.sale.india?.rate && native.art && !legacy.isFixedSize && !legacy.editItemId) {
     return <section id="create-your-wall" className="scroll-mt-28">
       <p className="mb-4 text-sm text-slate">Smooth peel-and-stick wallpaper with a removable, self-adhesive backing.</p>
       <ChooseDesign slug={native.slug} name={native.name} width={null} height={null}

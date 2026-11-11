@@ -84,7 +84,7 @@ function cleanPlacement(p: unknown): StoredLine['placement'] {
 
 /** Prices a cart for a country, or says why it cannot be sold there. */
 export function priceCart(lines: unknown, countryCode: string):
-  { lines: (Priced & { kind?: 'sample'; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
+  { lines: (Priced & { kind?: 'sample'; fulfilmentArt?: StoredLine['fulfilmentArt']; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
   if (!Array.isArray(lines) || !lines.length || lines.length > 50) return { refused: 'Your cart is empty.' };
   const market = marketOf(countryCode);
   const out = [];
@@ -93,7 +93,7 @@ export function priceCart(lines: unknown, countryCode: string):
     if (raw?.kind === 'sample') {
       const sample = priceSample(raw,countryCode);
       if ('refused' in sample) return sample;
-      out.push(sample); continue;
+      out.push({...sample,fulfilmentArt:{...artFor(slug)!}}); continue;
     }
     if (raw?.kind != null) return {refused:'This order type is not supported.'};
     if (!artFor(slug) || !onSale(slug, market)) return { refused: `${nameOf(slug)} is not available to buy in this country. Please remove it.` };
@@ -108,7 +108,7 @@ export function priceCart(lines: unknown, countryCode: string):
       const lettering=pricedLettering(crop,priced.widthCm!,priced.heightCm!,countryCode);
       if(lettering && priced.ratePerSqft===null)return {refused:'Lettering is available for measured wallpaper only.'};
       if(crop && lettering){crop.textOverlay=lettering.overlay;crop.personalisation=lettering.personalisation;}
-      out.push({ ...priced, lineMinor:priced.lineMinor+(installation?.total??0)*100+(lettering?.fee??0)*100, ...(lettering?{personalisationMinor:lettering.fee*100}:{}), ...(installation?{installationMinor:installation.total*100}:{}), placement, ...(crop?{crop}:{}) });
+      out.push({ ...priced, fulfilmentArt:{...artFor(slug)!}, lineMinor:priced.lineMinor+(installation?.total??0)*100+(lettering?.fee??0)*100, ...(lettering?{personalisationMinor:lettering.fee*100}:{}), ...(installation?{installationMinor:installation.total*100}:{}), placement, ...(crop?{crop}:{}) });
     } catch (error) { return {refused:error instanceof Error?error.message:'Check your approved layout.'}; }
   }
   return { lines: out, totalMinor: out.reduce((s, l) => s + l.lineMinor, 0), currency: currencyOf(market) };
@@ -133,7 +133,7 @@ export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): 
   };
   if (o.amount_inr === null) return fail('Razorpay gave no rupee figure for this payment.');
   let body;
-  try { body = webOrderBody({ id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
+  try { body = webOrderBody({ createdAt:o.created_at, id: o.id, paymentId: o.payment_id!, amountInr: o.amount_inr, lines: JSON.parse(o.lines), customer: JSON.parse(o.customer) }); }
   catch (e) { return fail((e as Error).message); }
   try {
     const res = await pay.sendOrder(body);
