@@ -7,6 +7,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "@/components/SiteImage";
+import { HushWanderCollection } from "@/components/HushWanderCollection";
 
 // Collection listings had no time-based revalidation at all: they were rebuilt
 // only when something happened to call revalidatePath, so a newly published or
@@ -166,6 +167,12 @@ const HIDE_GROUP_ON: Record<string, "colour" | "style" | "subject" | "room" | un
   searchParams: Promise<SP>;
 }): Promise<Metadata> {
   const { handle } = await params;
+  if (handle === "hush-and-wander") return {
+    title: { absolute: "Hush & Wander | Nursery Wallpaper Collection | MimiPip" },
+    description: "Eleven softly painted nursery murals for the first little moments at home. Meet the foxes, ducks, whales and other gentle worlds of Hush & Wander.",
+    alternates: { canonical: "/collections/hush-and-wander" },
+    openGraph: { title: "Hush & Wander | MimiPip", description: "A room for the first thousand little moments.", images: ["/nursery-worlds/01-little-fox-orchard-room-v2.webp"] },
+  };
   if (process.env.MIMIPIP_LOCAL_REVIEW === '1') { const {headFor} = await import('@/brand/seo/head'); const head = headFor('/collections/' + handle); return head ? {title:{absolute:head.title}, description:head.description, alternates:{canonical:head.canonical}} : {title:'Collection', robots:{index:false,follow:true}}; }
   const { page: pageRaw, market } = await searchParams;
   const page = parsePage(pageRaw);
@@ -241,7 +248,8 @@ export default async function CollectionPage({
   searchParams: Promise<SP>;
 }) {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'||handle==='happy-petals'||handle==='hush-and-wander'||handle==='dotty-days'||handle==='colour-create'||handle==='dotty-days'||handle==='colour-create'){const {collectionDesigns}=await import('@/brand/review/data');if(collectionDesigns(handle).length){const {Browse}=await import('@/brand/review/pages');return <Browse axis="collection" value={handle}/>;}notFound();}
+  if (handle === "hush-and-wander") return <HushWanderCollection />;
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'||handle==='happy-petals'||handle==='dotty-days'||handle==='colour-create'){const {collectionDesigns}=await import('@/brand/review/data');if(collectionDesigns(handle).length){const {Browse}=await import('@/brand/review/pages');return <Browse axis="collection" value={handle}/>;}notFound();}
   if (handle === "ink") redirect("/collection/ink");
   if (handle === "new-york") redirect("/collection/new-york");
   const sp = await searchParams;
