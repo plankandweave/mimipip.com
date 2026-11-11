@@ -1,5 +1,6 @@
 'use client';
 import {checkedBillingIdentity} from '@/brand/commerce/billing-identity';
+import { useAuth } from "@/components/AuthProvider";
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
@@ -37,6 +38,10 @@ export default function Checkout() {
   const [giftDraft,setGiftDraft]=useState('');
   const [giftCode,setGiftCode]=useState('');
   const [giftsOpen,setGiftsOpen]=useState(false);
+  const { session: authSession } = useAuth();
+  const [walletMinor,setWalletMinor]=useState(0);
+  useEffect(()=>{if(!authSession){setWalletMinor(0);return;}let active=true;fetch('/api/account/gift-wallet',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(active)setWalletMinor(Number(d?.balanceMinor)||0);}).catch(()=>{});return()=>{active=false};},[authSession]);
+  const applyWallet=async()=>{const r=await fetch('/api/account/gift-wallet',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const d=await r.json().catch(()=>({}));if(!r.ok||typeof d.code!=='string'){setProblem(d.error||'Your gift balance could not be used.');return;}setGiftCode(d.code);setGiftDraft('');sessionStorage.setItem('mimipip-checkout-gift',d.code);};
   const [problem, setProblem] = useState('');
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<boolean | null>(null);
@@ -213,7 +218,7 @@ export default function Checkout() {
           {(india || form.gstin || form.billingName) && <details className="rounded-[14px] border border-edge p-4"><summary className="cursor-pointer text-sm font-semibold">Business GST invoice (optional)</summary><div className="mt-3 grid gap-3"><label className="grid gap-1.5 text-xs text-slate">GSTIN<input className={fieldClass+' text-base text-charcoal'} value={form.gstin} maxLength={15} autoCapitalize="characters" onChange={e=>setForm({...form,gstin:e.target.value.toUpperCase()})}/></label><label className="grid gap-1.5 text-xs text-slate">Registered business name<input className={fieldClass+' text-base text-charcoal'} value={form.billingName} maxLength={200} onChange={e=>setForm({...form,billingName:e.target.value})}/></label></div></details>}
           {problem && <p role="alert" className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{problem}</p>}
           {open === false && <p role="status" className="text-sm">Payments are paused for a moment. Your cart is saved.</p>}
-          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4"><label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{!!giftCode&&<button type="button" className="btn mt-3 ml-2" disabled={busy} onClick={()=>{setGiftCode('');setGiftDraft('');sessionStorage.removeItem('mimipip-checkout-gift');}}>Remove gift card</button>}{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved while the payment is open; a checkout left unpaid returns it to your card within about 90 minutes.</p></section>}
+          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4">{walletMinor>0&&!giftCode&&<button type="button" className="btn btn-primary mb-3" disabled={busy} onClick={()=>void applyWallet()}>Use my gift balance ({money('INR',walletMinor)})</button>}<label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{!!giftCode&&<button type="button" className="btn mt-3 ml-2" disabled={busy} onClick={()=>{setGiftCode('');setGiftDraft('');sessionStorage.removeItem('mimipip-checkout-gift');}}>Remove gift card</button>}{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved while the payment is open; a checkout left unpaid returns it to your card within about 90 minutes.</p></section>}
           {terms}
         </form>
         <section aria-label="Order summary" className="hidden h-fit lg:sticky lg:top-32 lg:flex lg:max-h-[calc(100vh-10rem)] lg:flex-col lg:rounded-[22px] lg:bg-wash lg:p-6">

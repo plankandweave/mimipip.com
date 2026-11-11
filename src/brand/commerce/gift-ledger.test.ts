@@ -144,7 +144,10 @@ test('a director-funded gift mints exactly one card and one email, and a repeat 
  const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
  assert.equal((await h.issue()).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
  assert.equal(h.mails.length,1);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
- const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Shopping code: /);assert.equal(m.to[0],'recipient@example.test');
+ const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Code \(optional, to use it without signing in\): MIMI-/);assert.match(m.text,/added to your MimiPip wallet\. Sign in at https:\/\/mimipip\.com\/account with recipient@example\.test/);assert.equal(m.to[0],'recipient@example.test');
+ // Gmail turns bare words like mimipip.com into its own http link with a redirect warning: every mention is an explicit https link.
+ const visible=m.html.replace(/<style[\s\S]*?<\/style>/g,'').replace(/<a [^>]*>[\s\S]*?<\/a>/g,'').replace(/<[^>]+>/g,' ');assert.ok(!/mimipip\.com/i.test(visible.replace(/hello@mimipip\.com/g,'')),visible);
+ assert.ok(!/href="http:\/\//.test(m.html));assert.match(m.html,/has been added to your MimiPip wallet/);
 });
 test('a gift with any live payment attempt, or a paid order, is never also funded',async()=>{
  for(const status of ['created','authorized','captured','refunded']){const h=fundedHarness([{id:'pay_x',status}]);assert.equal((await h.issue()).status,409);assert.equal(count(h,'mimipip_gift_cards'),0);assert.equal(h.o().payment_id,null);}
