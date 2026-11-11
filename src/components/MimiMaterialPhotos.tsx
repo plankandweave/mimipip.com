@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 /** Real studio photos; the owner confirmed these use MimiPip's wallpaper material. */
 export function MimiMaterialPhotos() {
-  return <section id="real-print-closeups" className="my-10 scroll-mt-28" aria-labelledby="material-photos-title">
+  return <section id="real-print-closeups" className="my-10 scroll-mt-56" aria-labelledby="material-photos-title">
     <h2 id="material-photos-title" className="text-2xl font-semibold">See the wallpaper up close</h2>
     <p className="my-3 leading-relaxed">Real photographs of the self-adhesive wallpaper used for MimiPip. The studio sample designs shown here illustrate the material; choose your artwork from our collections.</p>
     <div className="grid gap-5 sm:grid-cols-2">
