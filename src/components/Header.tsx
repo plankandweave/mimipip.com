@@ -262,7 +262,7 @@ export async function Header() {
                 {process.env.MIMIPIP_LOCAL_REVIEW==="1" ? "Kids’ wallpaper and floor games" : <ShippingBannerText />}
               </span>
               <span aria-hidden className="hidden text-charcoal/30 xl:inline">|</span>
-              <ShipToCountry className="min-w-0" />
+              <ShipToCountry className="min-w-0 [&_span]:text-charcoal [&_select]:text-charcoal" />
             </div>
             <div className="hidden shrink-0 md:block">{<Concierge />}</div>
           </div>
