@@ -1,3 +1,4 @@
+import { requireGatedUser } from "@/lib/auth-server";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { thumbnailRemote, cropPreviewRemote } from "@/lib/media-client";
 import { getProductByHandle, pickFlatImage } from "@/lib/queries";
@@ -13,12 +14,14 @@ export const maxDuration = 60;
 // chosen wall size, generated before purchase. Shows the design, how many
 // numbered panels it ships in, panel width, seam and trim.
 export async function POST(req: Request) {
+  const { blocked } = await requireGatedUser();
+  if (blocked) return blocked;
   const body = await req.json().catch(() => null);
   const handle = String(body?.productHandle ?? "");
   const widthCm = Number(body?.widthCm) || 0;
   const heightCm = Number(body?.heightCm) || 0;
   const materialSlug = String(body?.materialSlug ?? "");
-  if (!handle || widthCm <= 0 || heightCm <= 0) {
+  if (!handle || !Number.isFinite(widthCm) || !Number.isFinite(heightCm) || widthCm < 10 || heightCm < 10 || widthCm > 3000 || heightCm > 3000 || heightCm / widthCm > 10) {
     return new Response(JSON.stringify({ error: "bad_request" }), { status: 400 });
   }
 
@@ -26,12 +29,14 @@ export async function POST(req: Request) {
   if (!product) return new Response(JSON.stringify({ error: "not_found" }), { status: 404 });
 
   const selMaterial = (product.product_materials ?? []).find((m) => m.materials?.slug === materialSlug)?.materials;
-  const materialName = selMaterial?.name ?? "—";
+  if (!selMaterial) return Response.json({ error: "Choose an available material." }, { status: 400 });
+  const materialName = selMaterial.name;
   // Live production rules from the OS — the proof must show the split the
   // machine will actually make.
   const { maxPanelCm, overlapCm } = await fetchPrintRules();
   const panelCm = rollCmFromMm(selMaterial?.roll_width_mm, maxPanelCm);
   const flat = pickFlatImage(product.product_images ?? []);
+  if (!flat?.url) return Response.json({ error: "Approved artwork is unavailable." }, { status: 503 });
 
   let composition: ArrayBuffer | null = null;
   if (body.crop) {
@@ -91,7 +96,7 @@ export async function POST(req: Request) {
       page.drawImage(img, { x: M, y: y - h, width: w, height: h });
     }
   } catch {
-    if (composition) return Response.json({ error: "Could not create the composition proof." }, { status: 503 });
+    return Response.json({ error: "Could not create the composition proof." }, { status: 503 });
   }
 
   // specs column (right of the image)

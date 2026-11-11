@@ -264,7 +264,7 @@ function ConnectedProductConfigurator({
   const [installPin, setInstallPin] = useState("");
   const installPinRef = useRef<HTMLInputElement>(null);
   const [visualizerOpen, setVisualizerOpen] = useState(false);
-  const { authModal, signedIn } = useAuthGate();
+  const { gate, authModal, signedIn } = useAuthGate();
   // Opening the room visualiser is free and ungated. The homepage promises
   // "see it on your wall in seconds, at no charge", and this used to demand a
   // verified email plus consent boxes before the modal even opened. Mapping a
@@ -947,7 +947,7 @@ function ConnectedProductConfigurator({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `zyvorah-order-proof-${productHandle}.pdf`;
+      a.download = `mimipip-order-proof-${productHandle}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -2005,7 +2005,7 @@ function ConnectedProductConfigurator({
               </dl>
             </>
           )}
-          <button onClick={downloadProof} disabled={proofBusy || !nameReady} className="btn btn-ghost mt-4 text-sm disabled:opacity-50">
+          <button onClick={() => gate("download your wall proof", downloadProof)} disabled={proofBusy || !nameReady} className="btn btn-ghost mt-4 text-sm disabled:opacity-50">
             {proofBusy ? "Preparing proof…" : "Download order proof (PDF)"}
           </button>
           </div>

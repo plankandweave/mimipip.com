@@ -1,3 +1,4 @@
+import { shopperAiFetch } from "@/lib/shopper-service";
 import { NextResponse } from "next/server";
 import { getGatedUser } from "@/lib/auth-server";
 import { conciergeGate } from "@/lib/concierge-gate";
@@ -298,7 +299,7 @@ export async function POST(req: Request) {
       let cartDirty = false;
 
       try {
-        const client = new Anthropic({ apiKey: anthropicKeyFor("shoppers") });
+        const client = new Anthropic({ fetch: shopperAiFetch, apiKey: anthropicKeyFor("shoppers") });
         for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
           cacheNewestMessage(messages);
           const response = await client.messages.create({

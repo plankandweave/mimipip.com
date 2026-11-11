@@ -136,6 +136,7 @@ function keySetting(workflow: AiWorkflow, env: Record<string, string | undefined
 
 /** The key a workflow spends: its own when set, otherwise the shared one. */
 export function anthropicKeyFor(workflow: AiWorkflow, env: Record<string, string | undefined> = process.env): string | undefined {
+  if (workflow === "shoppers" && env === process.env && process.env.MIMIPIP_SHOPPER_SERVICES === "1") return "private-service-binding";
   if (env === process.env && !serviceAvailable("ai")) requireService("ai");
   return keySetting(workflow, env)?.key;
 }
