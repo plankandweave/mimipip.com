@@ -122,13 +122,14 @@ export function formatMarketMoney(amount: number, currency: CurrencyCode): strin
   return new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
     style: "currency",
     currency,
-    maximumFractionDigits: currency === "INR" ? 0 : 2,
+    minimumFractionDigits: currency === "INR" ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 
 export function marketGoodsFromInr(amountInr: number, countryCode: string): number {
   const market = marketFor(countryCode);
-  if (market.currency === "INR") return Math.round(amountInr);
+  if (market.currency === "INR") return roundMoney(amountInr);
   return roundMoney((amountInr / INR_PER_GLOBAL_PRICING_UNIT) * market.priceFactor);
 }
 
@@ -197,7 +198,7 @@ export function quoteMarketOrder(input: {
     currency: market.currency,
     goods,
     delivery,
-    total: market.currency === "USD" ? Math.ceil(goods + delivery) : Math.round(goods),
+    total: roundMoney(goods + delivery),
     chargeableWeightKg: chargeableWeightKg(areaSqFt, tubeCount),
     tubeCount,
   };

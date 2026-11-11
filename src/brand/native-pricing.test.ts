@@ -23,3 +23,13 @@ test('the wall-price estimator matches checkout including India GST and the area
  assert.equal(estimateWallpaper(8,9,'US')?.totalMinor,72000);
  for(const [w,h] of [[0,8],[NaN,8],[8,Infinity],[61,8]])assert.equal(estimateWallpaper(w,h,'IN'),null);
 });
+
+test('fractional wall prices stay exact from configurator to checkout in both markets',async()=>{
+ const {formatMarketMoney}=await import('../lib/markets');
+ const india=priceLine({slug:'almond-blossom',qty:1,widthCm:244,heightCm:274},'IN');assert.ok(!refused(india));
+ for(const country of ['IN','US']){
+  const line=priceLine({slug:'almond-blossom',qty:1,widthCm:244,heightCm:274},country==='IN'?'IN':'ABROAD');assert.ok(!refused(line));
+  const q=quoteMarketOrder({amountInr:india.lineMinor/100,countryCode:country});assert.equal(q.total,line.lineMinor/100);
+ }
+ assert.equal(formatMarketMoney(14392.64,'INR'),'₹14,392.64');assert.equal(formatMarketMoney(1000,'INR'),'₹1,000');
+});
