@@ -60,7 +60,7 @@ export function HushWanderCollection() {
         {designs.map((design, index) => <article key={design.slug} className={styles.card}>
           <Link href={`/products/${design.slug}`} className={styles.roomLink} aria-label={`Explore ${design.name} wallpaper`}>
             <img src={design.image} alt={`${design.name} wallpaper in an illustrative baby nursery`} width={1536} height={1024} loading={index < 2 ? 'eager' : 'lazy'} />
-            <span className={styles.roomLabel}>See this wallpaper <span aria-hidden="true">↗</span></span>
+            <span className={styles.roomLabel}>See this scene <span aria-hidden="true">↗</span></span>
           </Link>
           <div className={styles.cardBody}>
             <div className={styles.cardTitle}><p>{String(index + 1).padStart(2, '0')} / 11</p><h3>{design.name}</h3></div>
