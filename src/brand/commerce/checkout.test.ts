@@ -18,7 +18,7 @@ const wallMinor = (rate: number) => Math.round((300 * 250) / 929.0304 * rate * 1
 
 function harness(opts: { base?: number | null; osStatus?: number; keyId?: string | null } = {}) {
   const db = new DatabaseSync(':memory:');
-  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
+  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
   const DB = { prepare(sql: string) { return { bind(...v: any[]) { const s = db.prepare(sql); return { first: async () => s.get(...v) || null, run: async () => ({ meta: { changes: Number(s.run(...v).changes) } }), all: async () => ({ results: s.all(...v) }) }; } }; } };
   let captured = false, currency = 'INR', total = 0, osStatus = opts.osStatus ?? 200;
   const posts: any[] = [];
@@ -316,31 +316,34 @@ test('a saved pasted-material selection cannot silently become self-adhesive',()
  assert.ok(!('refused' in current));
 });
 
-async function seedGift(h:ReturnType<typeof harness>,minor:number){
- const {giftHash,normalizedGiftCode}=await import('./gift-ledger');
- const id='MPG-'+'B'.repeat(24),code='MIMI-'+ 'B'.repeat(24);
- h.env.MIMIPIP_GIFTS_ENABLED='1';h.db.exec('PRAGMA foreign_keys=ON');
- h.db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,created_at) VALUES(?,?,?,'pending',?,'INR','{}','buyer@example.test','recipient@example.test',0,?)").run(id,id,id,minor,Date.now());
- h.db.prepare("INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at) VALUES(?,?,?,?,'INR','active',?)").run(id,await giftHash(normalizedGiftCode(code)),minor,minor,Date.now());return code;
+async function seedGift(h:ReturnType<typeof harness>,minor:number,recipient=india.email){
+ const {giftHash,normalizedGiftCode,giftReference}=await import('./gift-ledger');const {walletTicket}=await import('./gift-wallet');
+ const id='MPG-'+'B'.repeat(24);
+ h.env.MIMIPIP_GIFTS_ENABLED='1';h.env.MIMIPIP_GIFT_SECRET='test-only-key-value-'.repeat(3);h.db.exec('PRAGMA foreign_keys=ON');
+ h.db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,created_at) VALUES(?,?,?,'pending',?,'INR','{}','gift.buyer@example.test',?,0,?)").run(id,id,id,minor,recipient,Date.now());
+ const ref=await giftReference(h.env.MIMIPIP_GIFT_SECRET,id,0);
+ h.db.prepare("INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at) VALUES(?,?,?,?,'INR','active',?)").run(id,await giftHash(normalizedGiftCode(ref)),minor,minor,Date.now());
+ // A balance is spent only with the signed-in recipient's ticket (the wallet route issues it).
+ return walletTicket(h.env.MIMIPIP_GIFT_SECRET,id,recipient);
 }
 test('partial gift charges only the balance and hands OS full invoice plus distinct tender',async()=>{
- const h=harness();const code=await seedGift(h,100100);const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.equal(made.amount,wallMinor(200)-100100);h.setCaptured();await h.pass();assert.equal(h.posts.length,1);const b=h.posts[0].body;assert.equal(b.amountInr,wallMinor(200)/100);assert.equal(b.payment.amountInr,made.amount/100);assert.equal(b.giftTender.amountInr,1001);assert.equal(b.giftTender.redemptionRef,made.orderNumber);await h.pass();assert.equal(h.posts.length,1);
+ const h=harness();const code=await seedGift(h,100100);const made=await(await h.call('create',{lines:[wall],customer:india,giftTicket:code})).json();assert.equal(made.amount,wallMinor(200)-100100);h.setCaptured();await h.pass();assert.equal(h.posts.length,1);const b=h.posts[0].body;assert.equal(b.amountInr,wallMinor(200)/100);assert.equal(b.payment.amountInr,made.amount/100);assert.equal(b.giftTender.amountInr,1001);assert.equal(b.giftTender.redemptionRef,made.orderNumber);await h.pass();assert.equal(h.posts.length,1);
 });
 test('fully gifted order never creates a provider payment and retains excess gift balance',async()=>{
- const h=harness();const code=await seedGift(h,2000000);const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.equal(made.paid,true);assert.equal(h.total(),0);assert.equal(h.posts.length,1);assert.equal(h.posts[0].body.payment,undefined);assert.equal(h.posts[0].body.giftTender.amountInr,wallMinor(200)/100);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,2000000-wallMinor(200));
+ const h=harness();const code=await seedGift(h,2000000);const made=await(await h.call('create',{lines:[wall],customer:india,giftTicket:code})).json();assert.equal(made.paid,true);assert.equal(h.total(),0);assert.equal(h.posts.length,1);assert.equal(h.posts[0].body.payment,undefined);assert.equal(h.posts[0].body.giftTender.amountInr,wallMinor(200)/100);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,2000000-wallMinor(200));
 });
 test('late provider response cannot publish a recovered unpresented gift checkout',async()=>{
  const h=harness();const code=await seedGift(h,100100);const original=h.env.STORE_PAY.razorpay;
  h.env.STORE_PAY.razorpay=async(path:string,body?:any)=>{const result=await original(path,body);if(body){h.db.exec("UPDATE mimipip_orders SET created_at=1 WHERE status='creating'");const {recoverCreatingGiftOrders}=await import('./gift-ledger');await recoverCreatingGiftOrders(h.env.DB);}return result;};
- const r=await h.call('create',{lines:[wall],customer:india,giftCode:code});assert.notEqual(r.status,200);assert.equal((await r.json()).orderId,undefined);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_orders').get().n,0);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ const r=await h.call('create',{lines:[wall],customer:india,giftTicket:code});assert.notEqual(r.status,200);assert.equal((await r.json()).orderId,undefined);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_orders').get().n,0);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
 });
 test('a changed part-gift checkout gives its balance back and starts afresh; a payment in flight keeps it',async()=>{
  const h=harness();h.env.MIMIPIP_GIFTS_ENABLED='1';const code=await seedGift(h,100100);
- const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.ok(made.orderId);
+ const made=await(await h.call('create',{lines:[wall],customer:india,giftTicket:code})).json();assert.ok(made.orderId);
  assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
  // Razorpay shows no payment on the order: the change releases it.
  const orig=h.env.STORE_PAY.razorpay;h.env.STORE_PAY.razorpay=async(path:string,body?:any)=>path.endsWith('/payments')?{ok:true,status:200,data:{items:[]}}:orig(path,body);
- const r=await h.call('create',{lines:[{...wall,widthCm:310}],customer:india,giftCode:code});assert.equal(r.status,409);const j=await r.json();assert.equal(j.renew,true);
+ const r=await h.call('create',{lines:[{...wall,widthCm:310}],customer:india,giftTicket:code});assert.equal(r.status,409);const j=await r.json();assert.equal(j.renew,true);
  assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
  assert.equal(h.db.prepare("SELECT status FROM mimipip_orders WHERE id=?").get(made.orderNumber).status,'expired');
 });
@@ -348,9 +351,9 @@ test('a gift card cannot settle a design service',async()=>{
  const h=harness();const code=await seedGift(h,100100);
  const svc={slug:'bespoke-customisation',qty:1,crop:{bespoke:{note:'A sunny nursery wall'}}};
  const priced=priceCart([wall,svc],'IN');assert.ok(!('refused' in priced)&&priced.lines.some((l:any)=>l.kind==='design-service'));
- const q=await handleCommerce(new Request('https://mimipip.com/api/checkout/quote',{method:'POST',headers:{origin:'https://mimipip.com','Content-Type':'application/json'},body:JSON.stringify({lines:[wall,svc],countryCode:'IN',giftCode:code})}),h.env);
+ const q=await handleCommerce(new Request('https://mimipip.com/api/checkout/quote',{method:'POST',headers:{origin:'https://mimipip.com','Content-Type':'application/json'},body:JSON.stringify({lines:[wall,svc],countryCode:'IN',giftTicket:code})}),h.env);
  assert.equal(q.status,400);assert.match((await q.json()).error,/design service/);
- const c=await h.call('create',{lines:[wall,svc],customer:india,giftCode:code});assert.equal(c.status,400);
+ const c=await h.call('create',{lines:[wall,svc],customer:india,giftTicket:code});assert.equal(c.status,400);
  assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
 });
 
@@ -378,4 +381,22 @@ test('an unreadable key holds a captured payment for the next pass instead of de
  assert.equal(h.db.prepare('SELECT status FROM mimipip_orders WHERE id=?').get(made.orderNumber).status,'pending');assert.equal(h.posts.length,0);
  h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_live_fixture'};await h.pass();
  assert.equal(h.db.prepare('SELECT status FROM mimipip_orders WHERE id=?').get(made.orderNumber).status,'paid');assert.equal(h.posts.length,1);
+});
+
+test('a gift balance is spent only by its signed-in recipient: a typed reference, a forged ticket or another email spends nothing',async()=>{
+ const h=harness();await seedGift(h,100100);
+ const {giftReference}=await import('./gift-ledger');const ref=await giftReference(h.env.MIMIPIP_GIFT_SECRET,'MPG-'+'B'.repeat(24),0);
+ // A typed reference is not a way to pay: the order is charged in full and the balance is untouched.
+ const typed=await(await h.call('create',{lines:[wall],customer:india,giftCode:ref})).json();assert.equal(typed.amount,wallMinor(200));
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ const h2=harness();const t2=await seedGift(h2,100100);
+ const forged=t2.slice(0,-1)+(t2.endsWith('0')?'1':'0');
+ assert.equal((await h2.call('create',{lines:[wall],customer:india,giftTicket:forged})).status,400);
+ assert.equal((await h2.call('create',{lines:[wall],customer:{...india,email:'someone.else@example.test'},giftTicket:t2})).status,400);
+ assert.equal(h2.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ // A ticket for a card sent to someone else is refused even though it is genuinely signed.
+ const h3=harness();const {walletTicket}=await import('./gift-wallet');await seedGift(h3,100100,'shardul@example.test');
+ const stolen=await walletTicket(h3.env.MIMIPIP_GIFT_SECRET,'MPG-'+'B'.repeat(24),india.email);
+ assert.equal((await h3.call('create',{lines:[wall],customer:india,giftTicket:stolen})).status,400);
+ assert.equal(h3.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
 });

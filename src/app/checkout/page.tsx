@@ -35,13 +35,12 @@ export default function Checkout() {
   const legacySnapshot = useRef<Line[]>([]);
   const [lines, setLines] = useState<Line[] | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
-  const [giftDraft,setGiftDraft]=useState('');
-  const [giftCode,setGiftCode]=useState('');
+  const [giftTicket,setGiftTicket]=useState('');
   const [giftsOpen,setGiftsOpen]=useState(false);
   const { session: authSession } = useAuth();
   const [walletMinor,setWalletMinor]=useState(0);
   useEffect(()=>{if(!authSession){setWalletMinor(0);return;}let active=true;fetch('/api/account/gift-wallet',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(active)setWalletMinor(Number(d?.balanceMinor)||0);}).catch(()=>{});return()=>{active=false};},[authSession]);
-  const applyWallet=async()=>{const r=await fetch('/api/account/gift-wallet',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const d=await r.json().catch(()=>({}));if(!r.ok||typeof d.code!=='string'){setProblem(d.error||'Your gift balance could not be used.');return;}setGiftCode(d.code);setGiftDraft('');sessionStorage.setItem('mimipip-checkout-gift',d.code);};
+  const applyWallet=async()=>{const r=await fetch('/api/account/gift-wallet',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const d=await r.json().catch(()=>({}));if(!r.ok||typeof d.ticket!=='string'){setProblem(d.error||'Your gift balance could not be used.');return;}setGiftTicket(d.ticket);sessionStorage.setItem('mimipip-checkout-gift',d.ticket);};
   const [problem, setProblem] = useState('');
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<boolean | null>(null);
@@ -50,7 +49,7 @@ export default function Checkout() {
   const countries = useMemo(() => countryOptions(), []);
   const countryCode = market.countryCode;
   const india = countryCode === 'IN';
-  const quoteKey = JSON.stringify({lines: lines?.map(payload) ?? [], countryCode,giftCode});
+  const quoteKey = JSON.stringify({lines: lines?.map(payload) ?? [], countryCode,giftTicket});
   const quoteReady = !!quote && quote.requestKey === quoteKey && !nativeCart.loading && !nativeCart.readError;
 
   const check = useCallback(async () => {
@@ -86,7 +85,7 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
-    const savedGift=sessionStorage.getItem('mimipip-checkout-gift')||'';setGiftCode(savedGift);setGiftDraft(savedGift);
+    const savedGift=sessionStorage.getItem('mimipip-checkout-gift')||'';setGiftTicket(/^[A-Za-z0-9_-]+\.[a-f0-9]{64}$/.test(savedGift)?savedGift:'');
     fetch('/api/gift-card/readiness').then(r=>r.json()).then(d=>setGiftsOpen(d.open===true)).catch(()=>{});
     // Existing browser selections are retained when no native cart is present.
     fetch('/api/checkout/readiness').then(r => r.json()).then(d => setOpen(!!d.open)).catch(() => setOpen(false));
@@ -110,11 +109,11 @@ export default function Checkout() {
     if (!lines?.length) { setQuote(null); return; }
     let live = true;
     setQuote(null);
-    post('quote', { lines: lines.map(payload), countryCode,giftCode,token:session() })
+    post('quote', { lines: lines.map(payload), countryCode,giftTicket,token:session() })
       .then(q => { if (live) { setQuote({...q, requestKey: quoteKey}); setProblem(''); } })
       .catch(e => { if (!live) return; setQuote(null);
         // A code the quote refuses must never block the checkout: it is dropped, and the quote runs again without it.
-        if (giftCode) { setGiftCode(''); setGiftDraft(''); sessionStorage.removeItem('mimipip-checkout-gift'); setProblem((e as Error).message + ' The gift card was removed from this checkout.'); }
+        if (giftTicket) { setGiftTicket(''); sessionStorage.removeItem('mimipip-checkout-gift'); setProblem((e as Error).message + ' The gift card was removed from this checkout.'); }
         else setProblem((e as Error).message); });
     return () => { live = false; };
   }, [lines, countryCode, quoteKey]);
@@ -129,11 +128,11 @@ export default function Checkout() {
       const {gstin,billingName,...contact}=form;
       const customer = { ...contact, countryCode, phone: form.phone.replace(india ? /\D/g : /^$/, ''),...(billingIdentity?{billingIdentity}:{}) };
       let d;
-      try { d = await post('create', { token: session(), lines: lines.map(payload), customer,giftCode }); }
+      try { d = await post('create', { token: session(), lines: lines.map(payload), customer,giftTicket }); }
       catch (err) {
         if (!(err as { renew?: boolean }).renew) throw err;
         sessionStorage.setItem(SESSION_KEY, newSession());
-        d = await post('create', { token: session(), lines: lines.map(payload), customer,giftCode });
+        d = await post('create', { token: session(), lines: lines.map(payload), customer,giftTicket });
       }
       sessionStorage.setItem('mimipip-checkout-selection', JSON.stringify({token:session(),...selection}));
       sessionStorage.setItem('mimipip-checkout-started', '1');
@@ -218,7 +217,7 @@ export default function Checkout() {
           {(india || form.gstin || form.billingName) && <details className="rounded-[14px] border border-edge p-4"><summary className="cursor-pointer text-sm font-semibold">Business GST invoice (optional)</summary><div className="mt-3 grid gap-3"><label className="grid gap-1.5 text-xs text-slate">GSTIN<input className={fieldClass+' text-base text-charcoal'} value={form.gstin} maxLength={15} autoCapitalize="characters" onChange={e=>setForm({...form,gstin:e.target.value.toUpperCase()})}/></label><label className="grid gap-1.5 text-xs text-slate">Registered business name<input className={fieldClass+' text-base text-charcoal'} value={form.billingName} maxLength={200} onChange={e=>setForm({...form,billingName:e.target.value})}/></label></div></details>}
           {problem && <p role="alert" className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{problem}</p>}
           {open === false && <p role="status" className="text-sm">Payments are paused for a moment. Your cart is saved.</p>}
-          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4">{walletMinor>0&&!giftCode&&<button type="button" className="btn btn-primary mb-3" disabled={busy} onClick={()=>void applyWallet()}>Use my gift balance ({money('INR',walletMinor)})</button>}<label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{!!giftCode&&<button type="button" className="btn mt-3 ml-2" disabled={busy} onClick={()=>{setGiftCode('');setGiftDraft('');sessionStorage.removeItem('mimipip-checkout-gift');}}>Remove gift card</button>}{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved while the payment is open; a checkout left unpaid returns it to your card within about 90 minutes.</p></section>}
+          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4">{authSession?(walletMinor>0||giftTicket?<>{!giftTicket&&<button type="button" className="btn btn-primary" disabled={busy} onClick={()=>void applyWallet()}>Use my gift balance ({money('INR',walletMinor)})</button>}{!!giftTicket&&<button type="button" className="btn" disabled={busy} onClick={()=>{setGiftTicket('');sessionStorage.removeItem('mimipip-checkout-gift');}}>Don't use my gift balance</button>}</>:<p className="text-sm">There is no gift balance on this account.</p>):<p className="text-sm">Have a MimiPip gift? <Link href="/account" className="underline underline-offset-2">Sign in</Link> with the email it was sent to, and your balance appears here.</p>}{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift balance: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Use the email your gift was sent to as this order's contact email. Anything you don't spend stays in your wallet; a checkout left unpaid returns its share within about 90 minutes.</p></section>}
           {terms}
         </form>
         <section aria-label="Order summary" className="hidden h-fit lg:sticky lg:top-32 lg:flex lg:max-h-[calc(100vh-10rem)] lg:flex-col lg:rounded-[22px] lg:bg-wash lg:p-6">

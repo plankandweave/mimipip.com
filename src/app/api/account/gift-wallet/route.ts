@@ -1,5 +1,6 @@
 import {supabaseServerAuth} from '@/lib/auth-server';
-import {confirmedEmail,walletBalance,walletCards,walletCode} from '@/brand/commerce/gift-wallet';
+import {confirmedEmail,walletBalance,walletCards,walletSpend} from '@/brand/commerce/gift-wallet';
+import {giftHash,rateLimitGift} from '@/brand/commerce/gift-ledger';
 import type {GiftEnv} from '@/brand/commerce/gift-card';
 const json=(value:unknown,status=200)=>Response.json(value,{status,headers:{'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
 async function verified(){
@@ -25,8 +26,9 @@ export async function POST(request:Request){
   const {env}=await import(/* @vite-ignore */ 'cloudflare:workers') as {env:GiftEnv};
   if(!env.DB||!env.MIMIPIP_GIFT_SECRET)return json({error:'Your gift balance is temporarily unavailable.'},503);
   let b:any={};try{b=await request.json();}catch{/* oldest card */}
-  const card=await walletCode(env.DB,env.MIMIPIP_GIFT_SECRET,email,b?.cardId);
-  if(!card)return json({error:'There is no gift balance on this account.'},404);
+  if(b?.reference!==undefined&&!await rateLimitGift(env.DB,await giftHash('gift-wallet:'+email),10,60000))return json({error:'Please wait a minute before trying again.'},429);
+  const card=await walletSpend(env.DB,env.MIMIPIP_GIFT_SECRET,email,{cardId:b?.cardId,reference:b?.reference});
+  if(!card)return json({error:'There is no gift balance on this account for that card.'},404);
   return json(card);
  }catch{return json({error:'Your gift balance could not be used. Please try again.'},503);}
 }

@@ -11,10 +11,27 @@ export async function giftCapability(secret:string,id:string,purpose:'code'|'vie
  const value=hex(await crypto.subtle.sign('HMAC',k,enc.encode(`mimipip-gift-v1:${purpose}:${id}`)));
  return purpose==='view'?value:'MIMI-'+value.slice(0,24).toUpperCase().match(/.{6}/g)!.join('-');
 }
-export const normalizedGiftCode=(code:unknown)=>typeof code==='string'?code.trim().toUpperCase().replace(/[\s-]/g,''):'';
+/** Crockford base32: no I, L, O or U, so a reference read aloud or retyped cannot be mistaken. */
+const CROCKFORD='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+export async function giftHmac(secret:string,message:string){
+ if(secret.length<32)throw new Error('Gift signing key unavailable');
+ const k=await crypto.subtle.importKey('raw',enc.encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);
+ return new Uint8Array(await crypto.subtle.sign('HMAC',k,enc.encode(message)));
+}
+/** A card's short reference, MIMI-XXXX-XXXX (40 bits). It identifies the card; it spends nothing on its own:
+ *  a balance is spent only by the signed-in recipient (gift-wallet.ts). n is the attempt that was free at minting. */
+export async function giftReference(secret:string,id:string,n=0){
+ const b=await giftHmac(secret,`mimipip-gift-v2:reference:${id}|${n}`);
+ let bits=0n;for(let i=0;i<5;i++)bits=(bits<<8n)|BigInt(b[i]!);
+ let s='';for(let i=7;i>=0;i--)s+=CROCKFORD[Number((bits>>BigInt(i*5))&31n)];
+ return `MIMI-${s.slice(0,4)}-${s.slice(4)}`;
+}
+export const normalizedGiftCode=(code:unknown)=>typeof code==='string'?code.trim().toUpperCase().replace(/[\s-]/g,'').replace(/[IL]/g,'1').replace(/O/g,'0'):'';
+export const isReferenceClash=(e:unknown)=>/UNIQUE/i.test(String((e as Error)?.message??e))&&/code_hash/i.test(String((e as Error)?.message??e));
 export async function cardForCode(db:GiftDb,code:unknown,now=Date.now()){
  const normalized=normalizedGiftCode(code);
- if(!/^MIMI[A-F0-9]{24}$/.test(normalized))return null;
+ // MIMI-XXXX-XXXX, normalised (I and L read as 1, O as 0): M1M1 + 8 Crockford characters.
+ if(!/^M1M1[0-9A-HJKMNP-TV-Z]{8}$/.test(normalized))return null;
  const row=await db.prepare("SELECT * FROM mimipip_gift_cards WHERE code_hash=? AND status='active'").bind(await giftHash(normalized)).first<GiftCard>();
  return row&&(!row.expires_at||row.expires_at>now)?row:null;
 }
