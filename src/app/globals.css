@@ -508,7 +508,3 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
   }
 }
 
-/* Ultra-wide windows must not crop farther than the reviewed desktop frame. */
-@media (min-width: 1024px) and (min-aspect-ratio: 2/1) {
-  .hero-reviewed-image { object-fit: contain !important; }
-}
