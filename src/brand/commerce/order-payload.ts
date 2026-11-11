@@ -58,8 +58,8 @@ export function webOrderBody(o: { id: string; paymentId: string; amountInr: numb
         const checked = priceSample(l as unknown as Record<string,unknown>, c.countryCode);
         if ('refused' in checked || l.lineMinor !== checked.lineMinor) throw new Error('Invalid durable sample specification for '+l.slug);
         return {lineRef:String(i+1),brand:'lorange',designUrl:a.art,designName:sampleDesign(l.slug)!.title,orderedTitle:l.name,productHandle:l.slug,
-          widthMm:210,heightMm:297,material:'paste' as const,materialSlug:'smooth-matt',qty:1,lineTotalInr:inr[i],
-          sample:{designHandle:l.slug,materialSlug:'smooth-matt',materialLabel:'Soft Matte',muralWidthCm:SAMPLE_REFERENCE_CM,muralHeightCm:SAMPLE_REFERENCE_CM,sourceUrl:a.art}};
+          widthMm:210,heightMm:297,material:'self_adhesive' as const,materialSlug:'self-adhesive-vinyl',qty:1,lineTotalInr:inr[i],
+          sample:{designHandle:l.slug,materialSlug:'self-adhesive-vinyl',materialLabel:'Smooth Self-Adhesive',muralWidthCm:SAMPLE_REFERENCE_CM,muralHeightCm:SAMPLE_REFERENCE_CM,sourceUrl:a.art}};
       }
       // Revalidate durable records too: an older pending order must not lose
       // unsupported instructions when a later payment reconciliation sends it.

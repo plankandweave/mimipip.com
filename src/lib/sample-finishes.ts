@@ -10,18 +10,16 @@
  * desk can actually cut, pack and post at the flat ₹200 line price — a sample
  * we can't fulfil takes the customer's money for nothing. Canvas is deliberately
  * absent: it is a fixed-size, rolled-and-tubed good taxed at 12%, not an A4
- * swatch inside this flat-priced, 18% flow. Self-Adhesive is also absent: this
- * sample service uses verified wallpaper artwork offered on Soft Matte — Self-Adhesive is a ready-size-only media
- * and isn't a real option for these designs.
+ * swatch inside this flat-priced, 18% flow. Wallpaper samples use the same
+ * self-adhesive stock as the website wallpaper.
  */
 export type SampleFinish = { name: string; label: string; blurb: string };
 
 export const SAMPLE_FINISHES: SampleFinish[] = [
   {
-    name: "Soft Matte",
-    // Roheena, 12 October 2026: the feel first, then how it goes up.
-    label: "Soft Matte",
-    blurb: "Smooth to the touch and never glossy, with a beautiful softness. Pasted straight onto the wall.",
+    name: "Smooth Self-Adhesive",
+    label: "Smooth Self-Adhesive",
+    blurb: "Smooth to the touch, with an adhesive backing for application to a prepared wall.",
   },
 ];
 
