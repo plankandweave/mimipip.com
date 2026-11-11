@@ -45,7 +45,7 @@ test('llms.txt names MimiPip, its prices and policies, every design on sale and 
   const text = llmsTxt();
   assert.match(text, /^# MimiPip\n\n> /);
   assert.match(text, /on mimipip\.com only/);
-  assert.match(text, /₹200 per sq ft plus 18% GST/);
+  assert.match(text, /₹200 per sq ft including GST/);
   assert.match(text, /US\$10 per sq ft including delivery/);
   assert.match(text, /smallest wallpaper order is 20 sq ft/);
   assert.match(text, /\/feeds\/openai-products\.jsonl/);
