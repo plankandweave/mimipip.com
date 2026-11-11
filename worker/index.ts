@@ -1,3 +1,4 @@
+import {handleGiftCard} from '../src/brand/commerce/gift-card';
 import {handleSampleOrder} from '../src/brand/commerce/sample-order';
 import {publicPage} from "./public-page";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
@@ -53,6 +54,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  // A design that cannot be bought is not shown: its address goes to the shop (owner rule, 10 Nov 2026).
  if(['GET','HEAD'].includes(request.method)){const to=hiddenDestination(p);if(to)return new Response(null,{status:302,headers:{Location:new URL(to,u.origin).href,'X-Robots-Tag':'noindex','Cache-Control':'no-store'}});}
  if(p==='/api/sample-order'||p==='/api/sample-order/readiness')return withCheckoutBrowserPolicy(await handleSampleOrder(request,env as CheckoutEnv));
+ if(p==='/api/gift-card'||p.startsWith('/api/gift-card/'))return withOfflineBrowserPolicy(await handleGiftCard(request));
  if(p.startsWith('/api/checkout/')){
   try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
@@ -65,6 +67,14 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  }
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
+ if(p==='/gift-card' && ['GET','HEAD'].includes(request.method)){
+  const response=await publicPage(request,await handler.fetch(request,env,ctx));
+  const headers=new Headers(response.headers);
+  // The isolated, script-free srcdoc card preview uses only our own artwork/fonts.
+  headers.set('Content-Security-Policy',(headers.get('Content-Security-Policy')||'').replace(/frame-src [^;]*/,"frame-src 'self'"));
+  headers.set('Cache-Control','no-store');
+  return new Response(response.body,{status:response.status,headers});
+ }
  const nativeApi=/^\/api\/(forms$|custom-upload$|proof$|shopper-services$|consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
  if(p==='/api/cart'&&request.method==='POST'){
   // Add to cart, counted where it happens. The body is read from a copy; the cart is untouched.

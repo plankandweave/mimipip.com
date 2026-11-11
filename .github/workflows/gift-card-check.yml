@@ -1,0 +1,37 @@
+name: Check gift-card release
+on:
+  pull_request:
+    paths:
+      - 'src/app/gift-card/**'
+      - 'src/brand/commerce/gift-card*'
+      - 'public/brand/mimi-pip/gift-cards/**'
+      - 'worker/index.ts'
+      - '.github/workflows/gift-card-check.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: |
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          node node_modules/esbuild/install.js
+          node node_modules/workerd/install.js
+      - name: Test
+        run: npm test
+      - name: Typecheck
+        run: npm run typecheck:app
+      - name: Build
+        run: MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 npx vinext build
