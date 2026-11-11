@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   const product = await getProductByHandle(handle);
   if (!product) return new Response(JSON.stringify({ error: "not_found" }), { status: 404 });
 
-  const selMaterial = (product.product_materials ?? []).find((m) => m.materials?.slug === materialSlug)?.materials;
+  const selMaterial = (product.product_materials ?? []).find((m) => m.available && m.materials?.slug === materialSlug)?.materials;
   if (!selMaterial) return Response.json({ error: "Choose an available material." }, { status: 400 });
   const materialName = selMaterial.name;
   // Live production rules from the OS — the proof must show the split the
