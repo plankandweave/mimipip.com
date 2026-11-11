@@ -4,11 +4,12 @@ import Link from "next/link";
 
 /** A mail's link carries a key and still asks for one press, so a mail scanner opening the link leaves nobody off the list. */
 export default function Unsubscribe() {
+  const [ready, setReady] = useState(false);
   const [key, setKey] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [problem, setProblem] = useState("");
-  useEffect(() => { setKey(new URLSearchParams(window.location.search).get("key")); }, []);
+  useEffect(() => { setKey(new URLSearchParams(window.location.search).get("key")); setReady(true); }, []);
   async function leave(e: React.FormEvent) {
     e.preventDefault();
     setProblem("");
@@ -26,7 +27,7 @@ export default function Unsubscribe() {
           {!key && <label className="grid gap-1">Your email
             <input className="w-full rounded-lg border bg-white p-2" type="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} />
           </label>}
-          <button className="btn btn-primary justify-self-start">Stop emails</button>
+          <button disabled={!ready} className="btn btn-primary justify-self-start">Stop emails</button>
           <p role="status" className="text-sm">{problem}</p>
         </form>
       )}
