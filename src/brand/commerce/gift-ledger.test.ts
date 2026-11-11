@@ -163,7 +163,7 @@ test('a payment that lands later on a funded gift mints nothing and is recorded 
  assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
  const capture={id:'pay_late',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
  h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
- await watchFundedOrders(h.env,h.now+3600001);
+ await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_late');assert.equal(h.o().last_error,'settled_by_payment:pay_late');
 });
 test('only the OS token may fund a gift',async()=>{
@@ -178,11 +178,11 @@ test('review #58 (1): an authorised payment does not settle a funding, and the w
  let items:any[]=[{id:'pay_auth',status:'authorized',captured:false,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];let order:any={status:'attempted',amount_paid:0,currency:'INR'};
  h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items}}:{ok:true,data:order};
  const late=()=>h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id;
- await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);assert.equal(h.o().last_error,null);
+ await watchFundedOrders(h.env,Date.now()+7_200_000);assert.equal(late(),null);assert.equal(h.o().last_error,null);
  // A capture of a different amount or order, or a refunded one, settles nothing either.
- for(const bad of [{order_id:'order_other'},{captured:false}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);}
+ for(const bad of [{order_id:'order_other'},{captured:false}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);assert.equal(late(),null);}
  // A capture whose order does not read paid is money taken that cannot settle: it is recorded for review, not ignored.
- items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
+ items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(late(),'pay_ok');assert.equal(h.o().last_error,'late_payment_review:pay_ok:100100:INR:refunded=0');assert.equal(count(h,'mimipip_gift_cards'),1);
 });
 test('review #58 (2): an interrupted funded issue leaves the gift untouched, and a later real payment still activates it once',async()=>{
@@ -222,7 +222,7 @@ test('a capture of the original amount on a funded gift with a different face va
  const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
  const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
  h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
- await watchFundedOrders(h.env,h.now+3600001);
+ await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');
  assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
  assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
@@ -242,8 +242,8 @@ test('the late payment and its review note are written together: an interruption
  const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
  const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
  h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
- h.env.DB.failBatchAt=1;await assert.rejects(watchFundedOrders(h.env,h.now+3600001));h.env.DB.failBatchAt=-1;
+ h.env.DB.failBatchAt=1;await assert.rejects(watchFundedOrders(h.env,Date.now()+7_200_000));h.env.DB.failBatchAt=-1;
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,null);assert.equal(h.o().last_error,null);
- h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
+ h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,Date.now()+7_200_000);
  assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
 });
