@@ -40,3 +40,12 @@ test('design queue refuses missing authentication and detects concurrent status 
  const get=await handleDesignBriefs(new Request(req,{headers:{'x-zyvorah-token':'fixture'}}),env);assert.equal(get.status,200);assert.equal((await get.json()).briefs.length,1);assert.match(queries[0],/status='paid'/);
  const update=await handleDesignBriefs(new Request(req,{method:'POST',headers:{'x-zyvorah-token':'fixture'},body:JSON.stringify({orderRef:row.id,lineRef:'1',status:'designing'})}),env);assert.equal(update.status,409);assert.match(queries.at(-1)!,/AND fulfilment=\?/);
 });
+test('private cart images sign only owned authoritative artwork after full validation',async()=>{
+ const {customCartImage}=await import('./cart-artwork');const signed:string[]=[];
+ const sign=async(ref:string)=>{signed.push(ref);return 'signed-fixture';};
+ assert.equal(await customCartImage(upload,assets,sign),'signed-fixture');assert.deepEqual(signed,[art]);signed.length=0;
+ for(const line of [{...upload,crop:{...upload.crop,imageUrl:art.replace(id,'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')}},{...upload,qty:0},upload]){
+  const owned=line===upload?{}:assets;assert.equal(await customCartImage(line,owned,sign),null);
+ }
+ assert.deepEqual(signed,[]);
+});

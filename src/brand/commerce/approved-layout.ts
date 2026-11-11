@@ -7,6 +7,7 @@ const cm=z.number().finite().min(0).max(3000);
 const positiveCm=cm.positive();
 const position=z.number().finite().min(0).max(1);
 const layout=z.object({
+ planningMode:z.literal('full-wall').optional(),
  customArtworkId:z.string().uuid().optional(),
  imageUrl:z.string().max(2048),wallWidthCm:positiveCm,wallHeightCm:positiveCm,
  offsetX:position,offsetY:position,zoom:z.number().finite().min(1).max(8),flipH:z.boolean().optional(),flipV:z.boolean().optional(),
@@ -41,6 +42,6 @@ export function approvedLayout(raw:unknown,widthCm:number|null,heightCm:number|n
  if(c.walls?.length&&Math.abs(c.walls.reduce((a,b)=>a+b,0)-c.wallWidthCm)>.05)throw new Error('Check the widths of your walls.');
  if(c.doors?.some(d=>d.offsetCm+d.widthCm>c.wallWidthCm+.05||(d.sillCm??0)+d.heightCm>c.wallHeightCm+.05)||c.divisions?.some(d=>d>c.wallWidthCm))throw new Error('Keep wall markings inside the wall.');
  if(c.installation && (c.installation.ratePerSqft!==INSTALL_RATE_EX_GST || c.installation.total<=0))throw new Error('Please select installation again to see its current price.');
- if(c.openingsPlan||c.seamless||c.bespoke||c.concept||(c.walls?.length??0)>1||(c.doors?.length??0)>0||(c.divisions?.length??0)>0)throw new Error('This customised layout needs our team to confirm fulfilment before payment. Please contact MimiPip.');
+ if(c.openingsPlan||c.seamless||c.bespoke||c.concept||(!c.planningMode&&((c.walls?.length??0)>1||(c.doors?.length??0)>0||(c.divisions?.length??0)>0)))throw new Error('This customised layout needs our team to confirm fulfilment before payment. Please contact MimiPip.');
  return {...c,imageUrl:art} as CropData;
 }

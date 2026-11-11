@@ -1,3 +1,4 @@
+import { hiddenDestination } from '@/brand/seo/routes';
 import { InRealHomesSection } from "@/components/InRealHomesSection";
 
 import { SpaceTile } from "@/components/SectionTiles";
@@ -437,6 +438,7 @@ const HERO_SLIDES = 3;
   const tileImgs: ProductCardData[] = [];
   const usedKickers = new Set<string>();
   for (const e of shuffled) {
+    if (hiddenDestination(`/collections/${e.handle}`)) continue;
     if (variety.collectionUsed(e.handle)) continue;
     const k = kickerFor(e);
     if (usedKickers.has(k)) continue;
@@ -815,7 +817,7 @@ const HERO_SLIDES = 3;
       })}
 
       {/* ---------- shop by (row 5: after the new-arrival rows, before the spotlight) ---------- */}
-      <Reveal>
+      {tileEntries.length > 0 && <Reveal>
       <section className="container-x py-20">
         <div className="mb-10 text-center">
           <p className="caps text-mist">Browse by style</p>
@@ -848,7 +850,7 @@ const HERO_SLIDES = 3;
           ))}
         </div>
       </section>
-      </Reveal>
+      </Reveal>}
 
       {/* ---------- signature spotlight ---------- */}
       {signatureRow && signatureProducts.length > 0 && (
