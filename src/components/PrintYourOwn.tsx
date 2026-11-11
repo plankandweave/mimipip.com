@@ -245,8 +245,7 @@ export function PrintYourOwn({
         </span>
         <h1 className="mt-4 text-[clamp(2rem,4vw,2.8rem)] leading-[1.05]">Your design, on your wall.</h1>
         <p className="mt-3 text-slate">
-          Upload any artwork or photo you have the rights to, size it to your exact wall, choose a
-          finish, and we&apos;ll print it sized to your wall — same quality and journey as our own murals.
+          Turn your artwork or photo into a mural wallpaper, sized to your wall in our smooth self-adhesive finish. Upload an image you have the rights to use, then choose its composition and wall size.
         </p>
 
         {!uploaded ? (
@@ -255,7 +254,7 @@ export function PrintYourOwn({
             <ol className="mt-2 grid gap-1.5 list-decimal pl-4">
               <li>Upload your image.</li>
               <li>Frame it and enter your wall size.</li>
-              <li>Pick a finish and see your price.</li>
+              <li>See your wall’s price.</li>
               <li>Confirm the rights &amp; print consents at checkout, then pay.</li>
             </ol>
           </div>

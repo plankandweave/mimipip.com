@@ -633,6 +633,13 @@ function ConnectedProductConfigurator({
     restoredEdit.current = true;
     setQty(line.quantity);
     const c = line.crop_data;
+    const firstWidth=c?.walls?.length?c.walls[0]:Number(line.width_cm);
+    pickReadySize(firstWidth/CM_PER_INCH,Number(line.height_cm)/CM_PER_INCH);
+    setExtraWalls(c?.walls?.slice(1)??[]);
+    setDoors(c?.doors??[]);
+    const corners=c?.walls?.slice(0,-1).map((_,i)=>c.walls!.slice(0,i+1).reduce((sum,w)=>sum+w,0))??[];
+    setManualDivisions(c?.divisions?.filter(d=>!corners.some(v=>Math.abs(v-d)<.01))??[]);
+    setTextOverlay(c?.textOverlay??null);
     if (c) {
       setOffsetX(c.offsetX ?? 0.5);
       setOffsetY(c.offsetY ?? 0.5);

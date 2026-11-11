@@ -1,3 +1,4 @@
+import {customCartImage} from '@/brand/commerce/cart-artwork';
 import {customArtsFor} from '@/brand/commerce/custom-art-server';
 import { priceCart } from "@/brand/commerce/checkout";
 import {pricedLettering} from '@/brand/commerce/lettering';
@@ -53,12 +54,13 @@ async function readCart(token: string) {
       // RPC callers cannot make this service-role reader sign another cart's file.
       const ownPreview=ref?.bucket==='mimipip-order-previews' && ref.path.startsWith(token+'/');
       const itemLines=[{slug:item.handle,materialSlug:item.material_slug,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data}];
-      const quote = priceCart(itemLines, 'IN',await customArtsFor(itemLines,token));
+      const assets=await customArtsFor(itemLines,token);
+      const quote = priceCart(itemLines, 'IN',assets);
       const repriced = 'refused' in quote ? {price_changed:true} : {
         line_total:quote.totalMinor/100,unit_price:quote.lines[0].ratePerSqft??item.unit_price,
         area_sqft:quote.lines[0].billedSqft??item.area_sqft,price_changed:false,
       };
-      return {...item,...repriced,...(item.handle==='custom-wallpaper' && item.crop_data?{image:await signDoc(item.crop_data.imageUrl)}:{}),preview_url:ownPreview?await signDoc(item.preview_url):null};
+      return {...item,...repriced,...(item.handle==='custom-wallpaper' && item.crop_data?{image:await customCartImage(itemLines[0],assets,signDoc)}:{}),preview_url:ownPreview?await signDoc(item.preview_url):null};
     }));
     data.subtotal = data.items.reduce((sum:number,item:{line_total:number})=>sum+item.line_total,0);
   }
