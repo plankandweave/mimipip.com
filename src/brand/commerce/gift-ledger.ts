@@ -22,8 +22,8 @@ export async function giftHmac(secret:string,message:string){
  *  a balance is spent only by the signed-in recipient (gift-wallet.ts). n is the attempt that was free at minting. */
 export async function giftReference(secret:string,id:string,n=0){
  const b=await giftHmac(secret,`mimipip-gift-v2:reference:${id}|${n}`);
- let bits=0n;for(let i=0;i<5;i++)bits=(bits<<8n)|BigInt(b[i]!);
- let s='';for(let i=7;i>=0;i--)s+=CROCKFORD[Number((bits>>BigInt(i*5))&31n)];
+ let bits=0;for(let i=0;i<5;i++)bits=bits*256+b[i]!; // 40 bits: exact in a double
+ let s='';for(let i=7;i>=0;i--)s+=CROCKFORD[Math.floor(bits/2**(i*5))%32];
  return `MIMI-${s.slice(0,4)}-${s.slice(4)}`;
 }
 export const normalizedGiftCode=(code:unknown)=>typeof code==='string'?code.trim().toUpperCase().replace(/[\s-]/g,'').replace(/[IL]/g,'1').replace(/O/g,'0'):'';
