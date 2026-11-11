@@ -180,11 +180,10 @@ test('review #58 (1): an authorised payment does not settle a funding, and the w
  const late=()=>h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id;
  await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);assert.equal(h.o().last_error,null);
  // A capture of a different amount or order, or a refunded one, settles nothing either.
- for(const bad of [{amount:100},{order_id:'order_other'},{amount_refunded:100100},{currency:'USD'}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);}
- // The order itself must read paid for that amount.
- items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);
- order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
- assert.equal(late(),'pay_ok');assert.equal(h.o().last_error,'settled_by_payment:pay_ok');assert.equal(count(h,'mimipip_gift_cards'),1);
+ for(const bad of [{order_id:'order_other'},{captured:false}]){items=[{id:'pay_bad',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0,...bad}];order={status:'paid',amount_paid:100100,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);assert.equal(late(),null);}
+ // A capture whose order does not read paid is money taken that cannot settle: it is recorded for review, not ignored.
+ items=[{id:'pay_ok',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0}];order={status:'attempted',amount_paid:0,currency:'INR'};h.db.exec('UPDATE mimipip_gift_funding SET checked_at=0');await watchFundedOrders(h.env,h.now+3600001);
+ assert.equal(late(),'pay_ok');assert.equal(h.o().last_error,'late_payment_review:pay_ok:100100:INR:refunded=0');assert.equal(count(h,'mimipip_gift_cards'),1);
 });
 test('review #58 (2): an interrupted funded issue leaves the gift untouched, and a later real payment still activates it once',async()=>{
  const h=fundedHarness();
@@ -203,4 +202,28 @@ test('review #58 (2): a funded claim stranded by an older build is given back, s
  h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[h.payment]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
  await sweepGifts({...h.env,RESEND_API_KEY:undefined});
  assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,'pay_fixture');assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+
+test('a funded face value is written with the card in one step; until then a card payment of the original still activates it as bought',async()=>{
+ const h=fundedHarness();const body={...h.body,faceMinor:90001};
+ // Interrupted: the amount is unchanged and nothing is claimed.
+ h.env.DB.failBatchAt=2;await assert.rejects(h.issue(body));h.env.DB.failBatchAt=-1;
+ assert.equal(h.o().amount,100100);assert.equal(JSON.parse(h.o().presentation).amount,1001);assert.equal(h.o().payment_id,null);
+ const r=await h.issue(body);assert.equal(r.status,200);
+ assert.equal(h.o().amount,90001);assert.equal(JSON.parse(h.o().presentation).amount,900.01);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
+ assert.equal(h.db.prepare('SELECT amount_minor FROM mimipip_gift_funding').get().amount_minor,90001);
+ assert.match(JSON.parse(h.mails[0].body).text,/Value: ₹900\.01/);
+ assert.equal((await h.issue(body)).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
+ assert.equal((await h.issue({...body,faceMinor:90002})).status,409);
+ for(const faceMinor of [100,5_000_001,1.5])assert.equal((await fundedHarness().issue({...h.body,faceMinor})).status,400);
+});
+test('a capture of the original amount on a funded gift with a different face value is recorded for review, never ignored',async()=>{
+ const h=fundedHarness();await h.issue({...h.body,faceMinor:90001});
+ const capture={id:'pay_orig',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
+ h.env.STORE_PAY.razorpay=async(path:string)=>path.endsWith('/payments')?{ok:true,data:{items:[capture]}}:{ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}};
+ await watchFundedOrders(h.env,h.now+3600001);
+ assert.equal(h.db.prepare('SELECT late_payment_id FROM mimipip_gift_funding').get().late_payment_id,'pay_orig');
+ assert.equal(h.o().last_error,'late_payment_review:pay_orig:100100:INR:refunded=0');
+ assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,90001);
 });
