@@ -34,7 +34,7 @@ const OCEANIA = new Set("AU FJ NC NZ PG".split(" "));
 
 const PRICE_FACTORS: Record<MarketTier, number> = { india: 1, value: 1, standard: 1, core: 1, premium: 1 };
 // Native totals are GST-inclusive INR. This is a retail price mapping, not FX.
-const INR_PER_GLOBAL_PRICING_UNIT = MIMIPIP_PRICING.sellingInrPerSqFt * (1 + (MIMIPIP_PRICING.gstRate ?? 0.18)) / MIMIPIP_PRICING.sellingUsdPerSqFt;
+const INR_PER_GLOBAL_PRICING_UNIT = MIMIPIP_PRICING.sellingInrPerSqFt / MIMIPIP_PRICING.sellingUsdPerSqFt;
 
 export type Market = {
   countryCode: string;

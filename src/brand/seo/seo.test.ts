@@ -82,7 +82,7 @@ test('a product page carries Product and Offer with the price a shopper pays', (
   const [product] = productJsonLd(wall) as any[];
   assert.equal(product['@type'], 'Product');
   assert.deepEqual(product.offers.map((o: any) => [o.priceCurrency, o.price, o.availability]), [
-    ['INR', '4720.00', 'https://schema.org/InStock'],   // 20 sq ft × ₹200 + 18% GST: the smallest order
+    ['INR', '4000.00', 'https://schema.org/InStock'],   // 20 sq ft × ₹200 including GST: the smallest order
     ['USD', '200.00', 'https://schema.org/InStock'],    // 20 sq ft × US$10
   ]);
   const [game] = productJsonLd(sellable.find(r => r.slug === 'hopscotch-peach-pop')!) as any[];
@@ -132,7 +132,7 @@ test('shopping feeds: only designs on sale, sound against the feed rules, the pr
       assert.equal(i.price, `${(quote.totalMinor / 100).toFixed(2)} ${quote.currency}`, i.id + ' feed price is not the checkout price');
     }
   }
-  assert.equal(feedItems('IN').find(i => i.link.endsWith('/almond-blossom'))!.price, '16992.00 INR');
+  assert.equal(feedItems('IN').find(i => i.link.endsWith('/almond-blossom'))!.price, '14400.00 INR');
   assert.equal(feedItems('US').find(i => i.link.endsWith('/almond-blossom'))!.price, '720.00 USD');
   for (const make of Object.values(FEEDS)) {
     const xml = make();

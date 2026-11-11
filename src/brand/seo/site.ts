@@ -7,7 +7,7 @@
 import records from '../review/catalogue.json';
 import { artFor } from '../commerce/order-payload';
 import { saleOf, sellableAnywhere, type Sale } from '../commerce/sale';
-import { fixedPrice, measured, MIN_BILLED_SQFT, INDIA_GST_RATE } from '../commerce/prices';
+import { fixedPrice, measured, MIN_BILLED_SQFT } from '../commerce/prices';
 
 export const ORIGIN = 'https://mimipip.com';
 export const BRAND = 'MimiPip';
@@ -41,7 +41,7 @@ export function listPrice(slug: string, market: 'IN' | 'ABROAD', sqft = STANDARD
   const currency = market === 'IN' ? 'INR' : 'USD';
   if (offer.fixed !== undefined) return { currency, amount: round2(offer.fixed) };
   if (offer.rate === undefined) return null;
-  return { currency, amount: round2(Math.max(sqft, MIN_BILLED_SQFT) * offer.rate * (market === 'IN' ? 1 + INDIA_GST_RATE : 1)) };
+  return { currency, amount: round2(Math.max(sqft, MIN_BILLED_SQFT) * offer.rate) };
 }
 /** The least a wallpaper order costs: the 20 sq ft minimum. */
 export const minPrice = (slug: string, market: 'IN' | 'ABROAD') => listPrice(slug, market, MIN_BILLED_SQFT);

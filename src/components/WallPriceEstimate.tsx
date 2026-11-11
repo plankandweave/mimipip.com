@@ -21,7 +21,7 @@ export function WallPriceEstimate() {
   return (
     <div className="rounded-[22px] border border-edge bg-wash p-5 sm:p-7">
       <h2 className="font-display text-xl font-semibold text-charcoal">Estimate your wall</h2>
-      <p className="mt-2 text-sm text-slate">{market.currency === "INR" ? "Wallpaper is ₹200 per sq ft plus 18% GST, with standard India delivery included." : "Wallpaper is US$10 per sq ft, including delivery."}</p>
+      <p className="mt-2 text-sm text-slate">{market.currency === "INR" ? "Wallpaper is ₹200 per sq ft, including GST, with standard India delivery included." : "Wallpaper is US$10 per sq ft, including delivery."}</p>
       <div className="mt-5 grid grid-cols-2 gap-3">
         <label className="text-xs font-semibold text-slate">Wall width (ft)
           <input type="number" min="0.1" max="60" step="0.5" inputMode="decimal" value={width} onChange={(e) => setWidth(e.target.value)} placeholder="e.g. 10" className="mt-1 block h-12 w-full rounded-[12px] border border-edge bg-surface px-3 text-base text-charcoal outline-none focus:border-charcoal" />
