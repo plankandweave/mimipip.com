@@ -556,5 +556,60 @@
     "art": "https://mimipip.com/nursery-worlds/print-art/11-penguin-snowdrift.png",
     "material": "paste",
     "materialSlug": "smooth-matt"
+  },
+  "shape-street-quiet": {
+    "art": "https://mimipip.com/review/shape-street/shape-street-quiet.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-bright": {
+    "art": "https://mimipip.com/review/shape-street/shape-street-bright.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-market-morning": {
+    "art": "https://mimipip.com/review/shape-street/market-morning.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-tram-trail": {
+    "art": "https://mimipip.com/review/shape-street/tram-trail.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-rooftop-gardens": {
+    "art": "https://mimipip.com/review/shape-street/rooftop-gardens.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-harbour-hop": {
+    "art": "https://mimipip.com/review/shape-street/harbour-hop.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-park-loop": {
+    "art": "https://mimipip.com/review/shape-street/park-loop.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-rainy-crossings": {
+    "art": "https://mimipip.com/review/shape-street/rainy-crossings.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-festival-flags": {
+    "art": "https://mimipip.com/review/shape-street/festival-flags.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-night-lights": {
+    "art": "https://mimipip.com/review/shape-street/night-lights.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
+  },
+  "shape-street-building-blocks": {
+    "art": "https://mimipip.com/review/shape-street/building-blocks.png",
+    "material": "paste",
+    "materialSlug": "smooth-matt"
   }
 }
