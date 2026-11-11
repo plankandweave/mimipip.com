@@ -16,7 +16,7 @@ const wall = { slug: 'almond-blossom', qty: 1, widthCm: 300, heightCm: 250 };
 const hop = { slug: 'hopscotch-peach-pop', qty: 2 };
 const wallMinor = (rate: number) => Math.round((300 * 250) / 929.0304 * rate * 100);
 
-function harness(opts: { base?: number | null; osStatus?: number } = {}) {
+function harness(opts: { base?: number | null; osStatus?: number; keyId?: string | null } = {}) {
   const db = new DatabaseSync(':memory:');
   for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
   const DB = { prepare(sql: string) { return { bind(...v: any[]) { const s = db.prepare(sql); return { first: async () => s.get(...v) || null, run: async () => ({ meta: { changes: Number(s.run(...v).changes) } }), all: async () => ({ results: s.all(...v) }) }; } }; } };
@@ -25,7 +25,7 @@ function harness(opts: { base?: number | null; osStatus?: number } = {}) {
   const pay = () => ({ id: 'pay_test', status: captured ? 'captured' : 'authorized', captured, amount: total, currency, amount_refunded: 0, order_id: 'order_test', ...(currency === 'USD' && opts.base !== null ? { base_amount: opts.base ?? 501234, base_currency: 'INR' } : {}) });
   const fakeSecret = 'test-secret';
   const STORE_PAY = {
-    ready: () => true, keyId: () => 'rzp_test_key',
+    ready: () => true, keyId: () => opts.keyId === undefined ? 'rzp_live_fixture' : opts.keyId,
     razorpay: async (path: string, body?: any) => {
       let data: any;
       if (body) { total = body.amount; currency = body.currency; data = { id: 'order_test', amount: total, currency }; }
@@ -352,4 +352,30 @@ test('a gift card cannot settle a design service',async()=>{
  assert.equal(q.status,400);assert.match((await q.json()).error,/design service/);
  const c=await h.call('create',{lines:[wall,svc],customer:india,giftCode:code});assert.equal(c.status,400);
  assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+});
+
+// A Razorpay test key takes no real money, but its payments still read as captured: nothing may come of them.
+test('a test or unknown Razorpay key closes checkout and says why, without exposing the key',async()=>{
+ for(const [keyId,mode] of [['rzp_test_fixture','test'],[null,'unknown'],['something_else','unknown']] as const){
+  const h=harness({keyId});
+  const r=await(await handleCommerce(new Request('https://mimipip.com/api/checkout/readiness'),h.env)).json();
+  assert.equal(r.open,false);assert.equal(r.gateway,mode);assert.ok(!JSON.stringify(r).includes('fixture'));
+  const made=await h.call('create',{lines:[wall],customer:india});assert.equal(made.status,503);assert.equal(h.total(),0);
+ }
+ const live=await(await handleCommerce(new Request('https://mimipip.com/api/checkout/readiness'),harness().env)).json();
+ assert.equal(live.open,true);assert.equal(live.gateway,'live');
+});
+test('a payment captured on a test key never becomes a paid order or reaches the OS',async()=>{
+ const h=harness();const made=await(await h.call('create',{lines:[wall],customer:india})).json();assert.ok(made.orderId);
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture'};h.setCaptured();
+ await h.pass();await sweep(h.env);
+ const row=h.db.prepare('SELECT status,os_error FROM mimipip_orders WHERE id=?').get(made.orderNumber);
+ assert.equal(row.status,'review');assert.equal(row.os_error,'gateway_not_live');assert.equal(h.posts.length,0);
+});
+test('an unreadable key holds a captured payment for the next pass instead of deciding',async()=>{
+ const h=harness();const made=await(await h.call('create',{lines:[wall],customer:india})).json();
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>{throw new Error('binding down');}};h.setCaptured();await h.pass();
+ assert.equal(h.db.prepare('SELECT status FROM mimipip_orders WHERE id=?').get(made.orderNumber).status,'pending');assert.equal(h.posts.length,0);
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_live_fixture'};await h.pass();
+ assert.equal(h.db.prepare('SELECT status FROM mimipip_orders WHERE id=?').get(made.orderNumber).status,'paid');assert.equal(h.posts.length,1);
 });

@@ -14,7 +14,7 @@ function harness(){
  db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100100,'INR',?,?,?,0,'order_fixture',?)").run(id,'x','x',JSON.stringify({style:'blue-daisy',occasion:'Baby shower',recipientName:'Test Recipient',senderName:'Test Sender',amount:1001,currency:'INR',message:'A little love.'}),'buyer@example.test','recipient@example.test',now);
  const o=()=>db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').get(id) as GiftOrder;
  const payment={id:'pay_fixture',status:'captured',captured:true,order_id:'order_fixture',amount:100100,currency:'INR',amount_refunded:0};
- const env:any={DB,MIMIPIP_GIFTS_ENABLED:'1',MIMIPIP_GIFT_SECRET:'test-only-secret-'.repeat(3),RESEND_API_KEY:'test-only-no-network',STORE_PAY:{ready:()=>true,razorpay:async()=>({ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}})}};
+ const env:any={DB,MIMIPIP_GIFTS_ENABLED:'1',MIMIPIP_GIFT_SECRET:'test-only-secret-'.repeat(3),RESEND_API_KEY:'test-only-no-network',STORE_PAY:{ready:()=>true,keyId:()=>'rzp_live_fixture',giftReady:async()=>true,razorpay:async()=>({ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}})}};
  const order=(id:string,amount=100000,currency='INR')=>db.prepare("INSERT INTO mimipip_orders(id,token_hash,status,amount,currency,lines,customer,shipping,fulfilment,created_at,updated_at) VALUES(?,?,'creating',?,?,?, ?,0,'{}',?,?)").run(id,id,amount,currency,'[]','{}',now,now);
  return{db,env,id,o,payment,order,now};
 }
@@ -93,4 +93,33 @@ test('an abandoned part-gift checkout returns its balance only when Razorpay sho
  // A redeemed (paid) order is never released.
  h.db.prepare("UPDATE mimipip_orders SET status='paid' WHERE id='fresh'").run();
  assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[]}),row('fresh')),'kept');assert.equal(balance(),60100);
+});
+test('a payment captured on a test key never creates a spendable card or queues an email',async()=>{
+ const h=harness();h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture'};
+ assert.equal(await activateGift(h.env,h.o(),h.payment),false);
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,0);
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_email').get().n,0);
+ const o=h.o();assert.equal(o.status,'review');assert.equal(o.last_error,'gateway_not_live');
+ // Even if the key later turns live, a gift held for a test payment never activates.
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_live_fixture'};assert.equal(await activateGift(h.env,h.o(),h.payment),false);
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,0);
+});
+test('an unreadable key leaves the gift pending and unissued; a pending gift with no payment is untouched',async()=>{
+ const h=harness();h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>null};
+ assert.equal(await activateGift(h.env,h.o(),h.payment),false);assert.equal(h.o().status,'pending');
+ assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,0);
+ const {sweepGifts}=await import('./gift-card');h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture',razorpay:async()=>({ok:true,data:{items:[]}})};
+ await sweepGifts(h.env);const o=h.o();assert.equal(o.status,'pending');assert.equal(o.last_error,null);
+});
+test('gift purchasing and email delivery stay closed unless the gateway is live',async()=>{
+ const {giftReady}=await import('./gift-card');
+ const h=harness();assert.equal(await giftReady(h.env),true);
+ const r=await(await handleGiftCard(new Request('https://mimipip.com/api/gift-card/readiness'),h.env)).json();assert.equal(r.open,true);assert.equal(r.gateway,'live');
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture'};assert.equal(await giftReady(h.env),false);
+ const t=await(await handleGiftCard(new Request('https://mimipip.com/api/gift-card/readiness'),h.env)).json();assert.equal(t.open,false);assert.equal(t.gateway,'test');assert.ok(!JSON.stringify(t).includes('fixture'));
+ // An active card whose email is due is not mailed while the key is not live.
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_live_fixture'};await activateGift(h.env,h.o(),h.payment);
+ h.env.STORE_PAY={...h.env.STORE_PAY,keyId:()=>'rzp_test_fixture'};let sent=0;
+ await queueGiftEmails(h.env,(async()=>{sent++;return Response.json({id:'x'});}) as any,h.now+1000);
+ assert.equal(sent,0);assert.equal(h.db.prepare('SELECT state,first_attempt_at FROM mimipip_gift_email').get().state,'pending');
 });

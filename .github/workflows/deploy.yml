@@ -68,9 +68,20 @@ jobs:
       - name: Check the live site
         run: |
           sleep 20
-          curl -fsS https://mimipip.com/api/gift-card/readiness | grep -q '"open":true'
+          # Payments are taken only on a live Razorpay key (src/brand/commerce/gateway-mode.ts).
+          # Live: checkout and gift cards must be open. Not live: both must be CLOSED, so the
+          # guard is proved holding, and the run says so loudly instead of passing quietly.
+          gift=$(curl -fsS https://mimipip.com/api/gift-card/readiness); shop=$(curl -fsS https://mimipip.com/api/checkout/readiness)
+          mode=$(node -e 'const a=JSON.parse(process.argv[1]),b=JSON.parse(process.argv[2]); if(a.gateway!==b.gateway){console.log("mismatch");process.exit(0)} console.log(a.gateway)' "$gift" "$shop")
+          echo "Razorpay gateway mode: $mode"
+          case "$mode" in
+            live) { echo "$gift" | grep -q '"open":true' && echo "$shop" | grep -q '"open":true'; } || { echo "::error::Live key but checkout or gift cards are closed."; exit 1; } ;;
+            test|unknown)
+              { echo "$gift" | grep -q '"open":false' && echo "$shop" | grep -q '"open":false'; } || { echo "::error::Key is not live but checkout or gift cards are open: payments could be taken that are no money."; exit 1; }
+              echo "::warning::Razorpay key is not live ($mode): mimipip.com checkout and gift cards are closed and take no payments until live keys are set on zyvorah-store." ;;
+            *) echo "::error::Gift and checkout readiness disagree about the gateway mode."; exit 1 ;;
+          esac
           test "$(curl -s -o /dev/null -w '%{http_code}' https://mimipip.com/api/gift-card/print)" = 404
-          curl -fsS https://mimipip.com/api/checkout/readiness | grep -q '"open":true'
           curl -fsS https://mimipip.com/feeds/google-merchant.xml | grep -q '<g:brand>MimiPip</g:brand>'
           curl -fsS https://mimipip.com/sitemap.xml | grep -q 'https://mimipip.com/hopscotch-floor-sticker'
           test "$(curl -s -o /dev/null -w '%{http_code}' https://mimipip.com/products/sage-meadow)" = 302

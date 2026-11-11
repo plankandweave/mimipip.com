@@ -1,4 +1,5 @@
 import {giftCapability} from './gift-ledger';
+import {gatewayMode} from './gateway-mode';
 import {giftPresentation,type GiftEnv,type GiftOrder} from './gift-card';
 import {renderGiftCardHtml,formatGiftCardAmount} from './gift-card-presentation';
 export async function giftEmailPayload(env:GiftEnv,o:GiftOrder){
@@ -13,6 +14,8 @@ export async function giftEmailPayload(env:GiftEnv,o:GiftOrder){
 /** A durable immutable payload and a provider idempotency key cover crashes after provider acceptance. */
 export async function queueGiftEmails(env:GiftEnv,send:typeof fetch=fetch,now=Date.now()){
  if(!env.DB||!env.RESEND_API_KEY||!env.MIMIPIP_GIFT_SECRET)return;
+ // A second lock behind activation: no gift email leaves while the key is not live. Due mail waits (its retry window starts only when it is first tried).
+ if(await gatewayMode(env.STORE_PAY)!=='live')return;
  const db=env.DB;
  await db.prepare("UPDATE mimipip_gift_email SET state='review',last_error='retry_window_expired' WHERE state='pending' AND first_attempt_at IS NOT NULL AND first_attempt_at<=?").bind(now-23*3600000).run();
  const rows=await db.prepare("SELECT e.gift_id,e.payload,e.attempts FROM mimipip_gift_email e JOIN mimipip_gift_orders o ON o.id=e.gift_id WHERE e.state='pending' AND o.status='active' AND e.next_attempt_at<=? ORDER BY e.next_attempt_at LIMIT 10").bind(now).all<{gift_id:string;payload:string|null;attempts:number}>();
