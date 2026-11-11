@@ -1,6 +1,7 @@
 import { RoomPanel, type RoomPanelBounds } from "@/components/RoomPanel";
 import { ChooseDesign } from "@/components/DesignCart";
 import { saleOf } from "@/brand/commerce/sale";
+import { artFor } from "@/brand/commerce/order-payload";
 import { WishlistButton } from "@/components/WishlistButton";
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
@@ -29,7 +30,7 @@ export function ReviewDetail({p}:{p:RecordData}) {
    <p>{p.description}</p><WishlistButton handle={p.slug} variant="inline"/>
    {happyPetals && <p className="my-4">SKU {p.id} · <Link className="underline" href="/collections/happy-petals/">Explore all Happy Petals designs</Link></p>}
    {!happyPetals && <><h2>Size and price</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to your wall measurements":""}</p>
-   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} sale={saleOf(p.slug)} art={wallpaper?card(p).flatHoverImage:null}/></>}{happyPetals && <p className="my-5">Like this design? <a className="underline" href={'mailto:hello@mimipip.com?subject='+encodeURIComponent('Happy Petals · '+p.name)}>Ask MimiPip about availability</a>.</p>}
+   <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} sale={saleOf(p.slug)} art={wallpaper?(p.collection.includes("hush-and-wander")?artFor(p.slug)?.art:card(p).flatHoverImage):null}/></>}{happyPetals && <p className="my-5">Like this design? <a className="underline" href={'mailto:hello@mimipip.com?subject='+encodeURIComponent('Happy Petals · '+p.name)}>Ask MimiPip about availability</a>.</p>}
    {hopscotch && <section className="my-6 space-y-2"><h2>How to play</h2>
     <p>Start below 1 on a clear, level indoor floor. Step onto 1, then place one foot on each square of the next pair. Follow the numbers to 10 and walk back beside the sticker. Try small hops when comfortable.</p>
     <p>For Secret Stop, choose a number before starting. Freeze on that number, then continue to 10. Take turns choosing the next stop.</p>

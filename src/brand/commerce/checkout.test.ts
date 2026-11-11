@@ -194,6 +194,16 @@ test('legacy durable advanced layouts are held instead of silently losing instru
  assert.throws(()=>webOrderBody({id:'MP-old',paymentId:'pay_old',amountInr:1,lines:[line],customer:india as any}),/confirm fulfilment/);
 });
 
+test('Hush and Wander wall preview and print source both quote at checkout',()=>{
+ const slug='hush-and-wander-duckling-pond';
+ const art=artFor(slug)!.art;
+ for(const imageUrl of [art,'/nursery-worlds/02-duckling-pond-art-v3.webp']){
+  const result=priceCart([{slug,qty:1,widthCm:244,heightCm:274,crop:{imageUrl,wallWidthCm:244,wallHeightCm:274,offsetX:.5,offsetY:.5,zoom:1}}],'US');
+  assert.ok(!('refused' in result), 'checkout should accept the approved '+imageUrl);
+  assert.equal(result.lines[0].crop?.imageUrl,art);
+ }
+});
+
 test('sample pricing is exactly one India-only A4 Soft Matte sample, never a discounted wall', () => {
   const sample={slug:'almond-blossom',kind:'sample',qty:1};
   const q=priceCart([{...sample,amount:1,lineMinor:1}], 'IN');assert.ok(!('refused' in q));
