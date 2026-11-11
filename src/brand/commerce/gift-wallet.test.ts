@@ -9,7 +9,7 @@ import {confirmedEmail,walletCards,walletBalance,walletSpend,walletTicket,readWa
 
 function harness(recipient='Shardul.Test@Example.test',purchaser='buyer@example.test'){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
- for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference','0009_gift_buyer_copy'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
  const DB={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}}};
  const env:any={DB,MIMIPIP_GIFT_SECRET:'test-only-secret-'.repeat(3),STORE_PAY:{ready:()=>true,keyId:()=>'rzp_live_fixture',razorpay:async()=>({ok:true,data:{status:'paid',amount:100100,amount_paid:100100,currency:'INR'}})}};
  const now=Date.now();

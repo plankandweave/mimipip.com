@@ -18,7 +18,7 @@ const wallMinor = (rate: number) => Math.round((300 * 250) / 929.0304 * rate * 1
 
 function harness(opts: { base?: number | null; osStatus?: number; keyId?: string | null } = {}) {
   const db = new DatabaseSync(':memory:');
-  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
+  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference','0009_gift_buyer_copy']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
   const DB = { prepare(sql: string) { return { bind(...v: any[]) { const s = db.prepare(sql); return { first: async () => s.get(...v) || null, run: async () => ({ meta: { changes: Number(s.run(...v).changes) } }), all: async () => ({ results: s.all(...v) }) }; } }; } };
   let captured = false, currency = 'INR', total = 0, osStatus = opts.osStatus ?? 200;
   const posts: any[] = [];

@@ -5,10 +5,10 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,releaseStrandedFundedClaim,type GiftOrder} from './gift-card';
 import {giftCapability,giftReference,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
-import {queueGiftEmails} from './gift-email';
+import {queueGiftEmails,queueGiftCopies} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
- for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference','0009_gift_buyer_copy'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
  const DB:any={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{sql,first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}},
   failBatchAt:-1,
   async batch(stmts:any[]){db.exec('BEGIN');try{for(let i=0;i<stmts.length;i++){if(i===DB.failBatchAt)throw new Error('interrupted');await stmts[i].run();}db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}};
@@ -53,8 +53,10 @@ test('email lease prevents duplicate send; ambiguous retries preserve exact prov
  const h=harness();await activateGift(h.env,h.o(),h.payment);const sent:any[]=[];const send:any=async(_u:any,init:any)=>{sent.push(init);throw new Error('ambiguous network timeout');};
  await Promise.all([queueGiftEmails(h.env,send,h.now+1000),queueGiftEmails(h.env,send,h.now+1000)]);assert.equal(sent.length,1);
  await queueGiftEmails(h.env,async(_u,init)=>{sent.push(init);return Response.json({id:'email_fixture'});},h.now+301001);
- assert.equal(sent.length,2);assert.equal(sent[0].body,sent[1].body);assert.equal(sent[0].headers['Idempotency-Key'],sent[1].headers['Idempotency-Key']);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
- await queueGiftEmails(h.env,send,h.now+700000);assert.equal(sent.length,2);
+ // The recipient's email is retried with the same payload and key; the buyer's copy follows on its own key.
+ const toRecipient=()=>sent.filter(x=>JSON.parse(x.body).to[0]==='recipient@example.test');
+ assert.equal(toRecipient().length,2);assert.equal(toRecipient()[0].body,toRecipient()[1].body);assert.equal(toRecipient()[0].headers['Idempotency-Key'],toRecipient()[1].headers['Idempotency-Key']);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
+ await queueGiftEmails(h.env,send,h.now+700000);assert.equal(toRecipient().length,2);
 });
 test('an ambiguous email past the idempotency window holds for review instead of resending',async()=>{
  const h=harness();await activateGift(h.env,h.o(),h.payment);h.db.prepare('UPDATE mimipip_gift_email SET first_attempt_at=?').run(h.now-24*3600000);await queueGiftEmails(h.env,async()=>{throw new Error('must not send');},h.now);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'review');
@@ -143,7 +145,7 @@ test('a director-funded gift mints exactly one card and one email, and a repeat 
  assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
  const code=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
  assert.equal((await h.issue()).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
- assert.equal(h.mails.length,1);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
+ assert.equal(h.mails.length,2);assert.deepEqual(h.mails.map((x:any)=>JSON.parse(x.body).to[0]),['recipient@example.test','buyer@example.test']);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
  const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Card reference: MIMI-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}\n/);assert.match(m.text,/added to your MimiPip wallet\. Sign in at https:\/\/mimipip\.com\/account with recipient@example\.test/);assert.equal(m.to[0],'recipient@example.test');
  // Gmail turns bare words like mimipip.com into its own http link with a redirect warning: every mention is an explicit https link.
  const visible=m.html.replace(/<style[\s\S]*?<\/style>/g,'').replace(/<a [^>]*>[\s\S]*?<\/a>/g,'').replace(/<[^>]+>/g,' ');assert.ok(!/mimipip\.com/i.test(visible.replace(/hello@mimipip\.com/g,'')),visible);
@@ -277,4 +279,34 @@ test('a card reference is short, unambiguous and forgiving to type; a reference 
  assert.equal(await activateGift(h.env,h.o(),h.payment),true);
  assert.equal(h.db.prepare('SELECT code_n FROM mimipip_gift_cards WHERE id=?').get(h.id).code_n,1);
  const mine=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,1);assert.equal((await cardForCode(h.env.DB,mine))?.id,h.id);assert.equal((await cardForCode(h.env.DB,ref))?.id,other);
+});
+
+test('every gift email is followed by one copy to the buyer, never a second email to the recipient',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);
+ const sent:any[]=[];const send:any=async(_u:any,init:any)=>{sent.push(init);return Response.json({id:'email_'+sent.length});};
+ await queueGiftEmails(h.env,send,h.now+1000);
+ assert.equal(sent.length,2);
+ const [toRecipient,toBuyer]=sent.map(s=>JSON.parse(s.body));
+ assert.deepEqual(toRecipient.to,['recipient@example.test']);assert.deepEqual(toBuyer.to,['buyer@example.test']);
+ assert.equal(sent[1].headers['Idempotency-Key'],`mimipip-gift-copy-v1/${h.id}`);assert.notEqual(sent[0].headers['Idempotency-Key'],sent[1].headers['Idempotency-Key']);
+ assert.match(toBuyer.subject,/^Your copy: A MimiPip gift for Test Recipient, from Test Sender$/);
+ assert.match(toBuyer.html,/This is your copy of the MimiPip gift you sent to Test Recipient \(recipient@example\.test\)/);
+ assert.match(toBuyer.text,/^This is your copy/);
+ assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_copy').get().state,'accepted');
+ // Later passes send nothing more to anyone.
+ await queueGiftEmails(h.env,send,h.now+700000);await queueGiftCopies(h.env,send,h.now+800000);assert.equal(sent.length,2);
+});
+test('a gift already emailed before copies existed gets its buyer copy once, and the recipient is not emailed again',async()=>{
+ const h=harness();await activateGift(h.env,h.o(),h.payment);
+ h.db.prepare("UPDATE mimipip_gift_email SET state='accepted',provider_id='email_old',accepted_at=? WHERE gift_id=?").run(h.now,h.id);
+ const sent:any[]=[];const send:any=async(_u:any,init:any)=>{sent.push(init);return Response.json({id:'copy_1'});};
+ await queueGiftEmails(h.env,send,h.now+1000);
+ assert.equal(sent.length,1);assert.deepEqual(JSON.parse(sent[0].body).to,['buyer@example.test']);
+});
+test('no copy when the buyer and the recipient are the same address, and none on a key that is not live',async()=>{
+ const h=harness();h.db.exec("UPDATE mimipip_gift_orders SET purchaser_email=' Recipient@Example.test '");await activateGift(h.env,h.o(),h.payment);
+ const sent:any[]=[];const send:any=async(_u:any,init:any)=>{sent.push(init);return Response.json({id:'e'});};
+ await queueGiftEmails(h.env,send,h.now+1000);assert.equal(sent.length,1);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_copy').get().n,0);
+ const t=harness();await activateGift(t.env,t.o(),t.payment);t.db.prepare("UPDATE mimipip_gift_email SET state='accepted' WHERE gift_id=?").run(t.id);
+ t.env.STORE_PAY.keyId=()=>'rzp_test_fixture';const s2:any[]=[];await queueGiftCopies(t.env,async(_u:any,i:any)=>{s2.push(i);return Response.json({id:'x'});},t.now+1000);assert.equal(s2.length,0);
 });
