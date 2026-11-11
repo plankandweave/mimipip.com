@@ -25,8 +25,8 @@ export async function POST(req: Request) {
   switch (body.name) {
     case "check_order_status": {
       if (!body.verifiedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.verifiedEmail)) return Response.json({ error: "Verified identity required" }, { status: 403 });
-      const number = Number(a.order_number);
-      if (!Number.isSafeInteger(number) || number <= 0) return Response.json({ error: "Valid order number required" }, { status: 400 });
+      const number = String(a.order_number ?? "");
+      if (!/^MP-[A-F0-9]{16}$/.test(number)) return Response.json({ error: "Valid order number required" }, { status: 400 });
       result = await checkOrderStatus(number, body.verifiedEmail); break;
     }
     case "search_products": result = await searchProducts(String(a.query ?? "").slice(0, 300), limit); break;

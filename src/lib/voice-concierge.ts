@@ -143,7 +143,7 @@ async function runVoiceTool(name: string, input: unknown): Promise<unknown> {
     case "get_brand_info":
       return brandInfo(Array.isArray(args.topics) ? (args.topics as string[]) : []);
     case "check_order_status":
-      return checkOrderStatus(Number(args.order_number), String(args.email ?? ""));
+      return checkOrderStatus(String(args.order_number ?? ""), String(args.email ?? ""));
     case "cancel_order":
       return cancelOrder(Number(args.order_number), String(args.email ?? ""), args.confirmed === true);
     case "lodge_order_request":

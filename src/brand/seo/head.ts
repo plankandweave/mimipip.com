@@ -21,7 +21,7 @@ const label = (s: string) => (s === 'happy-petals' ? 'Happy Petals' : s === 'dot
 
 export function productTitle(r: Rec) {
   if (isWallpaper(r)) {
-    const full = `${r.name} kids' wallpaper, made to measure | ${BRAND}`;
+    const full = `${r.name} kids' wallpaper | ${BRAND}`;
     return full.length <= 70 ? full : `${r.name} kids' wallpaper | ${BRAND}`;
   }
   const name = r.name.replace(/^Connected Hopscotch — /, 'Hopscotch floor sticker, ');
