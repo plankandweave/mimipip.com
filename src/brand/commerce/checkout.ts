@@ -88,6 +88,7 @@ function cleanPlacement(p: unknown): StoredLine['placement'] {
 export function priceCart(lines: unknown, countryCode: string, customArts:CustomArts={}):
   { lines: (Priced & { kind?: 'sample'|'design-service'; brief?:import('./custom-services').DesignBrief; fulfilmentArt?: StoredLine['fulfilmentArt']; installationMinor?:number; personalisationMinor?:number; placement?: StoredLine['placement']; crop?: StoredLine['crop'] })[]; totalMinor: number; currency: 'INR' | 'USD' } | { refused: string } {
   if (!Array.isArray(lines) || !lines.length || lines.length > 50) return { refused: 'Your cart is empty.' };
+  if (!['IN','US'].includes(countryCode)) return { refused: 'Delivery is currently available in India and the United States. Please choose a supported destination.' };
   const market = marketOf(countryCode);
   const out = [];
   for (const raw of lines as any[]) {

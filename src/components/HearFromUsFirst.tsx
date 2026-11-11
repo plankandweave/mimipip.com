@@ -9,7 +9,7 @@ export function HearFromUsFirst({ source, heading = true }: { source: "home" | "
   const [website, setWebsite] = useState("");
   const [state, setState] = useState<"idle" | "busy" | "done">("idle");
   const [problem, setProblem] = useState("");
-  if (state === "done") return <p role="status" className="font-semibold">Thank you. You will hear from us first.</p>;
+  if (state === "done") return <p role="status" className="font-semibold">Thank you — your signup is saved.</p>;
   async function join(e: React.FormEvent) {
     e.preventDefault();
     if (state === "busy") return;
@@ -25,7 +25,7 @@ export function HearFromUsFirst({ source, heading = true }: { source: "home" | "
   return (
     <form onSubmit={join} className="grid max-w-xl gap-3">
       {heading && <h2 className="text-2xl lg:text-3xl">Hear from us first</h2>}
-      <p>New designs, first. Just your email.</p>
+      <p>Discover new wallpapers, floor games and ideas for playful rooms. Sign up for MimiPip news.</p>
       <label className="grid gap-1" htmlFor={id}>Your email
         <input id={id} className="w-full rounded-lg border bg-white p-2" type="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} />
       </label>

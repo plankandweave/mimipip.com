@@ -214,7 +214,12 @@ export async function Header() {
     { label: "Moods", href: "/moods" },
   ];
 
-  const shopFamilies: MegaMenuFamily[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? shopAxes.map(a=>({title:"Shop by "+label(a),href:"/browse/"+a,items:options(a).map(v=>({label:label(v),href:browseHref(a,v)}))})) : [
+  const shopFamilies: MegaMenuFamily[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [
+    {title:"Wallpapers",href:"/browse/collection",items:shopAxes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a}))},
+    {title:"Colour & Create",href:"/collections/colour-create",items:[{label:"Bunny Garden",href:"/products/colour-create-bunny-garden"}]},
+    {title:"Floor Games",href:"/floor-games",items:[{label:"Hopscotch",href:"/products/hopscotch-peach-pop"}]},
+    {title:"About Us",href:"/guides/about",items:[{label:"About MimiPip",href:"/guides/about"},{label:"Contact",href:"/contact"}]},
+  ] : [
     // The menu opens on "Shop by" and its five columns. The artist launches
     // (TAASH, Nafas's Face Parade) lead its Collections column, and Shop
     // Concepts is the first column, so neither needs a row of its own here.

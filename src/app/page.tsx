@@ -122,9 +122,9 @@ const MATERIAL_COPY: Record<string, {
     sample: true,
   },
   "self-adhesive-vinyl": {
-    finish: "Smooth matte, peel-and-stick — removable, leaves no residue",
-    installType: "Peel and stick, by hand",
-    bestUse: "Rentals and quick makeovers",
+    finish: "Smooth matte, self-adhesive finish",
+    installType: "Peel back the liner and smooth onto a suitable prepared wall; no separate paste.",
+    bestUse: "Smooth, suitable walls — check the surface and application instructions first",
   },
   "eco-cotton-canvas": {
     finish: "Premium eco-cotton canvas — fine-art surface, unframed",
@@ -808,10 +808,11 @@ const HERO_SLIDES = 3;
         </Unroll>
       )}
 
-      {[['Floor play', 'hopscotch'], ['Colour & Create', 'colour-create'], ['Borders', 'mimi-borders'], ['Happy Lines', 'happy-lines'], ['Little Steps, Big Adventures', 'little-steps-big-adventures']].map(([title, handle]) => {
+      {[['Colour & Create', 'colour-create'], ['Floor Games', 'hopscotch'], ['Borders', 'mimi-borders'], ['Happy Lines', 'happy-lines'], ['Little Steps, Big Adventures', 'little-steps-big-adventures']].map(([title, handle]) => {
         const products = reviewFilter('collection', handle).slice(0, 4);
         return products.length > 0 ? <Unroll key={handle} variant="settle"><section className="container-x py-10">
           <div className="mb-8 flex items-end justify-between gap-4"><h2 className="text-3xl lg:text-4xl">{title}</h2><Link href={'/collections/' + handle} className="btn btn-ghost text-sm">View all</Link></div>
+          {handle === 'colour-create' && <div className="mb-8 grid gap-6 md:grid-cols-2 md:items-center"><Image src="/review/colour-create/bunny-garden-room.webp" alt="Illustrative Bunny Garden room showing example colouring" width={1440} height={960} className="w-full rounded-2xl" /><div><h3 className="text-2xl font-semibold">Bunny Garden</h3><p className="mt-3">Flowers, butterflies and bunnies, ready for their own colours. Explore the outline artwork and imagine the story they will create.</p><p className="mt-2 text-sm text-slate">Illustrative room with example colouring. The flat artwork shows the uncoloured design.</p><Link href="/products/colour-create-bunny-garden" className="btn btn-ghost mt-4">Explore Bunny Garden</Link></div></div>}
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">{products.map(product => <ProductCard key={product.slug} product={reviewCard(product)} />)}</div>
         </section></Unroll> : null;
       })}
@@ -1137,8 +1138,8 @@ const HERO_SLIDES = 3;
             <p className="mt-4 text-[1.05rem] leading-relaxed text-charcoal">
               MimiPip brings gentle colours, curious characters and playful landscapes to children’s rooms. Explore wallpaper worlds for quiet beginnings and growing imaginations.
             </p>
-            <Link href="/our-story" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline">
-              Our Story <span aria-hidden>&rarr;</span>
+            <Link href="/guides/about" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline">
+              About MimiPip <span aria-hidden>&rarr;</span>
             </Link>
           </div>
         </div>

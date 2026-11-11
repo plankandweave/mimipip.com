@@ -33,3 +33,12 @@ test('fractional wall prices stay exact from configurator to checkout in both ma
  }
  assert.equal(formatMarketMoney(14392.64,'INR'),'₹14,392.64');assert.equal(formatMarketMoney(1000,'INR'),'₹1,000');
 });
+
+
+test('only verified delivery destinations can be selected or quoted',async()=>{
+ const {countryOptions,normalizeCountryCode}=await import('../lib/markets');
+ const {priceCart}=await import('./commerce/checkout');
+ assert.deepEqual(countryOptions().map(c=>c.code),['IN','US']);
+ assert.equal(normalizeCountryCode('GB'),null);
+ assert.ok('refused' in priceCart([{slug:'almond-blossom',qty:1,widthCm:243.84,heightCm:274.32}],'GB'));
+});

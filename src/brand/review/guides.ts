@@ -22,7 +22,7 @@ export const guides: Record<string, [string, string[]]> = {
     "Does a nursery or toddler label certify a product for that age? These labels organize decorating ideas. Check each product’s intended use, materials and instructions before choosing it."
   ]],
   "shipping-returns": ["Delivery and returns", [
-    "Delivery is included in your price, in India and abroad. Every wallpaper is made for you and delivered within 10 working days in India. Abroad, allow extra time for shipping and customs; any import duty or tax in your country is paid on delivery.",
+    "Delivery is included in your price for India and the United States. Every wallpaper is made for you and delivered within 10 working days in India. For the United States, allow extra time for shipping and customs; any applicable import duty or tax is paid on delivery.",
     "Cancellations: email us with your order number within 12 hours for a full refund, as long as production has not started. Once production starts, the order cannot be cancelled.",
     "Returns: each piece is made to your size and cannot be resold, so we cannot accept returns for a change of mind. We print to the sizes you enter, so please measure carefully. Slight colour differences between your screen and the print are normal.",
     "Damage or faults: if your order arrives damaged, email us within 48 hours of delivery with your order number and clear photos. For a print fault, tell us within 7 days of delivery. We will replace or reprint it at no cost, and where that is not possible, offer a refund."
