@@ -5,7 +5,7 @@ import records from './catalogue.json';
 import {saleOf,sellableAnywhere} from '../commerce/sale';
 import type { ProductCardData } from '@/lib/types';
 export const discoveryAxes=['collection','color','concept','age','room','space'] as const;
-export const shopAxes=['collection','color','age','room','space','size'] as const;
+export const shopAxes=['collection','color','concept','age','room','space','size'] as const;
 export const axes=[...discoveryAxes,'size'] as const;
 export type Axis=typeof axes[number];
 export type RecordData=typeof records[number];

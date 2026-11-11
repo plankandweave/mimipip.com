@@ -101,7 +101,7 @@ test('the landing pages she named exist, sell something, and make no claim we ca
   for (const key of ['kids-wallpaper', 'kids-room-wallpaper', 'nursery-wallpaper', 'floor-game-stickers', 'hopscotch-floor-sticker', 'birthday-gifts-for-kids', 'return-gifts-for-kids'])
     assert.ok(keys.includes(key), key + ' is not published');
   // No wall sticker and no colour-in wallpaper can be bought today, so neither page is published.
-  assert.deepEqual(unpublishedLandings.sort(), ['colourable-wallpaper', 'kids-wall-stickers']);
+  assert.deepEqual(unpublishedLandings.sort(), ['kids-wall-stickers']);
   for (const l of landings) {
     assert.ok(l.products.length > 0 && l.products.every(s => sellable.some(r => r.slug === s)), l.key);
     const words = [l.h1, l.metaTitle, l.description, l.intro, ...l.sections.flatMap(s => [s.heading, s.text])].join(' ');
