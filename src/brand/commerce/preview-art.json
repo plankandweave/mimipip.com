@@ -213,5 +213,9 @@
   "shape-street-rainy-crossings": "/review/shape-street/rainy-crossings.png",
   "shape-street-festival-flags": "/review/shape-street/festival-flags.png",
   "shape-street-night-lights": "/review/shape-street/night-lights.png",
-  "shape-street-building-blocks": "/review/shape-street/building-blocks.png"
+  "shape-street-building-blocks": "/review/shape-street/building-blocks.png",
+  "cloud-cuddle": "/review/sky-and-sea/cloud-cuddle/flat.png",
+  "ocean-daydream": "/review/sky-and-sea/ocean-daydream/flat.png",
+  "woodland-flight": "/review/sky-and-sea/woodland-flight/flat.png",
+  "balloon-reverie": "/review/sky-and-sea/balloon-reverie/flat.png"
 }

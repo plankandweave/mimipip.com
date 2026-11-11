@@ -12384,5 +12384,293 @@
       "bedroom",
       "playroom"
     ]
+  },
+  {
+    "id": "MP-WP-cloud-cuddle",
+    "slug": "cloud-cuddle",
+    "name": "Cloud Cuddle",
+    "description": "A teddy bear and sleeping lion rest among white clouds, a golden sun and a striped balloon on a soft blue sky.",
+    "collection": [
+      "wallpaper-worlds"
+    ],
+    "concept": [
+      "sky"
+    ],
+    "color": [
+      "blue"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/sky-and-sea/cloud-cuddle/room.png",
+    "imageRole": "Illustrative room render",
+    "source": "Mimi Pip",
+    "sourceHandle": "cloud-cuddle",
+    "sourceUrl": "https://mimipip.com/products/cloud-cuddle",
+    "sourceDetails": {
+      "Material": "Smooth Self-Adhesive",
+      "Dominant colours": "Blue",
+      "Style": "Botanical, Watercolour",
+      "Mood": "Playful, Serene",
+      "Subject": "Whimsical",
+      "Suitable rooms": "Baby Nursery, Kids",
+      "Children's rooms": "Suitable for children's rooms",
+      "Product type": "Wallpapers & Murals",
+      "Measurement type": "Area (sq ft)",
+      "Custom size available": "Yes",
+      "Fixed size available": "No",
+      "Pattern & mural type": "Mural wallpaper design — a single continuous scene sized to your wall, never a small repeating tile",
+      "Production time": "Made to order · delivered within 10 working days (Standard) or 4 working days (Express)"
+    },
+    "sourceImages": [
+      "/review/sky-and-sea/cloud-cuddle/room.png",
+      "/review/sky-and-sea/cloud-cuddle/flat.png"
+    ],
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null,
+    "flatImage": "/review/sky-and-sea/cloud-cuddle/flat.png",
+    "gallery": [
+      {
+        "url": "/review/sky-and-sea/cloud-cuddle/room.png",
+        "alt": "Cloud Cuddle wallpaper in a bedroom"
+      },
+      {
+        "url": "/review/sky-and-sea/cloud-cuddle/flat.png",
+        "alt": "Cloud Cuddle flat wallpaper artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-WP-ocean-daydream",
+    "slug": "ocean-daydream",
+    "name": "Ocean Daydream",
+    "description": "Cream whales, rays and tiny fish drift through a deep teal sea of delicate coral and seaweed.",
+    "collection": [
+      "wallpaper-worlds"
+    ],
+    "concept": [
+      "animals"
+    ],
+    "color": [
+      "blue"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/sky-and-sea/ocean-daydream/room.png",
+    "imageRole": "Illustrative room render",
+    "source": "Mimi Pip",
+    "sourceHandle": "ocean-daydream",
+    "sourceUrl": "https://mimipip.com/products/ocean-daydream",
+    "sourceDetails": {
+      "Material": "Smooth Self-Adhesive",
+      "Dominant colours": "Blue",
+      "Style": "Botanical, Watercolour",
+      "Mood": "Playful, Serene",
+      "Subject": "Whimsical",
+      "Suitable rooms": "Baby Nursery, Kids",
+      "Children's rooms": "Suitable for children's rooms",
+      "Product type": "Wallpapers & Murals",
+      "Measurement type": "Area (sq ft)",
+      "Custom size available": "Yes",
+      "Fixed size available": "No",
+      "Pattern & mural type": "Mural wallpaper design — a single continuous scene sized to your wall, never a small repeating tile",
+      "Production time": "Made to order · delivered within 10 working days (Standard) or 4 working days (Express)"
+    },
+    "sourceImages": [
+      "/review/sky-and-sea/ocean-daydream/room.png",
+      "/review/sky-and-sea/ocean-daydream/flat.png"
+    ],
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null,
+    "flatImage": "/review/sky-and-sea/ocean-daydream/flat.png",
+    "gallery": [
+      {
+        "url": "/review/sky-and-sea/ocean-daydream/room.png",
+        "alt": "Ocean Daydream wallpaper in a bedroom"
+      },
+      {
+        "url": "/review/sky-and-sea/ocean-daydream/flat.png",
+        "alt": "Ocean Daydream flat wallpaper artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-WP-woodland-flight",
+    "slug": "woodland-flight",
+    "name": "Woodland Flight",
+    "description": "A vintage airplane crosses an ivory sky above blue-grey woodland, a little balloon and a distant city.",
+    "collection": [
+      "wallpaper-worlds"
+    ],
+    "concept": [
+      "sky"
+    ],
+    "color": [
+      "blue"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/sky-and-sea/woodland-flight/room.png",
+    "imageRole": "Illustrative room render",
+    "source": "Mimi Pip",
+    "sourceHandle": "woodland-flight",
+    "sourceUrl": "https://mimipip.com/products/woodland-flight",
+    "sourceDetails": {
+      "Material": "Smooth Self-Adhesive",
+      "Dominant colours": "Blue",
+      "Style": "Botanical, Watercolour",
+      "Mood": "Playful, Serene",
+      "Subject": "Whimsical",
+      "Suitable rooms": "Baby Nursery, Kids",
+      "Children's rooms": "Suitable for children's rooms",
+      "Product type": "Wallpapers & Murals",
+      "Measurement type": "Area (sq ft)",
+      "Custom size available": "Yes",
+      "Fixed size available": "No",
+      "Pattern & mural type": "Mural wallpaper design — a single continuous scene sized to your wall, never a small repeating tile",
+      "Production time": "Made to order · delivered within 10 working days (Standard) or 4 working days (Express)"
+    },
+    "sourceImages": [
+      "/review/sky-and-sea/woodland-flight/room.png",
+      "/review/sky-and-sea/woodland-flight/flat.png"
+    ],
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null,
+    "flatImage": "/review/sky-and-sea/woodland-flight/flat.png",
+    "gallery": [
+      {
+        "url": "/review/sky-and-sea/woodland-flight/room.png",
+        "alt": "Woodland Flight wallpaper in a bedroom"
+      },
+      {
+        "url": "/review/sky-and-sea/woodland-flight/flat.png",
+        "alt": "Woodland Flight flat wallpaper artwork"
+      }
+    ]
+  },
+  {
+    "id": "MP-WP-balloon-reverie",
+    "slug": "balloon-reverie",
+    "name": "Balloon Reverie",
+    "description": "Vintage balloons in coral, cream and pale blue float among soft clouds in a duck-egg sky.",
+    "collection": [
+      "wallpaper-worlds"
+    ],
+    "concept": [
+      "sky"
+    ],
+    "color": [
+      "blue"
+    ],
+    "age": [
+      "baby",
+      "toddler",
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "bedroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/sky-and-sea/balloon-reverie/room.png",
+    "imageRole": "Illustrative room render",
+    "source": "Mimi Pip",
+    "sourceHandle": "balloon-reverie",
+    "sourceUrl": "https://mimipip.com/products/balloon-reverie",
+    "sourceDetails": {
+      "Material": "Smooth Self-Adhesive",
+      "Dominant colours": "Blue",
+      "Style": "Botanical, Watercolour",
+      "Mood": "Playful, Serene",
+      "Subject": "Whimsical",
+      "Suitable rooms": "Baby Nursery, Kids",
+      "Children's rooms": "Suitable for children's rooms",
+      "Product type": "Wallpapers & Murals",
+      "Measurement type": "Area (sq ft)",
+      "Custom size available": "Yes",
+      "Fixed size available": "No",
+      "Pattern & mural type": "Mural wallpaper design — a single continuous scene sized to your wall, never a small repeating tile",
+      "Production time": "Made to order · delivered within 10 working days (Standard) or 4 working days (Express)"
+    },
+    "sourceImages": [
+      "/review/sky-and-sea/balloon-reverie/room.png",
+      "/review/sky-and-sea/balloon-reverie/flat.png"
+    ],
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to measure",
+    "price": null,
+    "personalization": null,
+    "flatImage": "/review/sky-and-sea/balloon-reverie/flat.png",
+    "gallery": [
+      {
+        "url": "/review/sky-and-sea/balloon-reverie/room.png",
+        "alt": "Balloon Reverie wallpaper in a bedroom"
+      },
+      {
+        "url": "/review/sky-and-sea/balloon-reverie/flat.png",
+        "alt": "Balloon Reverie flat wallpaper artwork"
+      }
+    ]
   }
 ]
