@@ -1,5 +1,5 @@
 import type {Env as CheckoutEnv} from './checkout';
-import {giftHash,giftCapability,normalizedGiftCode,rateLimitGift,cardForCode,type GiftDb} from './gift-ledger';
+import {giftHash,giftCapability,giftReference,isReferenceClash,normalizedGiftCode,rateLimitGift,type GiftDb} from './gift-ledger';
 import {GIFT_POLICY} from './gift-policy';
 import {GIFT_CARD_STYLES,GIFT_CARD_OCCASIONS,renderGiftCardHtml,type GiftCardPresentationData} from './gift-card-presentation';
 import {queueGiftEmails} from './gift-email';
@@ -24,8 +24,8 @@ export function giftInput(b:any){
 }
 export async function giftPresentation(env:GiftEnv,o:GiftOrder):Promise<GiftCardPresentationData>{
  const p=JSON.parse(o.presentation) as GiftCardPresentationData;
- const card=await env.DB!.prepare('SELECT expires_at FROM mimipip_gift_cards WHERE id=?').bind(o.id).first<{expires_at:number|null}>();
- return {...p,status:o.status==='active'?'active':'pending',code:o.status==='active'?await giftCapability(env.MIMIPIP_GIFT_SECRET!,o.id,'code'):null,issuedAt:o.activated_at,expiresAt:card?.expires_at??null};
+ const card=await env.DB!.prepare('SELECT expires_at,code_n FROM mimipip_gift_cards WHERE id=?').bind(o.id).first<{expires_at:number|null;code_n:number}>();
+ return {...p,status:o.status==='active'?'active':'pending',code:o.status==='active'&&card?await giftReference(env.MIMIPIP_GIFT_SECRET!,o.id,card.code_n??0):null,issuedAt:o.activated_at,expiresAt:card?.expires_at??null};
 }
 export async function activateGift(env:GiftEnv,o:GiftOrder,p:any){
  if(o.status==='active')return true;
@@ -43,11 +43,18 @@ export async function activateGift(env:GiftEnv,o:GiftOrder,p:any){
  return !!await env.DB.prepare("SELECT id FROM mimipip_gift_orders WHERE id=? AND status='active'").bind(o.id).first();
 }
 /** The one way a card comes into being: only for the funding that holds the gift's payment_id, once per gift id. */
+const CARD_INSERT=`INSERT INTO mimipip_gift_cards(id,code_hash,code_n,initial_minor,balance_minor,currency,status,activated_at,expires_at)
+ SELECT id,?,?,amount,amount,currency,'active',?,CASE WHEN valid_days=0 THEN NULL ELSE ?+valid_days*86400000 END FROM mimipip_gift_orders
+ WHERE id=? AND status='pending' AND payment_id=? ON CONFLICT(id) DO NOTHING`;
+const referenceHash=async(env:GiftEnv,id:string,n:number)=>giftHash(normalizedGiftCode(await giftReference(env.MIMIPIP_GIFT_SECRET!,id,n)));
+/** Mint a card: a reference already held by another card is skipped for the next of four; past that it fails loudly. */
 async function mintCard(env:GiftEnv,id:string,paymentId:string){
- const now=Date.now(),code=await giftCapability(env.MIMIPIP_GIFT_SECRET!,id,'code');
- await env.DB!.prepare(`INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at,expires_at)
- SELECT id,?,amount,amount,currency,'active',?,CASE WHEN valid_days=0 THEN NULL ELSE ?+valid_days*86400000 END FROM mimipip_gift_orders
- WHERE id=? AND status='pending' AND payment_id=? ON CONFLICT(id) DO NOTHING`).bind(await giftHash(normalizedGiftCode(code)),now,now,id,paymentId).run();
+ const now=Date.now();
+ for(let n=0;n<4;n++){
+  try{await env.DB!.prepare(CARD_INSERT).bind(await referenceHash(env,id,n),n,now,now,id,paymentId).run();return;}
+  catch(e){if(!isReferenceClash(e))throw e;}
+ }
+ throw new Error('gift_reference_exhausted');
 }
 /** Who may fund a gift instead of a card payment. A director's gift is owed by that director in the books. */
 export const GIFT_FUNDERS=['director:roheena'] as const;
@@ -90,14 +97,16 @@ export async function issueFundedGift(env:GiftEnv,b:any,mailer:typeof fetch=fetc
  // The claim, the funding record and the card are one transaction: an interruption leaves either a
  // funded active card or the untouched pending gift, never a claimed gift with no card (review of #58).
  if(!db.batch)return issueFail(503,'unavailable');
- const code=await giftCapability(env.MIMIPIP_GIFT_SECRET,id,'code'),hash=await giftHash(normalizedGiftCode(code));
- await db.batch([
+ let minted=false;
+ for(let n=0;n<4&&!minted;n++){
+ const hash=await referenceHash(env,id,n);
+ try{await db.batch([
   db.prepare("UPDATE mimipip_gift_orders SET payment_id=?,amount=?,presentation=json_set(presentation,'$.amount',?) WHERE id=? AND status='pending' AND amount=? AND (payment_id IS NULL OR payment_id=?)").bind(paymentId,face,face/100,id,amount,paymentId),
   db.prepare("INSERT INTO mimipip_gift_funding(gift_id,funded_by,reference,amount_minor,provider_order_id,issued_at,checked_at) SELECT id,?,?,amount,provider_order_id,?,? FROM mimipip_gift_orders WHERE id=? AND status='pending' AND payment_id=? ON CONFLICT(gift_id) DO NOTHING").bind(by,ref.trim(),now,now,id,paymentId),
-  db.prepare(`INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at,expires_at)
- SELECT id,?,amount,amount,currency,'active',?,CASE WHEN valid_days=0 THEN NULL ELSE ?+valid_days*86400000 END FROM mimipip_gift_orders
- WHERE id=? AND status='pending' AND payment_id=? ON CONFLICT(id) DO NOTHING`).bind(hash,now,now,id,paymentId),
- ]);
+  db.prepare(CARD_INSERT).bind(hash,n,now,now,id,paymentId),
+ ]);minted=true;}catch(e){if(!isReferenceClash(e))throw e;}
+ }
+ if(!minted)return issueFail(500,'gift_reference_exhausted');
  o=await db.prepare('SELECT * FROM mimipip_gift_orders WHERE id=?').bind(id).first<GiftOrder>();
  if(o?.status!=='active'||o.payment_id!==paymentId)return issueFail(409,'not_issued');
  // A concurrent call with another face value may have issued the card: success is only for the value it holds.
@@ -191,10 +200,7 @@ export async function handleGiftCard(request:Request,env:GiftEnv={}):Promise<Res
  const bucket=await giftHash('gift-request:'+(request.headers.get('CF-Connecting-IP')??'unknown'));
  if(!await rateLimitGift(db,bucket,60,60000))return giftJson({error:'Please wait a minute before trying again.'},429);
  if(path==='/api/gift-card/message'){const {giftMessage}=await import('./gift-message');return giftMessage(b,env,bucket);}
- if(path==='/api/gift-card/check'){
-  const card=await cardForCode(db,b.code);if(!card)return giftJson({error:'Gift card not found, unavailable or expired.'},404);
-  return giftJson({currency:card.currency,balance:card.balance_minor/100,expiresAt:card.expires_at});
- }
+ if(path==='/api/gift-card/check')return giftJson({error:'Sign in to see your gift balance.'},410);
  if(!env.STORE_PAY||!env.MIMIPIP_GIFT_SECRET)return giftJson({error:'Gift-card service is temporarily unavailable.'},503);
  if(typeof b.token!=='string'||!/^[a-f0-9]{64}$/.test(b.token))return giftJson({error:'Invalid gift-card session'},400);
  const tokenHash=await giftHash(b.token);

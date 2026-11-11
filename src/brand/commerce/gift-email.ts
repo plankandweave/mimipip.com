@@ -8,8 +8,8 @@ export async function giftEmailPayload(env:GiftEnv,o:GiftOrder){
  const printUrl=`https://mimipip.com/api/gift-card/print?${query}`;
  return {from:'MimiPip <hello@mimipip.com>',to:[o.recipient_email],reply_to:'hello@mimipip.com',
   subject:`A MimiPip gift for ${data.recipientName.replace(/[\r\n]/g,' ')}, from ${data.senderName.replace(/[\r\n]/g,' ')}`,
-  html:renderGiftCardHtml(data,{mode:'email',cardImageUrl:`https://mimipip.com/api/gift-card/image?${query}`,printUrl}),
-  text:`You have received a MimiPip gift card from ${data.senderName}.\n\nFor: ${data.recipientName}\nOccasion: ${data.occasion}\nValue: ${formatGiftCardAmount(data.amount,data.currency)}\nShopping code: ${data.code}\n\n${data.message||''}\n\nNo expiry. Use all or part of the balance at mimipip.com; any remaining balance stays on your card.\nPrintable card: ${printUrl}\n\nKeep this card and code safe. Need help? hello@mimipip.com`};
+  html:renderGiftCardHtml(data,{mode:'email',cardImageUrl:`https://mimipip.com/api/gift-card/image?${query}`,printUrl,walletEmail:o.recipient_email}),
+  text:`You have received a MimiPip gift card from ${data.senderName}.\n\n${formatGiftCardAmount(data.amount,data.currency)} has been added to your MimiPip wallet. Sign in at https://mimipip.com/account with ${o.recipient_email} to see it and use it at checkout. No account yet? Create one with this email and your balance appears.\n\nFor: ${data.recipientName}\nOccasion: ${data.occasion}\nValue: ${formatGiftCardAmount(data.amount,data.currency)}\nCard reference: ${data.code}\n\n${data.message||''}\n\nNo expiry. Your balance is used when you are signed in with ${o.recipient_email}; anything you don't spend stays in your wallet.\nPrintable card: ${printUrl}\n\nNeed help? hello@mimipip.com`};
 }
 /** A durable immutable payload and a provider idempotency key cover crashes after provider acceptance. */
 export async function queueGiftEmails(env:GiftEnv,send:typeof fetch=fetch,now=Date.now()){

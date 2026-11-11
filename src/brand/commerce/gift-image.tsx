@@ -19,7 +19,7 @@ export async function giftCardImage(d:GiftCardPresentationData,env:GiftEnv){
   <div style={{...text,top:199,fontFamily:'Fredoka,Devanagari',fontSize:Math.min(66,Math.max(20,1120/Math.max(17,[...d.recipientName].length))),width:820}}>{d.recipientName}</div>
   <div style={{...text,top:282,fontFamily:'Fredoka,Devanagari',fontSize:senderSize,lineHeight:1.2,width:820}}>{sender}</div>
   <div style={{...text,top:342,fontSize:39}}>{formatGiftCardAmount(d.amount,d.currency)}</div>
-  <div style={{...text,top:480,fontSize:18,color:'#65574d'}}>Shopping code</div><div style={{...text,top:512,fontSize:23,width:760}}>{active?d.code:'Pending activation'}</div>
+  <div style={{...text,top:480,fontSize:18,color:'#65574d'}}>Card reference</div><div style={{...text,top:512,fontSize:23,width:760}}>{active?d.code:'Pending activation'}</div>
   <div style={{...text,top:574,fontSize:21}}>mimipip.com</div><div style={{position:'absolute',display:'flex',right:65,top:578,fontSize:16}}>{active?'No expiry · A little joy, just for you':'Preview · not activated'}</div>
  </div>,{width:994,height:627,fonts:[{name:'Fredoka',data:display,weight:600},{name:'Nunito',data:body,weight:700},{name:'Devanagari',data:dev,weight:700}],headers:{'Cache-Control':'private, no-store','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex','X-Content-Type-Options':'nosniff'}});
 }

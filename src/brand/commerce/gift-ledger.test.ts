@@ -4,11 +4,11 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {giftInput,activateGift,handleGiftCard,issueFundedGift,watchFundedOrders,fundedPaymentId,sweepGifts,releaseStrandedFundedClaim,type GiftOrder} from './gift-card';
-import {giftCapability,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
+import {giftCapability,giftReference,giftHash,normalizedGiftCode,cardForCode,reserveGift,abandonUnpresentedOrder,recoverCreatingGiftOrders} from './gift-ledger';
 import {queueGiftEmails} from './gift-email';
 function harness(){
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');
- for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
+ for(const f of ['0000_volatile_phantom_reporter','0001_typical_sheva_callister','0002_cart_checkout','0006_gift_cards','0007_gift_funding','0008_gift_card_reference'])db.exec(readFileSync(`drizzle/${f}.sql`,'utf8'));
  const DB:any={prepare(sql:string){return{bind(...v:any[]){const s=db.prepare(sql);return{sql,first:async()=>s.get(...v)||null,run:async()=>({meta:{changes:Number(s.run(...v).changes)}}),all:async()=>({results:s.all(...v)})};}}},
   failBatchAt:-1,
   async batch(stmts:any[]){db.exec('BEGIN');try{for(let i=0;i<stmts.length;i++){if(i===DB.failBatchAt)throw new Error('interrupted');await stmts[i].run();}db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}};
@@ -32,7 +32,7 @@ test('only independently confirmed exact captured payment activates; replay mint
  await Promise.all([activateGift(h.env,h.o(),h.payment),activateGift(h.env,h.o(),h.payment)]);
  assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_cards').get().n,1);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_gift_email').get().n,1);
  const c=h.db.prepare('SELECT * FROM mimipip_gift_cards').get();assert.equal(c.balance_minor,100100);assert.equal(c.expires_at,null);
- const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.id,h.id);assert.notEqual(c.code_hash,code);assert.equal(c.code_hash,await giftHash(normalizedGiftCode(code)));
+ const code=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);assert.equal((await cardForCode(h.env.DB,code))?.id,h.id);assert.notEqual(c.code_hash,code);assert.equal(c.code_hash,await giftHash(normalizedGiftCode(code)));
 });
 test('competing reservations cannot overspend, completed use is immutable, remainder stays available',async()=>{
  const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('first');h.order('second');
@@ -141,10 +141,21 @@ test('a director-funded gift mints exactly one card and one email, and a repeat 
  assert.equal(a.status,200);assert.equal(b.status,200);
  assert.equal(count(h,'mimipip_gift_cards'),1);assert.equal(count(h,'mimipip_gift_email'),1);assert.equal(count(h,'mimipip_gift_funding'),1);
  assert.equal(h.o().status,'active');assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));
- const code=await giftCapability(h.env.MIMIPIP_GIFT_SECRET,h.id,'code');assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
+ const code=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);assert.equal((await cardForCode(h.env.DB,code))?.balance_minor,100100);
  assert.equal((await h.issue()).status,200);assert.equal(count(h,'mimipip_gift_cards'),1);
  assert.equal(h.mails.length,1);assert.equal(h.db.prepare('SELECT state FROM mimipip_gift_email').get().state,'accepted');
- const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Shopping code: /);assert.equal(m.to[0],'recipient@example.test');
+ const m=JSON.parse(h.mails[0].body);assert.match(m.text,/Card reference: MIMI-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}\n/);assert.match(m.text,/added to your MimiPip wallet\. Sign in at https:\/\/mimipip\.com\/account with recipient@example\.test/);assert.equal(m.to[0],'recipient@example.test');
+ // Gmail turns bare words like mimipip.com into its own http link with a redirect warning: every mention is an explicit https link.
+ const visible=m.html.replace(/<style[\s\S]*?<\/style>/g,'').replace(/<a [^>]*>[\s\S]*?<\/a>/g,'').replace(/<[^>]+>/g,' ');assert.ok(!/mimipip\.com/i.test(visible.replace(/hello@mimipip\.com/g,'')),visible);
+ assert.ok(!/href="http:\/\//.test(m.html));assert.match(m.html,/has been added to your MimiPip wallet/);
+ // Gmail warns ("Redirect Notice") when a link's visible text is a web address that is not exactly where it goes:
+ // no link in the email reads as a web address except an email address that is its own mailto target.
+ for(const [,href,text] of m.html.matchAll(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)){
+  const label=text.replace(/<[^>]+>/g,'').trim();
+  if(/^mailto:/.test(href))assert.equal('mailto:'+label,href);
+  else assert.ok(!/\b[a-z0-9-]+\.(com|in|net|org)\b|https?:/i.test(label),`link text reads as an address: ${label} -> ${href}`);
+ }
+ assert.match(m.html,/href="https:\/\/mimipip\.com\/account">Open my MimiPip wallet</);
 });
 test('a gift with any live payment attempt, or a paid order, is never also funded',async()=>{
  for(const status of ['created','authorized','captured','refunded']){const h=fundedHarness([{id:'pay_x',status}]);assert.equal((await h.issue()).status,409);assert.equal(count(h,'mimipip_gift_cards'),0);assert.equal(h.o().payment_id,null);}
@@ -254,4 +265,16 @@ test('giving back a stranded funded claim is one transaction: interrupted, the c
  h.env.DB.failBatchAt=1;await assert.rejects(releaseStrandedFundedClaim(h.env,h.o()));h.env.DB.failBatchAt=-1;
  assert.equal(h.o().payment_id,fundedPaymentId('director:roheena',h.id));assert.equal(count(h,'mimipip_gift_funding'),1);
  await releaseStrandedFundedClaim(h.env,h.o());assert.equal(h.o().payment_id,null);assert.equal(count(h,'mimipip_gift_funding'),0);
+});
+
+test('a card reference is short, unambiguous and forgiving to type; a reference already taken moves the card to the next one',async()=>{
+ const h=harness();const ref=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,0);
+ assert.match(ref,/^MIMI-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/);assert.equal(ref.length,14);
+ assert.equal(normalizedGiftCode(ref.toLowerCase().replace(/0/g,'o').replace(/1/g,'l')),normalizedGiftCode(ref));
+ const other='MPG-'+'C'.repeat(24);
+ h.db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,provider_order_id,created_at) VALUES(?,?,?,'pending',100,'INR','{}','b@example.test','r@example.test',0,'order_other',1)").run(other,other,other);
+ h.db.prepare("INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at) VALUES(?,?,100,100,'INR','active',1)").run(other,await giftHash(normalizedGiftCode(ref)));
+ assert.equal(await activateGift(h.env,h.o(),h.payment),true);
+ assert.equal(h.db.prepare('SELECT code_n FROM mimipip_gift_cards WHERE id=?').get(h.id).code_n,1);
+ const mine=await giftReference(h.env.MIMIPIP_GIFT_SECRET,h.id,1);assert.equal((await cardForCode(h.env.DB,mine))?.id,h.id);assert.equal((await cardForCode(h.env.DB,ref))?.id,other);
 });
