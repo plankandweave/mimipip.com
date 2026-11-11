@@ -88,6 +88,7 @@ export function webOrderBody(o: { createdAt?: number; id: string; paymentId: str
         ...(l.ratePerSqft !== null && c.countryCode === 'IN' ? { catalogueRatePerSqft: l.ratePerSqft } : {}),
         ...(l.billedSqft !== null ? { chargeableSqft: l.billedSqft } : {}),
         ...(placement ? { placement } : {}),
+        ...(crop?.planningMode==='full-wall'?{planningLayout:{mode:'full-wall' as const,wallsCm:crop.walls??[l.widthCm],divisionsCm:crop.divisions??[],marks:crop.doors??[]}}:{}),
       };
     }),
   };

@@ -18,3 +18,12 @@ test('unverified production instructions are rejected instead of stripped at the
  }
  for (const placement of [{zoom:0,cropX:.5,cropY:.5},{zoom:1,cropX:2,cropY:.5}]) assert.ok('refused' in priceCart([{...base,placement}],'IN'));
 });
+
+test('native full-wall planning keeps multiple walls and marks without changing the billed area',async()=>{
+ const {webOrderBody}=await import('./order-payload');
+ const marked={...crop,planningMode:'full-wall',walls:[100,200],doors:[{offsetCm:20,widthCm:80,heightCm:200}],divisions:[100]};
+ const q=priceCart([{...base,crop:marked}],'IN'),plain=priceCart([{...base,crop}],'IN');
+ assert.ok(!('refused'in q));assert.ok(!('refused'in plain));assert.equal(q.totalMinor,plain.totalMinor);
+ const b=webOrderBody({id:'MP-test',paymentId:'pay_test',amountInr:q.totalMinor/100,lines:q.lines,customer:{name:'QA',email:'qa@example.invalid',phone:'9999999999',address:'Test address',city:'Pune',state:'Maharashtra',postcode:'411001',countryCode:'IN',country:'India'}});
+ assert.deepEqual(b.items[0].planningLayout,{mode:'full-wall',wallsCm:[100,200],marks:marked.doors,divisionsCm:[100]});assert.equal(b.items[0].widthMm,3000);
+});

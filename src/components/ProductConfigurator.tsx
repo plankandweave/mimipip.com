@@ -803,6 +803,7 @@ function ConnectedProductConfigurator({
         zoom,
         flipH,
         flipV,
+        planningMode: "full-wall",
         walls: multiWall ? wallsCm : undefined,
         doors: placedDoors.length
           ? placedDoors.map((d) => ({ widthCm: d.widthCm, heightCm: d.heightCm, offsetCm: d.offsetCm, ...(d.sillCm ? { sillCm: d.sillCm } : {}), ...(d.kind ? { kind: d.kind } : {}) }))
