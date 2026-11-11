@@ -1,7 +1,7 @@
 import { istDateKey } from "@/lib/ist";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { supabaseAdmin } from "./supabase-admin";
-import { exGst } from "./pricing";
+import { exGst, gstInvoice } from "./pricing";
 import { financialYear, buyerStateCode, gstSplit, sellerGstConfig, type SellerGst } from "./gst";
 import { pushInvoiceToOs } from "./os-invoice";
 import { toUploadBody } from "./storage-body";
@@ -13,8 +13,8 @@ import { SITE_URL } from "./seo";
 // (sellerGstConfig), so a tax document with placeholder data can never exist.
 // Standard fonts can't encode the ₹ glyph, so amounts are printed as "Rs.".
 
-const money = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 });
-const rs = (n: number) => `Rs. ${money.format(Math.round(n))}`;
+const money = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const rs = (n: number) => `Rs. ${money.format(n)}`;
 
 type Line = { desc: string; hsnSac: string; qty: number; taxable: number };
 
@@ -65,7 +65,7 @@ async function fetchPartnerLogo(url: string): Promise<{ bytes: Uint8Array; kind:
   }
 }
 
-async function buildInvoicePdf(d: InvoiceData): Promise<Uint8Array> {
+export async function buildInvoicePdf(d: InvoiceData): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const page = doc.addPage([595, 842]); // A4
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -274,9 +274,10 @@ export async function generateGstInvoice(orderId: string): Promise<string | null
   const deliveryFree = Number(order.shipping ?? 0) <= 0;
 
   const lines: Line[] = raw.map((l) => ({ desc: l.desc, hsnSac: l.hsnSac, qty: l.qty, taxable: exGst(l.incl) }));
-  const taxableTotal = lines.reduce((s, l) => s + l.taxable, 0);
-  const grandTotal = raw.reduce((s, l) => s + l.incl, 0);
-  const gstTotal = grandTotal - taxableTotal;
+  const amounts = gstInvoice(raw.map(l => ({label:l.desc,incl:l.incl})));
+  const taxableTotal = amounts.taxableSubtotal;
+  const grandTotal = amounts.total;
+  const gstTotal = amounts.gst;
 
   const addr = (order.shipping_address ?? {}) as { name?: string; line1?: string; city?: string; state?: string; pincode?: string };
   const buyerState = buyerStateCode(order.gstin, addr.state);
