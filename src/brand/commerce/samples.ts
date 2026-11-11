@@ -8,7 +8,7 @@ export { SAMPLE_REFERENCE_CM } from './sample-policy';
 export const sampleDesigns = catalogue.filter(r => {
   const art = (printMap as Record<string, {material: string; materialSlug?: string}>)[r.slug];
   return r.type.includes('wallpaper') && r.measurementType === 'made-to-measure' && art?.material === 'paste' && art.materialSlug === 'smooth-matt';
-}).map(r => ({handle:r.slug,title:r.name,image:`/review/hover-art/${r.slug}.webp`}));
+}).map(r => ({handle:r.slug,title:r.name,image:(r as typeof r & {flatImage?:string}).flatImage ?? `/review/hover-art/${r.slug}.webp`}));
 export const sampleDesign = (slug:string) => sampleDesigns.find(r=>r.handle===slug);
 
 export function priceSample(raw: Record<string, unknown>, countryCode:string): (Priced & {kind:'sample'}) | {refused:string} {

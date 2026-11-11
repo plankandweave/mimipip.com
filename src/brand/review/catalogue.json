@@ -11714,5 +11714,618 @@
     "status": "Made to measure",
     "price": null,
     "personalization": null
+  },
+  {
+    "id": "MP-SS-01",
+    "slug": "shape-street-quiet",
+    "name": "Shape Street — Quiet",
+    "description": "Follow the winding roads through a little town of trams, bridges, colourful houses and market stalls. Dusty blue, sage, apricot and blush bring a gentle sense of adventure to a child’s room.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "transport",
+      "shapes"
+    ],
+    "color": [
+      "blue",
+      "green",
+      "pink",
+      "neutral"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/shape-street-quiet-room.png",
+    "imageRole": "Illustrative room visualization",
+    "flatImage": "/review/shape-street/shape-street-quiet.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/shape-street-quiet-room.png",
+        "alt": "Shape Street — Quiet in a styled child’s bedroom"
+      },
+      {
+        "url": "/review/shape-street/shape-street-quiet.png",
+        "alt": "Shape Street — Quiet flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-02",
+    "slug": "shape-street-bright",
+    "name": "Shape Street — Bright",
+    "description": "A lively little town of trams, bicycles, bridges and market stalls. Follow the looping streets and discover a new route each day, in confident cobalt, coral, mint and sunshine yellow.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "transport",
+      "shapes"
+    ],
+    "color": [
+      "blue",
+      "orange",
+      "green",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/shape-street-bright-room.png",
+    "imageRole": "Illustrative room visualization",
+    "flatImage": "/review/shape-street/shape-street-bright.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/shape-street-bright-room.png",
+        "alt": "Shape Street — Bright in a styled child’s bedroom"
+      },
+      {
+        "url": "/review/shape-street/shape-street-bright.png",
+        "alt": "Shape Street — Bright flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-03",
+    "slug": "shape-street-market-morning",
+    "name": "Market Morning",
+    "description": "The neighbourhood wakes to fruit stalls, bakery carts and a tram over the bridge. Follow the streets from one colourful stall to the next.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "market",
+      "transport"
+    ],
+    "color": [
+      "yellow",
+      "orange",
+      "green",
+      "blue"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/market-morning.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/market-morning.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/market-morning.png",
+        "alt": "Market Morning flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-04",
+    "slug": "shape-street-tram-trail",
+    "name": "Tram Trail",
+    "description": "All aboard for a winding trip through Shape Street. A cheerful tram passes tiny stations, arched bridges and neighbours waiting for a ride.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "transport",
+      "adventure"
+    ],
+    "color": [
+      "blue",
+      "coral",
+      "yellow",
+      "green"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/tram-trail.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/tram-trail.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/tram-trail.png",
+        "alt": "Tram Trail flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-05",
+    "slug": "shape-street-rooftop-gardens",
+    "name": "Rooftop Gardens",
+    "description": "Above the town, little gardeners tend flowers and vegetables on connected rooftops. Follow the bridges and find what is growing next.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "garden",
+      "nature"
+    ],
+    "color": [
+      "green",
+      "pink",
+      "blue",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/rooftop-gardens.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/rooftop-gardens.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/rooftop-gardens.png",
+        "alt": "Rooftop Gardens flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-06",
+    "slug": "shape-street-harbour-hop",
+    "name": "Harbour Hop",
+    "description": "Take the curved path down to the harbour. Sailboats, bridges and a striped lighthouse turn the waterfront into a gentle voyage.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "ocean",
+      "transport"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "coral",
+      "green"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/harbour-hop.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/harbour-hop.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/harbour-hop.png",
+        "alt": "Harbour Hop flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-07",
+    "slug": "shape-street-park-loop",
+    "name": "Park Loop",
+    "description": "A looping path leads past play arches, picnics, kites and a small pond. There is something new to spot around every bend.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "park",
+      "play"
+    ],
+    "color": [
+      "green",
+      "blue",
+      "yellow",
+      "coral"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/park-loop.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/park-loop.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/park-loop.png",
+        "alt": "Park Loop flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-08",
+    "slug": "shape-street-rainy-crossings",
+    "name": "Rainy Crossings",
+    "description": "Raincoats and umbrellas brighten the town as friends cross little streets and float paper boats in the puddles.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "rain",
+      "transport"
+    ],
+    "color": [
+      "blue",
+      "green",
+      "pink",
+      "yellow"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/rainy-crossings.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/rainy-crossings.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/rainy-crossings.png",
+        "alt": "Rainy Crossings flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-09",
+    "slug": "shape-street-festival-flags",
+    "name": "Festival Flags",
+    "description": "Bunting crosses the rooftops as music, dancing and a toy parade fill the town square. A joyful day to revisit again and again.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "celebration",
+      "music"
+    ],
+    "color": [
+      "yellow",
+      "coral",
+      "blue",
+      "green"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/festival-flags.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/festival-flags.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/festival-flags.png",
+        "alt": "Festival Flags flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-10",
+    "slug": "shape-street-night-lights",
+    "name": "Night Lights",
+    "description": "The last tram heads home beneath a softly glowing sky. Warm windows and little lanterns make this a cosy bedtime town.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "night",
+      "transport"
+    ],
+    "color": [
+      "blue",
+      "purple",
+      "yellow",
+      "green"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/night-lights.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/night-lights.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/night-lights.png",
+        "alt": "Night Lights flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
+  },
+  {
+    "id": "MP-SS-11",
+    "slug": "shape-street-building-blocks",
+    "name": "Building Blocks",
+    "description": "Arches, circles, triangles and tiny vehicles build a bright little town. Look closely, trace the shapes and imagine what comes next.",
+    "collection": [
+      "shape-street"
+    ],
+    "concept": [
+      "city",
+      "shapes",
+      "transport"
+    ],
+    "color": [
+      "blue",
+      "yellow",
+      "green",
+      "pink"
+    ],
+    "age": [
+      "toddler",
+      "preschool"
+    ],
+    "space": [
+      "bedroom",
+      "playroom"
+    ],
+    "type": [
+      "wallpaper"
+    ],
+    "surface": [
+      "wall"
+    ],
+    "widthCm": null,
+    "heightCm": null,
+    "measurementType": "made-to-measure",
+    "image": "/review/shape-street/building-blocks.png",
+    "imageRole": "Flat wallpaper artwork",
+    "flatImage": "/review/shape-street/building-blocks.png",
+    "gallery": [
+      {
+        "url": "/review/shape-street/building-blocks.png",
+        "alt": "Building Blocks flat wallpaper artwork"
+      }
+    ],
+    "source": "MimiPip · Shape Street",
+    "sourceIndiaPricePerSqft": 200,
+    "status": "Made to order",
+    "price": null,
+    "personalization": null,
+    "room": [
+      "bedroom",
+      "playroom"
+    ]
   }
 ]
