@@ -39,3 +39,26 @@ export async function rateLimitGift(db:GiftDb,bucket:string,limit:number,windowM
 export async function recoverCreatingGiftOrders(db:GiftDb,now=Date.now()){
  await db.prepare("DELETE FROM mimipip_orders WHERE status='creating' AND razorpay_order_id IS NULL AND created_at<=? AND id IN (SELECT order_id FROM mimipip_gift_tenders WHERE state='reserved')").bind(now-5*60000).run();
 }
+/** How long a presented part-gift checkout may sit unpaid before its balance goes back to the card. */
+export const GIFT_RESERVATION_TTL_MS=90*60000;
+type ProviderCall=(path:string)=>Promise<any>;
+type ReleasableOrder={id:string;status:string;razorpay_order_id:string|null;gift_minor?:number};
+/** A pending part-gift checkout the shopper walked away from, or changed. Razorpay is asked FIRST:
+ * any payment record on the provider order (created, authorised or captured) keeps the balance held,
+ * because that money may still land. Only an order nobody has paid is expired, and deleting its
+ * reserved tender returns the balance to the card (trigger mimipip_gift_release). The expired order
+ * stays on file so a capture that arrives after this is caught by the sweep and held for review. */
+export async function releaseUnpaidGiftOrder(db:GiftDb,call:ProviderCall,o:ReleasableOrder,now=Date.now()):Promise<'released'|'paid'|'kept'>{
+ if(o.status!=='pending'||!o.gift_minor||!o.razorpay_order_id)return 'kept';
+ const ps=await call('orders/'+o.razorpay_order_id+'/payments');
+ if((ps?.items??[]).length)return 'paid';
+ const r=await db.prepare("UPDATE mimipip_orders SET status='expired',updated_at=? WHERE id=? AND status='pending'").bind(now,o.id).run();
+ if(!r.meta.changes)return 'kept';
+ await db.prepare("DELETE FROM mimipip_gift_tenders WHERE order_id=? AND state='reserved'").bind(o.id).run();
+ return 'released';
+}
+/** Pending part-gift checkouts older than the TTL, released one by one on the same rule. */
+export async function releaseStaleGiftOrders(db:GiftDb,call:ProviderCall,now=Date.now()){
+ const rows=await db.prepare("SELECT id,status,razorpay_order_id,gift_minor FROM mimipip_orders WHERE status='pending' AND gift_minor>0 AND razorpay_order_id IS NOT NULL AND created_at<=? ORDER BY created_at LIMIT 25").bind(now-GIFT_RESERVATION_TTL_MS).all<ReleasableOrder>();
+ for(const o of rows.results)try{await releaseUnpaidGiftOrder(db,call,o,now);}catch{/* asked again next pass */}
+}

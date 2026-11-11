@@ -23,7 +23,8 @@ export async function queueGiftEmails(env:GiftEnv,send:typeof fetch=fetch,now=Da
   try{
    const r=await send('https://api.resend.com/emails',{method:'POST',signal:AbortSignal.timeout(10000),headers:{Authorization:`Bearer ${env.RESEND_API_KEY}`,'Content-Type':'application/json','Idempotency-Key':`mimipip-gift-v1/${o.id}`},body:payload});
    const result=await r.json() as {id?:string;name?:string};
-   if(r.ok&&result.id)await db.prepare("UPDATE mimipip_gift_email SET state='accepted',provider_id=?,accepted_at=?,last_error=NULL WHERE gift_id=?").bind(result.id,now,o.id).run();
+   // Accepted: the payload (which carries the code and viewing key in clear) is not kept.
+   if(r.ok&&result.id)await db.prepare("UPDATE mimipip_gift_email SET state='accepted',provider_id=?,accepted_at=?,last_error=NULL,payload=NULL WHERE gift_id=?").bind(result.id,now,o.id).run();
    else{const retry=r.status===429||r.status>=500||(r.status===409&&result.name==='concurrent_idempotent_requests');await db.prepare('UPDATE mimipip_gift_email SET state=?,last_error=?,next_attempt_at=? WHERE gift_id=?').bind(retry?'pending':'review',`provider_${r.status}`,now+Math.min(3600000,300000*2**Math.min(row.attempts,4)),o.id).run();}
   }catch{/* An ambiguous result is retried with the same payload/key, only inside the provider window. */}
  }

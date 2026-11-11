@@ -58,7 +58,8 @@ export async function handleGiftCard(request:Request,env:GiftEnv={}):Promise<Res
   if(!env.DB||!env.STORE_PAY||!await env.STORE_PAY.osTokenMatches(request.headers.get('x-zyvorah-token')??''))return giftJson({error:'Not authorised'},401);
   const orders=await env.DB.prepare('SELECT o.id,o.status,o.amount,o.currency,o.payment_id,o.provider_order_id,o.created_at,o.activated_at,o.last_error,c.balance_minor,c.expires_at,e.state AS email_state,e.last_error AS email_error FROM mimipip_gift_orders o LEFT JOIN mimipip_gift_cards c ON c.id=o.id LEFT JOIN mimipip_gift_email e ON e.gift_id=o.id ORDER BY o.created_at DESC LIMIT 100').bind().all();
   const reservations=await env.DB.prepare("SELECT t.order_id,t.gift_id,t.amount_minor,t.state,t.created_at,o.status,o.razorpay_order_id FROM mimipip_gift_tenders t JOIN mimipip_orders o ON o.id=t.order_id WHERE t.state='reserved' ORDER BY t.created_at LIMIT 100").bind().all();
-  return giftJson({orders:orders.results,reservations:reservations.results});
+  const lateCaptures=await env.DB.prepare("SELECT id,amount,gift_minor,currency,razorpay_order_id,os_error,created_at,updated_at FROM mimipip_orders WHERE status='review' ORDER BY updated_at DESC LIMIT 100").bind().all();
+  return giftJson({orders:orders.results,reservations:reservations.results,lateCaptures:lateCaptures.results});
  }
  if(path==='/api/gift-card/image'||path==='/api/gift-card/print'){
   if(request.method!=='GET')return giftJson({error:'Method not allowed'},405);

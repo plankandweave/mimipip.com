@@ -74,3 +74,23 @@ test('an interrupted unpresented mixed checkout restores balance after grace, an
 test('cleanup never releases a published provider checkout or a settled full-gift order',async()=>{
  const h=harness();await activateGift(h.env,h.o(),h.payment);h.order('presented',200000);await reserveGift(h.env.DB,'presented',h.id,100100,h.now);h.db.exec("UPDATE mimipip_orders SET status='pending',razorpay_order_id='order_presented' WHERE id='presented'");await recoverCreatingGiftOrders(h.env.DB,h.now+86400000);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);assert.ok(h.db.prepare("SELECT id FROM mimipip_orders WHERE id='presented'").get());
 });
+test('an abandoned part-gift checkout returns its balance only when Razorpay shows no payment',async()=>{
+ const {releaseUnpaidGiftOrder,releaseStaleGiftOrders,GIFT_RESERVATION_TTL_MS}=await import('./gift-ledger');
+ const h=harness();await activateGift(h.env,h.o(),h.payment);
+ const present=async(id:string,created=h.now)=>{h.order(id);h.db.prepare('UPDATE mimipip_orders SET created_at=? WHERE id=?').run(created,id);await reserveGift(h.env.DB,id,h.id,20000);h.db.prepare("UPDATE mimipip_orders SET status='pending',razorpay_order_id=? WHERE id=?").run('order_'+id,id);};
+ const row=(id:string)=>h.db.prepare('SELECT * FROM mimipip_orders WHERE id=?').get(id);
+ const balance=()=>h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor;
+ await present('inflight');assert.equal(balance(),80100);
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[{status:'created'}]}),row('inflight')),'paid');
+ assert.equal(balance(),80100);assert.equal(row('inflight').status,'pending');
+ await present('nobody');assert.equal(balance(),60100);
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[]}),row('nobody')),'released');
+ assert.equal(balance(),80100);assert.equal(row('nobody').status,'expired');
+ assert.equal(h.db.prepare("SELECT count(*) n FROM mimipip_gift_tenders WHERE order_id='nobody'").get().n,0);
+ await present('fresh');await present('stale',h.now-GIFT_RESERVATION_TTL_MS-1000);assert.equal(balance(),40100);
+ await releaseStaleGiftOrders(h.env.DB,async()=>({items:[]}),h.now);
+ assert.equal(balance(),60100);assert.equal(row('fresh').status,'pending');assert.equal(row('stale').status,'expired');
+ // A redeemed (paid) order is never released.
+ h.db.prepare("UPDATE mimipip_orders SET status='paid' WHERE id='fresh'").run();
+ assert.equal(await releaseUnpaidGiftOrder(h.env.DB,async()=>({items:[]}),row('fresh')),'kept');assert.equal(balance(),60100);
+});

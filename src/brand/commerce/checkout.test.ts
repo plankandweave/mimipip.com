@@ -334,3 +334,22 @@ test('late provider response cannot publish a recovered unpresented gift checkou
  h.env.STORE_PAY.razorpay=async(path:string,body?:any)=>{const result=await original(path,body);if(body){h.db.exec("UPDATE mimipip_orders SET created_at=1 WHERE status='creating'");const {recoverCreatingGiftOrders}=await import('./gift-ledger');await recoverCreatingGiftOrders(h.env.DB);}return result;};
  const r=await h.call('create',{lines:[wall],customer:india,giftCode:code});assert.notEqual(r.status,200);assert.equal((await r.json()).orderId,undefined);assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_orders').get().n,0);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
 });
+test('a changed part-gift checkout gives its balance back and starts afresh; a payment in flight keeps it',async()=>{
+ const h=harness();h.env.MIMIPIP_GIFTS_ENABLED='1';const code=await seedGift(h,100100);
+ const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.ok(made.orderId);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,0);
+ // Razorpay shows no payment on the order: the change releases it.
+ const orig=h.env.STORE_PAY.razorpay;h.env.STORE_PAY.razorpay=async(path:string,body?:any)=>path.endsWith('/payments')?{ok:true,status:200,data:{items:[]}}:orig(path,body);
+ const r=await h.call('create',{lines:[{...wall,widthCm:310}],customer:india,giftCode:code});assert.equal(r.status,409);const j=await r.json();assert.equal(j.renew,true);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+ assert.equal(h.db.prepare("SELECT status FROM mimipip_orders WHERE id=?").get(made.orderNumber).status,'expired');
+});
+test('a gift card cannot settle a design service',async()=>{
+ const h=harness();const code=await seedGift(h,100100);
+ const svc={slug:'bespoke-customisation',qty:1,crop:{bespoke:{note:'A sunny nursery wall'}}};
+ const priced=priceCart([wall,svc],'IN');assert.ok(!('refused' in priced)&&priced.lines.some((l:any)=>l.kind==='design-service'));
+ const q=await handleCommerce(new Request('https://mimipip.com/api/checkout/quote',{method:'POST',headers:{origin:'https://mimipip.com','Content-Type':'application/json'},body:JSON.stringify({lines:[wall,svc],countryCode:'IN',giftCode:code})}),h.env);
+ assert.equal(q.status,400);assert.match((await q.json()).error,/design service/);
+ const c=await h.call('create',{lines:[wall,svc],customer:india,giftCode:code});assert.equal(c.status,400);
+ assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,100100);
+});

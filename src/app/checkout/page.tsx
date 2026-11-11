@@ -107,7 +107,10 @@ export default function Checkout() {
     setQuote(null);
     post('quote', { lines: lines.map(payload), countryCode,giftCode,token:session() })
       .then(q => { if (live) { setQuote({...q, requestKey: quoteKey}); setProblem(''); } })
-      .catch(e => { if (live) { setQuote(null); setProblem((e as Error).message); } });
+      .catch(e => { if (!live) return; setQuote(null);
+        // A code the quote refuses must never block the checkout: it is dropped, and the quote runs again without it.
+        if (giftCode) { setGiftCode(''); setGiftDraft(''); sessionStorage.removeItem('mimipip-checkout-gift'); setProblem((e as Error).message + ' The gift card was removed from this checkout.'); }
+        else setProblem((e as Error).message); });
     return () => { live = false; };
   }, [lines, countryCode, quoteKey]);
 
@@ -210,7 +213,7 @@ export default function Checkout() {
           {(india || form.gstin || form.billingName) && <details className="rounded-[14px] border border-edge p-4"><summary className="cursor-pointer text-sm font-semibold">Business GST invoice (optional)</summary><div className="mt-3 grid gap-3"><label className="grid gap-1.5 text-xs text-slate">GSTIN<input className={fieldClass+' text-base text-charcoal'} value={form.gstin} maxLength={15} autoCapitalize="characters" onChange={e=>setForm({...form,gstin:e.target.value.toUpperCase()})}/></label><label className="grid gap-1.5 text-xs text-slate">Registered business name<input className={fieldClass+' text-base text-charcoal'} value={form.billingName} maxLength={200} onChange={e=>setForm({...form,billingName:e.target.value})}/></label></div></details>}
           {problem && <p role="alert" className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{problem}</p>}
           {open === false && <p role="status" className="text-sm">Payments are paused for a moment. Your cart is saved.</p>}
-          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4"><label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved until payment completes or MimiPip reviews it.</p></section>}
+          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4"><label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{!!giftCode&&<button type="button" className="btn mt-3 ml-2" disabled={busy} onClick={()=>{setGiftCode('');setGiftDraft('');sessionStorage.removeItem('mimipip-checkout-gift');}}>Remove gift card</button>}{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved while the payment is open; a checkout left unpaid returns it to your card within about 90 minutes.</p></section>}
           {terms}
         </form>
         <section aria-label="Order summary" className="hidden h-fit lg:sticky lg:top-32 lg:flex lg:max-h-[calc(100vh-10rem)] lg:flex-col lg:rounded-[22px] lg:bg-wash lg:p-6">
