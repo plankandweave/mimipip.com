@@ -1,13 +1,13 @@
 import {migratePetalsLine} from "../brand/review/petals-legacy";
 export type Dimensions={width:number;height:number};
-export type Line={slug:string;name:string;size:string;artworkUrl?:string;sku?:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;fixedSize?:boolean;rate?:number;wallpaper?:boolean;stickersOnly?:boolean};
+export type Line={materialSlug?:string;slug:string;name:string;size:string;artworkUrl?:string;sku?:string;qty:number;currency:"INR"|"USD";amount:number|null;crop?:import("@/lib/visualizer").CropData;dimensions?:Dimensions;fixedSize?:boolean;rate?:number;wallpaper?:boolean;stickersOnly?:boolean};
 const key="mimipip.design-cart.v1";
 export const validQuantity=(n:number)=>Number.isInteger(n)&&n>=1&&n<=99;
 export const validLength=(n:number)=>Number.isFinite(n)&&n>0&&n<=100000;
 export function wallpaperPrice(d:Dimensions, rate:number){return Math.round(Math.max(d.width*d.height/929.0304,20)*rate*100)/100}
 /** A cart line as the server prices it. The browser's own figures are never sent. */
 export const linePayload=(l:Line)=>({
- slug:l.slug,qty:l.qty,
+ slug:l.slug,qty:l.qty,...(l.materialSlug?{materialSlug:l.materialSlug}:{}),
  ...(l.dimensions?{widthCm:l.dimensions.width,heightCm:l.dimensions.height}:{}),
  ...(l.fixedSize?{fixedSize:true}:{}),
  ...(l.crop?{crop:l.crop,placement:{zoom:l.crop.zoom,cropX:l.crop.offsetX,cropY:l.crop.offsetY,flipH:l.crop.flipH,flipV:l.crop.flipV}}:{}),

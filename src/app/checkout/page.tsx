@@ -86,10 +86,11 @@ export default function Checkout() {
   useEffect(() => {
     if(nativeCart.loading)return;
     if(nativeCart.readError){setLines(null);setQuote(null);setProblem('Your cart could not be read. Please reload before checking out.');return;}
+    if(nativeCart.items.some(item=>item.price_changed)){setLines(null);setQuote(null);setProblem('A saved wallpaper selection has changed. Return to your cart and edit its size, finish or crop before checkout.');return;}
     checkoutItemIds.current=nativeCart.items.map(({item_id,quantity,crop_data})=>({item_id,quantity,crop_data}));
     try {
       legacySnapshot.current=readLines();
-      const nativeLines:Line[]=nativeCart.items.map(item=>({slug:item.handle,name:item.title,size:`${item.width_cm} × ${item.height_cm} cm`,qty:item.quantity,currency:'INR',amount:item.line_total/item.quantity,dimensions:{width:item.width_cm,height:item.height_cm},crop:item.crop_data??undefined,wallpaper:item.category==='wallpaper'}));
+      const nativeLines:Line[]=nativeCart.items.map(item=>({materialSlug:item.material_slug,slug:item.handle,name:item.title,size:`${item.width_cm} × ${item.height_cm} cm`,qty:item.quantity,currency:'INR',amount:item.line_total/item.quantity,dimensions:{width:item.width_cm,height:item.height_cm},crop:item.crop_data??undefined,wallpaper:item.category==='wallpaper'}));
       setLines([...nativeLines,...legacySnapshot.current]);
     } catch { setLines(null);setProblem('Your saved cart could not be read.'); }
 

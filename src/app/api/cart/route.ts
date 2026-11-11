@@ -47,11 +47,11 @@ async function readCart(token: string) {
   const { data, error } = await supabase.rpc("cart_get", { p_session_token: token });
   if (error) throw error;
   if (data?.items) {
-    data.items = await Promise.all(data.items.map(async (item: {preview_url?:string|null;handle:string;quantity:number;width_cm:number;height_cm:number;crop_data?:CropData;line_total:number;unit_price:number;area_sqft:number}) => {
+    data.items = await Promise.all(data.items.map(async (item: {preview_url?:string|null;handle:string;material_slug?:string;quantity:number;width_cm:number;height_cm:number;crop_data?:CropData;line_total:number;unit_price:number;area_sqft:number}) => {
       const ref=docRef(item.preview_url);
       // RPC callers cannot make this service-role reader sign another cart's file.
       const ownPreview=ref?.bucket==='mimipip-order-previews' && ref.path.startsWith(token+'/');
-      const quote = priceCart([{slug:item.handle,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data}], 'IN');
+      const quote = priceCart([{slug:item.handle,materialSlug:item.material_slug,qty:item.quantity,widthCm:item.width_cm,heightCm:item.height_cm,crop:item.crop_data}], 'IN');
       const repriced = 'refused' in quote ? {price_changed:true} : {
         line_total:quote.totalMinor/100,unit_price:quote.lines[0].ratePerSqft??item.unit_price,
         area_sqft:quote.lines[0].billedSqft??item.area_sqft,price_changed:false,
@@ -85,6 +85,7 @@ export async function POST(req: Request) {
   let body: {
     productHandle: string;
     materialSlug: string;
+    editItemId?: string;
     widthCm: number;
     heightCm: number;
     areaSqft: number;
@@ -168,7 +169,9 @@ export async function POST(req: Request) {
     }
   }
 
-  const { error } = await supabase.rpc("cart_add_item", {
+  if(body.editItemId && !/^[0-9a-f-]{36}$/i.test(body.editItemId))return NextResponse.json({error:"Invalid cart item"},{status:400});
+  const { error } = await supabase.rpc(body.editItemId ? "cart_replace_item" : "cart_add_item", {
+    ...(body.editItemId?{p_item_id:body.editItemId}:{}),
     p_session_token: token,
     p_product_handle: body.productHandle,
     p_material_slug: body.materialSlug,

@@ -308,3 +308,10 @@ test('legacy pending wallpaper keeps its purchased pasted stock; ambiguous recor
  assert.equal(webOrderBody({...order,createdAt:Date.parse('2026-11-10T01:00:00Z')}).items[0].material,'paste');
  assert.throws(()=>webOrderBody({...order,createdAt:Date.now()}),/Unversioned material/);
 });
+
+test('a saved pasted-material selection cannot silently become self-adhesive',()=>{
+ const q=priceCart([{...wall,materialSlug:'smooth-matt'}],'IN');
+ assert.ok('refused' in q);assert.match(q.refused,/material has changed/);
+ const current=priceCart([{...wall,materialSlug:'self-adhesive-vinyl'}],'IN');
+ assert.ok(!('refused' in current));
+});
