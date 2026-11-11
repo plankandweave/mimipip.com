@@ -369,62 +369,19 @@ const STAGE_NOTE: Record<string, string> = {
  * Wrong email is indistinguishable from a missing order (no enumeration).
  * Returns only customer-safe fields, enriched with a dispatch/delivery estimate.
  */
-export async function checkOrderStatus(orderNumber: number, email: string) {
-  if (!Number.isFinite(orderNumber) || !email) return { found: false as const };
-  const { data, error } = await supabase.rpc("concierge_order_status", {
-    p_order_number: Math.trunc(orderNumber),
-    p_email: email.trim(),
-  });
-  if (error) {
-    console.error("concierge_order_status failed:", error.message);
-    return { found: false as const };
-  }
-  const o = data as {
-    found: boolean;
-    order_number?: number;
-    status?: string;
-    payment_status?: string;
-    created_at?: string;
-    shipping_speed?: string | null;
-    city?: string | null;
-    total?: number;
-    courier?: string | null;
-    awb?: string | null;
-    tracking_url?: string | null;
-    gst_invoice_url?: string | null;
-    order_copy_url?: string | null;
-    cancellable?: boolean;
-    items?: { title: string; material: string; width_cm: number; height_cm: number; quantity: number }[];
-  } | null;
-  if (!o?.found) return { found: false as const };
-
-  const express = (o.shipping_speed ?? "").toLowerCase().includes("express");
-  const placed = o.created_at ? new Date(o.created_at) : new Date();
-  const est = express ? estimateExpressDelivery(placed) : estimateStandardDelivery(placed);
-  const shipped = ["shipped", "delivered"].includes(o.status ?? "");
-
-  return {
-    found: true as const,
-    order_number: o.order_number,
-    status: o.status,
-    status_explanation: STAGE_NOTE[o.status ?? ""] ?? o.status,
-    payment_status: o.payment_status,
-    city: o.city ?? null,
-    total: o.total != null ? formatINR(Number(o.total)) : null,
-    speed: express ? "Express delivery" : "Standard",
-    // Estimate only meaningful before it ships; after shipping, use tracking.
-    dispatch_estimate: shipped
-      ? null
-      : `dispatch by ${formatShipDate(est.dispatchBy)}, estimated delivery by ${formatShipDate(est.deliveryTo)} (estimates, not guarantees; ${STANDARD_SHIPPING.exceptionsNote})`,
-    tracking: shipped && o.tracking_url ? { courier: o.courier, awb: o.awb, url: o.tracking_url } : null,
-    // Signed for this reply rather than handed out as a permanent file URL.
-    // An hour is the right window here: the customer clicks it from the chat
-    // they are in, and a link pasted elsewhere goes dead the same day.
-    gst_invoice_url: await signDoc(o.gst_invoice_url),
-    order_copy_url: await signDoc(o.order_copy_url),
-    cancellable: !!o.cancellable,
-    items: o.items ?? [],
-  };
+export async function checkOrderStatus(orderNumber: string, email: string) {
+  if (!/^MP-[A-F0-9]{16}$/.test(orderNumber) || !email) return {found:false};
+  const {getGatedUser}=await import('./auth-server');
+  const user=await getGatedUser();
+  if (!user?.email || user.email.trim().toLowerCase()!==email.trim().toLowerCase()) return {found:false};
+  const {env}=await import(/* @vite-ignore */ 'cloudflare:workers') as {env:import('../brand/commerce/checkout').Env};
+  if(!env.DB)return {found:false,error:'Order lookup is temporarily unavailable.'};
+  const {readAccountOrders,orderMoney}=await import('../brand/commerce/account-orders');
+  const [order]=await readAccountOrders(env.DB,user.email,orderNumber);
+  if(!order)return {found:false};
+  return {found:true,order_number:order.id,status:order.status,payment_status:'paid',total:orderMoney(order),
+    status_explanation:'Payment confirmed. Open the order in your account for the recorded details. Production and courier tracking are not available in this lookup.',
+    account_url:'/account/orders/'+order.id,cancellable:false,items:order.lines};
 }
 
 /**
@@ -1035,11 +992,11 @@ export const CONCIERGE_TOOLS: Anthropic.Tool[] = [
   {
     name: "check_order_status",
     description:
-      "Look up a customer's OWN order by its order number AND the email used at checkout — BOTH are required. Returns the current stage, a dispatch/delivery estimate (or tracking once shipped), and invoice links. If it returns found:false, the number+email didn't match — ask them to double-check both. Never reveal any order detail without both the number and the matching email.",
+      "Look up a customer's OWN order by its order number AND the email used at checkout — BOTH are required. Requires the signed-in account to match the checkout email. Returns confirmed paid order details; does not claim unverified production, tracking or refund status. If it returns found:false, the number+email didn't match — ask them to double-check both. Never reveal any order detail without both the number and the matching email.",
     input_schema: {
       type: "object" as const,
       properties: {
-        order_number: { type: "number", description: "The order number from their confirmation" },
+        order_number: { type: "string", description: "The MimiPip order reference from their confirmation, starting MP-" },
         email: { type: "string", description: "The email used at checkout" },
       },
       required: ["order_number", "email"],
