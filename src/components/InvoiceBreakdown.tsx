@@ -1,4 +1,6 @@
-import { formatINR, gstInvoice, type InvoiceLine } from "@/lib/pricing";
+import { gstInvoice, type InvoiceLine } from "@/lib/pricing";
+
+const formatINR = (amount: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(amount);
 
 /**
  * A reusable GST mini-invoice. Line items are shown at their ex-GST (taxable)

@@ -7,7 +7,7 @@
 import records from '../review/catalogue.json';
 import { artFor } from '../commerce/order-payload';
 import { saleOf, sellableAnywhere, type Sale } from '../commerce/sale';
-import { fixedPrice, measured, MIN_BILLED_SQFT } from '../commerce/prices';
+import { fixedPrice, measured, MIN_BILLED_SQFT, WALLPAPER_FIXED_SIZES } from '../commerce/prices';
 
 export const ORIGIN = 'https://mimipip.com';
 export const BRAND = 'MimiPip';
@@ -43,8 +43,15 @@ export function listPrice(slug: string, market: 'IN' | 'ABROAD', sqft = STANDARD
   if (offer.rate === undefined) return null;
   return { currency, amount: round2(Math.max(sqft, MIN_BILLED_SQFT) * offer.rate) };
 }
-/** The least a wallpaper order costs: the 20 sq ft minimum. */
-export const minPrice = (slug: string, market: 'IN' | 'ABROAD') => listPrice(slug, market, MIN_BILLED_SQFT);
+/** India offers finished sizes; custom walls and overseas orders retain minimum billing. */
+export const minPrice = (slug: string, market: 'IN' | 'ABROAD'): Money | null => {
+  const offer = saleOf(slug).india;
+  if (market === 'IN' && offer?.rate !== undefined) {
+    const area = Math.min(...WALLPAPER_FIXED_SIZES.map(([w,h]) => w*h));
+    return { currency: 'INR', amount: round2(area * offer.rate) };
+  }
+  return listPrice(slug, market, MIN_BILLED_SQFT);
+};
 
 /** A JPEG of the product picture, for feeds and link previews (made by scripts/gen-feed-images.py). */
 export const feedImage = (slug: string) => `/feed-images/${slug}.jpg`;

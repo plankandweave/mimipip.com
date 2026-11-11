@@ -82,7 +82,7 @@ test('a product page carries Product and Offer with the price a shopper pays', (
   const [product] = productJsonLd(wall) as any[];
   assert.equal(product['@type'], 'Product');
   assert.deepEqual(product.offers.map((o: any) => [o.priceCurrency, o.price, o.availability]), [
-    ['INR', '4000.00', 'https://schema.org/InStock'],   // 20 sq ft × ₹200 including GST: the smallest order
+    ['INR', '1200.00', 'https://schema.org/InStock'],   // 2 × 3 ft finished size at ₹200 including GST
     ['USD', '200.00', 'https://schema.org/InStock'],    // 20 sq ft × US$10
   ]);
   const [game] = productJsonLd(sellable.find(r => r.slug === 'hopscotch-peach-pop')!) as any[];
