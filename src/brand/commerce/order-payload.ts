@@ -41,10 +41,13 @@ export function linesInr(lines: Pick<StoredLine, 'lineMinor'>[], totalInr: numbe
   });
 }
 
-export function webOrderBody(o: { createdAt?: number; id: string; paymentId: string; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
+export function webOrderBody(o: { createdAt?: number; id: string; paymentId: string|null; giftTender?:{giftId:string;redemptionRef:string;amountInr:number}; amountInr: number; lines: StoredLine[]; customer: StoredCustomer }) {
   const inr = linesInr(o.lines, o.amountInr);
   const c = o.customer;
   const physicalInr=Math.round(o.lines.reduce((sum,l,i)=>sum+(l.kind==='design-service'?0:inr[i]),0)*100)/100;
+  const giftPhysical=o.giftTender?Math.min(o.giftTender.amountInr,physicalInr):0;
+  const cashPhysical=Math.round((physicalInr-giftPhysical)*100)/100;
+  if(cashPhysical>0&&!o.paymentId)throw new Error('Missing cash payment reference');
   const billingIdentity=checkedBillingIdentity(c.billingIdentity,c.countryCode);
   return {
     brand: 'lorange',
@@ -53,7 +56,8 @@ export function webOrderBody(o: { createdAt?: number; id: string; paymentId: str
     amountInr: physicalInr,
     shippingInr: 0,
     customer: { name: c.name, phone: c.phone, email: c.email, address: c.address, city: c.city, pincode: c.postcode, state: c.state, country: c.country, countryCode: c.countryCode },
-    payment: { razorpayPaymentId: o.paymentId, amountInr: physicalInr },
+    ...(o.paymentId?{payment:{razorpayPaymentId:o.paymentId,amountInr:cashPhysical}}:{}),
+    ...(giftPhysical>0?{giftTender:{giftId:o.giftTender!.giftId,redemptionRef:o.giftTender!.redemptionRef,amountInr:giftPhysical,currency:'INR' as const}}:{}),
     items: o.lines.flatMap((l, i) => {
       if(l.kind==='design-service')return [];
       // Unversioned orders predate the stock change. Never reinterpret them using today's catalogue.

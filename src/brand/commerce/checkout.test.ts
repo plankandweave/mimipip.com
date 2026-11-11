@@ -18,7 +18,7 @@ const wallMinor = (rate: number) => Math.round((300 * 250) / 929.0304 * rate * 1
 
 function harness(opts: { base?: number | null; osStatus?: number } = {}) {
   const db = new DatabaseSync(':memory:');
-  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
+  for (const f of ['0000_volatile_phantom_reporter', '0001_typical_sheva_callister', '0002_cart_checkout','0006_gift_cards']) db.exec(readFileSync('drizzle/' + f + '.sql', 'utf8'));
   const DB = { prepare(sql: string) { return { bind(...v: any[]) { const s = db.prepare(sql); return { first: async () => s.get(...v) || null, run: async () => ({ meta: { changes: Number(s.run(...v).changes) } }), all: async () => ({ results: s.all(...v) }) }; } }; } };
   let captured = false, currency = 'INR', total = 0, osStatus = opts.osStatus ?? 200;
   const posts: any[] = [];
@@ -314,4 +314,18 @@ test('a saved pasted-material selection cannot silently become self-adhesive',()
  assert.ok('refused' in q);assert.match(q.refused,/material has changed/);
  const current=priceCart([{...wall,materialSlug:'self-adhesive-vinyl'}],'IN');
  assert.ok(!('refused' in current));
+});
+
+async function seedGift(h:ReturnType<typeof harness>,minor:number){
+ const {giftHash,normalizedGiftCode}=await import('./gift-ledger');
+ const id='MPG-'+'B'.repeat(24),code='MIMI-'+ 'B'.repeat(24);
+ h.env.MIMIPIP_GIFTS_ENABLED='1';h.db.exec('PRAGMA foreign_keys=ON');
+ h.db.prepare("INSERT INTO mimipip_gift_orders(id,token_hash,fingerprint,status,amount,currency,presentation,purchaser_email,recipient_email,valid_days,created_at) VALUES(?,?,?,'pending',?,'INR','{}','buyer@example.test','recipient@example.test',0,?)").run(id,id,id,minor,Date.now());
+ h.db.prepare("INSERT INTO mimipip_gift_cards(id,code_hash,initial_minor,balance_minor,currency,status,activated_at) VALUES(?,?,?,?,'INR','active',?)").run(id,await giftHash(normalizedGiftCode(code)),minor,minor,Date.now());return code;
+}
+test('partial gift charges only the balance and hands OS full invoice plus distinct tender',async()=>{
+ const h=harness();const code=await seedGift(h,100100);const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.equal(made.amount,wallMinor(200)-100100);h.setCaptured();await h.pass();assert.equal(h.posts.length,1);const b=h.posts[0].body;assert.equal(b.amountInr,wallMinor(200)/100);assert.equal(b.payment.amountInr,made.amount/100);assert.equal(b.giftTender.amountInr,1001);assert.equal(b.giftTender.redemptionRef,made.orderNumber);await h.pass();assert.equal(h.posts.length,1);
+});
+test('fully gifted order never creates a provider payment and retains excess gift balance',async()=>{
+ const h=harness();const code=await seedGift(h,2000000);const made=await(await h.call('create',{lines:[wall],customer:india,giftCode:code})).json();assert.equal(made.paid,true);assert.equal(h.total(),0);assert.equal(h.posts.length,1);assert.equal(h.posts[0].body.payment,undefined);assert.equal(h.posts[0].body.giftTender.amountInr,wallMinor(200)/100);assert.equal(h.db.prepare('SELECT balance_minor FROM mimipip_gift_cards').get().balance_minor,2000000-wallMinor(200));
 });

@@ -9,7 +9,7 @@ import { countryOptions } from '@/lib/markets';
 import { useMarket } from '@/components/MarketProvider';
 import { saveLines, linePayload as payload, readLines, type Line } from '@/components/design-cart-store';
 
-type Quote = { requestKey: string; currency: 'INR' | 'USD'; totalMinor: number; lines: { slug: string; name: string; qty: number; lineMinor: number; billedSqft: number | null; installationMinor?:number; personalisationMinor?:number }[] };
+type Quote = { requestKey: string; currency: 'INR' | 'USD'; totalMinor: number; giftMinor?:number; payableMinor?:number; lines: { slug: string; name: string; qty: number; lineMinor: number; billedSqft: number | null; installationMinor?:number; personalisationMinor?:number }[] };
 type Paid = { paid: boolean; orderNumber: string; amount: number; currency: 'INR' | 'USD'; lines: { name: string; qty: number; lineMinor: number }[]; customer: { name: string; email: string }; message: string };
 
 const SESSION_KEY = 'mimipip-checkout-session';
@@ -34,6 +34,9 @@ export default function Checkout() {
   const legacySnapshot = useRef<Line[]>([]);
   const [lines, setLines] = useState<Line[] | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [giftDraft,setGiftDraft]=useState('');
+  const [giftCode,setGiftCode]=useState('');
+  const [giftsOpen,setGiftsOpen]=useState(false);
   const [problem, setProblem] = useState('');
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<boolean | null>(null);
@@ -42,14 +45,14 @@ export default function Checkout() {
   const countries = useMemo(() => countryOptions(), []);
   const countryCode = market.countryCode;
   const india = countryCode === 'IN';
-  const quoteKey = JSON.stringify({lines: lines?.map(payload) ?? [], countryCode});
+  const quoteKey = JSON.stringify({lines: lines?.map(payload) ?? [], countryCode,giftCode});
   const quoteReady = !!quote && quote.requestKey === quoteKey && !nativeCart.loading && !nativeCart.readError;
 
   const check = useCallback(async () => {
     try {
       const d = await post('status', { token: session() });
       if (d.paid) {
-        setPaid(d);
+        setPaid(d);sessionStorage.removeItem('mimipip-checkout-gift');
         // Clear only the selections captured when this payment began. A resumed
         // payment must never erase items added to the cart afterwards.
         try {
@@ -78,6 +81,8 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
+    const savedGift=sessionStorage.getItem('mimipip-checkout-gift')||'';setGiftCode(savedGift);setGiftDraft(savedGift);
+    fetch('/api/gift-card/readiness').then(r=>r.json()).then(d=>setGiftsOpen(d.open===true)).catch(()=>{});
     // Existing browser selections are retained when no native cart is present.
     fetch('/api/checkout/readiness').then(r => r.json()).then(d => setOpen(!!d.open)).catch(() => setOpen(false));
     if (sessionStorage.getItem('mimipip-checkout-started')) void check();
@@ -100,7 +105,7 @@ export default function Checkout() {
     if (!lines?.length) { setQuote(null); return; }
     let live = true;
     setQuote(null);
-    post('quote', { lines: lines.map(payload), countryCode })
+    post('quote', { lines: lines.map(payload), countryCode,giftCode,token:session() })
       .then(q => { if (live) { setQuote({...q, requestKey: quoteKey}); setProblem(''); } })
       .catch(e => { if (live) { setQuote(null); setProblem((e as Error).message); } });
     return () => { live = false; };
@@ -116,15 +121,15 @@ export default function Checkout() {
       const {gstin,billingName,...contact}=form;
       const customer = { ...contact, countryCode, phone: form.phone.replace(india ? /\D/g : /^$/, ''),...(billingIdentity?{billingIdentity}:{}) };
       let d;
-      try { d = await post('create', { token: session(), lines: lines.map(payload), customer }); }
+      try { d = await post('create', { token: session(), lines: lines.map(payload), customer,giftCode }); }
       catch (err) {
         if (!(err as { renew?: boolean }).renew) throw err;
         sessionStorage.setItem(SESSION_KEY, newSession());
-        d = await post('create', { token: session(), lines: lines.map(payload), customer });
+        d = await post('create', { token: session(), lines: lines.map(payload), customer,giftCode });
       }
-      if (d.paid) { await check(); return; }
       sessionStorage.setItem('mimipip-checkout-selection', JSON.stringify({token:session(),...selection}));
       sessionStorage.setItem('mimipip-checkout-started', '1');
+      if(d.paid){await check();setBusy(false);return;}
       if (!await loadRazorpay()) throw new Error('The payment window could not load. Please try again.');
       const widget = new (window as any).Razorpay({
         key: d.keyId, order_id: d.orderId, amount: d.amount, currency: d.currency, name: 'MimiPip', description: 'Your MimiPip order',
@@ -176,7 +181,7 @@ export default function Checkout() {
       <p className="text-xs text-slate">Duties and customs are payable locally if charged.</p>
     </div>
   ) : <p className="text-sm text-slate" role="status">{problem ? 'Check your cart and delivery country to continue.' : 'Updating your order…'}</p>;
-  const placeButton = <button type="submit" form="mimipip-checkout" className="btn btn-primary w-full" disabled={busy || !quoteReady || open !== true}>{busy ? 'Opening payment…' : quoteReady && quote ? `Pay ${money(quote.currency, quote.totalMinor)}` : 'Pay'}</button>;
+  const placeButton = <button type="submit" form="mimipip-checkout" className="btn btn-primary w-full" disabled={busy || !quoteReady || open !== true}>{busy ? 'Opening payment…' : quoteReady && quote ? (quote.payableMinor===0?'Place order with gift card':`Pay ${money(quote.currency, quote.payableMinor??quote.totalMinor)}`) : 'Pay'}</button>;
   const terms = <p className="mt-3 text-xs leading-relaxed text-slate">By paying you accept our <Link className="underline" href="/guides/shipping-returns">delivery and returns</Link> and <Link className="underline" href="/guides/terms">terms</Link>.</p>;
   return (
     <main className="container-x py-10 pb-[calc(env(safe-area-inset-bottom)+140px)] lg:pb-10">
@@ -205,6 +210,7 @@ export default function Checkout() {
           {(india || form.gstin || form.billingName) && <details className="rounded-[14px] border border-edge p-4"><summary className="cursor-pointer text-sm font-semibold">Business GST invoice (optional)</summary><div className="mt-3 grid gap-3"><label className="grid gap-1.5 text-xs text-slate">GSTIN<input className={fieldClass+' text-base text-charcoal'} value={form.gstin} maxLength={15} autoCapitalize="characters" onChange={e=>setForm({...form,gstin:e.target.value.toUpperCase()})}/></label><label className="grid gap-1.5 text-xs text-slate">Registered business name<input className={fieldClass+' text-base text-charcoal'} value={form.billingName} maxLength={200} onChange={e=>setForm({...form,billingName:e.target.value})}/></label></div></details>}
           {problem && <p role="alert" className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{problem}</p>}
           {open === false && <p role="status" className="text-sm">Payments are paused for a moment. Your cart is saved.</p>}
+          {india&&giftsOpen&&<section className="rounded-[14px] border border-edge p-4"><label className="grid gap-2 text-sm">Have a MimiPip gift card?<input className={fieldClass} value={giftDraft} maxLength={40} autoComplete="off" placeholder="MIMI-…" onChange={e=>setGiftDraft(e.target.value)}/></label><button type="button" className="btn mt-3" disabled={busy} onClick={()=>{const code=giftDraft.trim();setGiftCode(code);sessionStorage.setItem('mimipip-checkout-gift',code);}}>Apply gift card</button>{quoteReady&&!!quote?.giftMinor&&<p className="mt-3 text-sm">Gift card: {money('INR',quote.giftMinor)} · Remaining to pay: {money('INR',quote.payableMinor??quote.totalMinor)}</p>}<p className="mt-2 text-xs text-slate">Any unused balance stays on your card. Once checkout starts, its gift balance stays reserved until payment completes or MimiPip reviews it.</p></section>}
           {terms}
         </form>
         <section aria-label="Order summary" className="hidden h-fit lg:sticky lg:top-32 lg:flex lg:max-h-[calc(100vh-10rem)] lg:flex-col lg:rounded-[22px] lg:bg-wash lg:p-6">

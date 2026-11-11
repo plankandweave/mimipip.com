@@ -1,4 +1,5 @@
-import {handleGiftCard} from '../src/brand/commerce/gift-card';
+import {queueGiftEmails} from '../src/brand/commerce/gift-email';
+import {handleGiftCard,sweepGifts,type GiftEnv} from '../src/brand/commerce/gift-card';
 import {handleSampleOrder} from '../src/brand/commerce/sample-order';
 import {publicPage} from "./public-page";
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
@@ -54,7 +55,12 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  // A design that cannot be bought is not shown: its address goes to the shop (owner rule, 10 Nov 2026).
  if(['GET','HEAD'].includes(request.method)){const to=hiddenDestination(p);if(to)return new Response(null,{status:302,headers:{Location:new URL(to,u.origin).href,'X-Robots-Tag':'noindex','Cache-Control':'no-store'}});}
  if(p==='/api/sample-order'||p==='/api/sample-order/readiness')return withCheckoutBrowserPolicy(await handleSampleOrder(request,env as CheckoutEnv));
- if(p==='/api/gift-card'||p.startsWith('/api/gift-card/'))return withOfflineBrowserPolicy(await handleGiftCard(request));
+ if(p==='/api/gift-card'||p.startsWith('/api/gift-card/')){
+  try{const response=await handleGiftCard(request,env as GiftEnv);
+   if(response.ok&&['/api/gift-card/verify','/api/gift-card/status'].includes(p))(ctx as {waitUntil(p:Promise<unknown>):void}).waitUntil(queueGiftEmails(env as GiftEnv).catch(()=>console.error('mimipip_gift_queue')));
+   return response;
+  }catch{return Response.json({error:'Gift-card service is temporarily unavailable. Please check your payment status before retrying.'},{status:503,headers:{'Cache-Control':'no-store'}});}
+ }
  if(p.startsWith('/api/checkout/')){
   try {return withCheckoutBrowserPolicy(await handleCommerce(request,env as CheckoutEnv));}
   catch{return new Response(JSON.stringify({error:'Checkout is temporarily unavailable.'}),{status:503,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});}
@@ -68,10 +74,10 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/india-checkout')return redirect(u,'/checkout/');
  if(p==='/checkout' && ['GET','HEAD'].includes(request.method))return withCheckoutBrowserPolicy(await handler.fetch(request,env,ctx));
  if(p==='/gift-card' && ['GET','HEAD'].includes(request.method)){
-  const response=await publicPage(request,await handler.fetch(request,env,ctx));
+  const response=withCheckoutBrowserPolicy(await publicPage(request,await handler.fetch(request,env,ctx)));
   const headers=new Headers(response.headers);
   // The isolated, script-free srcdoc card preview uses only our own artwork/fonts.
-  headers.set('Content-Security-Policy',(headers.get('Content-Security-Policy')||'').replace(/frame-src [^;]*/,"frame-src 'self'"));
+  headers.set('Content-Security-Policy',(headers.get('Content-Security-Policy')||'').replace(/frame-src [^;]*/,"frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com"));
   headers.set('Cache-Control','no-store');
   return new Response(response.body,{status:response.status,headers});
  }
@@ -119,5 +125,5 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
 }
 export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
-async scheduled(_event:unknown,env:unknown){await Promise.all([sweep(env as CheckoutEnv),sendWelcomeEmails(env as WelcomeEnv)]);}
+async scheduled(_event:unknown,env:unknown){await Promise.all([sweep(env as CheckoutEnv),sweepGifts(env as GiftEnv),sendWelcomeEmails(env as WelcomeEnv)]);}
 };
