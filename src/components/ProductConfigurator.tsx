@@ -573,6 +573,7 @@ function ConnectedProductConfigurator({
     setHeightInches(0);
     setWidthGiven(true);
     setHeightGiven(true);
+    setExactReady(null);
     setSizePreset(p.label);
     setCustomSize(false);
     gaEvent("size_preset", { item_id: productHandle, preset: p.label });
@@ -1224,15 +1225,15 @@ function ConnectedProductConfigurator({
             <div>
               <span className="mb-1.5 block text-xs font-medium text-mist">Width</span>
               <div className="grid grid-cols-2 gap-2">
-                <NumField name="Width" label="ft" value={widthGiven ? widthFeet : ""} onChange={(v) => { if (!widthGiven) setWidthInches(0); setWidthGiven(true); setWidthFeet(v); syncHeightToWidth(v * 12 + (widthGiven ? widthInches : 0)); }} />
-                <NumField name="Width" label="in" value={widthGiven ? widthInches : ""} onChange={(v) => { if (!widthGiven) setWidthFeet(0); setWidthGiven(true); setWidthInches(v); syncHeightToWidth((widthGiven ? widthFeet : 0) * 12 + v); }} max={11} step="0.5" />
+                <NumField name="Width" label="ft" value={widthGiven ? widthFeet : ""} onChange={(v) => { setExactReady(null); if (!widthGiven) setWidthInches(0); setWidthGiven(true); setWidthFeet(v); syncHeightToWidth(v * 12 + (widthGiven ? widthInches : 0)); }} />
+                <NumField name="Width" label="in" value={widthGiven ? widthInches : ""} onChange={(v) => { setExactReady(null); if (!widthGiven) setWidthFeet(0); setWidthGiven(true); setWidthInches(v); syncHeightToWidth((widthGiven ? widthFeet : 0) * 12 + v); }} max={11} step="0.5" />
               </div>
             </div>
             <div>
               <span className="mb-1.5 block text-xs font-medium text-mist">Height</span>
               <div className="grid grid-cols-2 gap-2">
-                <NumField name="Height" label="ft" value={heightGiven ? heightFeet : ""} onChange={(v) => { if (!heightGiven) setHeightInches(0); setHeightGiven(true); setHeightFeet(v); syncWidthToHeight(v * 12 + (heightGiven ? heightInches : 0)); }} />
-                <NumField name="Height" label="in" value={heightGiven ? heightInches : ""} onChange={(v) => { if (!heightGiven) setHeightFeet(0); setHeightGiven(true); setHeightInches(v); syncWidthToHeight((heightGiven ? heightFeet : 0) * 12 + v); }} max={11} step="0.5" />
+                <NumField name="Height" label="ft" value={heightGiven ? heightFeet : ""} onChange={(v) => { setExactReady(null); if (!heightGiven) setHeightInches(0); setHeightGiven(true); setHeightFeet(v); syncWidthToHeight(v * 12 + (heightGiven ? heightInches : 0)); }} />
+                <NumField name="Height" label="in" value={heightGiven ? heightInches : ""} onChange={(v) => { setExactReady(null); if (!heightGiven) setHeightFeet(0); setHeightGiven(true); setHeightInches(v); syncWidthToHeight((heightGiven ? heightFeet : 0) * 12 + v); }} max={11} step="0.5" />
               </div>
             </div>
 
@@ -1246,6 +1247,7 @@ function ConnectedProductConfigurator({
                   checked={lockRatio}
                   onChange={(e) => {
                     setLockChoice(e.target.checked);
+                    if (e.target.checked) setExactReady(null);
                     // Turning it on corrects the shape immediately, keeping the
                     // width they already chose — otherwise the box reads "on"
                     // while the size on screen is still the old shape.
@@ -2041,6 +2043,7 @@ function ConnectedProductConfigurator({
         open={measureOpen}
         onClose={() => setMeasureOpen(false)}
         onResult={(wMm, hMm) => {
+          setExactReady(null);
           setWidthGiven(true);
           setHeightGiven(true);
           setDimFromMm(wMm, setWidthFeet, setWidthInches);

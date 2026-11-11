@@ -1150,25 +1150,7 @@ const HERO_SLIDES = 3;
       <InRealHomesSection />
       </Reveal>
 
-      {/* ---------- commercial discovery ---------- */}
-      <Reveal>
-      <section className="container-x pb-6">
-        <div className="pastel-section grid items-center gap-8 bg-charcoal text-surface md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-semibold lg:text-3xl">Wallpaper for places people remember.</h2>
-            <p className="mt-2 text-sm text-surface/75">Hotels, restaurants, offices, retail — designed and produced for commercial spaces.</p>
-          </div>
-          <div className="flex flex-wrap gap-3 md:justify-end">
-            <Link href="/commercial" className="btn border-surface bg-surface text-charcoal hover:bg-surface/90">
-              Explore Commercial Wallpaper
-            </Link>
-            <Link href="/commercial#enquire" className="btn border-surface/40 bg-transparent text-surface hover:bg-surface hover:text-charcoal">
-              Submit a Project
-            </Link>
-          </div>
-        </div>
-      </section>
-      </Reveal>
+
     </div>
   );
   return inMarket(landingCountryCode, page);
