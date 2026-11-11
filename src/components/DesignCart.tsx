@@ -28,7 +28,8 @@ export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,f
  const india=market.countryCode==="IN";
  const offer=india?sale.india:sale.abroad;
  const currency=india?"INR":"USD";
- const amount=!offer?null:offer.fixed??(offer.rate&&ready?wallpaperPrice({width:wallWidth,height:wallHeight},offer.rate) * (india ? 1 + INDIA_GST_RATE : 1):null);
+ // Match the server quote: apply GST before rounding to paise.
+ const amount=!offer?null:offer.fixed??(offer.rate&&ready?Math.round(Math.max(wallWidth*wallHeight/929.0304,20)*offer.rate*(india?1+INDIA_GST_RATE:1)*100)/100:null);
  const fmt=(n:number)=>new Intl.NumberFormat("en",{style:"currency",currency,maximumFractionDigits:n%1?2:0}).format(n);
  if(!offer){const listed=fixedPrice(slug,india?'IN':'ABROAD');return <div className="my-5">{listed!==null&&<p className="text-xl font-semibold">{fmt(listed)}{india?' including GST':''}</p>}<p>Currently unavailable to order. <a className="underline" href="/contact">Ask us about this design</a>.</p></div>;}
  return <><form className="my-5 grid gap-3" onSubmit={e=>{e.preventDefault();try{if(amount===null){S("Enter your wall size first.");return;}saveLines(addLine(readLines(),{slug,name,size,qty,amount,sku,artworkUrl:floorArtwork,currency,stickersOnly:!wallpaper,wallpaper,rate:offer.rate,crop:payload,dimensions:custom?{width:wallWidth,height:wallHeight}:undefined}));S("Added to your cart.");(window as unknown as {mimipipFunnel?:(e:string,s:string)=>void}).mimipipFunnel?.("add_to_cart",slug);}catch{S("Could not save this selection on this device.");}}}>
