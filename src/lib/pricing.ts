@@ -417,9 +417,9 @@ export const INSTALL_RATE_INCL_GST = Math.round(INSTALL_RATE_EX_GST * (1 + GST_R
 /** "₹41.30/sq ft incl. GST" — one phrasing for every surface that quotes the rate. */
 export const INSTALL_RATE_LABEL = `₹${INSTALL_RATE_INCL_GST.toFixed(2)}/sq ft incl. GST`;
 
-/** Taxable (ex-GST) value of a GST-inclusive amount, in whole rupees. */
+/** Taxable (ex-GST) value of a GST-inclusive amount, rounded to paise. */
 export function exGst(inclusive: number): number {
-  return Math.round(inclusive / (1 + GST_RATE));
+  return Math.round(inclusive * 100 / (1 + GST_RATE)) / 100;
 }
 
 export type InvoiceLine = { label: string; incl: number };
@@ -431,9 +431,9 @@ export type InvoiceLine = { label: string; incl: number };
  */
 export function gstInvoice(lines: InvoiceLine[]) {
   const taxableLines = lines.map((l) => ({ ...l, taxable: exGst(l.incl) }));
-  const taxableSubtotal = taxableLines.reduce((s, l) => s + l.taxable, 0);
-  const total = lines.reduce((s, l) => s + l.incl, 0);
-  const gst = total - taxableSubtotal;
+  const taxableSubtotal = Math.round(taxableLines.reduce((s, l) => s + Math.round(l.taxable * 100), 0)) / 100;
+  const total = lines.reduce((s, l) => s + Math.round(l.incl * 100), 0) / 100;
+  const gst = Math.round((total - taxableSubtotal) * 100) / 100;
   return { taxableLines, taxableSubtotal, gst, total, rate: GST_RATE };
 }
 

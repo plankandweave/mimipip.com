@@ -858,7 +858,6 @@ function ConnectedProductConfigurator({
       // offsetX/offsetY) — what the portal's own editor would have saved.
       setProjectDialog({
         productHandle,
-        editItemId,
         materialSlug: material.slug,
         widthMm: Math.round(runWidthCm * 10),
         heightMm: Math.round(heightCm * 10),
