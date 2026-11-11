@@ -29,3 +29,7 @@ The optional button requests three editable notes through GPT-6.1 Sol, reasoning
 ## Validation
 
 Local mocked tests cover exact captured value, wrong currency/refunds, duplicate activation, atomic competing redemptions, retained balance, immutable redeemed tenders, reservation release boundaries, full/mixed checkout settlement, protected views and email leases/retry windows. Actual next/og pixel inspection covers all three styles, Marathi, long names and pending-code suppression. No real payment, voucher or email has been created by these tests. The personal recipient gift remains held for email-proof review.
+
+## Database
+
+`drizzle/0006_gift_cards.sql` was applied to D1 `mimipip-orders` once on 11 November 2026 and recorded in `d1_migrations` with 0004 and 0005, which were already in place. The deploy workflow does not run D1 migrations: its token has no D1 access, and `docs/CHECKOUT.md` keeps schema changes out of the deploy. Never run 0006 again; its `ALTER TABLE` would fail.

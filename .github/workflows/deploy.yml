@@ -38,11 +38,13 @@ jobs:
         run: npm run typecheck:app
       - name: Build
         run: MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 npx vinext build
-      - name: Prepare gift-card database and stable signing key
+      # D1 migrations are NOT run here: the deploy token is a Workers token with no D1 access
+      # (code 7403, 11 Nov 2026). 0006 was applied once and recorded in d1_migrations; a new
+      # table is created by the Worker itself (docs/CHECKOUT.md).
+      - name: Stable gift-card signing key
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          npx wrangler d1 migrations apply mimipip-orders --remote --config wrangler.gift-migrations.jsonc
           # Every issued code is derived from MIMIPIP_GIFT_SECRET, so it is created ONCE and never rotated here.
           # "could not read the list" must fail the deploy, never be mistaken for "absent".
           npx wrangler secret list --config dist/server/wrangler.json --format json > "$RUNNER_TEMP/mimipip-secret-names.json"

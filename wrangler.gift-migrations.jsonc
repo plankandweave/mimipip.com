@@ -1,6 +1,0 @@
-{
- "name":"mimipip-com",
- "account_id":"13aafd6aa6cfe9043868017f5a1c577f",
- "compatibility_date":"2026-05-15",
- "d1_databases":[{"binding":"DB","database_name":"mimipip-orders","database_id":"a7adc803-e604-46ee-a846-62dc21daf7a5","migrations_dir":"drizzle"}]
-}
