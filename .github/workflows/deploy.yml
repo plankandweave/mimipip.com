@@ -43,7 +43,6 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::The repository secret CLOUDFLARE_API_TOKEN is not set, so nothing was deployed."; exit 1; }
-          npx wrangler d1 execute mimipip-orders --remote --config dist/server/wrangler.json --file drizzle/0005_welcome_email.sql
           npx wrangler deploy --config dist/server/wrangler.json --message "main ${GITHUB_SHA::7}"
       - name: Check the live site
         run: |

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MimiMaterialPhotos } from "@/components/MimiMaterialPhotos";
 import { notFound } from "next/navigation";
 import { guides } from "@/brand/review/guides";
 
@@ -14,6 +15,7 @@ export default async function Guide({params}: Props) {
   return <article className="container-x max-w-3xl py-12">
     <h1>{guide[0]}</h1>
     {guide[1].map(line => <p key={line} className="my-5 leading-relaxed">{line}</p>)}
+    {topic === "materials" && <MimiMaterialPhotos />}
     {topic === "trade" && <nav aria-label="Buyer collections" className="my-6 grid gap-3">
       {[
         ["Browse all designs", "/browse/collection"],
