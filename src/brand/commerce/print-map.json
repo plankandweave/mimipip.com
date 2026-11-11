@@ -172,20 +172,20 @@
   "hopscotch-bold-adventure": {
     "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-bold-adventure-afe7f14f08.jpg",
     "material": "self_adhesive",
-    "printHeightCm": 263.0,
-    "printWidthCm": 78.0
+    "printHeightCm": 263,
+    "printWidthCm": 78
   },
   "hopscotch-pastel-play": {
     "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-pastel-play-9fd3e8fefd.jpg",
     "material": "self_adhesive",
-    "printHeightCm": 263.0,
-    "printWidthCm": 78.0
+    "printHeightCm": 263,
+    "printWidthCm": 78
   },
   "hopscotch-peach-pop": {
     "art": "https://media.zyvorah.com/_print-masters/mimipip/hopscotch-peach-pop-f17342ce47.jpg",
     "material": "self_adhesive",
-    "printHeightCm": 263.0,
-    "printWidthCm": 78.0
+    "printHeightCm": 263,
+    "printWidthCm": 78
   },
   "iris-lagoon": {
     "art": "https://zyvorah.com/media/product-images/studio-uploads/kids-nursery-99281663-7907-4cd2-87e0-f79973f57969.png",
@@ -899,6 +899,46 @@
   },
   "balloon-reverie": {
     "art": "https://mimipip.com/review/sky-and-sea/balloon-reverie/flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-watercolour-daydream": {
+    "art": "https://mimipip.com/pastel-stripes/watercolour-daydream-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-pastel-paintbox": {
+    "art": "https://mimipip.com/pastel-stripes/pastel-paintbox-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-sorbet-parade": {
+    "art": "https://mimipip.com/pastel-stripes/sorbet-parade-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-ribbon-candy": {
+    "art": "https://mimipip.com/pastel-stripes/ribbon-candy-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-gelato-morning": {
+    "art": "https://mimipip.com/pastel-stripes/gelato-morning-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-candy-slant": {
+    "art": "https://mimipip.com/pastel-stripes/candy-slant-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-peach-sundae": {
+    "art": "https://mimipip.com/pastel-stripes/peach-sundae-flat.png",
+    "material": "self_adhesive",
+    "materialSlug": "self-adhesive-vinyl"
+  },
+  "pastel-stripes-meadow-rainbow": {
+    "art": "https://mimipip.com/pastel-stripes/meadow-rainbow-flat.png",
     "material": "self_adhesive",
     "materialSlug": "self-adhesive-vinyl"
   }
