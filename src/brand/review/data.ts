@@ -22,12 +22,12 @@ function sizeGroup(p:RecordData) {
 export const options=(axis:Axis) => {
   if(axis==='size') return ['made-to-measure','fixed-dimensions'].filter(key=>shop.some(p=>sizeGroup(p)===key));
   if(axis==='age') return ['baby','toddler','preschool','school-age'];
-  return [...new Set(shop.flatMap(p=>p[axis]??[]))].sort();
+  return [...new Set([...shop.flatMap(p=>p[axis]??[]), ...(axis==='collection'?['happy-petals']:[])])].sort();
 };
 const shop=catalogue;
 /** A collection page lists only what can be bought, like the rest of the shop. */
-export const collectionDesigns=(handle:string)=>shop.filter(p=>p.collection.includes(handle));
-export const filter=(axis:Axis,value:string)=>shop.filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
+export const collectionDesigns=(handle:string)=>(handle==='happy-petals'?records:shop).filter(p=>p.collection.includes(handle));
+export const filter=(axis:Axis,value:string)=>(axis==='collection'&&value==='happy-petals'?records:shop).filter(p=>!value||(axis==='size'?sizeGroup(p)===value:p[axis]?.includes(value)));
 export const browseHref=(axis:Axis,value:string)=>axis==='collection'?'/collections/'+encodeURIComponent(value)+'/':'/browse/'+axis+'?value='+encodeURIComponent(value);
 export const card=(p:RecordData):ProductCardData=>({
   roomPanel: (p as RecordData & {roomPanel?:import("@/components/RoomPanel").RoomPanelBounds}).roomPanel,
@@ -59,5 +59,5 @@ export const card=(p:RecordData):ProductCardData=>({
   sale:saleOf(p.slug),
   sampleable:false,
 });
-export const find=(slug:string)=>shop.find(p=>p.slug===slug);
+export const find=(slug:string)=>shop.find(p=>p.slug===slug)??records.find(p=>p.slug===slug&&p.collection.includes('happy-petals'));
 export const label=(s:string)=>s==='happy-petals'?'Happy Petals':s==='dotty-days'?'Dotty Days':s==='colour-create'?'Colour & Create':s.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());

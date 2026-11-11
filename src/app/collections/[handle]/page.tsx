@@ -241,7 +241,7 @@ export default async function CollectionPage({
   searchParams: Promise<SP>;
 }) {
   const { handle } = await params;
-  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'){const {collectionDesigns}=await import('@/brand/review/data');if(collectionDesigns(handle).length){const {Browse}=await import('@/brand/review/pages');return <Browse axis="collection" value={handle}/>;}notFound();}
+  if(process.env.MIMIPIP_LOCAL_REVIEW==='1'||handle==='happy-petals'){const {collectionDesigns}=await import('@/brand/review/data');if(collectionDesigns(handle).length){const {Browse}=await import('@/brand/review/pages');return <Browse axis="collection" value={handle}/>;}notFound();}
   if (handle === "ink") redirect("/collection/ink");
   if (handle === "new-york") redirect("/collection/new-york");
   const sp = await searchParams;

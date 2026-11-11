@@ -6,6 +6,8 @@
  * cannot disagree with prices.json.
  */
 import { landingOf, landings } from './landing';
+import records from '../review/catalogue.json';
+const previewPetals = records.filter(r => r.collection.includes('happy-petals'));
 import { abs, BRAND, feedImage, isWallpaper, listPrice, minPrice, ORIGIN, productPath, recordOf, isSellable, sellable, typeLabel, type Rec } from './site';
 
 export type Head = { title: string; description: string; canonical: string; image: string; imageAlt: string; type: 'website' | 'product'; jsonLd: unknown[] };
@@ -106,7 +108,8 @@ export function headFor(path: string, value?: string | null): Head | null {
   const product = /^\/products\/([a-z0-9-]+)$/.exec(path);
   if (product) {
     const r = recordOf(product[1]);
-    if (!r || !isSellable(r.slug)) return null;
+    if (!r || (!isSellable(r.slug) && !r.collection.includes('happy-petals'))) return null;
+    if (r.collection.includes('happy-petals')) return base(`${r.name} floral wallpaper | ${BRAND}`, `${r.name} is a floral wallpaper design for children's rooms. See the artwork and styled room view; ask MimiPip about availability.`, { image: abs(r.image), imageAlt: `${r.name} in a styled children's room`, type: 'product' });
     return base(productTitle(r), productDescription(r), { image: abs(feedImage(r.slug)), imageAlt: r.collection.includes('playroom-stories') ? `${r.name} flat wallpaper artwork` : `${r.name} ${typeLabel(r)} shown in a child's room`, type: 'product', jsonLd: productJsonLd(r) });
   }
   const landing = landingOf(path.slice(1));
@@ -123,10 +126,11 @@ export function headFor(path: string, value?: string | null): Head | null {
   }
   const collection = /^\/collections\/([a-z0-9-]+)$/.exec(path);
   if (collection) {
-    const items = sellable.filter(r => r.collection.includes(collection[1]));
+    const items = (collection[1] === 'happy-petals' ? previewPetals : sellable).filter(r => r.collection.includes(collection[1]));
     if (!items.length) return null;
     const name = label(collection[1]);
     const wall = isWallpaper(items[0]);
+    if (collection[1] === 'happy-petals') return base(`${name}: floral wallpaper for kids | ${BRAND}`, `Explore Happy Petals floral wallpaper designs for nurseries, bedrooms and playrooms. See each artwork and styled room view. Ask MimiPip about availability.`, { image: abs(items[0].image), imageAlt: `${name} floral wallpaper in a styled room`, jsonLd: [itemList(name, items.map(r => r.slug))] });
     return base(`${name}: ${wall ? "kids' wallpaper collection" : 'floor game stickers'} | ${BRAND}`,
       wall ? `${items.length} ${name} kids' wallpaper designs from MimiPip, each made to your wall's measurements.`
         : collection[1] === 'hopscotch' ? `Hopscotch floor game stickers from MimiPip: ${items.length} colourways of one connected number trail, 75 × 260 cm.`
@@ -161,4 +165,5 @@ export const indexablePaths = (extra: string[]): string[] => [
   ...['collection', 'color', 'concept', 'age', 'size', 'space'].map(a => '/browse/' + a),
   ...[...new Set(sellable.flatMap(r => r.collection))].map(c => '/collections/' + c),
   ...sellable.map(r => productPath(r.slug)),
+  '/collections/happy-petals', ...previewPetals.map(r => productPath(r.slug)),
 ];
