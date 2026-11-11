@@ -357,8 +357,10 @@ export default async function ProductPage({
   if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));
   const mimiProduct=findReview(handle);
   if(!mimiProduct)notFound();
-  // Fixed-size Mimi ranges retain their own dimensions and product presentation.
-  if(!mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
+  // Playroom Stories are sold from MimiPip's own catalogue and print map.
+  // The inherited product renderer reads a separate database; these new
+  // designs must use the same review storefront as the collection listing.
+  if(mimiProduct.collection.includes("playroom-stories") || !mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.
