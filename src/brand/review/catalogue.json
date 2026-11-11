@@ -11716,7 +11716,7 @@
     "personalization": null
   },
   {
-    "id": "MP-SS-01",
+    "id": "MP-WP-SHAPE-01",
     "slug": "shape-street-quiet",
     "name": "Shape Street — Quiet",
     "description": "Follow the winding roads through a little town of trams, bridges, colourful houses and market stalls. Dusty blue, sage, apricot and blush bring a gentle sense of adventure to a child’s room.",
@@ -11775,7 +11775,7 @@
     ]
   },
   {
-    "id": "MP-SS-02",
+    "id": "MP-WP-SHAPE-02",
     "slug": "shape-street-bright",
     "name": "Shape Street — Bright",
     "description": "A lively little town of trams, bicycles, bridges and market stalls. Follow the looping streets and discover a new route each day, in confident cobalt, coral, mint and sunshine yellow.",
@@ -11834,7 +11834,7 @@
     ]
   },
   {
-    "id": "MP-SS-03",
+    "id": "MP-WP-SHAPE-03",
     "slug": "shape-street-market-morning",
     "name": "Market Morning",
     "description": "The neighbourhood wakes to fruit stalls, bakery carts and a tram over the bridge. Follow the streets from one colourful stall to the next.",
@@ -11889,7 +11889,7 @@
     ]
   },
   {
-    "id": "MP-SS-04",
+    "id": "MP-WP-SHAPE-04",
     "slug": "shape-street-tram-trail",
     "name": "Tram Trail",
     "description": "All aboard for a winding trip through Shape Street. A cheerful tram passes tiny stations, arched bridges and neighbours waiting for a ride.",
@@ -11944,7 +11944,7 @@
     ]
   },
   {
-    "id": "MP-SS-05",
+    "id": "MP-WP-SHAPE-05",
     "slug": "shape-street-rooftop-gardens",
     "name": "Rooftop Gardens",
     "description": "Above the town, little gardeners tend flowers and vegetables on connected rooftops. Follow the bridges and find what is growing next.",
@@ -11999,7 +11999,7 @@
     ]
   },
   {
-    "id": "MP-SS-06",
+    "id": "MP-WP-SHAPE-06",
     "slug": "shape-street-harbour-hop",
     "name": "Harbour Hop",
     "description": "Take the curved path down to the harbour. Sailboats, bridges and a striped lighthouse turn the waterfront into a gentle voyage.",
@@ -12054,7 +12054,7 @@
     ]
   },
   {
-    "id": "MP-SS-07",
+    "id": "MP-WP-SHAPE-07",
     "slug": "shape-street-park-loop",
     "name": "Park Loop",
     "description": "A looping path leads past play arches, picnics, kites and a small pond. There is something new to spot around every bend.",
@@ -12109,7 +12109,7 @@
     ]
   },
   {
-    "id": "MP-SS-08",
+    "id": "MP-WP-SHAPE-08",
     "slug": "shape-street-rainy-crossings",
     "name": "Rainy Crossings",
     "description": "Raincoats and umbrellas brighten the town as friends cross little streets and float paper boats in the puddles.",
@@ -12164,7 +12164,7 @@
     ]
   },
   {
-    "id": "MP-SS-09",
+    "id": "MP-WP-SHAPE-09",
     "slug": "shape-street-festival-flags",
     "name": "Festival Flags",
     "description": "Bunting crosses the rooftops as music, dancing and a toy parade fill the town square. A joyful day to revisit again and again.",
@@ -12219,7 +12219,7 @@
     ]
   },
   {
-    "id": "MP-SS-10",
+    "id": "MP-WP-SHAPE-10",
     "slug": "shape-street-night-lights",
     "name": "Night Lights",
     "description": "The last tram heads home beneath a softly glowing sky. Warm windows and little lanterns make this a cosy bedtime town.",
@@ -12274,7 +12274,7 @@
     ]
   },
   {
-    "id": "MP-SS-11",
+    "id": "MP-WP-SHAPE-11",
     "slug": "shape-street-building-blocks",
     "name": "Building Blocks",
     "description": "Arches, circles, triangles and tiny vehicles build a bright little town. Look closely, trace the shapes and imagine what comes next.",
