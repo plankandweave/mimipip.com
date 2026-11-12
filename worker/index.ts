@@ -2,6 +2,7 @@ import {queueGiftEmails} from '../src/brand/commerce/gift-email';
 import {handleGiftCard,sweepGifts,type GiftEnv} from '../src/brand/commerce/gift-card';
 import {handleSampleOrder} from '../src/brand/commerce/sample-order';
 import {publicPage} from "./public-page";
+import {DEFAULT_SHARE_IMAGE} from '../src/brand/seo/head';
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
 import {handleCommerce,sweep,type Env as CheckoutEnv} from '../src/brand/commerce/checkout';
@@ -44,6 +45,8 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(u.hostname==='www.mimipip.com'){u.hostname='mimipip.com';return Response.redirect(u.href,301);}
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
+ // The inherited share-picture routes cannot be drawn on this site; anything still holding their address gets the brand's own picture.
+ if(p==='/opengraph-image'||p==='/twitter-image')return Response.redirect(DEFAULT_SHARE_IMAGE,302);
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
  // Shopping feeds and the sitemap are made here, from the catalogue and prices.json; nothing inherited is served.
  if(p==='/feeds/openai-products.jsonl')return openAiFeedResponse(u,request.method);
