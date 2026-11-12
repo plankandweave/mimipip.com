@@ -5,8 +5,10 @@ import { guides } from "@/brand/review/guides";
 
 type Props = { params: Promise<{topic: string}> };
 export async function generateMetadata({params}: Props) {
-  const guide = guides[(await params).topic];
-  return { title: guide?.[0] ?? "Shopping help" };
+  const {topic} = await params;
+  const guide = guides[topic];
+  if (!guide) notFound();
+  return { title: guide[0], alternates: { canonical: `/guides/${topic}` } };
 }
 export default async function Guide({params}: Props) {
   const {topic} = await params;
