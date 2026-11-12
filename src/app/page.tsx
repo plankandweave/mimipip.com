@@ -532,6 +532,11 @@ const HERO_SLIDES = 3;
           </Link>
         ))}
       </nav>
+      {/* ---------- now open (public launch, 14 November 2026). Says the shop is open and nothing about how anything is made. ---------- */}
+      <p data-launch-note className="container-x pt-5 text-center text-sm text-slate">
+        <span className="font-medium text-charcoal">Now open.</span> Hello, we&rsquo;re MimiPip: little spaces for big little worlds.{" "}
+        <Link href="/browse/collection" className="underline underline-offset-4">Come and look around</Link>
+      </p>
       {/* ---------- hero ---------- */}
       <section className="relative mx-4 mt-4 overflow-hidden rounded-[32px] lg:mx-6">
         <div

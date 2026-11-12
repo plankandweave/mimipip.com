@@ -1,5 +1,5 @@
 import {publishedUrls} from '../src/brand/review/published-sitemap';
-import {headFor,organizationJsonLd,type Head} from '../src/brand/seo/head';
+import {headFor,organizationJsonLd,DEFAULT_SHARE_IMAGE,type Head} from '../src/brand/seo/head';
 import {offlineContentSecurityPolicy,withOfflineBrowserPolicy,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 
 /** Pages search may list. Everything else is served noindex. */
@@ -44,7 +44,10 @@ export function publicPage(request:Request, response:Response) {
   const html = withCheckoutBrowserPolicy(new Response(response.body,{status:response.status,headers}));
   let sawTitle=false,inSvg=false;
   let rewriter = new HTMLRewriter()
-    .on('meta[name="robots"],meta[name="googlebot"]',{element(el){el.remove()}});
+    .on('meta[name="robots"],meta[name="googlebot"]',{element(el){el.remove()}})
+    // The cart, the guides and the gift page keep the inherited tags, whose preview picture is a route that
+    // cannot be drawn here (it answered 500). A link shared from them shows the brand's own picture instead.
+    .on('meta[property="og:image"],meta[name="twitter:image"]',{element(el){if((el.getAttribute('content')||'').includes('/opengraph-image'))el.setAttribute('content',DEFAULT_SHARE_IMAGE)}});
   if (head) rewriter = rewriter
     // One of each, ours: the inherited tags described another shop's page (the home address as og:url, a broken preview picture).
     .on('meta[name="description"],link[rel="canonical"],link[rel="alternate"][hreflang],meta[property^="og:"],meta[name^="twitter:"]',{element(el){el.remove()}})

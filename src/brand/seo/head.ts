@@ -5,12 +5,17 @@
  * writes this into the page (worker/public-page.ts), so the inherited pages
  * cannot disagree with prices.json.
  */
+import identity from '../adapters/mimi-pip.json';
 import { landingOf, landings } from './landing';
 import { abs, BRAND, feedImage, isWallpaper, listPrice, minPrice, ORIGIN, productPath, recordOf, isSellable, sellable, typeLabel, type Rec } from './site';
 
 export type Head = { title: string; description: string; canonical: string; image: string; imageAlt: string; type: 'website' | 'product'; jsonLd: unknown[] };
 
 const DEFAULT_IMAGE = feedImage('safari-celebration');
+/** The preview picture of any page that has none of its own: a real MimiPip wall, a file the site serves. */
+export const DEFAULT_SHARE_IMAGE = abs(DEFAULT_IMAGE);
+/** The brand's own profiles, from the site settings. Empty until one is set there. */
+const SAME_AS = Object.values(identity.socialLinks).filter((u): u is string => typeof u === 'string' && u.startsWith('https://'));
 const clip = (text: string, max: number) => {
   const clean = text.replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
@@ -152,6 +157,7 @@ export const organizationJsonLd = {
   description: "Kids' wallpaper sized to your wall, and floor game stickers, for nurseries, children's bedrooms and playrooms.",
   parentOrganization: { '@type': 'Organization', name: 'Magnitude Brands Private Limited' },
   contactPoint: { '@type': 'ContactPoint', email: 'hello@mimipip.com', contactType: 'customer support' },
+  ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
   hasMerchantReturnPolicy: {
     '@type': 'MerchantReturnPolicy', returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
     merchantReturnLink: ORIGIN + '/guides/shipping-returns',
