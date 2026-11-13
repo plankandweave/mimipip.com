@@ -3,7 +3,7 @@ import {headFor,organizationJsonLd,DEFAULT_SHARE_IMAGE,type Head} from '../src/b
 import {offlineContentSecurityPolicy,withOfflineBrowserPolicy,withCheckoutBrowserPolicy} from '../src/brand/network-policy';
 
 /** Pages search may list. Everything else is served noindex. */
-const publicPaths = new Set([
+export const publicPaths: ReadonlySet<string> = new Set([
   ...publishedUrls.map(url => new URL(url).pathname.replace(/\/$/, '') || '/'),
   '/contact','/faq',
 ]);

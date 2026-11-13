@@ -1,7 +1,8 @@
 import {queueGiftEmails} from '../src/brand/commerce/gift-email';
 import {handleGiftCard,sweepGifts,type GiftEnv} from '../src/brand/commerce/gift-card';
 import {handleSampleOrder} from '../src/brand/commerce/sample-order';
-import {publicPage} from "./public-page";
+import {publicPage,publicPaths} from "./public-page";
+import {edgeCacheKey,withEdgeCache} from '../src/brand/seo/edge-cache';
 import {DEFAULT_SHARE_IMAGE} from '../src/brand/seo/head';
 import {legacyPetalsDestination} from '../src/brand/review/petals-legacy';
 import floorPlay from './floor-play.json';
@@ -126,7 +127,10 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  const collection=/^\/collections\/([^/]+)(?:\/([^/]+))?$/.exec(p);
  if(collection?.[2]){const item=records.find(r=>'detailURL' in r&&r.detailURL===p+'/');if(item)return redirect(u,'/products/'+item.slug);}
  if(collection&&!collection[2]&&families[collection[1]]&&families[collection[1]]!==collection[1])return redirect(u,'/collections/'+families[collection[1]]);
- return publicPage(request,await handler.fetch(request,env,ctx));
+ // A public page is the same for every shopper: kept whole at the edge, so a visitor far from the
+ // database is not made to wait for a dozen reads in Mumbai (src/brand/seo/edge-cache.ts).
+ const version=(env as {CF_VERSION_METADATA?:{id?:string}}).CF_VERSION_METADATA?.id??'';
+ return withEdgeCache(request,ctx as {waitUntil(p:Promise<unknown>):void},edgeCacheKey(request,publicPaths,version),async()=>publicPage(request,await handler.fetch(request,env,ctx)));
 }
 export default {async fetch(request:Request,env:unknown,ctx:unknown){return withVisitorCountry(request,await serve(request,env,ctx));},
 // Every five minutes: payments the browser never reported, and paid orders the OS has not taken.
