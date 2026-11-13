@@ -45,6 +45,8 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  const u=new URL(request.url),p=u.pathname.replace(/\/$/,'')||'/';
  if(u.hostname==='www.mimipip.com'){u.hostname='mimipip.com';return Response.redirect(u.href,301);}
  if(p==='/browse/gender'||p==='/shop/gender')return redirect(u,'/browse/collection');
+ // Short policy addresses people type or print on a parcel slip: one page answers them all.
+ if(['/shipping','/returns','/refunds','/refund','/delivery','/cancellation','/cancellations'].includes(p))return Response.redirect(new URL('/guides/shipping-returns',u.origin).href,301);
  // The inherited share-picture routes cannot be drawn on this site; anything still holding their address gets the brand's own picture.
  if(p==='/opengraph-image'||p==='/twitter-image')return Response.redirect(DEFAULT_SHARE_IMAGE,302);
  if(p==='/robots.txt' && u.hostname!=='mimipip.com') return new Response('User-agent: *\nDisallow: /\n',{headers:{'Content-Type':'text/plain'}});
