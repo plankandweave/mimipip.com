@@ -15,7 +15,7 @@ One file: `src/brand/commerce/prices.json`. A design with no figure there is not
 | What | Figure | Source |
 |---|---|---|
 | Wallpaper abroad | US$10 per sq ft, delivery included | Roheena, 5 Nov 2026 (replaces US$60), at ₹50 per sq ft cost |
-| Wallpaper India | ₹200 per sq ft plus GST | `MIMIPIP_PRICING.sellingInrPerSqFt` |
+| Wallpaper India | ₹200 per sq ft including GST | `MIMIPIP_PRICING.sellingInrPerSqFt` |
 | Fixed pieces | `fixedInr` / `fixedUsd` in `prices.json` (Hopscotch ₹4,953.55 / US$209.90) | Simple Price List, 8 Nov 2026 |
 | Minimum | 20 sq ft billed; delivery free in India | Zyvorah's rule, carried over |
 
