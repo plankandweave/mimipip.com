@@ -179,7 +179,6 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
                   </Link>
                 </li>
               ))}
-              {c.title === "Help" && <li><span className="text-sm text-slate">Etsy (coming soon)</span></li>}
             </ul>
           </div>
         ))}
