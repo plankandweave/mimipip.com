@@ -1,4 +1,5 @@
 "use client";
+import { amazonIndiaLink } from "@/brand/commerce/amazon-india";
 import { brand } from "@/brand/current";
 
 import { useCanvasJourney } from "./ShoppingJourney";
@@ -118,7 +119,7 @@ const DOORS: {
 export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
   const canvas = useCanvasJourney();
   const columns = disconnected ? [
-    { title: "Shop", links: ["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })) },
+    { title: "Shop", links: [...["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })), { label: "Gift cards", href: "/gift-card" }] },
     { title: "Plan your room", links: [
       { label: "In real homes", href: "/in-real-homes/" },
       { label: "Playroom stories", href: "/collections/playroom-stories" },
@@ -130,7 +131,9 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
       { label: "About Us", href: "/guides/about" },
       { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
       { label: "United States", href: "/us" }, { label: "India", href: "/in" },
-      { label: "Retail buyer guide", href: "/trade" }
+      { label: "Retail buyer guide", href: "/trade" },
+      // Footer only, never beside Add to cart (owner rule, 7 Oct 2026). Absent until a live listing exists.
+      ...(amazonIndiaLink() ? [{ label: "Also on Amazon India", href: amazonIndiaLink()! }] : [])
     ] }
   ] : canvas ? COLS.map(column => column.title === "Shop" ? {
     title: "Shop",

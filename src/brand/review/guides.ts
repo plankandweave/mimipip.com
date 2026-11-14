@@ -1,3 +1,4 @@
+import { amazonIndiaLink } from "../commerce/amazon-india";
 export const guides: Record<string, [string, string[]]> = {
   materials: ["Will it suit my surface?", [
     "Start with the placement shown on the design page. A wall border, floor sticker and bathroom decal are three different uses. A room photograph illustrates the artwork and does not establish surface compatibility.",
@@ -19,7 +20,9 @@ export const guides: Record<string, [string, string[]]> = {
   faq: ["Shopping questions", [
     "How do I save a design? Tap its heart, then open Saved designs. The list stays in the same browser on this device. Tap the heart again to remove it.",
     "How does the cart work? Choose your design, size and quantity, then add it to your cart. Your selections stay on this device until you check out. Your wall size sets the price, and delivery is included.",
-    "Does a nursery or toddler label certify a product for that age? These labels organize decorating ideas. Check each product’s intended use, materials and instructions before choosing it."
+    "Does a nursery or toddler label certify a product for that age? These labels organize decorating ideas. Check each product’s intended use, materials and instructions before choosing it.",
+    // Only once a live Amazon India listing is recorded in amazon-india.ts.
+    ...(amazonIndiaLink() ? [`Can I buy MimiPip on Amazon? Yes, some MimiPip designs are also on Amazon India: ${amazonIndiaLink()}. Every design, every size and the full price list are here on mimipip.com.`] : [])
   ]],
   "shipping-returns": ["Delivery and returns", [
     "Delivery is included in your price for India and the United States. Every wallpaper is made for you and delivered within 10 working days in India. For the United States, allow extra time for shipping and customs; any applicable import duty or tax is paid on delivery.",
