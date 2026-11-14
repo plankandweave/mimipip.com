@@ -573,3 +573,39 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
   .mimi-registry-images img { height:180px; }
   .mimi-home .pastel-section { border-radius:22px; }
 }
+
+/* Homepage review: coherent framing, compact mobile flow and equal actions. */
+.mimi-home .mimi-hero-layout { grid-template-columns: minmax(0, .85fr) minmax(0, 1.5fr); }
+.mimi-home .mimi-hero-art { position: relative; align-self: stretch; height: auto; min-height: 480px; }
+.mimi-home .mimi-hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mimi-home .mimi-hero-copy { min-width: 0; min-height: 0; }
+.mimi-home .mimi-hero-controls { justify-content: center; }
+.mimi-home .mimi-preview-actions { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; max-width: 340px; justify-self: center; }
+.mimi-home .mimi-preview-actions .btn { width: 100%; justify-content: center; text-align: center; }
+.mimi-home .mimi-registry-card { background: #fff0c9; border: 1px solid #eddfc2; }
+.mimi-home .mimi-registry-images { background: #eee5f2; padding: 10px; gap: 8px; }
+.mimi-home .mimi-registry-card .caps { color: #86516c; }
+.mimi-home .mimi-registry-card h2 { color: #684333; }
+.mimi-home .mimi-registry-card a:first-child { background: #704d64; color: #fff; }
+.mimi-home .mimi-colour-create { margin-top: 32px; margin-bottom: 24px; padding: clamp(24px,4vw,48px); border-radius: 28px; background: #fff1ce; border: 1px solid #efdfb7; }
+.mimi-home .mimi-colour-create h2 { font-size: clamp(34px,4vw,48px); }
+.mimi-home .mimi-colour-create .caps { color: #86516c; }
+.mimi-home .mimi-order-steps > div { min-width: 0; padding: 16px; }
+.mimi-home .mimi-how-it-works h2 { max-width: 22ch; }
+@media (max-width: 1023px) {
+  .mimi-home .mimi-hero-layout { display: flex; flex-direction: column; }
+  .mimi-home .mimi-hero-art { order: -1; width: 100%; min-height: 0; aspect-ratio: 4 / 3; }
+  .mimi-home .mimi-hero-copy { padding: 24px; }
+  .mimi-home .mimi-hero-category { margin-top: 12px; }
+  .mimi-home .mimi-hero-description { max-width: 48ch; }
+  .mimi-home .mimi-hero-cta { margin-top: 20px; }
+  .mimi-home .mimi-registry-card { grid-template-columns: 1fr; }
+  .mimi-home .mimi-registry-images img { height: 220px; min-height: 0; width: 100%; }
+}
+@media (max-width: 479px) {
+  .mimi-home .mimi-hero-copy { padding: 22px 20px; }
+  .mimi-home .mimi-hero-copy h1 { font-size: 32px; }
+  .mimi-home .mimi-registry-images img { height: 160px; }
+  .mimi-home .mimi-order-steps > div { display: flex; align-items: center; gap: 14px; }
+  .mimi-home .mimi-order-steps p { margin: 0; }
+}

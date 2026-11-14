@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 
 // Owner-approved order. Use existing catalogue photography only.
-// Keep entire images visible: the installed product may be at either wall edge.
+// Frame each installed product clearly at desktop, tablet and mobile widths.
 const slides = [
   { title: "A room for every little story.", category: "Wallpaper worlds", description: "From their very first room to their next big adventure.", href: "/products/safari-celebration", cta: "Explore this wallpaper", color: "#edf3ed", images: [{ src: "/review/assets/wallpaper-safari-celebration.webp", alt: "Safari Celebration wallpaper covering a playroom wall", width: 1440, height: 960 }] },
   { title: "A little garden at their feet.", category: "Wall borders", description: "Sage Meadow adds a gentle finishing touch along the bottom of their wall.", href: "/collections/mimi-borders", cta: "Explore borders", color: "#f7eeeb", images: [{ src: "/review/assets/sage-meadow-front-v2.webp", alt: "Sage Meadow border installed along the bottom of a nursery wall", width: 1374, height: 1145 }] },
@@ -14,29 +14,9 @@ const slides = [
 
 export default function MimiHomeHero() {
   const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setPlaying(!query.matches);
-    const visibility = () => setHidden(document.hidden);
-    sync(); visibility();
-    query.addEventListener("change", sync);
-    document.addEventListener("visibilitychange", visibility);
-    return () => { query.removeEventListener("change", sync); document.removeEventListener("visibilitychange", visibility); };
-  }, []);
-  useEffect(() => {
-    if (!playing || hovered || focused || hidden) return;
-    const timer = window.setInterval(() => setIndex(i => (i + 1) % slides.length), 7000);
-    return () => window.clearInterval(timer);
-  }, [playing, hovered, focused, hidden]);
   const slide = slides[index];
   return (
     <section className="mimi-home-hero" aria-label="Featured MimiPip designs" aria-roledescription="carousel"
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false); }}
       style={{ "--mimi-hero-tint": slide.color } as CSSProperties}>
       <div className="mimi-hero-layout">
         <div className="mimi-hero-copy">
@@ -57,9 +37,6 @@ export default function MimiHomeHero() {
         <div className="mimi-hero-dots">
           {slides.map((s, i) => <button key={s.title} type="button" aria-label={"Show slide " + (i + 1) + ": " + s.category}
             aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)}><span /></button>)}
-        </div>
-        <div className="mimi-hero-actions">
-          <button type="button" onClick={() => setPlaying(p => !p)} aria-label={playing ? "Pause slideshow" : "Play slideshow"}>{playing ? "Pause" : "Play"}</button>
         </div>
       </div>
     </section>

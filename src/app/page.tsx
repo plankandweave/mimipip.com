@@ -590,7 +590,7 @@ const HERO_SLIDES = 3;
               Upload a photo of your room and preview your favourite wallpaper.
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-3 md:justify-end">
+          <div className="mimi-preview-actions">
             <Link href="/see-it-in-my-room" className="btn border-charcoal bg-charcoal text-surface hover:bg-charcoal/90">
               Try it on my wall
             </Link>
@@ -689,8 +689,8 @@ const HERO_SLIDES = 3;
 
       {[['Colour & Create', 'colour-create'], ['Floor Games', 'hopscotch'], ['Borders', 'mimi-borders'], ['Happy Lines', 'happy-lines'], ['Little Steps, Big Adventures', 'little-steps-big-adventures']].map(([title, handle]) => {
         const products = reviewFilter('collection', handle).slice(0, 4);
-        return products.length > 0 ? <Unroll key={handle} variant="settle"><section className="container-x py-10">
-          <div className="mb-8 flex items-end justify-between gap-4"><h2 className="text-3xl lg:text-4xl">{title}</h2><Link href={'/collections/' + handle} className="btn btn-ghost text-sm">View all</Link></div>
+        return products.length > 0 ? <Unroll key={handle} variant="settle"><section className={`container-x py-10 mimi-collection-section ${handle === "colour-create" ? "mimi-colour-create" : ""}`}>
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4"><div>{handle === "colour-create" && <p className="caps mb-3">Little artists, big imaginations</p>}<h2 className="text-3xl lg:text-4xl">{title}</h2></div><Link href={'/collections/' + handle} className="btn btn-ghost text-sm">View all</Link></div>
           {handle === 'colour-create' && <div className="mb-8 grid gap-6 md:grid-cols-2 md:items-center"><Image src="/review/colour-create/bunny-garden-room.webp" alt="Illustrative Bunny Garden room showing example colouring" width={1440} height={960} className="w-full rounded-2xl" /><div><h3 className="text-2xl font-semibold">Bunny Garden</h3><p className="mt-3">Flowers, butterflies and bunnies, ready for their own colours. Explore the outline artwork and imagine the story they will create.</p><p className="mt-2 text-sm text-slate">Illustrative room with example colouring. The flat artwork shows the uncoloured design.</p><Link href="/products/colour-create-bunny-garden" className="btn btn-ghost mt-4">Explore Bunny Garden</Link></div></div>}
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">{products.map(product => <ProductCard key={product.slug} product={reviewCard(product)} />)}</div>
         </section></Unroll> : null;
@@ -805,13 +805,12 @@ const HERO_SLIDES = 3;
       {/* ---------- sized to your wall band ---------- */}
       <Unroll>
       <section className="container-x">
-        <div className="pastel-section grid items-center gap-10 bg-lavender/50 md:grid-cols-2">
+        <div className={`mimi-how-it-works pastel-section grid items-center gap-8 bg-lavender/50 ${bandPick?.image ? "lg:grid-cols-2" : ""}`}>
           <div>
             <span className="caps text-slate">The MimiPip way</span>
             <h2 className="mt-3 text-3xl lg:text-4xl">Choose a design. Make room for a story.</h2>
             <p className="mt-4 max-w-md text-slate">
-              Tell us your wall&apos;s width and height and we price it by the square
-              foot. The design is sized to your wall; the smallest order is 20 sq ft. The finish and price are shown on each design.
+              Choose your design and enter your wall size. We make it to fit. Custom orders start at 20 sq ft.
             </p>
             {/* H2 (30 Sep 2026 walkthrough): the per-sq-ft rate looks random
                 design to design unless it's said in words. Real tier names
@@ -821,7 +820,7 @@ const HERO_SLIDES = 3;
             <p className="mt-3 max-w-md text-sm text-slate">
               <MimiWallpaperRate />
             </p>
-            <div className="mt-8 flex flex-wrap gap-5">
+            <div className="mimi-order-steps mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
               {[
                 ["01", "Pick a design"],
                 ["02", "Enter your wall size"],
@@ -840,14 +839,14 @@ const HERO_SLIDES = 3;
               Have your own artwork? Start here 
             </Link>
           </div>
-          <div {...rowAttrs("band", [bandPick])} className="unroll-target relative aspect-[4/3] overflow-hidden rounded-[22px]">
+          {bandPick?.image && <div {...rowAttrs("band", [bandPick])} className="unroll-target relative aspect-[4/3] overflow-hidden rounded-[22px]">
             {bandPick?.image && (
               <>
                 <Image src={bandPick.image} alt="" fill sizes="50vw" className="object-cover" />
                 <MeasureLines />
               </>
             )}
-          </div>
+          </div>}
         </div>
       </section>
       </Unroll>
@@ -864,7 +863,7 @@ const HERO_SLIDES = 3;
         </div>
         {/* One card per live finish, on a grid that fits however many there
             are — never a lone card orphaned on a second row. */}
-        <div className={`grid gap-6 sm:grid-cols-2 ${MATERIAL_GRID_COLS[materials.length] ?? "lg:grid-cols-3"}`}>
+        <div className={`grid gap-6 ${materials.length === 1 ? "grid-cols-1" : "sm:grid-cols-2"} ${MATERIAL_GRID_COLS[materials.length] ?? "lg:grid-cols-3"}`}>
           {materials.map(({ offer, copy }) => (
             /* Cards stretch to the tallest in the row and the CTA is pushed to
                the foot (mt-auto), so every button sits on one line however
@@ -927,32 +926,9 @@ const HERO_SLIDES = 3;
       {/* ---------- durability & everyday use ---------- */}
       <Reveal>
       <section className="container-x pb-6">
-        <div className="pastel-section grid gap-8 bg-sage/30 md:grid-cols-2">
-          <div>
-            <span className="caps text-slate">Everyday use</span>
-            <h2 className="mt-3 text-2xl font-semibold lg:text-3xl">Designed for walls that are lived around.</h2>
-            <p className="mt-3 max-w-md text-sm text-slate">
-              Nothing extraordinary — just what to expect day to day, and how to look after it.
-            </p>
-          </div>
-          <dl className="grid gap-4 text-sm sm:grid-cols-2">
-            <div>
-              <dt className="font-semibold text-charcoal">Cleaning</dt>
-              <dd className="mt-1 text-slate">Wipe gently with a barely-damp cloth. Avoid harsh cleaners and scrubbing.</dd>
-            </div>
-            <div>
-              <dt className="font-semibold text-charcoal">Residential use</dt>
-              <dd className="mt-1 text-slate">Used every day across bedrooms, living rooms, dining rooms and hallways.</dd>
-            </div>
-            <div>
-              <dt className="font-semibold text-charcoal">Kids &amp; nursery rooms</dt>
-              <dd className="mt-1 text-slate">Explore designs made for gentle, lived-in spaces.</dd>
-            </div>
-            <div className="sm:col-span-2">
-              <dt className="font-semibold text-charcoal">Moisture</dt>
-              <dd className="mt-1 text-slate">Not intended for areas with direct water exposure, such as inside a shower.</dd>
-            </div>
-          </dl>
+        <div className="pastel-section grid items-center gap-6 bg-sage/30 lg:grid-cols-2">
+          <div><span className="caps text-slate">Everyday care</span><h2 className="mt-3 text-2xl lg:text-3xl">Little messes. Simple care.</h2></div>
+          <div className="text-sm leading-relaxed text-slate"><p>Wipe gently with a barely-damp cloth. Avoid harsh cleaners, scrubbing and direct water exposure.</p><Link href="/installation" className="mt-4 inline-block font-semibold underline underline-offset-4">Read the care guide</Link></div>
         </div>
       </section>
       </Reveal>
@@ -988,7 +964,7 @@ const HERO_SLIDES = 3;
         <div className="grid gap-4 sm:grid-cols-3">
           {[
             { title: "See it on your wall — free", desc: "Preview any design on your own room photo, no charge", bg: "bg-sky/50", href: "/see-it-in-my-room" },
-            { title: "Free shipping in India", desc: "On every order", bg: "bg-peach/50", href: "/shipping-policy" },
+            { title: "Shipping included", desc: "Across India and the US", bg: "bg-peach/50", href: "/shipping-policy" },
             { title: "Order a design sample", desc: "Feel the material before you commit", bg: "bg-blush/50", href: "/samples" },
           ].map((u) => (
             <Link

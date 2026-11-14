@@ -10,6 +10,7 @@ import { BadgeIcon } from "@/components/BadgeIcon";
 import { WishlistButton } from "@/components/WishlistButton";
 import { cardCopy, cardPrice } from "@/lib/card-copy";
 import { useCardMoney } from "@/lib/use-card-money";
+import { MIMIPIP_PRICING } from "@/brand/pricing-policy";
 import { useMarket } from "@/components/MarketProvider";
 
 /** `href` overrides the product link — a size landing page sends the shopper
@@ -31,7 +32,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
   const ownOffer = market.countryCode === "IN" ? product.sale?.india : product.sale?.abroad;
   const fixedOffer = ownOffer?.fixed;
   const price = fixedOffer != null ? `${market.countryCode === "IN" ? "₹" : "$"}${fixedOffer.toLocaleString(market.countryCode === "IN" ? "en-IN" : "en-US", { maximumFractionDigits: 2 })}` : numericPrice !== null && (product.measurementType ?? 'area') === 'area'
-    ? (market.countryCode === 'IN' ? '₹200/sq ft' : '$10/sq ft · shipping included')
+    ? (market.countryCode === 'IN' ? `₹${(MIMIPIP_PRICING.sellingInrPerSqFt / (1 + (MIMIPIP_PRICING.gstRate ?? 0))).toFixed(2)}/sq ft + GST` : '$10/sq ft · shipping included')
     : copy.price;
   // The flat artwork is fetched only when a mouse arrives, so visitors who
   // never hover do not download an extra image for every card.
@@ -134,7 +135,7 @@ export function ProductCard({ product, href }: { product: ProductCardData; href?
       <div className="pt-3">
         <h3 className="font-display text-[0.95rem] font-semibold leading-snug">{product.title}</h3>
         <p className="mt-1 text-sm text-slate">
-          {copy.promise}
+          {copy.promise === "Wallpaper" ? "Peel-and-stick wall covering" : copy.promise}
           {price && <span className="mt-0.5 block text-mist">{price}</span>}
         </p>
       </div>
