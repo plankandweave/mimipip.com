@@ -96,6 +96,7 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   assert.equal((await h.call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: '0'.repeat(64) })).status, 400);
   h.setCaptured(); r = await h.pass(); assert.equal(r.status, 200); assert.equal((await r.json()).paid, true);
   assert.equal(h.posts.length, 1);
+  assert.equal(h.db.prepare('SELECT count(*) n FROM mimipip_order_email').get().n,1);
   const { body } = h.posts[0];
   assert.equal(body.brand, 'lorange'); assert.equal(body.items[0].brand, 'lorange'); assert.equal(body.amountInr, expected / 100); assert.equal(body.payment.razorpayPaymentId, 'pay_test');
   assert.equal(body.customer.pincode, '411008'); assert.equal(body.customer.countryCode, 'IN'); assert.equal(body.orderRef, made.orderNumber);

@@ -1,3 +1,4 @@
+import {enqueueOrderEmail,sendOrderEmails} from './order-email';
 import {ensureRegistry,registryCheckout,privateOrderCustomer,releaseRegistryOrders} from '../registry/service';
 import {reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
 import {cardForTicket,walletEmail} from './gift-wallet';
@@ -42,6 +43,7 @@ export type Pay = {
   osTokenMatches(value: string): boolean | Promise<boolean>;
 };
 export type Env = {
+  RESEND_API_KEY?: string;
   MIMIPIP_CHECKOUT_ENABLED?: string;
   MIMIPIP_GIFTS_ENABLED?: string;
   /** Signs gift references and wallet tickets (owned by the gift module). */
@@ -165,6 +167,7 @@ async function changedGiftCheckout(db: NonNullable<Env['DB']>, call: ReturnType<
 }
 export async function sendToOs(o: Order, pay: Pay, db: NonNullable<Env['DB']>): Promise<boolean> {
   if (o.status !== 'paid' || o.os_status === 'sent') return o.os_status === 'sent';
+  await enqueueOrderEmail(db,o); // Persist before handoff; a storage failure leaves this order on the existing retry sweep.
   const fail = async (why: string) => {
     await db.prepare('UPDATE mimipip_orders SET os_error=?,os_tries=os_tries+1,updated_at=? WHERE id=?').bind(why.slice(0, 500), Date.now(), o.id).run();
     return false;
@@ -319,7 +322,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
         if(payable===0){
           await db.prepare("UPDATE mimipip_orders SET status='paid',amount_inr=?,updated_at=? WHERE id=? AND status='creating'").bind(priced.totalMinor/100,Date.now(),id).run();
           o=(await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(id).first<Order>())!;
-          await sendToOs(o,pay,db);return json({paid:true,orderNumber:o.id});
+          await sendToOs(o,pay,db);await sendOrderEmails(env).catch(()=>{});return json({paid:true,orderNumber:o.id});
         }
         let ro;
         try {
@@ -352,6 +355,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       }
     } else return json({ error: 'Not found' }, 404);
     o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
+    if(o.status==='paid')await sendOrderEmails(env).catch(()=>{});
     return json({
       status:o.status, paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, giftMinor:o.gift_minor??0, cashMinor:o.amount-(o.gift_minor??0), currency: o.currency,
       lines: JSON.parse(o.lines).map((l: StoredLine) => ({ name: l.name, qty: l.qty, lineMinor: l.lineMinor })),
@@ -391,4 +395,5 @@ export async function sweep(env: Env) {
   }
   const unsent = await db.prepare("SELECT * FROM mimipip_orders WHERE status='paid' AND os_status!='sent' ORDER BY created_at LIMIT 25").bind().all<Order>();
   for (const o of unsent.results) await sendToOs(o, pay, db);
+  await sendOrderEmails(env);
 }
