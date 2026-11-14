@@ -684,6 +684,24 @@ const HERO_SLIDES = 3;
         </div>
       </section>
 
+      <section aria-labelledby="home-registry-title" className="container-x my-8">
+        <div className="grid overflow-hidden rounded-[28px] bg-[#fff2cd] md:grid-cols-[1fr_1.2fr]">
+          <div className="grid grid-cols-2">
+            <img src="/registry/baby.jpg" alt="A sleeping newborn" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
+            <img src="/registry/birthday.jpg" alt="Children celebrating a birthday" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
+          </div>
+          <div className="p-6 md:p-8">
+            <p className="caps text-[#8b4528]">Baby showers, birthdays &amp; little milestones</p>
+            <h2 id="home-registry-title" className="mt-2 text-3xl">Baby &amp; Gift Registry</h2>
+            <p className="mt-3 max-w-lg">Choose their favourites. Share your wish list. Let the people who love them join the celebration.</p>
+            <div className="mt-5 flex flex-wrap items-center gap-5">
+              <Link href="/registry" className="rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Explore registries ↗</Link>
+              <Link href="/registry#find-registry" className="text-sm font-semibold underline underline-offset-4">Find a registry</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- trending pins (src/lib/trending-pins.ts) ----------
            The two designs with repeat cart activity this week, pinned to the
            top slot under the hero with a one-tap "Configure now". A product
