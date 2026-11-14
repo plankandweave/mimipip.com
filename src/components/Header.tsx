@@ -306,7 +306,7 @@ export async function Header() {
               seeAllLabel="See all rooms"
               secondarySection={{heading:"By Concepts",href:conceptsFor("homes"),items:homeConceptItems,seeAllLabel:"See all home concepts"}}
             />}
-            <div className="hidden min-[900px]:block">
+            <div className="hidden items-center gap-4 min-[900px]:flex">
               <MegaMenu families={shopFamilies} columns={process.env.MIMIPIP_LOCAL_REVIEW === "1"} />
               {process.env.MIMIPIP_LOCAL_REVIEW === "1" && <Link href="/registry" className="text-sm font-semibold hover:underline underline-offset-4">Registry</Link>}
             </div>
