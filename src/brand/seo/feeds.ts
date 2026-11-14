@@ -9,6 +9,7 @@
  */
 import { WALLPAPER_FIXED_SIZES, priceLine, refused } from '../commerce/prices';
 import { abs, BRAND, feedImage, isWallpaper, listPrice, ORIGIN, productPath, sellable, STANDARD_WALL_SQFT, typeLabel, type Rec } from './site';
+import pinterestRoomImages from './pinterest-room-images.json';
 
 export type FeedMarket = 'IN' | 'US';
 export type FeedItem = {
@@ -73,13 +74,27 @@ function rss(title: string, description: string, items: string[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n<channel>\n<title>${xml(title)}</title>\n<link>${ORIGIN}</link>\n<description>${xml(description)}</description>\n${items.join('')}</channel>\n</rss>\n`;
 }
 
-export function googleMerchantXml(market: FeedMarket) {
-  return rss(`${BRAND} (${market})`, "MimiPip kids' wallpaper and floor game stickers.", feedItems(market).map(i =>
+export function googleMerchantXml(market: FeedMarket, items = feedItems(market)) {
+  return rss(`${BRAND} (${market})`, "MimiPip kids' wallpaper and floor game stickers.", items.map(i =>
     '<item>\n' + tag('id', market === 'US' ? i.id.slice(0,47) + '-US' : i.id) + tag('title', i.title) + tag('description', i.description) + tag('link', i.link) + tag('image_link', i.imageLink) +
     tag('availability', i.availability) + tag('price', i.price) + tag('condition', i.condition) + tag('brand', i.brand) + tag('identifier_exists', 'no') +
     tag('google_product_category', i.googleCategory) + tag('product_type', i.productType) + tag('item_group_id', i.itemGroupId) + tag('color', i.color) + tag('size', i.size) + tag('material', i.material) +
     (i.unitMeasure ? tag('unit_pricing_measure', i.unitMeasure) + tag('unit_pricing_base_measure', '1 sqft') : '') +
     `<g:shipping><g:country>${i.shipCountry}</g:country><g:service>Standard</g:service><g:price>${i.shipPrice}</g:price></g:shipping>\n</item>\n`));
+}
+
+/** Reviewed room-render allowlist from the Pinterest workflow, 14 Nov 2026.
+ * Prices/availability remain live; new designs require image review before inclusion.
+ * Merchant review and image-resolution eligibility are tracked separately.
+ */
+export function pinterestCatalogueXml(market: FeedMarket) {
+  const images: Record<string, string> = pinterestRoomImages;
+  const items = feedItems(market).flatMap(item => {
+    const slug = new URL(item.link).pathname.split('/').pop()!;
+    const image = images[slug];
+    return image ? [{...item, imageLink: image}] : [];
+  });
+  return googleMerchantXml(market, items).replaceAll('<g:availability>in_stock</g:availability>', '<g:availability>in stock</g:availability>');
 }
 
 /** Meta's catalogue reads the same RSS shape; its availability is spelled with a space. */
@@ -97,6 +112,8 @@ export const FEEDS: Record<string, () => string> = {
   '/feeds/meta-catalogue.xml': () => metaCatalogueXml('IN'),
   '/feeds/meta-catalogue-in.xml': () => metaCatalogueXml('IN'),
   '/feeds/meta-catalogue-us.xml': () => metaCatalogueXml('US'),
+  '/feeds/pinterest-catalogue.xml': () => pinterestCatalogueXml('IN'),
+  '/feeds/pinterest-catalogue-us.xml': () => pinterestCatalogueXml('US'),
 };
 
 /** The checks the feed specifications state, as problems in words. Empty means the feed is sound. */
