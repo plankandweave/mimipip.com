@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { amazonListings, amazonProductUrl } from "@/brand/commerce/amazon-india";
 import { MimiMaterialPhotos } from "@/components/MimiMaterialPhotos";
 import { notFound } from "next/navigation";
 import { guides } from "@/brand/review/guides";
@@ -30,6 +31,7 @@ export default async function Guide({params}: Props) {
     </nav>}
     {(topic === "contact" || topic === "trade") && <p className="my-5"><a className="underline" href="mailto:hello@mimipip.com">hello@mimipip.com</a></p>}
     {topic === "contact" && <Link className="underline" href="/trade">Retail buyers and marketplace teams</Link>}
+    {topic === "amazon" && <ul className="my-5 space-y-2">{amazonListings().map(l => <li key={l.asin}><a className="underline" href={amazonProductUrl(l.asin)} target="_blank" rel="noopener">{l.name} on Amazon India</a> · <Link className="underline" href={`/products/${l.slug}`}>on mimipip.com</Link></li>)}</ul>}
     {topic === "tools" && <Link className="underline" href="/products/colour-create-bunny-garden">Try the wall and room previews with Bunny Garden</Link>}
     <nav aria-label="Explore and plan" className="mt-8 flex flex-wrap gap-5">
       <Link href="/browse/age?value=baby">Nursery designs</Link>

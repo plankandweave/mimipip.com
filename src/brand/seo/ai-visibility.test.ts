@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { feedItems } from './feeds';
 import { llmsTxt } from './llms';
+import { amazonListings, amazonProductUrl } from '../commerce/amazon-india';
 import { openAiFeed, openAiRowProblems, toOpenAiRow, OPENAI_REQUIRED } from './openai-feed';
 import { sellable } from './site';
 import { headFor, organizationJsonLd } from './head';
@@ -44,7 +45,11 @@ test('the feed check refuses a missing or untrue field instead of sending it', (
 test('llms.txt names MimiPip, its prices and policies, every design on sale and nothing of another brand', () => {
   const text = llmsTxt();
   assert.match(text, /^# MimiPip\n\n> /);
-  assert.match(text, /on mimipip\.com only/);
+  // Where to buy: mimipip.com for everything, and each live Amazon India listing by its own page.
+  if (amazonListings().length) {
+    assert.match(text, /on mimipip\.com, where every design and size is sold/);
+    for (const l of amazonListings()) assert.ok(text.includes(amazonProductUrl(l.asin)), l.asin);
+  } else assert.match(text, /on mimipip\.com only/);
   assert.match(text, /₹200 per sq ft including GST/);
   assert.match(text, /US\$10 per sq ft including delivery/);
   assert.match(text, /Custom wallpaper has a 20 sq ft minimum/);
