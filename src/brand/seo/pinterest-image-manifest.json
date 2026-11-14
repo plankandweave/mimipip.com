@@ -1438,5 +1438,104 @@
     "sourceHeight": 1254,
     "width": 1536,
     "height": 1536
+  },
+  {
+    "slug": "great-puddle-race",
+    "source": "https://mimipip.com/playroom-stories/rooms/01-great-puddle-race-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 4526719
+  },
+  {
+    "slug": "kite-catchers",
+    "source": "https://mimipip.com/playroom-stories/rooms/02-kite-catchers-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 4775640
+  },
+  {
+    "slug": "lantern-walk",
+    "source": "https://mimipip.com/playroom-stories/rooms/03-lantern-walk-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 6216054
+  },
+  {
+    "slug": "giant-sandcastle",
+    "source": "https://mimipip.com/playroom-stories/rooms/04-giant-sandcastle-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5175096
+  },
+  {
+    "slug": "backyard-campout",
+    "source": "https://mimipip.com/playroom-stories/rooms/05-backyard-campout-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5991615
+  },
+  {
+    "slug": "apple-orchard-picnic",
+    "source": "https://mimipip.com/playroom-stories/rooms/06-apple-orchard-picnic-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5792438
+  },
+  {
+    "slug": "snow-day",
+    "source": "https://mimipip.com/playroom-stories/rooms/07-snow-day-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 4766960
+  },
+  {
+    "slug": "little-gardeners",
+    "source": "https://mimipip.com/playroom-stories/rooms/08-little-gardeners-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5635574
+  },
+  {
+    "slug": "moonlight-sleepover",
+    "source": "https://mimipip.com/playroom-stories/rooms/09-moonlight-sleepover-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5907972
+  },
+  {
+    "slug": "rainbow-chalk-street",
+    "source": "https://mimipip.com/playroom-stories/rooms/10-rainbow-chalk-street-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 6140342
+  },
+  {
+    "slug": "birthday-banner",
+    "source": "https://mimipip.com/playroom-stories/rooms/11-birthday-banner-room.png",
+    "sourceWidth": 1728,
+    "sourceHeight": 1728,
+    "width": 1728,
+    "height": 1728,
+    "bytes": 5423857
   }
 ]

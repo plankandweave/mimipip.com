@@ -37,7 +37,7 @@ test('Google market feeds cannot overwrite offers when an existing account share
 test('Pinterest uses only reviewed room images while retaining current offer IDs and prices', async()=>{
  const {pinterestCatalogueXml,FEEDS}=await import('./feeds');
  const images=(await import('./pinterest-room-images.json')).default;
- for(const [market,count] of [['IN',702],['US',180]] as const){
+ for(const [market,count] of [['IN',746],['US',191]] as const){
   const xml=pinterestCatalogueXml(market);
   const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>m[1]);
   assert.equal(items.length,count);
