@@ -88,7 +88,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
   headers.set('Cache-Control','no-store');
   return new Response(response.body,{status:response.status,headers});
  }
- const nativeApi=/^\/api\/(registry(?:\/|$)|forms$|custom-upload$|proof$|shopper-services$|consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
+ const nativeApi=/^\/api\/(registry(?:\/|$)|forms$|artist-projects$|custom-upload$|proof$|shopper-services$|consent\/ads$|cart(?:\/|$)|auth(?:\/|$)|account(?:\/|$)|boards(?:\/|$)|wishlist(?:\/|$)|taste(?:\/|$)|market(?:\/|$)|search$|design-search$|products$|visual-search$|concierge(?:\/|$)|curator(?:\/|$)|segment-room$|text-overlay$|brand\/icon)/.test(p);
  if(p==='/api/cart'&&request.method==='POST'){
   // Add to cart, counted where it happens. The body is read from a copy; the cart is untouched.
   const copy=request.clone();const response=await publicPage(request,await handler.fetch(request,env,ctx));

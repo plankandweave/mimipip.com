@@ -627,7 +627,7 @@ const HERO_SLIDES = 3;
           {[
             { title: "Find My Wallpaper", desc: "Tell us about your room and receive a considered shortlist.", href: "/design-with", bg: "bg-lavender/40" },
             { title: "Match a Photo", desc: "Photograph something you love and find wallpapers that relate to it.", href: "/match-a-photo", bg: "bg-blush/40" },
-            { title: "Your Own Image", desc: "Explore wallpaper possibilities with your own artwork.", href: "/print-your-own", bg: "bg-peach/40" },
+            { title: "Their drawing. A whole new world.", desc: "Make wallpaper from your art or apply to become a Mimi Pip artist.", href: "/drawing-to-wallpaper", bg: "bg-peach/40" },
           ].map((j) => (
             <Link key={j.href} href={j.href} className={`${j.bg} flex flex-col justify-between rounded-[22px] p-6 transition-transform hover:-translate-y-0.5`}>
               <div>
@@ -834,7 +834,7 @@ const HERO_SLIDES = 3;
               ))}
             </div>
             <Link
-              href="/print-your-own"
+              href="/drawing-to-wallpaper"
               className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline"
             >
               Have your own artwork? Start here <span aria-hidden>&rarr;</span>

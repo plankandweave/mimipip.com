@@ -37,6 +37,7 @@ export default async function PrintYourOwnPage({searchParams}:{searchParams:Prom
 
   return (
     <div className="container-x py-10">
+      <p className="mb-8 rounded-2xl bg-sage/40 p-5">Want us to turn a drawing into a wallpaper design? <a className="underline font-semibold" href="/drawing-to-wallpaper">Visit the little artist studio.</a> This tool prints your finished artwork as supplied.</p>
       <PrintYourOwn editItemId={editItemId} productHandle={product.handle} productId={product.id} materials={materials} printRules={{ maxPanelCm: printRules.maxPanelCm, overlapCm: printRules.overlapCm }} />
     </div>
   );
