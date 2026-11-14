@@ -551,7 +551,7 @@ const HERO_SLIDES = 3;
             <h2 id="home-registry-title" className="mt-2 text-3xl">Baby &amp; Gift Registry</h2>
             <p className="mt-3 max-w-lg">Choose their favourites. Share your wish list. Let the people who love them join the celebration.</p>
             <div className="mt-5 flex flex-wrap items-center gap-5">
-              <Link href="/registry" className="rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Explore registries ↗</Link>
+              <Link href="/registry" className="rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Explore registries</Link>
               <Link href="/registry#find-registry" className="text-sm font-semibold underline underline-offset-4">Find a registry</Link>
             </div>
           </div>
@@ -592,7 +592,7 @@ const HERO_SLIDES = 3;
           </div>
           <div className="flex flex-wrap justify-center gap-3 md:justify-end">
             <Link href="/see-it-in-my-room" className="btn border-charcoal bg-charcoal text-surface hover:bg-charcoal/90">
-              Try it on my wall &rarr;
+              Try it on my wall
             </Link>
             <Link href="/samples" className="btn border-charcoal/30 bg-transparent text-charcoal hover:bg-charcoal hover:text-surface">
               Order a design sample
@@ -634,7 +634,7 @@ const HERO_SLIDES = 3;
                 <p className="font-display text-[1.1rem] font-bold text-charcoal">{j.title}</p>
                 <p className="mt-2 text-sm text-slate">{j.desc}</p>
               </div>
-              <span className="mt-6 text-sm font-semibold text-charcoal">Start &rarr;</span>
+              <span className="mt-6 text-sm font-semibold text-charcoal">Start</span>
             </Link>
           ))}
         </div>
@@ -837,7 +837,7 @@ const HERO_SLIDES = 3;
               href="/print-your-own"
               className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline"
             >
-              Have your own artwork? Start here <span aria-hidden>&rarr;</span>
+              Have your own artwork? Start here 
             </Link>
           </div>
           <div {...rowAttrs("band", [bandPick])} className="unroll-target relative aspect-[4/3] overflow-hidden rounded-[22px]">
@@ -1014,7 +1014,7 @@ const HERO_SLIDES = 3;
               MimiPip brings gentle colours, curious characters and playful landscapes to children’s rooms. Explore wallpaper worlds for quiet beginnings and growing imaginations.
             </p>
             <Link href="/guides/about" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal underline-offset-4 hover:underline">
-              About MimiPip <span aria-hidden>&rarr;</span>
+              About MimiPip 
             </Link>
           </div>
         </div>
