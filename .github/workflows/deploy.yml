@@ -90,3 +90,7 @@ jobs:
       # pages carry one Product with a real price (docs/ai-assistant-visibility.md).
       - name: Check assistants can read the shop
         run: node scripts/verify-ai-visibility.mjs
+
+      - name: Notify search engines of published URLs
+        continue-on-error: true
+        run: node scripts/submit-indexnow.mjs

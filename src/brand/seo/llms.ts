@@ -49,6 +49,12 @@ export function llmsTxt(): string {
 - Sticker listings include only the stickers; furniture and props in room pictures show placement.
 - ${sellable.length} designs are on sale today: ${walls.length} wallpapers and ${others.length} other pieces. These catalogue designs are listed below; uploaded-art wallpaper and bespoke design services have separate buying pages.
 
+## Machine-readable catalogue
+
+- [Product facts, tags and India variants](https://mimipip.com/api/agent/catalogue?country=IN)
+- [Product facts and US offers](https://mimipip.com/api/agent/catalogue?country=US)
+- Product lookup: /api/agent/product/{slug}; search: /api/agent/search?q={query}. These endpoints are read-only; purchases complete on the website.
+
 ## Start here
 
 - [Shop all designs](${ORIGIN}/browse/collection)

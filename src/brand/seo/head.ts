@@ -1,3 +1,5 @@
+import {feedItems} from './feeds';
+import {discoveryFacts} from './discovery';
 /**
  * What a search engine reads in the head of each page: one title, one
  * description, one canonical address, one preview picture, and for a design on
@@ -60,9 +62,16 @@ const offer = (r: Rec, market: 'IN' | 'ABROAD') => {
   };
 };
 
-export function productJsonLd(r: Rec) {
+export function productJsonLd(r: Rec, query?: URLSearchParams) {
   const offers = [offer(r, 'IN'), offer(r, 'ABROAD')].filter(Boolean);
   const collection = r.collection[0];
+  const facts=discoveryFacts(r);
+  const properties=Object.entries(facts.tags).filter(([,v])=>Array.isArray(v)&&v.length).map(([name,value])=>({'@type':'PropertyValue',name,value:(value as string[]).join(', ')}));
+  const variants=feedItems('IN').filter(i=>new URL(i.link).pathname===productPath(r.slug));
+  const selectedMarket=query?.get('market')==='US'?'US':'IN';
+  const selected= query?.has('market') ? feedItems(selectedMarket).find(i=>new URL(i.link).pathname===productPath(r.slug) && (query.has('fixed')?new URL(i.link).searchParams.get('fixed')===query.get('fixed'):query.has('w')?new URL(i.link).searchParams.get('w')===query.get('w')&&new URL(i.link).searchParams.get('h')===query.get('h'):true)) : null;
+  const selectedOffers=selected?[{...offers[selectedMarket==='US'?1:0],url:selected.link,price:selected.price.split(' ')[0],priceCurrency:selectedMarket==='US'?'USD':'INR',description:selected.description}]:offers;
+  const variantSchema=(i:typeof variants[number])=>({'@type':'Product','@id':i.link+'#product',name:i.title,description:i.description,sku:i.id,url:i.link,image:[i.imageLink],size:i.size,color:i.color,material:i.material,brand:{'@type':'Brand',name:BRAND},offers:{'@type':'Offer',url:i.link,price:i.price.split(' ')[0],priceCurrency:'INR',availability:'https://schema.org/InStock',seller:{'@id':ORIGIN+'/#organization'}}});
   return [{
     '@context': 'https://schema.org', '@type': 'Product',
     '@id': abs(productPath(r.slug)) + '#product',
@@ -71,8 +80,10 @@ export function productJsonLd(r: Rec) {
     brand: { '@type': 'Brand', name: BRAND },
     category: typeLabel(r),
     ...(r.widthCm && r.heightCm && !isWallpaper(r) ? { width: { '@type': 'QuantitativeValue', value: r.widthCm, unitCode: 'CMT' }, height: { '@type': 'QuantitativeValue', value: r.heightCm, unitCode: 'CMT' } } : {}),
-    offers,
-  }, {
+    color:r.color.join('/'), ...(isWallpaper(r)?{material:facts.material}:{}), additionalProperty:properties,
+    ...(selected?{sku:selected.id,size:selected.size,url:selected.link}:{}),
+    offers:selectedOffers,
+  }, ...(isWallpaper(r)&&selectedMarket==='IN'?[{'@context':'https://schema.org','@type':'ProductGroup','@id':abs(productPath(r.slug))+'#group',productGroupID:variants[0]?.itemGroupId,name:r.name,description:r.description,brand:{'@type':'Brand',name:BRAND},variesBy:['https://schema.org/size'],hasVariant:variants.map(variantSchema)}]:[]), {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: ORIGIN + '/' },
@@ -102,7 +113,7 @@ const floorGames: Record<string, [string, string]> = {
 };
 
 /** The head for a published path (no trailing slash, "/" for home), or null to leave the page as it is. */
-export function headFor(path: string, value?: string | null): Head | null {
+export function headFor(path: string, value?: string | null, query?: URLSearchParams): Head | null {
   const base = (title: string, description: string, extra: Partial<Head> = {}): Head =>
     ({ title, description, canonical: ORIGIN + (path === '/' ? '/' : path), image: abs(DEFAULT_IMAGE), imageAlt: "MimiPip kids' wallpaper shown in a child's room", type: 'website', jsonLd: [], ...extra });
   if (path === '/') return base(`${BRAND}: kids' wallpaper and floor games, making time for childhood`,
@@ -114,7 +125,7 @@ export function headFor(path: string, value?: string | null): Head | null {
   if (product) {
     const r = recordOf(product[1]);
     if (!r || !isSellable(r.slug)) return null;
-    return base(productTitle(r), productDescription(r), { image: abs(feedImage(r.slug)), imageAlt: r.collection.includes('playroom-stories') || r.collection.includes('shape-street') ? `${r.name} flat wallpaper artwork` : `${r.name} ${typeLabel(r)} shown in a child's room`, type: 'product', jsonLd: productJsonLd(r) });
+    return base(productTitle(r), productDescription(r), { image: abs(feedImage(r.slug)), imageAlt: r.collection.includes('playroom-stories') || r.collection.includes('shape-street') ? `${r.name} flat wallpaper artwork` : `${r.name} ${typeLabel(r)} shown in a child's room`, type: 'product', jsonLd: productJsonLd(r,query) });
   }
   const landing = landingOf(path.slice(1));
   if (landing) return base(landing.metaTitle, landing.description, {

@@ -1,3 +1,4 @@
+import {DiscoveryDetails} from './DiscoveryDetails';
 import { RoomPanel, type RoomPanelBounds } from "@/components/RoomPanel";
 import { ChooseDesign } from "@/components/DesignCart";
 import { saleOf } from "@/brand/commerce/sale";
@@ -65,7 +66,7 @@ export function ReviewDetail({p}:{p:RecordData}) {
    {hopscotch && <div><h2>Hopscotch floor game</h2><p>One connected contour-cut floor sticker, 75 × 260 cm.</p></div>}
    <p>{p.description}</p><WishlistButton handle={p.slug} variant="inline"/>
    {happyPetals && <p className="my-4">SKU {p.id} · <Link className="underline" href="/collections/happy-petals/">Explore all Happy Petals designs</Link></p>}
-   <h2>Size and price</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to your wall measurements":""}</p>
+   <DiscoveryDetails product={p}/><h2>Size and price</h2><p>{p.widthCm&&p.heightCm?p.widthCm+" × "+p.heightCm+" cm · nominal design dimensions":p.measurementType==="made-to-measure"?"Made to your wall measurements":""}</p>
    <ChooseDesign slug={p.slug} name={p.name} width={p.widthCm} height={p.heightCm} custom={p.measurementType==="made-to-measure"} wallpaper={wallpaper} sale={saleOf(p.slug)} art={wallpaper?(p.collection.includes("hush-and-wander")?artFor(p.slug)?.art:card(p).flatHoverImage):null}/>
    {hopscotch && <section className="my-6 space-y-2"><h2>How to play</h2>
     <p>Start below 1 on a clear, level indoor floor. Step onto 1, then place one foot on each square of the next pair. Follow the numbers to 10 and walk back beside the sticker. Try small hops when comfortable.</p>

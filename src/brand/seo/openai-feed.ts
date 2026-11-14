@@ -19,7 +19,7 @@ export type OpenAiRow = {
   item_id: string; title: string; description: string; url: string; brand: string; seller_name: string;
   image_url: string; availability: (typeof OPENAI_AVAILABILITY)[number]; price: string; seller_url: string;
   group_id?: string; listing_has_variations?: boolean; variant_dict?: Record<string, string>;
-  condition: 'new'; product_category?: string; color?: string; size?: string; shipping_price: string;
+  condition: 'new'; material?: string; dimensions?: FeedItem['dimensions']; is_ads_eligible: boolean; product_category?: string; color?: string; size?: string; shipping_price: string;
   accepts_returns: boolean; return_policy: string; seller_privacy_policy: string; seller_tos: string;
   is_eligible_search: boolean; is_eligible_checkout: boolean; target_countries?: string[];
 };
@@ -42,10 +42,13 @@ export function toOpenAiRow(i: FeedItem, market: FeedMarket): OpenAiRow {
     image_url: i.imageLink,
     availability: i.availability,
     price: i.price,
-    ...(i.itemGroupId && i.color
-      ? { group_id: i.itemGroupId, listing_has_variations: true, variant_dict: { colour: i.color } }
+    ...(i.itemGroupId && i.variantOptions
+      ? { group_id: i.itemGroupId, listing_has_variations: true, variant_dict: i.variantOptions }
       : {}),
     condition: i.condition,
+    is_ads_eligible: false,
+    ...(i.material ? {material:i.material} : {}),
+    ...(i.dimensions ? {dimensions:i.dimensions} : {}),
     ...(i.googleCategory ? { product_category: i.googleCategory } : {}),
     ...(i.color ? { color: i.color } : {}),
     ...(i.size ? { size: i.size } : {}),
@@ -58,7 +61,7 @@ export function toOpenAiRow(i: FeedItem, market: FeedMarket): OpenAiRow {
     is_eligible_search: true,
     // Orders are placed on mimipip.com; there is no ChatGPT checkout.
     is_eligible_checkout: false,
-    ...(market === 'US' ? { target_countries: ['US'] } : {}),
+    target_countries: [market],
   };
 }
 
@@ -75,7 +78,7 @@ export function openAiRowProblems(row: Partial<OpenAiRow>, market: FeedMarket): 
   if (row.price && !m) out.push(`price "${row.price}" not "0.00 CUR"`);
   else if (m && (!(Number(m[1]) > 0) || m[2] !== currency)) out.push(`price must be above zero in ${currency}`);
   if (row.shipping_price && !row.shipping_price.endsWith(' ' + currency)) out.push('shipping price in another currency');
-  if (row.url && !/^https:\/\/mimipip\.com\/products\/[a-z0-9-]+$/.test(row.url)) out.push('url is not a mimipip.com product page');
+  if (row.url && !/^https:\/\/mimipip\.com\/products\/[a-z0-9-]+(?:\?[^#\s]+)?$/.test(row.url)) out.push('url is not a mimipip.com product page');
   if (row.image_url && !/^https:\/\/mimipip\.com\/\S+\.(jpe?g|png)$/.test(row.image_url)) out.push('image is not a JPEG or PNG on mimipip.com');
   if (row.listing_has_variations && (!row.group_id || row.group_id === row.item_id || !row.variant_dict || !Object.values(row.variant_dict).every(Boolean)))
     out.push('variant without a distinct group_id and options');

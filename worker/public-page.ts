@@ -34,7 +34,7 @@ export function publicPage(request:Request, response:Response) {
   const path = url.pathname.replace(/\/$/,'') || '/';
   const publish = url.hostname === 'mimipip.com' && response.status === 200 && publicPaths.has(path);
   const robots = publish ? 'index, follow' : 'noindex, nofollow';
-  const head = publish ? headFor(path, url.searchParams.get('value')) : null;
+  const head = publish ? headFor(path, url.searchParams.get('value'), url.searchParams) : null;
   const headers = new Headers(response.headers);
   headers.set('X-Robots-Tag',robots);
   headers.set('Content-Security-Policy',publish ? analyticsPolicy : offlineContentSecurityPolicy);
@@ -60,6 +60,7 @@ export function publicPage(request:Request, response:Response) {
   return rewriter
     .on('head',{element(el){
       el.append(head ? headTags(head,robots) : '<meta name="robots" content="'+robots+'">',{html:true});
+      if (publish && path === '/') el.append('<meta name="msvalidate.01" content="A104DD7C47B2B3F64C341A799C0D738C">',{html:true});
       // Our own funnel count (first-party, no cookie); the consented analytics only on published pages.
       el.append('<script defer src="/mimipip-funnel.js"></script>',{html:true});
       if (publish) el.append('<script defer src="/mimipip-analytics.js"></script>',{html:true});

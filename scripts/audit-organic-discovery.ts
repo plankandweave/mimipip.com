@@ -1,0 +1,17 @@
+import {writeFileSync,mkdirSync} from 'node:fs';
+import {sellable,hidden,hiddenReason,isWallpaper} from '../src/brand/seo/site';
+import {feedItems,feedProblems} from '../src/brand/seo/feeds';
+import {openAiFeed} from '../src/brand/seo/openai-feed';
+import {discoveryFacts} from '../src/brand/seo/discovery';
+const out=process.argv[2]??'output/organic-discovery-2026-11-14';mkdirSync(out,{recursive:true});
+const rows=sellable.map(r=>({...discoveryFacts(r),indiaVariants:feedItems('IN').filter(i=>new URL(i.link).pathname==='/products/'+r.slug).length,usVariants:feedItems('US').filter(i=>new URL(i.link).pathname==='/products/'+r.slug).length}));
+const problems=['IN','US'].flatMap(m=>[...feedProblems(feedItems(m as 'IN'|'US')),...openAiFeed(m as 'IN'|'US').refused.map(x=>x.item_id+': '+x.problems.join(', '))]);
+const report={checkedAt:new Date().toISOString(),active:rows.length,wallpapers:sellable.filter(isWallpaper).length,feedRows:{IN:feedItems('IN').length,US:feedItems('US').length},problems,excluded:hidden.map(r=>({slug:r.slug,reason:hiddenReason(r)})),products:rows};
+writeFileSync(out+'/catalogue-audit.json',JSON.stringify(report,null,2));
+for(const market of ['IN','US'] as const)writeFileSync(out+`/openai-${market}.jsonl`,openAiFeed(market).rows.map(x=>JSON.stringify(x)).join('\n')+'\n');
+const q=(s:string)=>"'"+s.replaceAll("'","''")+"'";
+const values=sellable.filter(isWallpaper).flatMap(r=>Object.entries({Collection:r.collection,Theme:r.concept,Colour:r.color,Room:r.space,Audience:r.age,Material:['self-adhesive-vinyl'],Application:['peel-and-stick'],Finish:['smooth']}).flatMap(([key,vs])=>vs.map(v=>`(${q(r.slug)},${q(key+':'+v)})`)));
+values.push("('custom-wallpaper','ProductType:custom-wallpaper')","('custom-wallpaper','Material:self-adhesive-vinyl')","('custom-wallpaper','Application:peel-and-stick')");
+const sql=`WITH desired(handle,tag) AS (VALUES ${values.join(',\n')}), inserted AS (INSERT INTO mimipip.product_tags(product_id,tag) SELECT p.id,d.tag FROM desired d JOIN mimipip.products p ON p.handle=d.handle ON CONFLICT DO NOTHING RETURNING product_id) SELECT count(*) AS tags_added FROM inserted;`;
+writeFileSync(out+'/backend-tags-add.sql',sql);
+console.log(JSON.stringify({active:report.active,wallpapers:report.wallpapers,feedRows:report.feedRows,excluded:report.excluded.length,problems}));if(problems.length)process.exitCode=1;

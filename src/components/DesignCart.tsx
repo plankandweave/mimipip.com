@@ -10,10 +10,10 @@ const ignoreMeta=()=>{};
 import games from "../../floor-games/products.json";
 import {readLines,saveLines,addLine,wallpaperPrice,linePayload,type Line} from "./design-cart-store";
 import type {Sale} from "@/brand/commerce/sale";
-export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,floorArtwork,sku,onCustom}:{slug:string;name:string;width:number|null;height:number|null;custom:boolean;wallpaper:boolean;art?:string|null;sale:Sale;floorArtwork?:string;sku?:string;onCustom?:()=>void}){
+export function ChooseDesign({slug,name,width,height,custom,wallpaper,art,sale,floorArtwork,sku,onCustom,initialFixed}:{initialFixed?:string;slug:string;name:string;width:number|null;height:number|null;custom:boolean;wallpaper:boolean;art?:string|null;sale:Sale;floorArtwork?:string;sku?:string;onCustom?:()=>void}){
  const {market}=useMarket();
  const [w,W]=useState(""),[h,H]=useState(""),[qty,Q]=useState(1),[status,S]=useState("");
- const [sizeChoice,setSizeChoice]=useState<"fixed-0"|"fixed-1"|"fixed-2"|"custom">("fixed-0");
+ const [sizeChoice,setSizeChoice]=useState<"fixed-0"|"fixed-1"|"fixed-2"|"custom">(() => {const i=WALLPAPER_FIXED_SIZES.findIndex(([w,h])=>`${w}x${h}`===initialFixed);return `fixed-${i<0?0:i}` as 'fixed-0'|'fixed-1'|'fixed-2';});
  const hopscotch = slug.startsWith("hopscotch-");
  const [mode,show]=useState<"size"|"room"|null>(null),[crop,setCrop]=useState({offsetX:.5,offsetY:.5,zoom:1,flipH:false,flipV:false});
  const [unit,setUnit]=useState<Unit | "mm">("cm");

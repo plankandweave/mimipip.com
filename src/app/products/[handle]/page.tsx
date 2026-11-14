@@ -1,3 +1,4 @@
+import {DiscoveryDetails} from '@/brand/review/DiscoveryDetails';
 import { MimiWallpaperRate } from "@/components/MimiWallpaperRate";
 import {legacyPetalsDestination} from "@/brand/review/petals-legacy";
 import {find as findReview} from "@/brand/review/data";
@@ -353,14 +354,14 @@ export default async function ProductPage({
   searchParams,
 }: {
   params: Promise<{ handle: string }>;
-  searchParams: Promise<{ colourway?: string; w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
+  searchParams: Promise<{ fixed?: string; colourway?: string; w?: string; h?: string; sample?: string; material?: string; size?: string; length?: string; market?: string; edit?: string; configure?: string }>;
 }) {
   const { handle } = await params;
   if(handle==="happy-petals") permanentRedirect(legacyPetalsDestination((await searchParams).colourway));
   const mimiProduct=findReview(handle);
   if(!mimiProduct)notFound();
   // Wallpaper uses the original product tools now that the isolated catalogue is synchronized.
-  if(!mimiProduct.type.includes("wallpaper"))return <ReviewDetail p={mimiProduct}/>;
+  if(!mimiProduct.type.includes("wallpaper"))return <MarketProvider initialCountryCode={normalizeCountryCode((await searchParams).market)}><ReviewDetail p={mimiProduct}/></MarketProvider>;
   const sp = await searchParams;
   // These room references are prepared and proofed for each measured wall.
   // Keep their catalogue cards shoppable through the verified collection flow.
@@ -953,6 +954,7 @@ export default async function ProductPage({
               <BespokeAddOn forHandle="" forTitle="your design" />
             ) : (
             <MimiWallpaperPurchase
+              initialFixed={sp.fixed}
               native={{ slug: product.handle, name: product.title, art: flatImage?.url ?? artFor(product.handle)?.art ?? null, sale: saleOf(product.handle) }}
               productHandle={product.handle}
               productTitle={product.title}
@@ -996,6 +998,7 @@ export default async function ProductPage({
               bottom of this file. */}
 
           {JAIN_DESIGNS.some(d => d.handle === product.handle) && <aside className="my-6 rounded-2xl border border-edge bg-sage/20 p-5"><h2 className="text-xl">Created with Respect</h2><p className="mt-2 text-sm leading-relaxed">{JAIN_SHORT_RESPECT}</p><p className="mt-2 text-xs text-slate">Presentation artwork. Final scale, colour and installation need project review; this is not a validated production master.</p><div className="mt-3 flex flex-wrap gap-4 text-sm"><Link className="inline-flex min-h-10 items-center underline underline-offset-4" href="/collections/jain-temples#suggest-a-correction">Suggest a Correction</Link><Link className="inline-flex min-h-10 items-center underline underline-offset-4" href="/collections/jain-temples">Jain Temples collection →</Link></div></aside>}
+          <DiscoveryDetails product={mimiProduct}/>
           <ProductAttributes
             code={product.code ?? null}
             attributes={attributes}
