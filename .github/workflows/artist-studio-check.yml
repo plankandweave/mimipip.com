@@ -1,0 +1,34 @@
+name: Artist studio checks
+on:
+  pull_request:
+    paths:
+      - 'src/app/drawing-to-wallpaper/**'
+      - 'src/app/api/artist-projects/**'
+      - 'src/brand/artist-rules*'
+      - '.github/workflows/artist-studio-check.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: |
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          node node_modules/esbuild/install.js
+          node node_modules/workerd/install.js
+      - run: npm test
+      - run: npm run typecheck:app
+      - name: Build without deployment
+        run: MIMIPIP_LOCAL_REVIEW=1 NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW=1 npx vinext build
