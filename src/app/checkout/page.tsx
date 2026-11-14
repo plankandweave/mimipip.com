@@ -174,7 +174,24 @@ export default function Checkout() {
     </label>
   );
   const bill = quoteReady && quote ? india ? (
+    <div className="space-y-3 text-sm">
+      <dl className="space-y-3">
+        {quote.lines.map((l, i) => (
+          <div className="flex items-start justify-between gap-3" key={i}>
+            <dt className="min-w-0"><span className="font-semibold">{l.name} × {l.qty}</span>{l.billedSqft ? <span className="mt-1 block text-xs text-slate">{l.billedSqft} sq ft each</span> : null}</dt>
+            <dd className="shrink-0 tabular-nums">{money(quote.currency, l.lineMinor)}</dd>
+          </div>
+        ))}
+        <div className="flex justify-between gap-3 text-slate"><dt>Delivery</dt><dd>Free</dd></div>
+        <div className="flex justify-between gap-3 border-t border-edge pt-3 text-lg font-bold"><dt>Total (incl. GST)</dt><dd className="shrink-0 tabular-nums">{money(quote.currency, quote.totalMinor)}</dd></div>
+      </dl>
+      <details className="border-t border-edge pt-3">
+        <summary className="cursor-pointer rounded-sm text-sm text-slate underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-charcoal">Price breakdown</summary>
+        <div className="mt-3">
     <InvoiceBreakdown lines={quote.lines.flatMap(l=>[{label:`${l.name} × ${l.qty}${l.billedSqft ? ` · ${l.billedSqft} sq ft each` : ''}`,incl:(l.lineMinor-(l.installationMinor??0)-(l.personalisationMinor??0))/100},...(l.installationMinor?[{label:`Installation — ${l.name}`,incl:l.installationMinor/100}]:[]),...(l.personalisationMinor?[{label:`Name cloud — ${l.name}`,incl:l.personalisationMinor/100}]:[])])} />
+        </div>
+      </details>
+    </div>
   ) : (
     <div className="space-y-3 text-sm">
       <ul className="divide-y divide-edge">
