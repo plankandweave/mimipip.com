@@ -119,7 +119,7 @@ const DOORS: {
 export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
   const canvas = useCanvasJourney();
   const columns = disconnected ? [
-    { title: "Shop", links: [...["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })), { label: "Gift cards", href: "/gift-card" }] },
+    { title: "Shop", links: [...["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })), { label: "Gift cards", href: "/gift-card" }, { label: "Baby & Gift Registry", href: "/registry" }] },
     { title: "Plan your room", links: [
       { label: "In real homes", href: "/in-real-homes/" },
       { label: "Playroom stories", href: "/collections/playroom-stories" },

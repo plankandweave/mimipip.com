@@ -1,5 +1,6 @@
 "use client";
 
+import {AddToRegistry} from "@/components/AddToRegistry";
 import { DesignCart } from "@/components/DesignCart";
 import { linePayload, type Line, readLines } from "@/components/design-cart-store";
 import { PendingOrderRecovery } from "@/components/PendingOrderRecovery";
@@ -34,7 +35,7 @@ export default function CartPage(){
  useEffect(()=>{const update=()=>{try{setLegacy(readLines());}catch{}};update();window.addEventListener('mimipip-cart',update);window.addEventListener('storage',update);return()=>{window.removeEventListener('mimipip-cart',update);window.removeEventListener('storage',update);};},[]);
  const mixed=cart.items.length>0&&legacy.length>0;
  if(!cart.loading && !cart.readError && !cart.items.length && legacy.length)return <DesignCart/>;
- return <><ConnectedCartPage mixed={mixed}/>{legacy.length>0 && <DesignCart embedded/>}{mixed&&<CombinedCartTotal legacy={legacy}/>}</>;
+ return <><ConnectedCartPage mixed={mixed}/>{cart.items.length>0&&<section className="container-x pb-8"><h2 className="text-2xl">Save these wishes to a registry</h2><div className="mt-4 grid gap-4 sm:grid-cols-2">{cart.items.map(item=><div key={item.item_id} className="rounded-xl border border-edge p-4"><p>{item.title} · {item.width_cm} × {item.height_cm} cm</p><AddToRegistry disabled={!!item.price_changed} selection={{slug:item.handle,qty:item.quantity,materialSlug:item.material_slug,widthCm:item.width_cm,heightCm:item.height_cm,...(item.crop_data?{crop:item.crop_data}:{})}}/></div>)}</div></section>}{legacy.length>0 && <DesignCart embedded/>}{mixed&&<CombinedCartTotal legacy={legacy}/>}</>;
 }
 function CombinedCartTotal({legacy}:{legacy:Line[]}) {
  const cart=useCart();const {market}=useMarket();
