@@ -33,3 +33,25 @@ test('Google market feeds cannot overwrite offers when an existing account share
  const ids=(m:'IN'|'US')=>[...googleMerchantXml(m).matchAll(/<g:id>([^<]+)<\/g:id>/g)].map(x=>x[1]);
  const india=new Set(ids('IN'));assert.ok(ids('US').every(id=>!india.has(id)));assert.equal(new Set(ids('US')).size,ids('US').length);
 });
+
+test('Pinterest uses only reviewed room images while retaining current offer IDs and prices', async()=>{
+ const {pinterestCatalogueXml,FEEDS}=await import('./feeds');
+ const images=(await import('./pinterest-room-images.json')).default;
+ for(const [market,count] of [['IN',702],['US',180]] as const){
+  const xml=pinterestCatalogueXml(market);
+  const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>m[1]);
+  assert.equal(items.length,count);
+  const all=googleMerchantXml(market);
+  for(const item of items){
+   const id=item.match(/<g:id>([^<]+)<\/g:id>/)![1];
+   const price=item.match(/<g:price>([^<]+)<\/g:price>/)![1];
+   const image=item.match(/<g:image_link>([^<]+)<\/g:image_link>/)![1];
+   assert.ok(Object.values(images).includes(image));
+   assert.ok(all.includes(`<g:id>${id}</g:id>`));
+   assert.ok(all.includes(`<g:price>${price}</g:price>`));
+   assert.ok(item.includes('<g:availability>in stock</g:availability>'));
+  }
+ }
+ assert.ok(FEEDS['/feeds/pinterest-catalogue.xml']);
+ assert.ok(FEEDS['/feeds/pinterest-catalogue-us.xml']);
+});
