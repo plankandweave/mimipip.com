@@ -14,6 +14,7 @@ const COLS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Shop",
     links: [
       { label: "All Wallpaper", href: "/collections/wall-art" },
+      { label: "Shop Mimi Pip on Etsy — US", href: "https://www.etsy.com/shop/MimiPip" },
       { label: "Shop by Room", href: "/rooms" },
       { label: "Office Wallpaper", href: "/office" },
       { label: "Hospitality Wallpaper", href: "/hospitality" },
@@ -131,6 +132,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
       { label: "About Us", href: "/guides/about" },
       { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
       { label: "United States", href: "/us" }, { label: "India", href: "/in" },
+      { label: "Shop Mimi Pip on Etsy — US", href: "https://www.etsy.com/shop/MimiPip" },
       { label: "Retail buyer guide", href: "/trade" },
       // Footer only, never beside Add to cart (owner rule, 7 Oct 2026). Absent until a live listing exists.
       ...(amazonIndiaLink() ? [{ label: "Also on Amazon India", href: amazonIndiaLink()! }] : [])
