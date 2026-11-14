@@ -21,3 +21,12 @@ export function discoveryResponse(request: Request): Response {
   if(slug&&!products.length)return Response.json({error:'Product not available'},{status:404});
   return new Response(request.method==='HEAD'?null:JSON.stringify({brand:BRAND,country:market,count:products.length,checkout:'Complete your purchase on mimipip.com. Prices and delivery eligibility are checked at checkout.',products}),{headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=300','X-Robots-Tag':'noindex'}});
 }
+
+export const agentOpenApi = {
+ openapi:'3.1.0',info:{title:'MimiPip product discovery',version:'1.0.0',description:'Read-only public product facts and current offers. Complete purchases on mimipip.com.'},servers:[{url:'https://mimipip.com'}],
+ paths:Object.fromEntries([
+  ['/api/agent/catalogue','listProducts','List all sellable designs and offers',[]],
+  ['/api/agent/search','searchProducts','Search public catalogue facts',[{name:'q',in:'query',schema:{type:'string',maxLength:200}}]],
+  ['/api/agent/product/{slug}','getProduct','Read one sellable design',[{name:'slug',in:'path',required:true,schema:{type:'string'}}]],
+ ].map(([path,operationId,summary,params])=>[path,{get:{operationId,summary,parameters:[...(params as object[]),{name:'country',in:'query',schema:{type:'string',enum:['IN','US'],default:'IN'}}],responses:{'200':{description:'Public catalogue facts and offers',content:{'application/json':{schema:{type:'object'}}}},'404':{description:'No available product'}}}}])),
+};
