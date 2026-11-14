@@ -947,5 +947,17 @@
     "material": "self_adhesive",
     "printWidthCm": 82,
     "printHeightCm": 214
+  },
+  "wiggleway": {
+    "art": "https://mimipip.com/print-masters/wiggleway-e228785aa5.png",
+    "material": "self_adhesive",
+    "printWidthCm": 114,
+    "printHeightCm": 152
+  },
+  "fork-and-friends": {
+    "art": "https://mimipip.com/print-masters/fork-and-friends-a2c3889486.png",
+    "material": "self_adhesive",
+    "printWidthCm": 114,
+    "printHeightCm": 178
   }
 }

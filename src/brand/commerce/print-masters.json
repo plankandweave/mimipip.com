@@ -746,5 +746,29 @@
   "printHeightCm": 214,
   "family": "floor-games",
   "cut": "one connected outline; source SVG alongside PNG"
+ },
+ "wiggleway": {
+  "url": "https://mimipip.com/print-masters/wiggleway-e228785aa5.png",
+  "sha256": "e228785aa5e78df1a0b4024a78c7ca0cfdd5e28ddfefe877ef4a55431c01d31c",
+  "px": [
+   6732,
+   8976
+  ],
+  "printWidthCm": 114,
+  "printHeightCm": 152,
+  "family": "floor-games",
+  "cut": "one connected outline; source SVG alongside PNG"
+ },
+ "fork-and-friends": {
+  "url": "https://mimipip.com/print-masters/fork-and-friends-a2c3889486.png",
+  "sha256": "a2c3889486f7b94707dcdda4bd63f63fed5e5d4532ece956b738cacf7572cece",
+  "px": [
+   6732,
+   10512
+  ],
+  "printWidthCm": 114,
+  "printHeightCm": 178,
+  "family": "floor-games",
+  "cut": "one connected outline; source SVG alongside PNG"
  }
 }

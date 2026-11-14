@@ -13152,5 +13152,77 @@
     "status": "Preview record · material validation pending",
     "price": null,
     "personalization": null
+  },
+  {
+    "id": "MP-FG-01",
+    "slug": "wiggleway",
+    "name": "Wiggleway",
+    "description": "Clap on a colour, remember a route, or tell a story as you go. One connected floor sticker with four ways to play.",
+    "collection": [
+      "floor-games"
+    ],
+    "concept": [
+      "learning-play"
+    ],
+    "color": [
+      "multicolor"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom"
+    ],
+    "type": [
+      "floor-sticker"
+    ],
+    "surface": [
+      "floor"
+    ],
+    "widthCm": 114,
+    "heightCm": 152,
+    "image": "/floor-play-images/wiggleway/room-v4.webp",
+    "imageRole": "Illustrative room render · not proof of floor compatibility",
+    "source": "floor stickers · wiggleway",
+    "status": "Preview record · material validation pending",
+    "price": null,
+    "personalization": null
+  },
+  {
+    "id": "MP-FG-03",
+    "slug": "fork-and-friends",
+    "name": "Fork & Friends",
+    "description": "Start at opposite rings and find a way to swap places. One connected floor sticker for turn-taking, balance and playful puzzles.",
+    "collection": [
+      "floor-games"
+    ],
+    "concept": [
+      "learning-play"
+    ],
+    "color": [
+      "multicolor"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom"
+    ],
+    "type": [
+      "floor-sticker"
+    ],
+    "surface": [
+      "floor"
+    ],
+    "widthCm": 114,
+    "heightCm": 178,
+    "image": "/floor-play-images/fork-and-friends/room-v4.webp",
+    "imageRole": "Illustrative room render · not proof of floor compatibility",
+    "source": "floor stickers · fork-and-friends",
+    "status": "Preview record · material validation pending",
+    "price": null,
+    "personalization": null
   }
 ]

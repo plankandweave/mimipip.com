@@ -429,3 +429,16 @@ test('Jump Jamboree charges 3778 including GST, no delivery, and sends the exact
   assert.equal(body.items[0].heightMm, 2140);
   assert.match(body.items[0].designUrl, /jump-jamboree-[a-f0-9]{10}\.png$/);
 });
+
+for (const slug of ['hopscotch-peach-pop','hopscotch-pastel-play','hopscotch-bold-adventure','wiggleway','jump-jamboree','fork-and-friends']) {
+  test(`${slug}: existing Razorpay flow charges the catalogue price with free delivery and hands off once`, async () => {
+    const h=harness();
+    const quote=priceCart([{slug,qty:1}],'IN');assert.ok(!('refused' in quote));
+    const response=await h.call('create',{lines:[{slug,qty:1,amount:1}],customer:india});assert.equal(response.status,200);
+    const made=await response.json();assert.equal(made.amount,quote.totalMinor);assert.equal(made.currency,'INR');
+    assert.equal(h.db.prepare('select shipping from mimipip_orders').get().shipping,0);
+    h.setCaptured();assert.equal((await h.pass()).status,200);await h.pass();assert.equal(h.posts.length,1);
+    assert.equal(h.posts[0].body.shippingInr,0);assert.equal(h.posts[0].body.amountInr,quote.totalMinor/100);
+    const art=artFor(slug)!;assert.equal(h.posts[0].body.items[0].widthMm,art.printWidthCm!*10);assert.equal(h.posts[0].body.items[0].heightMm,art.printHeightCm!*10);
+  });
+}
