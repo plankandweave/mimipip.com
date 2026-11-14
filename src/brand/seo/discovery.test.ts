@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {discoveryResponse} from './discovery';
-import {feedItems} from './feeds';
+import {feedItems,googleMerchantXml} from './feeds';
 import {productJsonLd} from './head';
 import {sellable,isWallpaper} from './site';
 import {priceLine,refused} from '../commerce/prices';
@@ -27,4 +27,9 @@ test('read-only discovery covers the sellable catalogue without private files or
  assert.equal(discoveryResponse(new Request('https://mimipip.com/api/agent/product/sage-meadow')).status,404);
  const searched=await discoveryResponse(new Request('https://mimipip.com/api/agent/search?q=woodland')).json();assert.ok(searched.count>0&&searched.count<body.count);
  for(const slug of ['wiggleway','jump-jamboree','fork-and-friends'])assert.doesNotMatch(feedItems('IN').find(i=>new URL(i.link).pathname.endsWith('/'+slug))!.description,/numbers 1 to 10/);
+});
+
+test('Google market feeds cannot overwrite offers when an existing account shares a feed label',()=>{
+ const ids=(m:'IN'|'US')=>[...googleMerchantXml(m).matchAll(/<g:id>([^<]+)<\/g:id>/g)].map(x=>x[1]);
+ const india=new Set(ids('IN'));assert.ok(ids('US').every(id=>!india.has(id)));assert.equal(new Set(ids('US')).size,ids('US').length);
 });

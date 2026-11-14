@@ -75,7 +75,7 @@ function rss(title: string, description: string, items: string[]) {
 
 export function googleMerchantXml(market: FeedMarket) {
   return rss(`${BRAND} (${market})`, "MimiPip kids' wallpaper and floor game stickers.", feedItems(market).map(i =>
-    '<item>\n' + tag('id', i.id) + tag('title', i.title) + tag('description', i.description) + tag('link', i.link) + tag('image_link', i.imageLink) +
+    '<item>\n' + tag('id', market === 'US' ? i.id.slice(0,47) + '-US' : i.id) + tag('title', i.title) + tag('description', i.description) + tag('link', i.link) + tag('image_link', i.imageLink) +
     tag('availability', i.availability) + tag('price', i.price) + tag('condition', i.condition) + tag('brand', i.brand) + tag('identifier_exists', 'no') +
     tag('google_product_category', i.googleCategory) + tag('product_type', i.productType) + tag('item_group_id', i.itemGroupId) + tag('color', i.color) + tag('size', i.size) + tag('material', i.material) +
     (i.unitMeasure ? tag('unit_pricing_measure', i.unitMeasure) + tag('unit_pricing_base_measure', '1 sqft') : '') +
@@ -85,7 +85,7 @@ export function googleMerchantXml(market: FeedMarket) {
 /** Meta's catalogue reads the same RSS shape; its availability is spelled with a space. */
 export function metaCatalogueXml(market: FeedMarket) {
   return rss(`${BRAND} catalogue (${market})`, "MimiPip kids' wallpaper and floor game stickers.", feedItems(market).map(i =>
-    '<item>\n' + tag('id', i.id) + tag('title', i.title) + tag('description', i.description) + tag('availability', 'in stock') + tag('condition', i.condition) +
+    '<item>\n' + tag('id', market === 'US' ? i.id.slice(0,47) + '-US' : i.id) + tag('title', i.title) + tag('description', i.description) + tag('availability', 'in stock') + tag('condition', i.condition) +
     tag('price', i.price) + tag('link', i.link) + tag('image_link', i.imageLink) + tag('brand', i.brand) +
     tag('google_product_category', i.googleCategory) + tag('product_type', i.productType) + tag('item_group_id', i.itemGroupId) + tag('color', i.color) + tag('size', i.size) + tag('material', i.material) + '</item>\n'));
 }

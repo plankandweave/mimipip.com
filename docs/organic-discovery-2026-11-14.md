@@ -5,7 +5,7 @@ Scope: all sellable catalogue designs and their selectable offers, organic disco
 ## Implemented
 - 191 sellable designs: 185 wallpapers and six floor games. 39 unpublished records remain excluded for missing price/print readiness; they must not be activated by SEO work.
 - India feed: 746 offers (three fixed sizes and one 8 × 9 ft custom configuration for each wallpaper, plus six floor games). US: 191 offers. Custom dimensions are configurable rather than infinitely enumerated.
-- Stable existing offer IDs retained; explicit IDs and parent groups added for fixed sizes. Market and size deep links select the advertised offer.
+- Existing India and OpenAI offer IDs retained; Google/Meta US IDs receive a stable -US suffix to prevent overwriting India when legacy sources share a feed label; explicit IDs and parent groups added for fixed sizes. Market and size deep links select the advertised offer.
 - Checkout-derived fixed prices, actual dimensions, self-adhesive wallpaper material, colours and accurate product-type descriptions. Non-hopscotch games no longer claim numbered hopscotch paths.
 - ProductGroup variant data, selected offer markup and visible catalogue facts.
 - Read-only /api/agent/catalogue, /api/agent/search and /api/agent/product/{slug}; no ordering or private production-file exposure.
