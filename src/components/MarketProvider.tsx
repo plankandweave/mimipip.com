@@ -72,8 +72,13 @@ export function MarketProvider({
   // rather than seeding useState, which would be a hydration mismatch.
   useBeforePaint(() => {
     if (initialCode) return;
-    const detected = cookieCountry();
+    // A feed landing URL also sets the outer header's market, not only the
+    // product's nested provider. Ignore unsupported query values.
+    const requested = new URLSearchParams(window.location.search).get("market");
+    const landing = requested === "IN" || requested === "US" ? requested : null;
+    const detected = landing ?? cookieCountry();
     if (!detected) return;
+    if (landing) document.cookie = MARKET_COUNTRY_COOKIE + "=" + landing + "; Path=/; SameSite=Lax; Max-Age=31536000";
     setMarket((current) => (current.countryCode === detected ? current : marketFor(detected)));
     setReady(true);
   }, [initialCode]);
