@@ -409,7 +409,16 @@ export default async function ProductPage({
   // must show one plain image of the wallpaper itself, as the final image.
   // sortImages owns that order; the inline sort it replaces let a flat that
   // had been marked featured lead the gallery.
-  const images = sortImages(product.product_images ?? []);
+  // Reviewed Playroom Stories renders are versioned with the storefront.
+  // Keep their original flat as the last gallery image and leave the production
+  // artwork / wall visualiser source untouched.
+  const playroomGallery = mimiProduct.collection.includes("playroom-stories")
+    ? mimiProduct.gallery?.map((image, position) => ({
+        ...image, position, is_featured: position === 0,
+        is_flat: image.url === mimiProduct.flatImage,
+        scene_key: image.url === mimiProduct.flatImage ? null : "playroom",
+      })) : undefined;
+  const images = sortImages(playroomGallery ?? product.product_images ?? []);
   const artStory = ART_STORIES[product.handle as keyof typeof ART_STORIES];
 
   // The visualizer must map the clean flat pattern onto the customer's wall,
@@ -728,16 +737,18 @@ export default async function ProductPage({
         {/* gallery — gives way to the wall builder's live preview once the
             customer starts building (see WallBuilderStage) */}
         <WallBuilderStage isArtwork={isFixedSize} gallery={
-          <ProductGallery
+          <div><ProductGallery
             images={discoveryImages}
             title={product.title}
             showActions={category.supportsVisualiser || (category.supportsSamples && sampleable)}
             showSample={category.supportsSamples && sampleable}
-            fit={portraitFixed || shapedFlat ? "contain" : "cover"}
+            fit={playroomGallery || portraitFixed || shapedFlat ? "contain" : "cover"}
             fallbackAspect={
               portraitFixed ? readySizes![0][0] / readySizes![0][1] : (shapedFlat ?? undefined)
             }
           />
+          {playroomGallery && <p className="mt-3 text-sm">Room visualisation. Wallpaper only; furniture and accessories are not included. The original flat design is shown in the next image.</p>}
+          </div>
         } />
 
         {/* details — min-w-0 so an opened panel can never widen the grid
