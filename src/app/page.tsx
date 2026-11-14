@@ -516,42 +516,28 @@ const HERO_SLIDES = 3;
       {/* md and up only (7 October 2026): on a phone "Price my wall" and
           "Samples" now lead the browse rail in the header, so this second row
           of chips only pushed the hero further down the first screen. */}
-      <nav aria-label="Start choosing wallpaper" className="container-x hidden flex-wrap items-center justify-center gap-x-5 py-3 text-sm font-semibold text-charcoal md:flex">
-        <span className="w-full text-center text-slate sm:w-auto">First wall?</span>
-        {[
-          { label: "Find my wallpaper", href: "/design-with" },
-          { label: "Price my wall", href: "/wall-price" },
-          { label: "Order a sample", href: "/samples" },
-          { label: "Which format?", href: "/wallpaper-buying-guide#formats" },
-        ].map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className="inline-flex min-h-10 items-center rounded-full border border-edge bg-surface px-3.5 sm:min-h-0 sm:border-0 sm:bg-transparent sm:px-0 sm:underline sm:underline-offset-4"
-          >
-            {l.label}
-          </Link>
-        ))}
+      <nav aria-label="Plan your child's room" className="container-x mimi-parent-start">
+        <p>Making a little room their own?</p>
+        <div>
+          <Link href="/design-with">Help me choose</Link>
+          <Link href="/wall-price">Plan my budget</Link>
+          <Link href="/samples">Try a sample</Link>
+        </div>
       </nav>
-      {/* ---------- now open (public launch, 14 November 2026). Says the shop is open and nothing about how anything is made. ---------- */}
-      <p data-launch-note className="container-x pt-5 text-center text-sm text-slate">
-        <span className="font-medium text-charcoal">Now open.</span> Hello, we&rsquo;re MimiPip: little spaces for big little worlds.{" "}
-        <Link href="/browse/collection" className="underline underline-offset-4">Come and look around</Link>
-      </p>
       <MimiHomeHero />
 
       <section aria-labelledby="home-registry-title" className="container-x mimi-registry">
         <div className="mimi-registry-card grid overflow-hidden rounded-[28px] md:grid-cols-[0.9fr_1.2fr]">
           <div className="mimi-registry-images grid grid-cols-2">
             <img src="/registry/baby.jpg" alt="A sleeping newborn" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
-            <img src="/registry/birthday.jpg" alt="Children celebrating a birthday" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
+            <img src="https://images.pexels.com/photos/4868632/pexels-photo-4868632.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="A child in a party hat celebrating with a birthday cake" width={4480} height={6720} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
           </div>
           <div className="p-6 md:p-8">
             <p className="caps text-[#8b4528]">Baby showers, birthdays &amp; little milestones</p>
             <h2 id="home-registry-title" className="mt-2 text-3xl">Baby &amp; Gift Registry</h2>
-            <p className="mt-3 max-w-lg">Choose their favourites. Share your wish list. Let the people who love them join the celebration.</p>
+            <p className="mt-3 max-w-lg">Create a wish list for your little one’s room, birthday or baby shower. Share it with family and friends so they can choose a gift you’ll love.</p>
             <div className="mt-5 flex flex-wrap items-center gap-5">
-              <Link href="/registry" className="rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Explore registries</Link>
+              <Link href="/registry" className="rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Create a gift registry</Link>
               <Link href="/registry#find-registry" className="text-sm font-semibold underline underline-offset-4">Find a registry</Link>
             </div>
           </div>
@@ -982,7 +968,7 @@ const HERO_SLIDES = 3;
 
       {/* ---------- about zyvorah ---------- */}
       <Reveal>
-      <section className="container-x pb-16">
+      <section className="container-x mimi-about pb-6">
         <div className="pastel-section bg-wash text-center md:text-left">
           <div className="mx-auto max-w-2xl md:mx-0">
             <span className="caps text-slate">About MimiPip</span>

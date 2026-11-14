@@ -609,3 +609,29 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
   .mimi-home .mimi-order-steps > div { display: flex; align-items: center; gap: 14px; }
   .mimi-home .mimi-order-steps p { margin: 0; }
 }
+
+/* Parent-first opening and compact homepage/footer rhythm. */
+.mimi-home nav.mimi-parent-start { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px 24px; padding:14px 0 4px; font-size:14px; }
+.mimi-parent-start p { font-weight:700; }
+.mimi-parent-start > div { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 20px; }
+.mimi-parent-start a { display:inline-flex; align-items:center; min-height:36px; text-decoration:underline; text-underline-offset:4px; }
+.mimi-home { padding-bottom:0; }
+.mimi-home .mimi-home-hero { margin-top:12px; }
+.mimi-home .py-20 { padding-top:40px; padding-bottom:40px; }
+.mimi-home .py-16 { padding-top:32px; padding-bottom:32px; }
+.mimi-home .pb-20 { padding-bottom:40px; }
+.mimi-home .pt-16 { padding-top:40px; }
+.mimi-home .mimi-about { padding-bottom:16px; }
+.mimi-home #in-real-homes { margin-top:16px; margin-bottom:16px; }
+.mimi-footer-registry { background:#eee7f2; padding:18px; border-radius:18px; margin-top:14px; color:#68445b; }
+.mimi-footer-brands { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; }
+.mimi-footer-brands a { display:grid; place-items:center; width:44px; height:44px; border:1px solid #71441426; border-radius:50%; color:#714414; background:#fffcf7; }
+.mimi-footer-brands a:hover { background:#fff0c9; }
+.mimi-footer-brands a:focus-visible { outline:2px solid #714414; outline-offset:3px; }
+.mimi-footer-brands svg { display:block; width:24px; height:24px; }
+@media(max-width:639px) {
+  .mimi-home nav.mimi-parent-start { padding:12px 0 0; gap:2px; }
+  .mimi-parent-start p { width:100%; text-align:center; }
+  .mimi-parent-start > div { gap:4px 16px; font-size:13px; }
+  .mimi-home .py-20,.mimi-home .py-16 { padding-top:28px; padding-bottom:28px; }
+}

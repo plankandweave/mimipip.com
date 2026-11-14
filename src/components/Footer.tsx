@@ -1,5 +1,5 @@
 "use client";
-import { amazonIndiaLink } from "@/brand/commerce/amazon-india";
+import { FooterBrandLinks } from "./FooterBrandLinks";
 import { brand } from "@/brand/current";
 
 import { useCanvasJourney } from "./ShoppingJourney";
@@ -7,14 +7,12 @@ import { SHIKHA_LAUNCH_ENABLED } from "@/lib/customer-service-flag";
 import Link from "next/link";
 import { NewsletterForm } from "./NewsletterForm";
 import { HearFromUsFirst } from "./HearFromUsFirst";
-import { INSTAGRAM_URL, PINTEREST_URL, YOUTUBE_URL } from "@/lib/seo";
 
 const COLS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: "Shop",
     links: [
       { label: "All Wallpaper", href: "/collections/wall-art" },
-      { label: "Shop Mimi Pip on Etsy — US", href: "https://www.etsy.com/shop/MimiPip" },
       { label: "Shop by Room", href: "/rooms" },
       { label: "Office Wallpaper", href: "/office" },
       { label: "Hospitality Wallpaper", href: "/hospitality" },
@@ -120,7 +118,7 @@ const DOORS: {
 export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
   const canvas = useCanvasJourney();
   const columns = disconnected ? [
-    { title: "Shop", links: [...["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })), { label: "Gift cards", href: "/gift-card" }, { label: "Baby & Gift Registry", href: "/registry" }] },
+    { title: "Shop", links: [...["Collection", "Color", "Concept", "Age", "Space"].map(label => ({ label: "Shop by " + label, href: "/browse/" + label.toLowerCase() })), { label: "Gift cards", href: "/gift-card" }] },
     { title: "Plan your room", links: [
       { label: "In real homes", href: "/in-real-homes/" },
       { label: "Playroom stories", href: "/collections/playroom-stories" },
@@ -132,10 +130,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
       { label: "About Us", href: "/guides/about" },
       { label: "Frequently asked questions", href: "/faq" }, { label: "Shipping and returns", href: "/shipping-returns" },
       { label: "United States", href: "/us" }, { label: "India", href: "/in" },
-      { label: "Shop Mimi Pip on Etsy — US", href: "https://www.etsy.com/shop/MimiPip" },
       { label: "Retail buyer guide", href: "/trade" },
-      // Footer only, never beside Add to cart (owner rule, 7 Oct 2026). Absent until a live listing exists.
-      ...(amazonIndiaLink() ? [{ label: "Also on Amazon India", href: amazonIndiaLink()! }] : [])
     ] }
   ] : canvas ? COLS.map(column => column.title === "Shop" ? {
     title: "Shop",
@@ -145,10 +140,10 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
     links: [{ label: "Help Me Choose an Artwork", href: "/contact?question=choosing%20canvas%20artwork" }, { label: "Shipping & Returns", href: "/shipping-returns" }, { label: "Contact", href: "/contact" }],
   } : column) : COLS;
   return (
-    <footer className="mt-12 bg-wash">
+    <footer className={`bg-wash ${disconnected ? "mimi-footer mt-5" : "mt-12"}`}>
       {/* Five children (brand + four link columns). Two-up between sm and lg
           rather than a four-across row that would orphan the fifth. */}
-      <div className="container-x grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+      <div className={`container-x grid gap-7 py-8 sm:grid-cols-2 ${disconnected ? "lg:grid-cols-[1.3fr_1fr_1fr_1fr]" : "lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]"}`}>
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {(brand.logo || brand.emailLogo?.path) && <img src={brand.logo || brand.emailLogo!.path} alt={brand.name} className="h-9 w-auto" />}
@@ -156,21 +151,12 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
             {brand.description}
           </p>
           <div className="mt-5 text-sm">{disconnected ? <HearFromUsFirst source="footer" /> : <NewsletterForm />}</div>
-          <div className="mt-5 flex gap-4 text-sm text-slate">
-            {INSTAGRAM_URL && <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-charcoal">
-              Instagram
-            </a>}
-            {PINTEREST_URL && <a href={PINTEREST_URL} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-charcoal">
-              Pinterest
-            </a>}
-            {YOUTUBE_URL && <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-charcoal">
-              YouTube
-            </a>}
-          </div>
+          <FooterBrandLinks />
         </div>
         {columns.map((c) => (
           <div key={c.title}>
             <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-mist">{c.title}</p>
+            {disconnected && c.title === "Shop" && <div className="mimi-footer-registry"><p className="font-display text-lg">Gifts they’ll grow with</p><p className="mt-2 text-sm">Make a wish list for a baby shower or birthday, and share it with loved ones.</p><Link href="/registry" className="mt-3 block font-semibold underline underline-offset-4">Create a gift registry</Link><Link href="/registry#find-registry" className="mt-2 block text-sm underline underline-offset-4">Find someone’s registry</Link></div>}
             <ul className="mt-4 space-y-2.5">
               {c.links.map((l) => (
                 <li key={l.label}>
@@ -183,7 +169,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
           </div>
         ))}
       </div>
-      <div className="border-t border-edge">
+      {!disconnected && <div className="border-t border-edge">
         <div className="container-x grid gap-6 py-12 md:grid-cols-2">
           {!disconnected && DOORS.map((d) => (
             <div key={d.href} className="rounded-[20px] border border-edge bg-surface p-6">
@@ -207,7 +193,7 @@ export function Footer({disconnected=false}:{disconnected?:boolean}={}) {
         <div className="container-x pb-10 text-xs leading-relaxed text-mist">
           {brand.contactEmail ? <>Creators and press can write to <a href={`mailto:${brand.contactEmail}`} className="underline underline-offset-2 hover:text-charcoal">{brand.contactEmail}</a>.</> : <Link href="/faq">Help with choosing a design</Link>}
         </div>
-      </div>
+      </div>}
 
       <div className="border-t border-edge">
         <div className="container-x flex flex-wrap items-center justify-center gap-x-5 gap-y-2 py-4 text-xs text-slate">
