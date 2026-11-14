@@ -35,3 +35,9 @@ test('no historical bulk send, no unpaid or test-mode mail; rejection held for r
  await enqueueOrderEmail(env.DB,order);env.STORE_PAY.keyId=()=> 'rzp_test_fixture';await sendOrderEmails(env,send as any,1000);assert.equal(sent,0);
  env.STORE_PAY.keyId=()=> 'rzp_live_fixture';await sendOrderEmails(env,send as any,1000);await sendOrderEmails(env,send as any,400000);assert.equal(sent,1);assert.equal(db.prepare('SELECT state FROM mimipip_order_email').get().state,'review');
 });
+test('rich receipt uses exact Peach Pop artwork and ordered size, escapes content and retains all lines',()=>{
+ const m=orderEmailPayload({...order,customer:JSON.stringify({name:'<Roheena>',email:'buyer@example.test'}),lines:JSON.stringify([{slug:'hopscotch-peach-pop',name:'Peach & Pop',qty:1,lineMinor:490000,widthCm:75,heightCm:260},{slug:'custom',name:'Extra <design>',qty:2,lineMinor:0}])});
+ assert.match(m.html,/floor-play-images\/hopscotch-peach-pop\/product.png/);
+ assert.match(m.html,/full-logo.png/);assert.match(m.html,/75 × 260 cm/);assert.match(m.text,/75 × 260 cm/);
+ assert.match(m.html,/Extra &lt;design&gt;/);assert.match(m.html,/Hello &lt;Roheena&gt;/);assert.doesNotMatch(m.html,/Hello <Roheena>|zyvorah|747.46/);
+});
