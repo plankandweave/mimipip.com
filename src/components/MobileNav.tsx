@@ -118,6 +118,7 @@ export function MobileNav({
                   answer now comes first, the same list as the rail under the
                   header. */}
               {review ? <div className="flex flex-col">
+                <Link href="/registry" onClick={close} className="mb-3 rounded-2xl bg-[#fff2cd] px-4 py-4 font-semibold">Baby &amp; Gift Registry <span aria-hidden="true">↗</span></Link>
                 {shop.map(f=><details key={f.href} className="border-b py-2"><summary className="cursor-pointer py-2 font-semibold">{f.title}</summary>
                   <div className="flex flex-col items-start pl-3"><Link href={f.href} onClick={close} className="py-2">See all</Link>
                     {f.items?.map(it=><Link key={it.href} href={it.href} onClick={close} prefetch={false} className="py-2">{it.label}</Link>)}
