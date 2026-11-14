@@ -84,3 +84,20 @@
 .renderNote{margin-top:32px}
 @media(max-width:950px){.heroCopy{min-height:0}.heroImage{height:440px}.why{grid-template-columns:1fr 1fr}.whyText{grid-column:auto}}
 @media(max-width:650px){.heroCopy{padding:50px 24px 42px}.hero h1{font-size:68px}.heroBody{font-size:14px}.heroImage{min-height:0;height:330px}.why{display:block;padding:50px 24px}.why h2{font-size:43px}.whyText{margin-top:20px}.whyText p{font-size:14px}.designs{padding:48px 16px 45px}.designsHead{margin-bottom:24px}.designsHead>p{margin-top:12px}.grid{gap:17px}.cardBody{padding:17px}.cardTitle h3{font-size:28px}.moment{min-height:0}.renderNote{margin-top:28px}}
+
+/* Shop the collection directly using the same purchase flow as the product page. */
+.grid{align-items:start}
+.productTitle{font-family:Georgia,'Times New Roman',serif;font-size:clamp(26px,2.3vw,35px);line-height:1.15}
+.colors span{display:block;width:22px;height:22px;border-radius:50%;border:1px solid #453b3026;box-shadow:0 0 0 2px #fff,0 0 0 3px #e5dbce}
+.price{font-size:20px;font-weight:700;margin:20px 0 16px}
+.price span{display:block;font-size:12px;line-height:1.5;font-weight:400;color:var(--muted);margin-top:5px}
+.buyButton{display:flex;width:100%;min-height:48px;align-items:center;justify-content:center;padding:12px 16px;border-radius:30px;background:#70513c;color:white;font-size:14px;font-weight:700;text-align:center}
+.buyButton:hover{background:#4c3526}
+.buyButton:focus-visible,.detailsLink:focus-visible{outline:3px solid #a57f69;outline-offset:4px}
+.detailsLink{display:inline-block;margin-top:14px;font-size:13px;text-decoration:underline;text-underline-offset:4px}
+.purchase{border-top:1px solid #e8dfd3;margin-top:20px;padding-top:4px}
+.purchase input,.purchase select{max-width:100%;border:1px solid #c9bcae;border-radius:8px;padding:8px;background:white}
+.purchase input[type=number]{min-width:0}
+.purchase :global(.btn){height:auto;min-height:44px;white-space:normal}
+.purchase :global(.btn-primary){background:#70513c;color:white}
+@media(max-width:950px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.designsHead{align-items:start;flex-direction:column;gap:16px}.designsHead>p{max-width:600px}}

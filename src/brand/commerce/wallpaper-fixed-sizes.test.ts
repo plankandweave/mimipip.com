@@ -32,3 +32,25 @@ test('custom wallpaper retains the 20 sq ft minimum and fixed-size claims are va
   assert.ok(refused(priceLine({ ...small, widthCm: 2.1 * 30.48, fixedSize: true }, 'IN')));
   assert.ok(refused(priceLine({ ...small, fixedSize: true }, 'ABROAD')));
 });
+
+test('all eleven Hush and Wander designs have production artwork and can be priced from collection cart selections', () => {
+  const entries=Object.entries(printMap).filter(([slug])=>slug.startsWith('hush-and-wander-'));
+  assert.equal(entries.length,11);
+  for(const [slug,art] of entries) {
+    assert.match(art.art,/\/nursery-worlds\/print-art\/.*\.png$/);
+    for(const [widthFt,heightFt] of WALLPAPER_FIXED_SIZES) {
+      const input={slug,qty:2,widthCm:widthFt*30.48,heightCm:heightFt*30.48,fixedSize:true};
+      const priced=priceLine(input,'IN');
+      assert.ok(!refused(priced),slug);
+      const cart=priceCart([input],'IN');
+      assert.ok(!('refused' in cart),slug);
+      assert.equal(cart.totalMinor,priced.lineMinor,slug);
+    }
+    for(const country of ['IN','US']) {
+      const input={slug,qty:1,widthCm:240,heightCm:270};
+      const cart=priceCart([input],country);
+      assert.ok(!('refused' in cart),slug+' '+country);
+      assert.ok(cart.totalMinor>0,slug);
+    }
+  }
+});
