@@ -40,7 +40,7 @@ export function feedItems(market: FeedMarket): FeedItem[] {
       price: `${price.amount.toFixed(2)} ${price.currency}`,
       availability: 'in_stock', condition: 'new', brand: BRAND,
       productType: wall ? `Kids' Wallpaper > ${cap((r.concept[0] ?? 'designs').replace(/-/g, ' '))}` : hop ? 'Floor Game Stickers > Hopscotch' : 'Floor Game Stickers',
-      googleCategory: wall ? 'Home & Garden > Decor > Wallpaper' : null,
+      googleCategory: wall ? 'Home & Garden > Decor > Wallpaper' : 'Home & Garden > Decor > Home Decor Decals',
       itemGroupId: wall && market === 'IN' ? ('MP-GROUP-' + r.slug).toUpperCase().slice(0,50) : hop ? 'MP-HOPSCOTCH' : null,
       color: colourway ?? (r.color.length ? r.color.map(cap).join('/') : null),
       size: wall ? '8 ft x 9 ft' : `${r.widthCm} x ${r.heightCm} cm`,
