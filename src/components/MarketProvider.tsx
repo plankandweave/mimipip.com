@@ -80,7 +80,7 @@ export function MarketProvider({
 
   useEffect(() => {
     // The Worker names the country in a cookie; with none, the page shows the home market.
-    if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1"){setReady(true);return;}
+    if(process.env.NEXT_PUBLIC_MIMIPIP_LOCAL_REVIEW==="1"){if(initialCode)document.cookie=MARKET_COUNTRY_COOKIE+"="+encodeURIComponent(initialCode)+"; Path=/; SameSite=Lax; Max-Age=31536000";setReady(true);return;}
     if (initialCode) {
       // Carry the landing market into cart and checkout navigation.
       void fetch("/api/market", {

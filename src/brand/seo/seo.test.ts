@@ -126,18 +126,19 @@ test('the sitemap lists exactly the published addresses, with no trailing slash 
 test('shopping feeds: only designs on sale, sound against the feed rules, the price the checkout charges', () => {
   for (const market of ['IN', 'US'] as const) {
     const items = feedItems(market);
-    assert.equal(items.length, sellable.length);
+    assert.equal(new Set(items.map(i=>new URL(i.link).pathname)).size, sellable.length);
     assert.deepEqual(feedProblems(items), []);
     for (const i of items) {
       assert.ok(existsSync('public' + new URL(i.imageLink).pathname), i.id + ' picture missing');
       const slug = new URL(i.link).pathname.split('/').pop()!;
-      const quote = priceCart([{ slug, qty: 1, widthCm: 243.84, heightCm: 274.32 }], market);
+      const fixed = new URL(i.link).searchParams.get('fixed')?.split('x').map(Number);
+      const quote = priceCart([{ slug, qty: 1, widthCm: fixed ? fixed[0]*30.48 : 243.84, heightCm: fixed ? fixed[1]*30.48 : 274.32, fixedSize:!!fixed }], market);
       assert.ok(!('refused' in quote));
       assert.equal(i.price, `${(quote.totalMinor / 100).toFixed(2)} ${quote.currency}`, i.id + ' feed price is not the checkout price');
     }
   }
-  assert.equal(feedItems('IN').find(i => i.link.endsWith('/almond-blossom'))!.price, '14400.00 INR');
-  assert.equal(feedItems('US').find(i => i.link.endsWith('/almond-blossom'))!.price, '720.00 USD');
+  assert.equal(feedItems('IN').find(i => new URL(i.link).pathname.endsWith('/almond-blossom') && !new URL(i.link).searchParams.has('fixed'))!.price, '14400.00 INR');
+  assert.equal(feedItems('US').find(i => new URL(i.link).pathname.endsWith('/almond-blossom') && !new URL(i.link).searchParams.has('fixed'))!.price, '720.00 USD');
   for (const make of Object.values(FEEDS)) {
     const xml = make();
     assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<rss version="2\.0" xmlns:g="http:\/\/base\.google\.com\/ns\/1\.0">/);

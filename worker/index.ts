@@ -1,3 +1,4 @@
+import {discoveryResponse} from '../src/brand/seo/discovery';
 import {queueGiftEmails} from '../src/brand/commerce/gift-email';
 import {handleGiftCard,sweepGifts,type GiftEnv} from '../src/brand/commerce/gift-card';
 import {handleSampleOrder} from '../src/brand/commerce/sample-order';
@@ -57,6 +58,7 @@ async function serve(request:Request,env:unknown,ctx:unknown):Promise<Response>{
  if(p==='/llms.txt'&&u.hostname==='mimipip.com')return new Response(request.method==='HEAD'?null:llmsTxt(),{headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'public, max-age=3600'}});
  if(p.startsWith('/feeds/')){const feed=Object.hasOwn(FEEDS,p)?FEEDS[p]():null;return feed===null?new Response('Not found',{status:404,headers:{'X-Robots-Tag':'noindex'}}):new Response(request.method==='HEAD'?null:feed,{headers:{'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600','X-Robots-Tag':'noindex'}});}
  if(p==='/sitemap.xml'&&u.hostname==='mimipip.com')return new Response(sitemapXml(extraIndexable),{headers:{'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600'}});
+ if(p==='/api/agent'||p.startsWith('/api/agent/'))return discoveryResponse(request);
  if(p==='/api/funnel')return handleFunnelBeacon(request,(env as {DB?:FunnelDb}).DB);
  // A design that cannot be bought is not shown: its address goes to the shop (owner rule, 10 Nov 2026).
  if(['GET','HEAD'].includes(request.method)){const to=hiddenDestination(p);if(to)return new Response(null,{status:302,headers:{Location:new URL(to,u.origin).href,'X-Robots-Tag':'noindex','Cache-Control':'no-store'}});}

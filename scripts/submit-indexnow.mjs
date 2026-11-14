@@ -1,0 +1,10 @@
+import {readFileSync} from 'node:fs';
+const origin='https://mimipip.com';
+const key=readFileSync(new URL('../public/indexnow-key.txt',import.meta.url),'utf8').trim();
+const verification=await fetch(`${origin}/indexnow-key.txt`);
+if(!verification.ok||(await verification.text()).trim()!==key)throw Error('IndexNow key not deployed');
+const sitemap=await fetch(`${origin}/sitemap.xml`);if(!sitemap.ok)throw Error('Sitemap unavailable');
+const urls=[...(await sitemap.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]).filter(u=>new URL(u).origin===origin);
+const r=await fetch('https://api.indexnow.org/indexnow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({host:'mimipip.com',key,keyLocation:`${origin}/indexnow-key.txt`,urlList:urls})});
+console.log(JSON.stringify({submittedAt:new Date().toISOString(),endpoint:'https://api.indexnow.org/indexnow',urlCount:urls.length,status:r.status,body:await r.text(),meaning:r.status===200?'Received':r.status===202?'Received, key validation pending':'Failed'}));
+if(![200,202].includes(r.status))process.exitCode=1;

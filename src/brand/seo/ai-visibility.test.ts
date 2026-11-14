@@ -12,7 +12,7 @@ test('the OpenAI feed lists every design on sale, and only those, in each market
     const feed = openAiFeed(market);
     assert.deepEqual(feed.refused, [], market);
     assert.equal(feed.rows.length, feedItems(market).length);
-    assert.ok(feed.rows.length > 0 && feed.rows.length <= sellable.length);
+    assert.ok(feed.rows.length > 0 && feed.rows.length <= sellable.length * 4);
     const currency = market === 'US' ? 'USD' : 'INR';
     for (const row of feed.rows) {
       for (const f of OPENAI_REQUIRED) assert.ok(row[f], `${row.item_id} ${f}`);
