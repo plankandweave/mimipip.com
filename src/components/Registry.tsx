@@ -32,142 +32,64 @@ export function RegistryHome() {
   const [code, setCode] = useState(""),
     [error, setError] = useState("");
   return (
-    <main className="container-x max-w-6xl py-12">
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="caps text-slate">Mimi Pip Registry</p>
-        <h1 className="mt-4 text-4xl md:text-5xl">
-          Little wishes.
-          <br />
-          Lovely gifts.
-        </h1>
-        <p className="mt-5 text-lg">
-          Choose the things you love for their little world. Share your wishes
-          with the people who love them.
-        </p>
-        <Link
-          href="/registry/manage"
-          className="mt-5 inline-block underline underline-offset-4"
-        >
-          Manage my registries →
-        </Link>
-      </div>
-      <div className="my-10 grid gap-6 md:grid-cols-2">
+    <main className="container-x max-w-7xl py-8 md:py-10">
+      <header className="flex flex-col gap-5 pb-2 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl">
+          <p className="caps text-[#b94a26]">Mimi Pip Registry</p>
+          <h1 className="mt-3 text-3xl leading-tight md:text-5xl">Little people. Big celebrations.</h1>
+          <p className="mt-4 max-w-xl text-base leading-relaxed">Make a wish list for their little world. Share it with the people who love them.</p>
+        </div>
+        <nav aria-label="Registry shortcuts" className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
+          <a href="#find-registry" className="underline underline-offset-4">Find a registry</a>
+          <Link href="/registry/manage" className="underline underline-offset-4">My registries ↗</Link>
+        </nav>
+      </header>
+      <div className="grid gap-6 py-7 md:grid-cols-2 md:py-8">
         {[
-          {
-            kind: "baby",
-            title: "Baby Registry",
-            text: "A little world, ready to welcome them. Bring together your favourite nursery designs for a baby shower or a new arrival.",
-            colour: "#e8f0f2",
-            symbol: "A little hello",
-          },
-          {
-            kind: "gift",
-            title: "Gift Registry",
-            text: "Birthdays, a first big-kid room, and all the moments in between. Make a wish list that feels just like them.",
-            colour: "#fbebe3",
-            symbol: "Something to celebrate",
-          },
-        ].map((c) => (
-          <section
-            key={c.kind}
-            className="overflow-hidden rounded-3xl border border-edge"
-          >
-            <img
-              src={
-                c.kind === "baby"
-                  ? "/nursery-worlds/03-bear-and-bee-meadow-room-v2.webp"
-                  : "/feed-images/birthday-banner.jpg"
-              }
-              alt={
-                c.kind === "baby"
-                  ? "A warm nursery with a bear and meadow wall design"
-                  : "Children celebrating a birthday in an illustrated garden"
-              }
-              width={1671}
-              height={941}
-              className="aspect-video w-full object-cover"
-            />
-            <div className="p-7">
-              <h2 className="text-3xl">{c.title}</h2>
-              <p className="my-4 leading-relaxed">{c.text}</p>
-              <Link
-                className="btn btn-primary"
-                href={"/registry/manage?new=" + c.kind}
-              >
-                Create a {c.kind === "baby" ? "baby" : "gift"} registry
-              </Link>
-              {c.kind === "gift" && (
-                <p className="mt-3 text-sm">
-                  Birthday · New room · Family celebration · Just because
-                </p>
-              )}
+          {kind: "baby", title: "Baby Registry", kicker: "A little hello", text: "Getting ready for baby? Choose nursery favourites for your baby shower or new arrival.", image: "/registry/baby.jpg", alt: "A tiny newborn sleeping on a soft pink blanket", occasions: "Baby showers · New arrivals", colour: "#faeae5"},
+          {kind: "gift", title: "Gift Registry", kicker: "Hip, hip, hooray!", text: "Another candle, another adventure. Make a birthday wish list of playful things for their room.", image: "/registry/birthday.jpg", alt: "Two children in party hats blowing out candles on a birthday cake", occasions: "Birthdays · New rooms · Just because", colour: "#fff2cd"},
+        ].map(c => (
+          <section key={c.kind} className="overflow-hidden rounded-[28px]" style={{backgroundColor:c.colour}}>
+            <div className="flex items-center justify-between gap-3 px-6 py-5 md:px-7">
+              <h2 className="text-2xl md:text-3xl">{c.title}</h2>
+              <span className="text-sm font-semibold">{c.kicker}</span>
+            </div>
+            <img src={c.image} alt={c.alt} width={1200} height={800} className="aspect-[3/2] w-full object-cover" />
+            <div className="px-6 pb-7 pt-5 md:px-7">
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-[#8b4528]">{c.occasions}</p>
+              <p className="mt-3 max-w-md leading-relaxed">{c.text}</p>
+              <Link className="mt-5 inline-flex min-h-12 items-center gap-8 rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512] focus-visible:outline-2 focus-visible:outline-offset-4" href={"/registry/manage?new=" + c.kind}>Create a {c.kind} registry <span aria-hidden="true">↗</span></Link>
             </div>
           </section>
         ))}
       </div>
-      <section className="mx-auto max-w-xl rounded-3xl bg-wash p-6">
-        <h2 className="text-2xl">Find a registry</h2>
-        <p className="my-3">
-          Enter the registry code or paste the link shared with you.
-        </p>
-        <form
-          className="grid gap-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const match = code
-              .trim()
-              .match(/(?:^|\/)([a-f0-9]{32})(?:[/?#]|$)/);
-            if (!match) {
-              setError("Check the code or link and try again.");
-              return;
-            }
-            window.location.assign("/registry/" + match[1]);
-          }}
-        >
-          <label className="grid gap-2">
-            Registry code or link
-            <input
-              className={field}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              required
-            />
-          </label>
-          <button className="btn btn-primary">Find registry</button>
-          <p role="status">{error}</p>
+      <section id="find-registry" className="my-6 grid scroll-mt-40 gap-6 rounded-2xl bg-[#fff4df] p-6 md:grid-cols-2 md:items-center md:p-10">
+        <div><p className="caps text-[#b94a26]">Here to give?</p><h2 className="mt-2 text-3xl">Find their wish list.</h2><p className="mt-3">Use the registry link or code they shared with you.</p></div>
+        <form onSubmit={e => {
+          e.preventDefault();
+          const match = code.trim().match(/(?:^|\/)([a-f0-9]{32})(?:[/?#]|$)/);
+          if (!match) {setError("Check the code or link and try again."); return;}
+          window.location.assign("/registry/" + match[1]);
+        }}>
+          <label htmlFor="registry-code" className="mb-2 block text-sm font-semibold">Registry code or link</label>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input id="registry-code" className={field + " min-w-0"} value={code} onChange={e => {setCode(e.target.value); setError("");}} required aria-describedby={error ? "registry-error" : undefined} aria-invalid={!!error} />
+            <button className="min-h-12 shrink-0 rounded-full bg-[#714414] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5c3512]">Find registry ↗</button>
+          </div>
+          <p id="registry-error" role="status" className="mt-2 text-sm">{error}</p>
         </form>
       </section>
-      <div className="my-12 grid gap-6 md:grid-cols-3">
-        {[
-          [
-            "Choose your favourites",
-            "Save the exact designs and sizes you would love.",
-          ],
-          [
-            "Share your wishes",
-            "Send your private registry link to family and friends.",
-          ],
-          [
-            "Celebrate together",
-            "Guests choose a gift. Purchased gifts are counted for you.",
-          ],
-        ].map(([title, text], i) => (
-          <div key={title}>
-            <p className="caps text-slate">0{i + 1}</p>
-            <h2 className="my-2 text-xl">{title}</h2>
-            <p>{text}</p>
-          </div>
-        ))}
-      </div>
-      <p className="text-center">
-        Prefer to let them choose?{" "}
-        <Link className="underline" href="/gift-card">
-          Give a personalised gift card.
-        </Link>
-      </p>
+      <section className="py-8 md:py-12" aria-labelledby="registry-how">
+        <h2 id="registry-how" className="text-2xl md:text-3xl">A few favourites. One easy list.</h2>
+        <div className="mt-7 grid gap-7 md:grid-cols-3">
+          {[["Choose", "Save the designs, sizes and quantities you’d love."], ["Share", "Send your registry link or QR code to family and friends."], ["Enjoy", "Guests buy from your list. Gifts arrive at your chosen address, kept private from guests."]].map(([title, text], i) => <div key={title} className="border-t border-edge pt-4"><p className="text-xs text-[#b94a26]">0{i + 1}</p><h3 className="my-2 text-xl">{title}</h3><p className="max-w-sm text-sm leading-relaxed">{text}</p></div>)}
+        </div>
+      </section>
+      <p className="border-t border-edge pt-7 text-sm">Let them choose something of their own. <Link className="font-semibold underline underline-offset-4" href="/gift-card">Give a Mimi Pip gift card ↗</Link></p>
     </main>
   );
 }
+
 const emptyDelivery: Delivery = {
   name: "",
   email: "",
