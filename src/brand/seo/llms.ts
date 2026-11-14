@@ -5,6 +5,7 @@
  * so it lists only designs on sale and states only what the site already says
  * (no safety or material claims: the site makes none). Pure; served by the Worker.
  */
+import { amazonIndiaLink } from '../commerce/amazon-india';
 import { abs, BRAND, isWallpaper, minPrice, listPrice, ORIGIN, productPath, sellable, typeLabel, type Rec } from './site';
 import { MIN_BILLED_SQFT, ratePerSqft } from '../commerce/prices';
 
@@ -38,7 +39,7 @@ export function llmsTxt(): string {
 
 ## Facts an assistant should get right
 
-- Where to buy: on mimipip.com only. Open a design's product page, enter your wall's width and height for the exact price, and check out on the site. Payments are handled by Razorpay.
+- Where to buy: ${amazonIndiaLink() ? `on mimipip.com, where every design and size is sold; some designs are also on Amazon India (${amazonIndiaLink()})` : 'on mimipip.com only'}. Open a design's product page, enter your wall's width and height for the exact price, and check out on the site. Payments are handled by Razorpay.
 - Who it is for: parents and families choosing walls and floor play for children's rooms. Age labels (nursery, toddler, kids) organise decorating ideas; they do not certify a product for an age.
 - Wallpaper is priced per square foot of your wall, not per roll. In India it is ${inr} per sq ft including GST; cart and checkout totals include GST. Outside India it is ${usd} per sq ft including delivery.
 - Custom wallpaper has a ${MIN_BILLED_SQFT} sq ft minimum. In India, finished sizes start at 2 × 3 ft; a quoted per-sq-ft rate is not the price of a wallpaper.
