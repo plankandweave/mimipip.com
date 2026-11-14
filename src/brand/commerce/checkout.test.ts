@@ -55,8 +55,8 @@ test('abroad every wall is her US$10 a sq ft; India uses the approved ₹200 GST
   assert.equal(ratePerSqft('nafas-spiral-bloom', 'IN'), 200);
   const p = priceLine(wall, 'ABROAD'); assert.ok(!refused(p)); assert.equal(p.currency, 'USD'); assert.equal(p.unitMinor, wallMinor(10));
 });
-test('Hopscotch uses the selling-price sheet in India and the US', () => {
-  const p = priceLine(hop, 'IN'); assert.ok(!refused(p)); assert.equal(p.lineMinor, 980000); assert.equal(p.widthCm, 75);
+test('Hopscotch uses the owner-approved GST-inclusive India price and existing US price', () => {
+  const p = priceLine(hop, 'IN'); assert.ok(!refused(p)); assert.equal(p.lineMinor, 799800); assert.equal(p.widthCm, 75);
   assert.equal(onSale('hopscotch-peach-pop', 'ABROAD'), true); const abroad = priceLine(hop, 'ABROAD'); assert.ok(!refused(abroad)); assert.equal(abroad.lineMinor, 41980);
 });
 test('a design with no price on record is refused, never given one', () => {
@@ -90,7 +90,7 @@ test('India: the paid cart reaches the OS as a MimiPip order, once', async () =>
   const lines = [{ ...wall, placement: { zoom: 1.5, cropX: .2, cropY: .3 } }, hop];
   let r = await h.call('create', { lines, customer: india, amount: 1 }); assert.equal(r.status, 200);
   const made = await r.json();
-  const expected = wallMinor(200) + 980000;
+  const expected = wallMinor(200) + 799800;
   assert.equal(made.amount, expected); assert.equal(made.currency, 'INR'); assert.equal(h.total(), expected);
   assert.equal((await (await h.call('status')).json()).paid, false); assert.equal(h.posts.length, 0);
   assert.equal((await h.call('verify', { razorpay_order_id: 'order_test', razorpay_payment_id: 'pay_test', razorpay_signature: '0'.repeat(64) })).status, 400);
@@ -153,7 +153,7 @@ test('a price can be shown with no way to pay, but money cannot be taken', async
   const h = harness();
   delete h.env.STORE_PAY;
   const quote = await h.call('quote', { lines: [hop], countryCode: 'IN' });
-  assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 980000);
+  assert.equal(quote.status, 200); assert.equal((await quote.json()).totalMinor, 799800);
   const usQuote = await h.call('quote', { lines: [hop], countryCode: 'US' }); assert.equal(usQuote.status, 200); assert.equal((await usQuote.json()).totalMinor, 41980);
   assert.equal((await h.call('quote', { lines: [hop], countryCode: 'IN' }, 'https://evil.test')).status, 403);
   assert.equal((await h.call('create', { lines: [hop], customer: india })).status, 503);
@@ -435,7 +435,7 @@ for (const slug of ['hopscotch-peach-pop','hopscotch-pastel-play','hopscotch-bol
     const h=harness();
     const quote=priceCart([{slug,qty:1}],'IN');assert.ok(!('refused' in quote));
     const response=await h.call('create',{lines:[{slug,qty:1,amount:1}],customer:india});assert.equal(response.status,200);
-    const made=await response.json();assert.equal(made.amount,quote.totalMinor);assert.equal(made.currency,'INR');
+    const made=await response.json();if(slug.startsWith('hopscotch-'))assert.equal(made.amount,399900);assert.equal(made.amount,quote.totalMinor);assert.equal(made.currency,'INR');
     assert.equal(h.db.prepare('select shipping from mimipip_orders').get().shipping,0);
     h.setCaptured();assert.equal((await h.pass()).status,200);await h.pass();assert.equal(h.posts.length,1);
     assert.equal(h.posts[0].body.shippingInr,0);assert.equal(h.posts[0].body.amountInr,quote.totalMinor/100);

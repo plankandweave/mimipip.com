@@ -2,7 +2,7 @@
  * MimiPip designs that are also sold on Amazon India. The one place this lives.
  *
  * Only listings checked live on amazon.in go here (each was opened on amazon.in on
- * 14 Nov 2026: in stock, Add to cart, ₹4,900 — the same as on mimipip.com). The
+ * 14 Nov 2026: in stock, Add to cart, ₹4,900 — Amazon price observed then; not the current mimipip.com price). The
  * Seller Central batch has 14 active MimiPip listings; the rest are added by their
  * ASIN once read from Seller Central.
  *
