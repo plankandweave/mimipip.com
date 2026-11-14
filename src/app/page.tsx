@@ -527,10 +527,9 @@ const HERO_SLIDES = 3;
       <MimiHomeHero />
 
       <section aria-labelledby="home-registry-title" className="container-x mimi-registry">
-        <div className="mimi-registry-card grid overflow-hidden rounded-[28px] md:grid-cols-[0.9fr_1.2fr]">
-          <div className="mimi-registry-images grid grid-cols-2">
+        <div className="mimi-registry-card mimi-registry-single grid overflow-hidden rounded-[28px] md:grid-cols-[0.9fr_1.2fr]">
+          <div className="mimi-registry-images">
             <img src="/registry/baby.jpg" alt="A sleeping newborn" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
-            <img src="https://images.pexels.com/photos/4868632/pexels-photo-4868632.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="A child in a party hat celebrating with a birthday cake" width={4480} height={6720} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
           </div>
           <div className="p-6 md:p-8">
             <p className="caps text-[#8b4528]">Baby showers, birthdays &amp; little milestones</p>
