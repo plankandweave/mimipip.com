@@ -513,3 +513,62 @@ html[data-configure-bar="on"] .wa-launcher { display: none; }
 @font-face{font-family:"Plus Jakarta Sans";src:url('/fonts/Jakarta-800.ttf') format('truetype');font-weight:800;font-display:swap}
 @font-face{font-family:Inter;src:url('/fonts/Inter-400.ttf') format('truetype');font-weight:400;font-display:swap}
 @font-face{font-family:Inter;src:url('/fonts/Inter-700.ttf') format('truetype');font-weight:700;font-display:swap}
+
+/* MimiPip homepage: existing artwork, coordinated surfaces, uncropped product views. */
+.mimi-home { background:#fffcf7; color:#714414; font-family:MimiText,"Nunito",sans-serif; padding-bottom:24px; }
+.mimi-home h1,.mimi-home h2,.mimi-home h3 { font-family:MimiDisplay,MimiText,sans-serif; font-weight:500; letter-spacing:-.025em; text-wrap:balance; }
+.mimi-home .caps { letter-spacing:.12em; line-height:1.6; }
+.mimi-home .pastel-section { border-radius:28px; padding:clamp(24px,4vw,56px); }
+.mimi-home .btn { border-radius:999px; min-height:46px; height:auto; padding:12px 22px; line-height:1.35; }
+.mimi-home > nav { padding-top:18px; padding-bottom:6px; }
+.mimi-home [data-launch-note] { padding-top:14px; padding-bottom:8px; font-size:13px; }
+.mimi-home .mimi-home-hero { max-width:1480px; margin:20px auto 0; width:calc(100% - 48px); overflow:hidden; background:var(--mimi-hero-tint); border-radius:30px; }
+.mimi-hero-layout { display:grid; grid-template-columns:minmax(260px,.75fr) minmax(0,1.5fr); align-items:stretch; }
+.mimi-hero-copy { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; padding:clamp(24px,3.4vw,56px); }
+.mimi-eyebrow { font-size:11px; font-weight:800; line-height:1.6; letter-spacing:.11em; text-transform:uppercase; }
+.mimi-hero-category { margin-top:30px; font-size:13px; font-weight:800; }
+.mimi-home .mimi-hero-copy h1 { font-size:clamp(32px,3.5vw,56px); line-height:1.08; margin:12px 0 0; }
+.mimi-hero-description { max-width:32ch; margin-top:18px; font-size:16px; line-height:1.65; color:#735f4c; }
+.mimi-hero-cta { display:inline-flex; gap:16px; align-items:center; min-height:48px; margin-top:28px; padding:12px 23px; border-radius:999px; color:white; background:#714414; font-size:14px; font-weight:800; }
+.mimi-hero-cta:hover { background:#583412; }
+.mimi-hero-secondary { margin-top:16px; text-decoration:underline; text-underline-offset:5px; font-size:13px; font-weight:700; }
+.mimi-hero-art { display:flex; align-items:center; justify-content:center; min-width:0; height:clamp(380px,43vw,620px); background:#fffaf3; gap:12px; padding:12px; }
+.mimi-hero-image { display:block; width:100%; height:100%; min-width:0; object-fit:contain; object-position:center; border-radius:16px; }
+.mimi-hero-pair { display:grid; grid-template-columns:1fr 1fr; }
+.mimi-hero-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:4px 22px; border-top:1px solid #71441412; }
+.mimi-hero-dots,.mimi-hero-actions { display:flex; align-items:center; gap:2px; }
+.mimi-hero-dots button { width:36px; height:44px; display:grid; place-items:center; }
+.mimi-hero-dots span { display:block; width:7px; height:7px; border-radius:999px; background:#71441440; }
+.mimi-hero-dots [aria-current="true"] span { width:24px; background:#714414; }
+.mimi-hero-actions button { min-width:44px; min-height:44px; padding:8px; font-size:13px; font-weight:700; }
+.mimi-hero-count { padding-right:12px; font-size:11px; font-weight:700; letter-spacing:.1em; }
+.mimi-home-hero button:focus-visible,.mimi-home-hero a:focus-visible { outline:3px solid #ba5529; outline-offset:3px; }
+.mimi-home .mimi-registry { margin-top:36px; margin-bottom:12px; }
+.mimi-registry-card { background:#f7ede7; border:1px solid #7144140d; align-items:stretch; }
+.mimi-registry-images { gap:6px; padding:12px; }
+.mimi-registry-images img { border-radius:18px; }
+.mimi-registry-card > div:last-child { align-self:center; padding:clamp(24px,3vw,44px); }
+.mimi-registry-card h2 { font-size:clamp(28px,3vw,40px); }
+.mimi-registry-card p { line-height:1.65; }
+.mimi-home .bg-sky\/40 { background:#edf4f7; }
+.mimi-home .bg-lavender\/50 { background:#f1edf6; }
+.mimi-home .bg-sage\/30 { background:#edf3ec; }
+.mimi-home .bg-wash { background:#f6efe6; }
+@media (max-width:767px) {
+  .mimi-home .mimi-home-hero { width:calc(100% - 24px); margin-top:14px; border-radius:22px; }
+  .mimi-hero-layout { display:flex; flex-direction:column; }
+  .mimi-hero-art { order:-1; height:clamp(250px,80vw,440px); padding:8px; gap:6px; }
+  .mimi-hero-copy { min-height:280px; padding:24px; }
+  .mimi-hero-category { margin-top:14px; }
+  .mimi-home .mimi-hero-copy h1 { font-size:34px; }
+  .mimi-hero-description { margin-top:12px; font-size:15px; max-width:42ch; }
+  .mimi-hero-cta { margin-top:20px; }
+  .mimi-hero-controls { padding:4px 10px; flex-wrap:wrap; }
+  .mimi-hero-dots button { width:28px; }
+  .mimi-hero-count { display:none; }
+  .mimi-hero-actions { gap:0; }
+  .mimi-hero-actions button { min-width:36px; }
+  .mimi-home .mimi-registry { margin-top:24px; }
+  .mimi-registry-images img { height:180px; }
+  .mimi-home .pastel-section { border-radius:22px; }
+}

@@ -1,3 +1,4 @@
+import MimiHomeHero from "@/components/MimiHomeHero";
 import { hiddenDestination } from '@/brand/seo/routes';
 import { InRealHomesSection } from "@/components/InRealHomesSection";
 
@@ -508,7 +509,7 @@ const HERO_SLIDES = 3;
   const heroDesigns = (mixedCampaign ? campaignDesigns : launchHero ? launchSlides : heroSlidePicks.map((s) => s.design)).filter((d) => d.image);
 
   const page = (
-    <div>
+    <div className="mimi-home">
       {/* Chips on a phone (7 October 2026): as 16px-tall underlined text these
           were the smallest tap targets on the homepage. From sm up they stay
           the quiet text row they were. */}
@@ -537,156 +538,11 @@ const HERO_SLIDES = 3;
         <span className="font-medium text-charcoal">Now open.</span> Hello, we&rsquo;re MimiPip: little spaces for big little worlds.{" "}
         <Link href="/browse/collection" className="underline underline-offset-4">Come and look around</Link>
       </p>
-      {/* ---------- hero ---------- */}
-      <section className="relative mx-4 mt-4 overflow-hidden rounded-[32px] lg:mx-6">
-        <div
-          {...rowAttrs("hero", heroDesigns, mixedCampaign ? campaignCollections : launchHero ? [launchHero.handle] : heroEntry ? [heroEntry.handle] : [])}
-          // From lg up the frame is never narrower than 16:9 (it is exactly 16:9
-          // until 80vh caps it, after which it only gets wider). The TAASH film
-          // has its title burned into the left of the picture, and `object-cover`
-          // keeps the whole picture only when the frame is at least as wide as
-          // the film — at the old 80vh-tall frame (~1.5:1 on a laptop) the title
-          // read "AASH" / "i × MimiPip". Wider-than-16:9 only trims the ceiling,
-          // which the floor rule (#8) already allows. Below lg the 9:16 film is
-          // used and a taller frame crops only top and bottom.
-          className="relative h-[80vh] min-h-[540px] w-full lg:aspect-video lg:h-auto lg:max-h-[80vh] lg:min-h-0"
-        >
-          {/* Bias the crop to the top: the hero's text + dark gradient sit at
-              the BOTTOM, so the top is the display area — keep the mural's
-              subject (e.g. the horses' heads) in frame rather than cropping it.
-              Three walls now rather than one; the copy in front does not move
-              when the picture behind it changes. */}
-          <HeroSlider
-            label={mixedCampaign ? "Featured MimiPip designs" : launchHero ? `${launchHero.title} — the collection` : "Featured designs"}
-            slides={heroDesigns
-              .filter((d) => d.image)
-              .map((d) => ({
-                image: d.image as string,
-                framing: { mobilePosition: "50% 100%", desktopPosition: "50% 100%", desktopFit: "cover" as const },
-                alt: d.imageAlt,
-                label: mixedCampaign ? campaignCopy[d.handle]?.title : undefined,
-                ...(mixedCampaign && campaignCopy[d.handle] ? { content: (
-                  <div className="container-x relative flex h-full flex-col items-start justify-end pb-14">
-                    <span className="rounded-full bg-surface/20 px-4 py-1.5 text-[0.72rem] font-semibold tracking-wide text-surface backdrop-blur-sm">{campaignCopy[d.handle].kicker}</span>
-                    <h1 className="hero-title mt-5 max-w-2xl font-display text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.04] text-surface">{campaignCopy[d.handle].title}</h1>
-                    <p className="mt-4 max-w-md text-[1.05rem] text-surface/85">{d.handle === "bagh-kamal-bagh"
-                      ? <MarketPricingNote india="Free Express Delivery" international="We deliver worldwide" />
-                      : campaignCopy[d.handle].description}</p>
-                    <div className="mt-8 flex gap-3"><Link href={campaignCopy[d.handle].href} className="btn border-surface bg-surface text-charcoal hover:bg-surface/90">{campaignCopy[d.handle].cta}</Link></div>
-                  </div>
-                ) } : {}),
-                ...(mixedCampaign && d.handle === "ink-venice" ? { video: {
-                  desktopSrc: "/media/marketing-media/ink/Ink-header-horizontal.mp4",
-                  mobileSrc: "/media/marketing-media/ink/Ink-header-vertical.mp4",
-                  desktopPoster: "/media/marketing-media/ink/Ink-header-horizontal.jpg",
-                  mobilePoster: "/media/marketing-media/ink/Ink-header-vertical.jpg",
-                  href: "/collection/ink", label: "Ink Collection: Venice in three rooms", background: true,
-                } } : {}),
-                ...((mixedCampaign || launchHero?.handle === "taash") && d.handle === "taash-bisaat-gehra"
-                  ? { video: {
-                      desktopSrc: "/films/taash-collection-16x9-header-v4.mp4",
-                      mobileSrc: "/films/taash-collection-9x16-header-v4.mp4",
-                      desktopPoster: "/films/taash-collection-16x9-poster-v4.jpg",
-                      mobilePoster: "/films/taash-collection-9x16-poster-v4.jpg",
-                      href: launchCopyFor("taash").shopfrontPath ?? "/collections/taash",
-                    } }
-                  : {}),
-              }))}
-          >
-            <div className="container-x relative flex h-full flex-col items-start justify-end pb-14">
-              {launchHero ? (
-                // A launch says what it is and where to go. It does not also
-                // try to sell the four discovery journeys — for a fortnight,
-                // the shop window is about one thing.
-                <>
-                  <span className="rounded-full bg-surface/20 px-4 py-1.5 text-[0.72rem] font-semibold tracking-wide text-surface backdrop-blur-sm">
-                    {launchHero.handle === "taash" ? "Featured collaboration" : "New collection"}
-                  </span>
-                  <h1
-                    className={
-                      launchCopyFor(launchHero.handle).serifHeroTitle
-                        ? `hero-title mt-5 max-w-2xl ${launchSerif.className} text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.1] tracking-[0.3em] text-surface`
-                        : "hero-title mt-5 max-w-2xl font-display text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.04] text-surface"
-                    }
-                  >
-                    {launchHero.title}
-                  </h1>
-                  {launchCopyFor(launchHero.handle).heroCredit && (
-                    // Two houses made this one, so the hero names them under
-                    // the wordmark, in the order the printed book does — and
-                    // Mati's half is a door to Mati.
-                    <p className="mt-3 text-[0.85rem] tracking-[0.18em] text-surface/80">
-                      <a
-                        href={launchCopyFor(launchHero.handle).heroCredit!.partnerHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline decoration-surface/40 underline-offset-4 hover:decoration-surface"
-                      >
-                        {launchCopyFor(launchHero.handle).heroCredit!.partner}
-                      </a>
-                      {" \u00d7 "}
-                      {launchCopyFor(launchHero.handle).heroCredit!.house}
-                    </p>
-                  )}
-                  {(launchHero.blurb || launchHero.handle === "taash") && (
-                    <p className="mt-4 max-w-md text-[1.05rem] text-surface/85">
-                      {launchHero.handle === "taash"
-                        ? "Two houses. One deck. Playing cards become pattern, texture and rooms with a character of their own."
-                        : launchHero.blurb}
-                    </p>
-                  )}
-                  <div className="mt-8 flex gap-3">
-                    {/* ONE button. "Find My Wallpaper" used to sit beside it,
-                        but its label promises a browse and delivers the
-                        curator — a surprise on the most valuable pixels of the
-                        page — and a second button splits the one click the
-                        launch exists to earn (Roheena, 7 September). The
-                        journeys still live in the nav and further down the
-                        page; they just don't photobomb the launch.
+      <MimiHomeHero />
 
-                        A launch with a shopfront of its own (TAASH → /mati)
-                        sends people there, not to the bare collection grid —
-                        the same rule the launch mail already follows. */}
-                    <Link
-                      href={launchCopyFor(launchHero.handle).shopfrontPath ?? `/collections/${launchHero.handle}`}
-                      className="btn border-surface bg-surface text-charcoal hover:bg-surface/90"
-                    >
-                      See the collection
-                    </Link>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className="rounded-full bg-surface/20 px-4 py-1.5 text-[0.72rem] font-semibold tracking-wide text-surface backdrop-blur-sm">
-                    Original mural wallpaper designs
-                  </span>
-                  <h1 className="hero-title mt-5 max-w-2xl text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.04] text-surface">
-                    Walls worth telling stories about.
-                  </h1>
-                  <p className="mt-4 max-w-md text-[1.05rem] text-surface/85">
-                    Playful mural wallpapers for nurseries, bedrooms and rooms full of imagination.
-                  </p>
-                  <div className="mt-8 flex gap-3">
-                    <Link href="/design-with" className="btn border-surface bg-surface text-charcoal hover:bg-surface/90">
-                      Find My Wallpaper
-                    </Link>
-                    <Link href="/browse/collection?value=wallpaper-worlds" className="btn border-surface/40 bg-transparent text-surface hover:bg-surface hover:text-charcoal">
-                      Shop Wallpapers
-                    </Link>
-                  </div>
-                  <Link href="/print-your-own" className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-surface/85 underline-offset-4 hover:underline">
-                    Have your own image? Bring it to your wall. <span aria-hidden>&rarr;</span>
-                  </Link>
-                </>
-              )}
-            </div>
-          </HeroSlider>
-        </div>
-      </section>
-
-      <section aria-labelledby="home-registry-title" className="container-x my-8">
-        <div className="grid overflow-hidden rounded-[28px] bg-[#fff2cd] md:grid-cols-[1fr_1.2fr]">
-          <div className="grid grid-cols-2">
+      <section aria-labelledby="home-registry-title" className="container-x mimi-registry">
+        <div className="mimi-registry-card grid overflow-hidden rounded-[28px] md:grid-cols-[0.9fr_1.2fr]">
+          <div className="mimi-registry-images grid grid-cols-2">
             <img src="/registry/baby.jpg" alt="A sleeping newborn" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
             <img src="/registry/birthday.jpg" alt="Children celebrating a birthday" width={1200} height={800} loading="lazy" className="h-40 w-full object-cover md:h-full md:min-h-64" />
           </div>
