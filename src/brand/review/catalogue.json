@@ -13116,5 +13116,41 @@
         "alt": "Meadow Rainbow · exact flat artwork"
       }
     ]
+  },
+  {
+    "id": "MP-FG-02",
+    "slug": "jump-jamboree",
+    "name": "Jump Jamboree",
+    "description": "Feet together, feet apart: a connected colour trail for jumping, clapping and making up stories. One floor sticker with four ways to play.",
+    "collection": [
+      "floor-games"
+    ],
+    "concept": [
+      "learning-play"
+    ],
+    "color": [
+      "multicolor"
+    ],
+    "age": [
+      "preschool",
+      "school-age"
+    ],
+    "space": [
+      "playroom"
+    ],
+    "type": [
+      "floor-sticker"
+    ],
+    "surface": [
+      "floor"
+    ],
+    "widthCm": 82,
+    "heightCm": 214,
+    "image": "/floor-play-images/jump-jamboree/room-v4.webp",
+    "imageRole": "Illustrative room render · not proof of floor compatibility",
+    "source": "floor stickers · jump-jamboree",
+    "status": "Preview record · material validation pending",
+    "price": null,
+    "personalization": null
   }
 ]

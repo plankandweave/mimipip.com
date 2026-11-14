@@ -941,5 +941,11 @@
     "art": "https://mimipip.com/pastel-stripes/meadow-rainbow-flat.png",
     "material": "self_adhesive",
     "materialSlug": "self-adhesive-vinyl"
+  },
+  "jump-jamboree": {
+    "art": "https://mimipip.com/print-masters/jump-jamboree-e3d3cace4d.png",
+    "material": "self_adhesive",
+    "printWidthCm": 82,
+    "printHeightCm": 214
   }
 }

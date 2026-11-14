@@ -51,11 +51,13 @@ test('a hidden design is not shown anywhere: its address goes to the shop', () =
   assert.equal(hiddenDestination('/products/not-a-design'), null);
   const hiddenOnly = [...new Set(hidden.flatMap(r => r.collection))].filter(c => !sellable.some(r => r.collection.includes(c)));
   for (const c of hiddenOnly) assert.equal(hiddenDestination('/collections/' + c), '/browse/collection');
-  for (const game of ['wiggleway', 'jump-jamboree', 'fork-and-friends']) {
+  for (const game of ['wiggleway', 'fork-and-friends']) {
     assert.equal(hiddenDestination('/floor-games/' + game), '/floor-games');
     assert.equal(hiddenDestination('/choose-floor/' + game), '/floor-games');
   }
   assert.equal(hiddenDestination('/floor-games/hopscotch-peach-pop'), null);
+  assert.equal(hiddenDestination('/floor-games/jump-jamboree'), null);
+  assert.equal(hiddenDestination('/choose-floor/jump-jamboree'), null);
   for (const key of unpublishedLandings) assert.equal(hiddenDestination('/' + key), '/browse/collection');
 });
 

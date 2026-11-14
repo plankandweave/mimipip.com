@@ -734,5 +734,17 @@
   ],
   "sha256": "81d2d13994a414de7b06d191c4d165431a5b6d8313773b7fbeaf5f20cf5a0fa8",
   "url": "https://mimipip.com/happy-petals/print-art/21.png"
+ },
+ "jump-jamboree": {
+  "url": "https://mimipip.com/print-masters/jump-jamboree-e3d3cace4d.png",
+  "sha256": "e3d3cace4d1b13df51ce7dbc7e1421f1f3a826286cf1fd8821525bddf31376a2",
+  "px": [
+   4843,
+   12638
+  ],
+  "printWidthCm": 82,
+  "printHeightCm": 214,
+  "family": "floor-games",
+  "cut": "one connected outline; source SVG alongside PNG"
  }
 }

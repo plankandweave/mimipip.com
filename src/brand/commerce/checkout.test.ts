@@ -411,3 +411,21 @@ test('a part-gift checkout whose payment window was closed resumes with the same
  const q=await h.call('quote',{lines:[wall],countryCode:'IN',giftTicket:ticket});
  assert.equal(q.status,200);assert.equal((await q.json()).giftMinor,100100);
 });
+
+// Jump Jamboree uses the existing live shop flow; courier costing is not a gate.
+test('Jump Jamboree charges 3778 including GST, no delivery, and sends the exact floor size to the OS', async () => {
+  const h = harness();
+  const made = await (await h.call('create', { lines: [{ slug: 'jump-jamboree', qty: 1, amount: 1 }], customer: india })).json();
+  assert.equal(made.amount, 377800);
+  assert.equal(made.currency, 'INR');
+  const row = h.db.prepare('select shipping from mimipip_orders').get();
+  assert.equal(row.shipping, 0);
+  h.setCaptured();
+  assert.equal((await h.pass()).status, 200);
+  const body = h.posts[0].body;
+  assert.equal(body.amountInr, 3778);
+  assert.equal(body.shippingInr, 0);
+  assert.equal(body.items[0].widthMm, 820);
+  assert.equal(body.items[0].heightMm, 2140);
+  assert.match(body.items[0].designUrl, /jump-jamboree-[a-f0-9]{10}\.png$/);
+});
