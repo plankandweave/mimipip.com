@@ -52,6 +52,7 @@ export default function AccountPage() {
         : `${count} order${count > 1 ? "s" : ""} · latest: ${STATUS_PILL[latest!.status] ?? latest!.status}`;
 
   const links = [
+    { href: "/registry/manage", title: "My registries", desc: "Your wish lists, gifts and celebration messages.", badge: null },
     { href: "/account/orders", title: "My orders", desc: ordersDesc, badge: count > 0 ? count : null },
     { href: "/account/boards", title: "My boards", desc: "Wall previews you've saved.", badge: null },
     { href: "/wishlist", title: "Saved designs", desc: "Wallpapers you've hearted.", badge: null },

@@ -197,7 +197,7 @@ export async function Header() {
   // resolved above. Kids & nursery opens the sister brand's shop inside the
   // site (founder, 29 October 2026), which lists Zyvorah's own children's
   // rooms beneath its own collection — so it never depends on a menu read.
-  const browseLinks: BrowseLink[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [...axes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a})),{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : [
+  const browseLinks: BrowseLink[] = process.env.MIMIPIP_LOCAL_REVIEW === "1" ? [...axes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a})),{label:"Registry",href:"/registry"},{label:"Floor games",href:"/floor-games/"},{label:"In real homes",href:"/in-real-homes/"}] : [
     // The two first-wall answers lead (7 October 2026): on a phone they were a
     // separate chip row on the homepage only, under the header's own rows.
     { label: "Price my wall", href: "/wall-price" },
@@ -218,6 +218,7 @@ export async function Header() {
     {title:"Wallpapers",href:"/browse/collection",items:shopAxes.map(a=>({label:"Shop by "+label(a),href:"/browse/"+a}))},
     {title:"Colour & Create",href:"/collections/colour-create",items:[{label:"Bunny Garden",href:"/products/colour-create-bunny-garden"}]},
     {title:"Floor Games",href:"/floor-games",items:[{label:"Hopscotch",href:"/products/hopscotch-peach-pop"}]},
+    {title:"Gifts & Celebrations",href:"/registry",items:[{label:"Baby Registry",href:"/registry/manage?new=baby"},{label:"Gift Registry",href:"/registry/manage?new=gift"},{label:"Personalised gift cards",href:"/gift-card"}]},
     {title:"About Us",href:"/guides/about",items:[{label:"About MimiPip",href:"/guides/about"},{label:"Contact",href:"/contact"}]},
   ] : [
     // The menu opens on "Shop by" and its five columns. The artist launches

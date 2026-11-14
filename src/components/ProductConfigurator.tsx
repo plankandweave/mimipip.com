@@ -1,5 +1,6 @@
 "use client";
 
+import {AddToRegistry} from "./AddToRegistry";
 import { draftNumber } from "@/lib/number-draft";
 import { TextOverlayEditor, useTextOverlayPreview } from "@/components/TextOverlayEditor";
 import { defaultTextOverlay, overlayPlacementError, textOverlaySchema, type TextOverlay } from "@/lib/text-overlay";
@@ -1746,6 +1747,7 @@ function ConnectedProductConfigurator({
       </div>
 
       </div>
+      {!partner && <AddToRegistry disabled={!canAdd||!crop||!material} selection={{slug:productHandle,qty,materialSlug:material?.slug,widthCm:runWidthCm,heightCm,crop:crop?{...crop,approval:{approvedAt:new Date().toISOString(),panelArrangement:hasExclusions?openingsArrangementLabel(openingsPlan):panelArrangementLabel(runWidthCm,panelCm,overlapCm)},sizeAssumed:null}:undefined}}/>}
       {orderError && (
         <p className="rounded-[12px] bg-blush/50 px-4 py-3 text-sm text-charcoal">{orderError}</p>
       )}

@@ -1,3 +1,4 @@
+import {ensureRegistry,registryCheckout,privateOrderCustomer,releaseRegistryOrders} from '../registry/service';
 import {reserveGift,tenderFor,abandonUnpresentedOrder,recoverCreatingGiftOrders,releaseUnpaidGiftOrder,releaseStaleGiftOrders} from './gift-ledger';
 import {cardForTicket,walletEmail} from './gift-wallet';
 import {gatewayMode,NOT_LIVE} from './gateway-mode';
@@ -55,7 +56,7 @@ export type Env = {
 };
 type Order = {
   id: string; token_hash: string; status: string; amount: number; shipping: number;
-  currency: 'INR' | 'USD'; gift_minor?:number; lines: string; lines_hash: string | null; customer: string;
+  currency: 'INR' | 'USD'; fulfilment?:string; gift_minor?:number; lines: string; lines_hash: string | null; customer: string;
   razorpay_order_id: string | null; payment_id: string | null; amount_inr: number | null;
   os_status: string; os_error: string | null; os_tries: number; created_at: number; updated_at: number;
 };
@@ -232,6 +233,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       const raw = await request.text();
       if (raw.length > 32768) return json({ error: 'Payload too large' }, 413);
       const b = JSON.parse(raw);
+      if(b.registry){await ensureRegistry(db);const gift=await registryCheckout(db,b.registry);b.lines=gift.lines;b.countryCode=gift.customer.countryCode;if(b.giftTicket)return json({error:'Use a separate payment for a registry gift.'},400);}
       const priced = priceCart(b.lines, String(b.countryCode ?? ''),await resolveRequestArt(b.lines,request));
       if ('refused' in priced) return json({ error: priced.refused }, 400);
       let giftMinor=0;
@@ -266,6 +268,14 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     let o = await db.prepare('SELECT * FROM mimipip_orders WHERE token_hash=?').bind(tokenHash).first<Order>();
     if (path === '/api/checkout/create') {
       if (!await checkoutReady(env)) return json({ error: 'Checkout is temporarily unavailable.' }, 503);
+      let registryGift:Awaited<ReturnType<typeof registryCheckout>>|null=null;
+      if(b.registry){
+        await ensureRegistry(db);
+        try{registryGift=await registryCheckout(db,b.registry);}catch{return json({error:'This registry gift is unavailable. Return to the registry to choose another.'},400);}
+        if(b.giftTicket)return json({error:'Use a separate payment for a registry gift.'},400);
+        b.lines=registryGift.lines;b.customer=registryGift.customer;
+      }
+      if(o&&JSON.stringify(JSON.parse(o.fulfilment||'{}').registry??null)!==JSON.stringify(registryGift?.registry??null))return json({error:'Start a new checkout for this registry gift.'},409);
       if (!validCustomer(b.customer)) return json({ error: 'Check your delivery details.' }, 400);
       let billingIdentity;
       try{billingIdentity=checkedBillingIdentity(b.customer.billingIdentity,b.customer.countryCode);}
@@ -298,8 +308,8 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
         if(gift&&!gift.balance_minor)return json({error:'This gift balance is already used or reserved.'},400);
         const id = 'MP-' + crypto.randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase();
         const now = Date.now();
-        await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,'{}',?,?)")
-          .bind(id, tokenHash, priced.totalMinor, priced.currency, JSON.stringify(priced.lines), linesHash, JSON.stringify(customer), now, now).run();
+        await db.prepare("INSERT INTO mimipip_orders (id,token_hash,status,amount,shipping,currency,lines,lines_hash,customer,fulfilment,created_at,updated_at) VALUES (?,?,'creating',?,0,?,?,?,?,?,?,?)")
+          .bind(id, tokenHash, priced.totalMinor, priced.currency, JSON.stringify(priced.lines), linesHash, JSON.stringify(customer), JSON.stringify(registryGift?{registry:registryGift.registry}:{}), now, now).run();
         let giftMinor=0;
         if(gift){
           giftMinor=Math.min(gift.balance_minor,priced.totalMinor);
@@ -329,7 +339,7 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
       if (o.status === 'paid') return json({ paid: true, orderNumber: o.id });
       if (o.status === 'expired') return json({ error: 'This checkout expired and any gift balance went back to your card. Please try again.', renew: true }, 409);
       if (o.status !== 'pending') return json({ error: 'This order cannot be paid.' }, 409);
-      return json({ keyId: await pay.keyId(), orderId: o.razorpay_order_id, amount: o.amount-(o.gift_minor??0), currency: o.currency, orderNumber: o.id, customer: JSON.parse(o.customer) });
+      return json({ keyId: await pay.keyId(), orderId: o.razorpay_order_id, amount: o.amount-(o.gift_minor??0), currency: o.currency, orderNumber: o.id, customer: privateOrderCustomer(o) });
     }
     if (!o) return json({ error: 'Order not found' }, 404);
     if (path === '/api/checkout/verify') {
@@ -343,12 +353,13 @@ export async function handleCommerce(request: Request, env: Env): Promise<Respon
     } else return json({ error: 'Not found' }, 404);
     o = (await db.prepare('SELECT * FROM mimipip_orders WHERE id=?').bind(o.id).first<Order>())!;
     return json({
-      paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, giftMinor:o.gift_minor??0, cashMinor:o.amount-(o.gift_minor??0), currency: o.currency,
+      status:o.status, paid: o.status === 'paid', orderNumber: o.id, amount: o.amount, giftMinor:o.gift_minor??0, cashMinor:o.amount-(o.gift_minor??0), currency: o.currency,
       lines: JSON.parse(o.lines).map((l: StoredLine) => ({ name: l.name, qty: l.qty, lineMinor: l.lineMinor })),
-      customer: JSON.parse(o.customer),
+      customer: privateOrderCustomer(o),
       message: o.status === 'paid' ? 'Payment received. Your order is confirmed.' : o.status === 'expired' ? 'This checkout expired; any gift balance went back to your card. If you were charged, contact hello@mimipip.com before paying again.' : 'Payment has not been confirmed yet. If you were charged, please check again before paying.',
     });
   } catch (e) {
+    if((e as Error).message.includes('registry_gift_unavailable'))return json({error:'Someone has just chosen this gift. Please return to the registry and choose another.'},409);
     console.error('checkout:', (e as Error).message);
     return json({ error: 'We could not complete this step. Please check this order again; do not pay twice if you were charged.' }, 503);
   }
@@ -361,8 +372,9 @@ export async function sweep(env: Env) {
   const pay = env.STORE_PAY, db = env.DB, call = provider(pay), cutoff = Date.now() - 5 * 60_000;
   // A part-gift checkout nobody paid gives its balance back after the TTL (Razorpay asked first).
   await releaseStaleGiftOrders(db, call);
+  await releaseRegistryOrders(db,call);
   // Money that lands on a checkout AFTER its gift balance was released is never an order: it is held for review.
-  const expired = await db.prepare("SELECT * FROM mimipip_orders WHERE status='expired' AND gift_minor>0 AND razorpay_order_id IS NOT NULL AND created_at>? ORDER BY created_at LIMIT 25").bind(Date.now() - 3 * 864e5).all<Order>();
+  const expired = await db.prepare("SELECT * FROM mimipip_orders WHERE status='expired' AND (gift_minor>0 OR json_extract(fulfilment,'$.registry.itemId') IS NOT NULL) AND razorpay_order_id IS NOT NULL AND created_at>? ORDER BY created_at LIMIT 25").bind(Date.now() - 3 * 864e5).all<Order>();
   for (const o of expired.results) {
     try {
       const ps = await call('orders/' + o.razorpay_order_id + '/payments');
