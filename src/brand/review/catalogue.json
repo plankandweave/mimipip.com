@@ -10490,9 +10490,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/01-great-puddle-race.webp",
+    "image": "/playroom-stories/rooms/01-great-puddle-race-room.png",
     "flatImage": "/playroom-stories/01-great-puddle-race.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/01-great-puddle-race.png"
@@ -10507,7 +10507,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/01-great-puddle-race-room.png",
+        "alt": "The Great Puddle Race · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/01-great-puddle-race.webp",
+        "alt": "The Great Puddle Race · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-02",
@@ -10543,9 +10553,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/02-kite-catchers.webp",
+    "image": "/playroom-stories/rooms/02-kite-catchers-room.png",
     "flatImage": "/playroom-stories/02-kite-catchers.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/02-kite-catchers.png"
@@ -10560,7 +10570,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/02-kite-catchers-room.png",
+        "alt": "The Kite Catchers · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/02-kite-catchers.webp",
+        "alt": "The Kite Catchers · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-03",
@@ -10596,9 +10616,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/03-lantern-walk.webp",
+    "image": "/playroom-stories/rooms/03-lantern-walk-room.png",
     "flatImage": "/playroom-stories/03-lantern-walk.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/03-lantern-walk.png"
@@ -10613,7 +10633,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/03-lantern-walk-room.png",
+        "alt": "The Lantern Walk · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/03-lantern-walk.webp",
+        "alt": "The Lantern Walk · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-04",
@@ -10650,9 +10680,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/04-giant-sandcastle.webp",
+    "image": "/playroom-stories/rooms/04-giant-sandcastle-room.png",
     "flatImage": "/playroom-stories/04-giant-sandcastle.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/04-giant-sandcastle.png"
@@ -10667,7 +10697,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/04-giant-sandcastle-room.png",
+        "alt": "The Giant Sandcastle · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/04-giant-sandcastle.webp",
+        "alt": "The Giant Sandcastle · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-05",
@@ -10703,9 +10743,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/05-backyard-campout.webp",
+    "image": "/playroom-stories/rooms/05-backyard-campout-room.png",
     "flatImage": "/playroom-stories/05-backyard-campout.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/05-backyard-campout.png"
@@ -10720,7 +10760,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/05-backyard-campout-room.png",
+        "alt": "The Backyard Campout · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/05-backyard-campout.webp",
+        "alt": "The Backyard Campout · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-06",
@@ -10756,9 +10806,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/06-apple-orchard-picnic.webp",
+    "image": "/playroom-stories/rooms/06-apple-orchard-picnic-room.png",
     "flatImage": "/playroom-stories/06-apple-orchard-picnic.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/06-apple-orchard-picnic.png"
@@ -10773,7 +10823,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/06-apple-orchard-picnic-room.png",
+        "alt": "The Apple Orchard Picnic · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/06-apple-orchard-picnic.webp",
+        "alt": "The Apple Orchard Picnic · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-07",
@@ -10810,9 +10870,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/07-snow-day.webp",
+    "image": "/playroom-stories/rooms/07-snow-day-room.png",
     "flatImage": "/playroom-stories/07-snow-day.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/07-snow-day.png"
@@ -10827,7 +10887,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/07-snow-day-room.png",
+        "alt": "The Snow Day · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/07-snow-day.webp",
+        "alt": "The Snow Day · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-08",
@@ -10863,9 +10933,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/08-little-gardeners.webp",
+    "image": "/playroom-stories/rooms/08-little-gardeners-room.png",
     "flatImage": "/playroom-stories/08-little-gardeners.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/08-little-gardeners.png"
@@ -10880,7 +10950,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/08-little-gardeners-room.png",
+        "alt": "The Little Gardeners · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/08-little-gardeners.webp",
+        "alt": "The Little Gardeners · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-09",
@@ -10917,9 +10997,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/09-moonlight-sleepover.webp",
+    "image": "/playroom-stories/rooms/09-moonlight-sleepover-room.png",
     "flatImage": "/playroom-stories/09-moonlight-sleepover.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/09-moonlight-sleepover.png"
@@ -10934,7 +11014,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/09-moonlight-sleepover-room.png",
+        "alt": "The Moonlight Sleepover · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/09-moonlight-sleepover.webp",
+        "alt": "The Moonlight Sleepover · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-10",
@@ -10971,9 +11061,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/10-rainbow-chalk-street.webp",
+    "image": "/playroom-stories/rooms/10-rainbow-chalk-street-room.png",
     "flatImage": "/playroom-stories/10-rainbow-chalk-street.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/10-rainbow-chalk-street.png"
@@ -10988,7 +11078,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/10-rainbow-chalk-street-room.png",
+        "alt": "The Rainbow Chalk Street · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/10-rainbow-chalk-street.webp",
+        "alt": "The Rainbow Chalk Street · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-PL-11",
@@ -11024,9 +11124,9 @@
     "widthCm": null,
     "heightCm": null,
     "measurementType": "made-to-measure",
-    "image": "/playroom-stories/11-birthday-banner.webp",
+    "image": "/playroom-stories/rooms/11-birthday-banner-room.png",
     "flatImage": "/playroom-stories/11-birthday-banner.webp",
-    "imageRole": "Flat illustrated wallpaper artwork",
+    "imageRole": "Room visualisation with original wallpaper artwork",
     "source": "Original MimiPip playroom story artwork",
     "sourceImages": [
       "https://mimipip.com/playroom-stories/print-art/11-birthday-banner.png"
@@ -11041,7 +11141,17 @@
     },
     "status": "Made to measure",
     "price": null,
-    "personalization": null
+    "personalization": null,
+    "gallery": [
+      {
+        "url": "/playroom-stories/rooms/11-birthday-banner-room.png",
+        "alt": "The Birthday Banner · room visualisation; wallpaper only"
+      },
+      {
+        "url": "/playroom-stories/11-birthday-banner.webp",
+        "alt": "The Birthday Banner · original flat wallpaper artwork"
+      }
+    ]
   },
   {
     "id": "MP-WP-HW-01",

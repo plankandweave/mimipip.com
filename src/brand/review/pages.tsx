@@ -59,7 +59,7 @@ export function ReviewDetail({p}:{p:RecordData}) {
  const wallpaper=p.type.some(type=>type.includes("wallpaper"));
  return <WallBuilderProvider><section className="container-x grid gap-10 py-8 lg:grid-cols-2">
   <WallBuilderStage gallery={<div>{panel?<RoomPanel src={p.image} alt={p.name+" shown in a room illustration"} panel={panel}/>:<ProductGallery images={gallery} title={p.name} fit="contain" showActions={false} showSample={false}/>}
-   {(happyPetals || p.collection.includes("pastel-stripes")) && <p className="mt-3 text-sm">The styled room is a visualization. Your order includes wallpaper only. Furniture and accessories are for illustration.</p>}
+   {(happyPetals || p.collection.includes("pastel-stripes") || p.collection.includes("playroom-stories")) && <p className="mt-3 text-sm">The styled room is a visualization. Your order includes wallpaper only. Furniture and accessories are for illustration.</p>}
    {beep&&<><p>Illustrative application mockup · Stickers only · Furniture not included</p><figure className="mt-6"><img src="/listing-details/beep-beep/design-panels.svg" alt="Car, bus, train and airplane designs shown individually" className="mx-auto max-h-96"/><figcaption>Design illustration</figcaption></figure></>}</div>}/>
   <div><Link href={happyPetals ? "/collections/happy-petals/" : p.collection.includes("hush-and-wander") ? "/collections/hush-and-wander/" : "/browse/collection?value="+encodeURIComponent(p.collection[0])}>{label(p.collection[0])}</Link><h1>{p.name}</h1>
    {!wallpaper&&<p>Stickers only. Furniture and room accessories are not included.</p>}
