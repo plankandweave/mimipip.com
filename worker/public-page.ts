@@ -7,9 +7,15 @@ export const publicPaths: ReadonlySet<string> = new Set([
   ...publishedUrls.map(url => new URL(url).pathname.replace(/\/$/, '') || '/'),
   '/contact','/faq',
 ]);
-const analyticsPolicy = offlineContentSecurityPolicy
+/** The Magnitude OS visit counter (cookieless; os.magnitudegroup.in/api/site-pulse.js) on every page. */
+const PULSE_ORIGIN = 'https://os.magnitudegroup.in';
+const withPulse = (policy:string) => policy
+  .replace("script-src ", "script-src "+PULSE_ORIGIN+" ")
+  .replace("connect-src ", "connect-src "+PULSE_ORIGIN+" ");
+const analyticsPolicy = withPulse(offlineContentSecurityPolicy
   .replace("script-src 'self'", "script-src https://www.googletagmanager.com 'self'")
-  .replace("connect-src 'self'", "connect-src https://www.google-analytics.com https://region1.google-analytics.com 'self'");
+  .replace("connect-src 'self'", "connect-src https://www.google-analytics.com https://region1.google-analytics.com 'self'"));
+const plainPolicy = withPulse(offlineContentSecurityPolicy);
 
 const attr = (s:string) => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 /** The head tags search and link previews read, written once from src/brand/seo/head.ts. */
@@ -37,7 +43,7 @@ export function publicPage(request:Request, response:Response) {
   const head = publish ? headFor(path, url.searchParams.get('value'), url.searchParams) : null;
   const headers = new Headers(response.headers);
   headers.set('X-Robots-Tag',robots);
-  headers.set('Content-Security-Policy',publish ? analyticsPolicy : offlineContentSecurityPolicy);
+  headers.set('Content-Security-Policy',publish ? analyticsPolicy : plainPolicy);
   // Client navigation retains the first document's CSP. A shopper may start
   // anywhere, then open the original sample modal or navigate to checkout.
   // Permit the same existing payment provider on that initial document too.
@@ -63,6 +69,7 @@ export function publicPage(request:Request, response:Response) {
       if (publish && path === '/') el.append('<meta name="msvalidate.01" content="A104DD7C47B2B3F64C341A799C0D738C">',{html:true});
       // Our own funnel count (first-party, no cookie); the consented analytics only on published pages.
       el.append('<script defer src="/mimipip-funnel.js"></script>',{html:true});
+      el.append('<script defer src="'+PULSE_ORIGIN+'/api/site-pulse.js" data-site="mimipip.com"></script>',{html:true});
       if (publish) el.append('<script defer src="/mimipip-analytics.js"></script>',{html:true});
       if (head) el.onEndTag(end=>{if(!sawTitle)end.before('<title>'+attr(head.title)+'</title>',{html:true})});
     }}).transform(html);
