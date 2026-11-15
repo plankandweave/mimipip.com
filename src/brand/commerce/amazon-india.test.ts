@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AMAZON_INDIA_LISTINGS, amazonIndiaLink, amazonListings, amazonProductUrl } from './amazon-india';
+import { AMAZON_GROUPS, AMAZON_INDIA_LISTINGS, amazonIndiaLink, amazonListings, amazonProductUrl } from './amazon-india';
 import records from '../review/catalogue.json';
 
 test('nothing is shown when no listing is recorded', () => {
@@ -23,4 +23,8 @@ test('every recorded listing names a MimiPip design the site sells', () => {
   for (const l of AMAZON_INDIA_LISTINGS) assert.ok(slugs.has(l.slug), l.slug);
   assert.equal(amazonListings().length, AMAZON_INDIA_LISTINGS.length);
   assert.equal(amazonIndiaLink(), '/guides/amazon');
+});
+
+test('every recorded listing sits in one of the guide page groups', () => {
+  for (const l of AMAZON_INDIA_LISTINGS) assert.ok(l.group && (AMAZON_GROUPS as readonly string[]).includes(l.group), l.slug);
 });
