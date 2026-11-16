@@ -40,6 +40,25 @@ export function productDescription(r: Rec) {
   return clip(r.description, 155 - tail.length) + tail;
 }
 
+/** Only destinations and terms published in /guides/shipping-returns.
+ * Delivery timing stays unspecified until dispatch and transit ranges are confirmed.
+ * Never manufacture reviews or zero-count ratings to silence optional warnings.
+ */
+const fulfilment = (market: 'IN' | 'ABROAD') => ({
+  shippingDetails: {
+    '@type': 'OfferShippingDetails',
+    shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: market === 'IN' ? 'INR' : 'USD' },
+    shippingDestination: { '@type': 'DefinedRegion', addressCountry: market === 'IN' ? 'IN' : 'US' },
+    shippingSettingsLink: ORIGIN + '/guides/shipping-returns',
+  },
+  hasMerchantReturnPolicy: {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: market === 'IN' ? 'IN' : 'US',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+    merchantReturnLink: ORIGIN + '/guides/shipping-returns',
+  },
+});
+
 const offer = (r: Rec, market: 'IN' | 'ABROAD') => {
   const wall = isWallpaper(r);
   const price = wall ? minPrice(r.slug, market) : listPrice(r.slug, market);
@@ -54,11 +73,7 @@ const offer = (r: Rec, market: 'IN' | 'ABROAD') => {
     seller: { '@id': ORIGIN + '/#organization' },
     ...(market === 'IN' ? { eligibleRegion: { '@type': 'Country', name: 'IN' } } : { ineligibleRegion: { '@type': 'Country', name: 'IN' } }),
     ...(wall ? { description: market === 'IN' ? '2 × 3 ft finished wallpaper size. Custom wall sizes are priced separately.' : 'Smallest custom order, 20 sq ft. The price follows the size of your wall.' } : {}),
-    shippingDetails: {
-      '@type': 'OfferShippingDetails',
-      shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: price.currency },
-      ...(market === 'IN' ? { shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IN' } } : {}),
-    },
+    ...fulfilment(market),
   };
 };
 
@@ -71,7 +86,7 @@ export function productJsonLd(r: Rec, query?: URLSearchParams) {
   const selectedMarket=query?.get('market')==='US'?'US':'IN';
   const selected= query?.has('market') ? feedItems(selectedMarket).find(i=>new URL(i.link).pathname===productPath(r.slug) && (query.has('fixed')?new URL(i.link).searchParams.get('fixed')===query.get('fixed'):query.has('w')?new URL(i.link).searchParams.get('w')===query.get('w')&&new URL(i.link).searchParams.get('h')===query.get('h'):true)) : null;
   const selectedOffers=selected?[{...offers[selectedMarket==='US'?1:0],url:selected.link,price:selected.price.split(' ')[0],priceCurrency:selectedMarket==='US'?'USD':'INR',description:selected.description}]:offers;
-  const variantSchema=(i:typeof variants[number])=>({'@type':'Product','@id':i.link+'#product',name:i.title,description:i.description,sku:i.id,url:i.link,image:[i.imageLink],size:i.size,color:i.color,material:i.material,brand:{'@type':'Brand',name:BRAND},offers:{'@type':'Offer',url:i.link,price:i.price.split(' ')[0],priceCurrency:'INR',availability:'https://schema.org/InStock',seller:{'@id':ORIGIN+'/#organization'}}});
+  const variantSchema=(i:typeof variants[number])=>({'@type':'Product','@id':i.link+'#product',name:i.title,description:i.description,sku:i.id,url:i.link,image:[i.imageLink],size:i.size,color:i.color,material:i.material,brand:{'@type':'Brand',name:BRAND},offers:{...fulfilment('IN'),'@type':'Offer',url:i.link,price:i.price.split(' ')[0],priceCurrency:'INR',availability:'https://schema.org/InStock',seller:{'@id':ORIGIN+'/#organization'}}});
   return [{
     '@context': 'https://schema.org', '@type': 'Product',
     '@id': abs(productPath(r.slug)) + '#product',
