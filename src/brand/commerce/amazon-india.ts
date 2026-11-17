@@ -6,7 +6,8 @@
  * 15 Nov 2026 every recorded ASIN was fetched from amazon.in and showed Add to cart.
  * A wallpaper is recorded by its parent ASIN, which opens the design with its three
  * finished sizes (2 x 3, 3 x 4.5 and 4 x 6 ft). World Explorer Vintage Plane
- * (MP-WP-KD-0011) is listed but inactive on Amazon, so it is left out until it is live.
+ * (MP-WP-KD-0011) cleared Amazon's manual review and was added on 17 Nov 2026, the
+ * day it was checked live on amazon.in with Add to cart.
  *
  * The owner's rule of 7 October 2026 for Zyvorah stands: Amazon is never offered on
  * a product page beside Add to cart. MimiPip names it in the footer, the FAQ and its
