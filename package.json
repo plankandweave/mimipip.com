@@ -16,7 +16,7 @@
     "review:local": "node scripts/local-review.mjs",
     "db:generate": "drizzle-kit generate",
     "typecheck:app": "tsc --noEmit --project tsconfig.app.json",
-    "test:restoration": "tsx --test src/brand/commerce/*.test.ts src/brand/seo/*.test.ts src/brand/pricing-policy.test.ts src/brand/native-pricing.test.ts src/brand/storage.test.ts src/lib/wall-default.test.ts"
+    "test:restoration": "tsx --test src/brand/commerce/*.test.ts src/brand/seo/*.test.ts src/brand/pricing-policy.test.ts src/brand/native-pricing.test.ts src/brand/storage.test.ts src/lib/wall-default.test.ts src/brand/artist-rules.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
